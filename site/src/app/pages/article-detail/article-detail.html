@@ -19,6 +19,8 @@
       <div class="prose">
         <router-outlet />
       </div>
+
+      <app-giscus-comments [term]="article.slug" />
     </div>
   </article>
 } @else {

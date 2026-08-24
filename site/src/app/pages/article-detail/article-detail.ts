@@ -4,9 +4,10 @@ import { Meta, Title } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { articles, type ArticleMeta } from '../../data/articles';
+import { GiscusComments } from '../../shared/giscus/giscus-comments';
 
 @Component({
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterOutlet, GiscusComments],
   selector: 'app-article-detail',
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',
