@@ -1,0 +1,87 @@
+<section class="page">
+  <div class="container resume">
+    <header class="page-header">
+      <span class="eyebrow">Sobre &amp; Currículo</span>
+      <h1>{{ name }}</h1>
+      <p class="headline">{{ headline }}</p>
+      <p class="location muted">{{ location }}</p>
+      <p>{{ summary }}</p>
+      <div class="contacts">
+        @for (c of contacts; track c.label) {
+          <a class="btn btn-ghost" [href]="c.href" target="_blank" rel="noopener">{{ c.label }}</a>
+        }
+      </div>
+    </header>
+
+    <div class="resume-grid">
+      <div class="resume-main">
+        <section aria-labelledby="exp-title" class="card">
+          <h2 id="exp-title">Experiência</h2>
+          <ul class="timeline">
+            @for (item of experience; track item.company) {
+              <li>
+                <div class="item-head">
+                  <h3>{{ item.role }}</h3>
+                  <span class="muted">{{ item.period }}</span>
+                </div>
+                <p class="company">{{ item.company }}</p>
+                <p class="muted">{{ item.description }}</p>
+              </li>
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="edu-title" class="card">
+          <h2 id="edu-title">Formação</h2>
+          <ul class="plain-list">
+            @for (item of education; track item.school) {
+              <li>
+                <h3>{{ item.course }}</h3>
+                <p class="muted">{{ item.school }} · {{ item.period }}</p>
+              </li>
+            }
+          </ul>
+        </section>
+      </div>
+
+      <aside class="resume-side">
+        <section aria-labelledby="skills-title" class="card">
+          <h2 id="skills-title">Habilidades</h2>
+          <div class="skill-groups">
+            @for (group of skills; track group.area) {
+              <div>
+                <h3>{{ group.area }}</h3>
+                <div class="tags">
+                  @for (item of group.items; track item) {
+                    <span class="tag">{{ item }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section aria-labelledby="lang-title" class="card">
+          <h2 id="lang-title">Idiomas</h2>
+          <ul class="plain-list compact">
+            @for (lang of languages; track lang) {
+              <li>{{ lang }}</li>
+            }
+          </ul>
+        </section>
+
+        <section aria-labelledby="cert-title" class="card">
+          <h2 id="cert-title">Certificações</h2>
+          <ul class="plain-list compact">
+            @for (cert of certifications; track cert.title) {
+              <li>
+                <strong>{{ cert.title }}</strong>
+                <span class="muted"> — {{ cert.issuer }}, {{ cert.year }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+</section>

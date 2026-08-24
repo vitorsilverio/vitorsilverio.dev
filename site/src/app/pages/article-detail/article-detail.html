@@ -1,0 +1,45 @@
+@if (article(); as article) {
+  <article class="page article">
+    <div class="container article-wrap">
+      <a class="back" routerLink="/artigos">← Voltar aos artigos</a>
+
+      <header class="article-header">
+        <div class="tags">
+          @for (tag of article.tags; track tag) {
+            <a class="tag tag-link" routerLink="/artigos" [queryParams]="{ tag }">{{ tag }}</a>
+          }
+        </div>
+        <h1>{{ article.title }}</h1>
+        <p class="article-meta muted">
+          <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
+          · {{ article.readingTime }} de leitura
+        </p>
+      </header>
+
+      <div class="prose">
+        @switch (article.slug) {
+          @case ('boas-vindas') {
+            <app-article-boas-vindas appHighlight />
+          }
+          @case ('angular-signals-na-pratica') {
+            <app-article-signals appHighlight />
+          }
+          @case ('hello-armbox') {
+            <app-article-hello-armbox appHighlight />
+          }
+          @default {
+            <p>Conteúdo em breve.</p>
+          }
+        }
+      </div>
+    </div>
+  </article>
+} @else {
+  <section class="page">
+    <div class="container">
+      <h1>Artigo não encontrado</h1>
+      <p class="muted">O artigo "{{ slug() }}" não existe ou foi movido.</p>
+      <a class="btn btn-primary" routerLink="/artigos">Ver todos os artigos</a>
+    </div>
+  </section>
+}

@@ -1,0 +1,63 @@
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Portfólio</span>
+      <h1>Projetos</h1>
+      <p>
+        Uma seleção do que venho construindo — com destaque para minha coleção
+        de emuladores em Java. Cada projeto representa uma oportunidade de
+        aprender algo novo.
+      </p>
+    </header>
+
+    @if (featured().length) {
+      <div class="featured-section">
+        @for (project of featured(); track project.name) {
+          <article class="card project featured">
+            <span class="badge">Destaque</span>
+            <h2>{{ project.name }}</h2>
+            <p class="muted">{{ project.description }}</p>
+            <div class="tags">
+              @for (tag of project.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+            <div class="project-links">
+              @if (project.liveUrl) {
+                <a class="btn btn-primary" [href]="project.liveUrl" target="_blank" rel="noopener">Ver online</a>
+              }
+              @if (project.repoUrl) {
+                <a class="btn btn-ghost" [href]="project.repoUrl" target="_blank" rel="noopener">Código</a>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    <div class="grid">
+      @for (project of others(); track project.name) {
+        <article class="card project">
+          <div class="project-top">
+            <h2>{{ project.name }}</h2>
+            <span class="year muted">{{ project.year }}</span>
+          </div>
+          <p class="muted">{{ project.description }}</p>
+          <div class="tags">
+            @for (tag of project.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+          <div class="project-links">
+            @if (project.liveUrl) {
+              <a class="btn btn-primary" [href]="project.liveUrl" target="_blank" rel="noopener">Ver online</a>
+            }
+            @if (project.repoUrl) {
+              <a class="btn btn-ghost" [href]="project.repoUrl" target="_blank" rel="noopener">Código</a>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

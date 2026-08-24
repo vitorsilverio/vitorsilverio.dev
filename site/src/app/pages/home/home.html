@@ -1,0 +1,40 @@
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">Desenvolvedor &amp; estudante contínuo</p>
+    <h1>Olá, eu sou o <span class="accent">Vítor Silvério</span>.</h1>
+    <p class="lead">
+      Aqui compartilho meus projetos, meu currículo e — principalmente — artigos
+      sobre as coisas que estudo e gosto de explorar, muitos escritos com ajuda
+      de IA.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" routerLink="/artigos">Ler artigos</a>
+      <a class="btn btn-ghost" routerLink="/projetos">Ver projetos</a>
+    </div>
+  </div>
+</section>
+
+<section class="container latest">
+  <div class="section-head">
+    <h2>Últimos artigos</h2>
+    <a routerLink="/artigos" class="muted">Ver todos →</a>
+  </div>
+
+  <div class="grid">
+    @for (article of recentArticles(); track article.slug) {
+      <a class="card article-card" [routerLink]="['/artigos', article.slug]">
+        <div class="article-meta">
+          <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
+          <span>· {{ article.readingTime }}</span>
+        </div>
+        <h3>{{ article.title }}</h3>
+        <p class="muted">{{ article.excerpt }}</p>
+        <div class="tags">
+          @for (tag of article.tags; track tag) {
+            <span class="tag">{{ tag }}</span>
+          }
+        </div>
+      </a>
+    }
+  </div>
+</section>

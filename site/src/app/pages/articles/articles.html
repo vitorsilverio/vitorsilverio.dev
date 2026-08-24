@@ -1,0 +1,68 @@
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Escritos &amp; estudos</span>
+      <h1>Artigos</h1>
+      <p>
+        Anotações e aprendizados sobre tecnologia — muitos redigidos com apoio de
+        IA enquanto estudo. Novos textos entram aqui.
+      </p>
+    </header>
+
+    <div class="tag-filter" role="group" aria-label="Filtrar artigos por tag">
+      <button
+        type="button"
+        class="tag"
+        [class.active]="!selectedTag()"
+        (click)="clearFilter()"
+      >
+        Todos
+      </button>
+      @for (tag of allTags(); track tag) {
+        <button
+          type="button"
+          class="tag"
+          [class.active]="selectedTag() === tag"
+          aria-pressed="{{ selectedTag() === tag }}"
+          (click)="toggleTag(tag)"
+        >
+          {{ tag }}
+        </button>
+      }
+    </div>
+
+    @if (filteredArticles().length > 0) {
+      <ul class="article-list">
+        @for (article of filteredArticles(); track article.slug) {
+          <li class="article-item">
+            <a class="article-row" [routerLink]="['/artigos', article.slug]">
+              <div class="article-text">
+                <h2>{{ article.title }}</h2>
+                <p class="muted">{{ article.excerpt }}</p>
+              </div>
+              <div class="article-info muted">
+                <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
+                <span>· {{ article.readingTime }} de leitura</span>
+              </div>
+            </a>
+            <div class="tags">
+              @for (tag of article.tags; track tag) {
+                <button
+                  type="button"
+                  class="tag"
+                  [class.active]="selectedTag() === tag"
+                  aria-pressed="{{ selectedTag() === tag }}"
+                  (click)="toggleTag(tag)"
+                >
+                  {{ tag }}
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="muted">Nenhum artigo com a tag "{{ selectedTag() }}".</p>
+    }
+  </div>
+</section>
