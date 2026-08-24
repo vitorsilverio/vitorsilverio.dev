@@ -1,28 +1,35 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Meta } from '@angular/platform-browser';
+import { Component, computed, effect, inject } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { articles, type ArticleMeta } from '../../data/articles';
-import { ArticleBoasVindas } from './posts/boas-vindas';
-import { ArticleSignals } from './posts/angular-signals-na-pratica';
-import { ArticleHelloArmbox } from './posts/hello-armbox';
-import { HighlightDirective } from '../../shared/highlight.directive';
 
 @Component({
-  imports: [
-    RouterLink,
-    ArticleBoasVindas,
-    ArticleSignals,
-    ArticleHelloArmbox,
-    HighlightDirective,
-  ],
+  imports: [RouterLink, RouterOutlet],
   selector: 'app-article-detail',
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',
 })
 export class ArticleDetail {
   private readonly meta = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  protected readonly slug = input.required<string>();
+  protected readonly slug = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(
+        () =>
+          this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined,
+      ),
+    ),
+    {
+      initialValue:
+        this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined,
+    },
+  );
 
   protected readonly article = computed<ArticleMeta | undefined>(() =>
     articles.find((a) => a.slug === this.slug()),
@@ -32,9 +39,11 @@ export class ArticleDetail {
     effect(() => {
       const article = this.article();
       if (!article) {
+        this.title.setTitle('Artigos · Vítor Silvério');
         return;
       }
       this.meta.updateTag({ name: 'description', content: article.excerpt });
+      this.title.setTitle(`${article.title} · Vitor Silvário`);
       this.meta.updateTag({ property: 'og:title', content: article.title });
       this.meta.updateTag({
         property: 'og:description',

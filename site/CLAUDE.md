@@ -56,3 +56,30 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+
+## Adding a new article (workflow obrigatório)
+
+Os artigos são componentes standalone em `src/app/pages/article-detail/posts/<slug>.ts`,
+listados em `src/app/data/articles.ts` e roteados de forma lazy via `postLoaders` em
+`src/app/app.routes.ts`. Para NÃO esquecer nenhuma etapa (e manter o SEO do pré-render),
+**use sempre o script automatizado**:
+
+```bash
+npm run novo-artigo -- --slug <slug-kebab> --title "Título" --tags "Tag1,Tag2" --excerpt "Resumo"
+```
+
+O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar os 4 pontos:
+
+1. Criar `src/app/pages/article-detail/posts/<slug>.ts` com `hostDirectives: [HighlightDirective]`
+   e `imports: [RouterLink]` (o highlight deve viver DENTRO de cada post, não no `article-detail`).
+2. Registrar o post em `src/app/data/articles.ts` (array `articles`): `slug`, `title`, `date`
+   (`YYYY-MM-DD`), `readingTime`, `excerpt`, `tags`.
+3. Adicionar o loader lazy em `postLoaders` (`src/app/app.routes.ts`):
+   `'<slug>': () => import('./pages/article-detail/posts/<slug>').then((m) => m.Article<Slug>)`.
+4. Adicionar a rota em `src/prerender-routes.txt` (`/artigos/<slug>`), senão o pré-render
+   não gera o HTML estático do artigo.
+5. Adicionar a `<url>` correspondente em `public/sitemap.xml` (`https://vitorsilverio.dev/artigos/<slug>`),
+   senão o artigo fica de fora do sitemap.
+
+Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
+(pré-render das rotas + tipos) e `npm run test`.

@@ -3,15 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideLocationMocks } from '@angular/common/testing';
 import { ArticleHelloArmbox } from './posts/hello-armbox';
-import { HighlightDirective } from '../../shared/highlight.directive';
 
 @Component({
-  imports: [ArticleHelloArmbox, HighlightDirective],
-  template: `<app-article-hello-armbox appHighlight />`,
+  imports: [ArticleHelloArmbox],
+  template: `<app-article-hello-armbox />`,
 })
 class Host {}
 
-describe('HighlightDirective', () => {
+describe('HighlightDirective (via hostDirectives)', () => {
   it('aplica syntax highlight (tokens do Prism) no código do artigo', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([]), provideLocationMocks()],

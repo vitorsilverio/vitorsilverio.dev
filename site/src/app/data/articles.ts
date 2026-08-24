@@ -35,4 +35,13 @@ export const articles: readonly ArticleMeta[] = [
       'Mão na massa: escreva um hello world em assembly ARM, monte um ELF real e rode no arm-box (o runner sobre o arm-jitter).',
     tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial'],
   },
+  {
+    slug: 'ambiente-arm',
+    title: 'Setup do ambiente ARM',
+    date: '2026-08-24',
+    readingTime: '9 min',
+    excerpt:
+      'Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.',
+    tags: ['ARM', 'Tutorial', 'arm-jitter', 'armbox', 'Toolchain'],
+  },
 ];

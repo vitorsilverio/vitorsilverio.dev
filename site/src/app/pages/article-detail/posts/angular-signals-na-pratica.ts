@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   selector: 'app-article-signals',
+  hostDirectives: [HighlightDirective],
   template: `
     <p>
       O Angular evoluiu bastante nos últimos anos, e uma das mudanças mais

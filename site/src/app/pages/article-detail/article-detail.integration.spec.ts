@@ -1,27 +1,26 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Routes } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { provideLocationMocks } from '@angular/common/testing';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { ArticleDetail } from './article-detail';
+import { routes } from '../../app.routes';
 
-const routes: Routes = [{ path: 'artigos/:slug', component: ArticleDetail }];
-
-describe('ArticleDetail (integração)', () => {
-  it('renderiza o artigo e aplica highlight nos blocos de código', () => {
+describe('ArticleDetail (integração, rota lazy)', () => {
+  it('renderiza o artigo via rota lazy e aplica highlight nos blocos de código', async () => {
     TestBed.configureTestingModule({
-      imports: [ArticleDetail],
       providers: [provideRouter(routes), provideLocationMocks()],
     });
 
-    const fixture = TestBed.createComponent(ArticleDetail);
-    fixture.componentRef.setInput('slug', 'hello-armbox');
-    fixture.detectChanges();
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/artigos/hello-armbox', ArticleDetail);
 
-    const asm = fixture.nativeElement.querySelector('code.language-armasm');
-    const bash = fixture.nativeElement.querySelector('code.language-bash');
+    const el = harness.routeNativeElement!;
+    const asm = el.querySelector('code.language-armasm');
+    const bash = el.querySelector('code.language-bash');
 
     expect(asm).toBeTruthy();
     expect(bash).toBeTruthy();
-    expect(asm.querySelector('.token')).toBeTruthy();
-    expect(bash.querySelector('.token')).toBeTruthy();
+    expect(asm!.querySelector('.token')).toBeTruthy();
+    expect(bash!.querySelector('.token')).toBeTruthy();
   });
 });
