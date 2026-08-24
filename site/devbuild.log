@@ -1,0 +1,139 @@
+> Building...
+ÔêÜ Building...
+Initial chunk files | Names          |  Raw size
+chunk-7L76VN55.js   | -              | 904.08 kB | 
+chunk-LWK7BHEK.js   | -              | 426.48 kB | 
+main.js             | main           |  29.62 kB | 
+styles.css          | styles         |   6.49 kB | 
+
+                    | Initial total  |   1.37 MB
+
+Lazy chunk files    | Names          |  Raw size
+chunk-HI2HMTWS.js   | article-detail | 114.65 kB | 
+chunk-KT3RHQ6S.js   | resume         |  19.12 kB | 
+chunk-MV5NE27L.js   | projects       |  14.99 kB | 
+chunk-V3P2C7XG.js   | articles       |  14.58 kB | 
+chunk-B3KDVR2U.js   | home           |  10.14 kB | 
+chunk-W5DIH5O3.js   | not-found      |   3.29 kB | 
+chunk-UERZI3JK.js   | -              |   1.13 kB | 
+
+Prerendered 7 static routes.
+Application bundle generation failed. [5.470 seconds] - 2026-08-24T01:45:46.993Z
+
+X [ERROR] An error occurred while prerendering route '/artigos'.
+
+Error: NG0401: Missing Platform: This may be due to using `bootstrapApplication` on the server without passing a `BootstrapContext`. Please make sure that `bootstrapApplication` is called with a `context` argument. Find more at https://v22.angular.dev/errors/NG0401
+    at internalCreateApplication (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\.angular\prerender-root\5b26fdd4-a21b-47a5-b3c5-a113342d69fc\node_modules\@angular\core\fesm2022\core.mjs:2431:11)
+    at bootstrapApplication (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\.angular\prerender-root\5b26fdd4-a21b-47a5-b3c5-a113342d69fc\node_modules\@angular\platform-browser\fesm2022\_browser-chunk.mjs:251:10)
+    at bootstrap (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\.angular\prerender-root\5b26fdd4-a21b-47a5-b3c5-a113342d69fc\src\main.server.ts:5:25)
+    at renderAngular (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\.angular\prerender-root\5b26fdd4-a21b-47a5-b3c5-a113342d69fc\node_modules\@angular\ssr\fesm2022\ssr.mjs:141:30)
+    at AngularServerApp.handleRendering (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\.angular\prerender-root\5b26fdd4-a21b-47a5-b3c5-a113342d69fc\node_modules\@angular\ssr\fesm2022\ssr.mjs:1309:26)
+    at async renderPage (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\render-worker.ts:48:20)
+    at async onMessage (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\src\worker.ts:184:18)
+
+
+X [ERROR] An error occurred while prerendering route '/artigos/hello-armbox'.
+
+Error: Terminating worker thread
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:489:27)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+    at async executeBuild (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-build.js:286:28)
+    at async watch (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\index.js:110:24)
+    at async Task.task [as taskFn] (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\tools\esbuild\utils.js:135:26)
+
+
+X [ERROR] An error occurred while prerendering route '/'.
+
+Error: Terminating worker thread
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:489:27)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+    at async executeBuild (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-build.js:286:28)
+    at async watch (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\index.js:110:24)
+    at async Task.task [as taskFn] (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\tools\esbuild\utils.js:135:26)
+
+
+X [ERROR] An error occurred while prerendering route '/artigos/angular-signals-na-pratica'.
+
+Error: Terminating worker thread
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:489:27)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+    at async executeBuild (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-build.js:286:28)
+    at async watch (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\index.js:110:24)
+    at async Task.task [as taskFn] (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\tools\esbuild\utils.js:135:26)
+
+
+X [ERROR] An error occurred while prerendering route '/'.
+
+Error: Terminating worker thread
+    at Object.ThreadTermination (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\errors.js:5:30)
+    at WorkerInfo.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\worker_pool\index.js:81:43)
+    at ThreadPool._removeWorker (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:266:20)
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:495:18)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+
+
+X [ERROR] An error occurred while prerendering route '/curriculo'.
+
+Error: Terminating worker thread
+    at Object.ThreadTermination (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\errors.js:5:30)
+    at WorkerInfo.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\worker_pool\index.js:81:43)
+    at ThreadPool._removeWorker (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:266:20)
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:495:18)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+
+
+X [ERROR] An error occurred while prerendering route '/artigos/boas-vindas'.
+
+Error: Terminating worker thread
+    at Object.ThreadTermination (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\errors.js:5:30)
+    at WorkerInfo.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\worker_pool\index.js:81:43)
+    at ThreadPool._removeWorker (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:266:20)
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:495:18)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+
+
+X [ERROR] An error occurred while prerendering route '/projetos'.
+
+Error: Terminating worker thread
+    at Object.ThreadTermination (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\errors.js:5:30)
+    at WorkerInfo.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\worker_pool\index.js:81:43)
+    at ThreadPool._removeWorker (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:266:20)
+    at ThreadPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:495:18)
+    at WorkerPool.destroy (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\piscina\dist\index.js:669:65)
+    at C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:166:35
+    at async Promise.all (index 3)
+    at async renderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:170:9)
+    at async prerenderPages (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\utils\server-rendering\prerender.js:107:49)
+    at async executePostBundleSteps (C:\Users\user\IdeaProjects\vitorsilverio.dev\site\node_modules\@angular\build\src\builders\application\execute-post-bundle.js:77:73)
+
+

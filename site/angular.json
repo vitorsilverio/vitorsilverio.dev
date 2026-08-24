@@ -20,6 +20,11 @@
             "tsConfig": "tsconfig.app.json",
             "baseHref": "/",
             "allowedCommonJsDependencies": ["prismjs"],
+            "server": "src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "src/prerender-routes.txt"
+            },
             "assets": [
               {
                 "glob": "**/*",

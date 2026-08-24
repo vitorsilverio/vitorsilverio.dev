@@ -1,0 +1,26 @@
+
+> site@0.0.0 build
+> ng build
+
+> Building...
+ÔêÜ Building...
+Initial chunk files | Names          |  Raw size | Estimated transfer size
+main-B4NVGAE5.js    | main           | 247.01 kB |                67.47 kB
+styles-S7IJV6UV.css | styles         |   5.21 kB |                 1.68 kB
+
+                    | Initial total  | 252.21 kB |                69.14 kB
+
+Lazy chunk files    | Names          |  Raw size | Estimated transfer size
+chunk-CX9K9xbu.js   | article-detail |  41.79 kB |                14.91 kB
+chunk-COnyZic7.js   | resume         |   7.45 kB |                 2.56 kB
+chunk-C_4wurwt.js   | projects       |   5.16 kB |                 1.70 kB
+chunk-BMmo3LYP.js   | articles       |   4.80 kB |                 1.79 kB
+chunk-d8Ig5pPk.js   | home           |   3.61 kB |                 1.47 kB
+chunk-BGEvN2uF.js   | not-found      | 983 bytes |               983 bytes
+chunk-DgCeY0t9.js   | -              | 838 bytes |               838 bytes
+
+Prerendered 7 static routes.
+Application bundle generation complete. [5.401 seconds] - 2026-08-24T01:48:18.860Z
+
+Output location: C:\Users\user\IdeaProjects\vitorsilverio.dev\site\dist\site
+

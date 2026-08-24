@@ -1,4 +1,11 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+  Injectable,
+  effect,
+  inject,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 
 type Theme = 'light' | 'dark';
 
@@ -6,16 +13,22 @@ const STORAGE_KEY = 'vs-theme';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly document = inject(DOCUMENT);
+
   readonly theme = signal<Theme>(this.readInitial());
 
   constructor() {
     effect(() => {
       const value = this.theme();
-      document.documentElement.setAttribute('data-theme', value);
-      try {
-        localStorage.setItem(STORAGE_KEY, value);
-      } catch {
-        /* ignore storage errors (private mode, etc.) */
+      this.document.documentElement.setAttribute('data-theme', value);
+      if (this.isBrowser) {
+        try {
+          localStorage.setItem(STORAGE_KEY, value);
+        } catch {
+          /* ignore storage errors (private mode, etc.) */
+        }
       }
     });
   }
@@ -25,13 +38,15 @@ export class ThemeService {
   }
 
   private readInitial(): Theme {
+    if (!this.isBrowser) {
+      return 'light';
+    }
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === 'light' || stored === 'dark') {
         return stored;
       }
       if (
-        typeof window !== 'undefined' &&
         typeof window.matchMedia === 'function' &&
         window.matchMedia('(prefers-color-scheme: dark)').matches
       ) {
