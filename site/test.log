@@ -1,16 +1,16 @@
 > Building...
 ÔêÜ Building...
-Application bundle generation complete. [2.851 seconds] - 2026-08-24T11:57:13.769Z
+Application bundle generation complete. [2.065 seconds] - 2026-08-24T12:07:12.639Z
 
 
 [1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90mC:/Users/user/IdeaProjects/vitorsilverio.dev/site[39m
 
- [32mÔ£ô[39m [30m[45m site [49m[39m src/app/pages/article-detail/article-detail.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 94[2mms[22m[39m
- [32mÔ£ô[39m [30m[45m site [49m[39m src/app/app.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 136[2mms[22m[39m
- [32mÔ£ô[39m [30m[45m site [49m[39m src/app/pages/article-detail/article-detail.integration.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 193[2mms[22m[39m
+ [32mÔ£ô[39m [30m[45m site [49m[39m src/app/app.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+ [32mÔ£ô[39m [30m[45m site [49m[39m src/app/pages/article-detail/article-detail.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32mÔ£ô[39m [30m[45m site [49m[39m src/app/pages/article-detail/article-detail.integration.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 197[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
 [2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
-[2m   Start at [22m 08:57:14
-[2m   Duration [22m 2.22s[2m (transform 575ms, setup 1.45s, import 692ms, tests 423ms, environment 3.00s)[22m
+[2m   Start at [22m 09:07:12
+[2m   Duration [22m 2.41s[2m (transform 289ms, setup 1.41s, import 652ms, tests 536ms, environment 3.30s)[22m
 

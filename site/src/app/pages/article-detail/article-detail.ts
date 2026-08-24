@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { articles, type ArticleMeta } from '../../data/articles';
 import { GiscusComments } from '../../shared/giscus/giscus-comments';
+import { formatPtDate } from '../../shared/date.util';
 
 @Component({
   imports: [RouterLink, RouterOutlet, GiscusComments],
@@ -54,10 +55,5 @@ export class ArticleDetail {
     });
   }
 
-  protected readonly formattedDate = (iso: string): string =>
-    new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    }).format(new Date(iso));
+  protected readonly formattedDate = (iso: string): string => formatPtDate(iso);
 }

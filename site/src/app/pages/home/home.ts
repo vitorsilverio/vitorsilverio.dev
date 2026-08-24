@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { articles } from '../../data/articles';
+import { formatPtDate } from '../../shared/date.util';
 
 @Component({
   imports: [RouterLink],
@@ -18,9 +19,5 @@ export class Home {
   );
 
   protected readonly formattedDate = (iso: string): string =>
-    new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }).format(new Date(iso));
+    formatPtDate(iso, 'short');
 }

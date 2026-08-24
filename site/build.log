@@ -6,27 +6,27 @@
 ÔêÜ Building...
 Initial chunk files | Names                      |  Raw size | Estimated transfer size
 chunk-Jxbayw0q.js   | -                          | 137.19 kB |                40.87 kB
-main-WEHEZRBD.js    | main                       | 110.20 kB |                28.55 kB
+main-B2VXVYQU.js    | main                       | 110.20 kB |                28.52 kB
 styles-S7IJV6UV.css | styles                     |   5.21 kB |                 1.68 kB
 
-                    | Initial total              | 252.61 kB |                71.09 kB
+                    | Initial total              | 252.61 kB |                71.07 kB
 
 Lazy chunk files    | Names                      |  Raw size | Estimated transfer size
 chunk-QlOva1C1.js   | -                          |  27.94 kB |                 9.84 kB
-chunk-FuR5wNI7.js   | hello-armbox               |   7.75 kB |                 2.97 kB
+chunk-Eyd8G_20.js   | hello-armbox               |   7.75 kB |                 2.97 kB
 chunk-B7FvlPtj.js   | resume                     |   7.46 kB |                 2.56 kB
-chunk-wL5mpWxK.js   | ambiente-arm               |   6.15 kB |                 2.48 kB
-chunk-QBvsf7wi.js   | article-detail             |   5.90 kB |                 2.40 kB
+chunk-8gqrOLDL.js   | ambiente-arm               |   6.15 kB |                 2.48 kB
+chunk-mKfnqsU6.js   | article-detail             |   5.82 kB |                 2.35 kB
 chunk-CDCCu8Ir.js   | projects                   |   5.17 kB |                 1.71 kB
-chunk-CWugbjAq.js   | articles                   |   4.85 kB |                 1.82 kB
-chunk--29YpZew.js   | home                       |   3.65 kB |                 1.48 kB
+chunk-DP73bkDY.js   | articles                   |   4.77 kB |                 1.77 kB
+chunk-CRp_JCiD.js   | home                       |   3.58 kB |                 1.46 kB
 chunk-BgKOzDqv.js   | angular-signals-na-pratica |   1.88 kB |               919 bytes
 chunk-BldUKhcA.js   | boas-vindas                |   1.59 kB |               849 bytes
-chunk-Stmoibay.js   | -                          |   1.13 kB |               551 bytes
-chunk-Bx64KSvn.js   | not-found                  |   1.02 kB |                 1.02 kB
+chunk-DUV0iQlE.js   | -                          |   1.31 kB |               652 bytes
+chunk-B6eSAhaC.js   | not-found                  |   1.02 kB |                 1.02 kB
 
 Prerendered 8 static routes.
-Application bundle generation complete. [4.258 seconds] - 2026-08-24T11:57:08.179Z
+Application bundle generation complete. [4.484 seconds] - 2026-08-24T12:07:08.354Z
 
 Output location: C:\Users\user\IdeaProjects\vitorsilverio.dev\site\dist\site
 
