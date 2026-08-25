@@ -8,7 +8,7 @@
   --accent: #4f46e5;
   --accent-strong: #4338ca;
   --accent-contrast: #ffffff;
-  --ring: #4f46e599;
+  --ring: #4338ca;
   --shadow: 0 1px 2px rgba(16, 16, 31, 0.06), 0 8px 24px rgba(16, 16, 31, 0.06);
   --radius: 14px;
   --maxw: 1040px;
@@ -27,7 +27,7 @@
   --accent: #818cf8;
   --accent-strong: #a5b4fc;
   --accent-contrast: #0e0e16;
-  --ring: #818cf899;
+  --ring: #a5b4fc;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
@@ -73,6 +73,11 @@ a:hover {
   outline: 3px solid var(--ring);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Foco programático (ex.: troca de rota em SPA) não deve exibir contorno */
+[tabindex="-1"]:focus {
+  outline: none;
 }
 
 .container {
@@ -135,18 +140,20 @@ a:hover {
 .grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
 }
 
 .tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.2rem 0.6rem;
+  padding: 0.35rem 0.7rem;
   border-radius: 999px;
   background: var(--surface-2);
   color: var(--muted);
   border: 1px solid var(--border);
+  min-height: 24px;
 }
 
 button.tag {
@@ -222,28 +229,33 @@ button.tag:hover {
 }
 
 /* Article prose (applies to article body content) */
+.prose {
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+
 .prose h2 {
   margin-top: 2rem;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
 .prose h3 {
   margin-top: 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .prose p {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.3rem;
 }
 
 .prose ul,
 .prose ol {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.3rem;
   padding-left: 1.4rem;
 }
 
 .prose li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.55rem;
 }
 
 .prose code {
@@ -274,4 +286,28 @@ button.tag:hover {
   padding: 0.5rem 1rem;
   border-left: 3px solid var(--accent);
   color: var(--muted);
+}
+
+.prose a {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

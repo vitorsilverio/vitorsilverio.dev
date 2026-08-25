@@ -2,7 +2,7 @@
   <div class="container">
     <header class="page-header">
       <span class="eyebrow">Escritos &amp; estudos</span>
-      <h1>Artigos</h1>
+      <h1 tabindex="-1">Artigos</h1>
       <p>
         Anotações e aprendizados sobre tecnologia — muitos redigidos com apoio de
         IA enquanto estudo. Novos textos entram aqui.
@@ -34,25 +34,31 @@
     @if (filteredArticles().length > 0) {
       <ul class="article-list">
         @for (article of filteredArticles(); track article.slug) {
-           <li class="article-item">
-             <img
-               class="article-cover"
-               [src]="'/assets/covers/' + article.slug + '.svg'"
-               [alt]="article.title"
-               width="1200"
-               height="630"
-             />
-             <a class="article-row" [routerLink]="['/artigos', article.slug]">
-              <div class="article-text">
-                <h2>{{ article.title }}</h2>
-                <p class="muted">{{ article.excerpt }}</p>
-              </div>
-              <div class="article-info muted">
-                <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
-                <span>· {{ article.readingTime }} de leitura</span>
-              </div>
-            </a>
-            <div class="tags">
+            <li class="article-item">
+              <a
+                class="article-card"
+                [routerLink]="['/artigos', article.slug]"
+                [attr.aria-label]="'Ler artigo: ' + article.title"
+              >
+                <img
+                  class="article-cover"
+                  [src]="'/assets/covers/' + article.slug + '.svg'"
+                  alt=""
+                  width="1200"
+                  height="630"
+                />
+                <div class="article-body">
+                  <div class="article-text">
+                    <h2>{{ article.title }}</h2>
+                    <p class="muted">{{ article.excerpt }}</p>
+                  </div>
+                  <div class="article-info muted">
+                    <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
+                    <span>· {{ article.readingTime }} de leitura</span>
+                  </div>
+                </div>
+              </a>
+              <div class="tags">
               @for (tag of article.tags; track tag) {
                 <button
                   type="button"

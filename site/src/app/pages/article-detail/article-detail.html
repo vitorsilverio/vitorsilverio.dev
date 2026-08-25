@@ -17,7 +17,7 @@
             <a class="tag tag-link" routerLink="/artigos" [queryParams]="{ tag }">{{ tag }}</a>
           }
         </div>
-        <h1>{{ article.title }}</h1>
+         <h1 #articleTitle tabindex="-1">{{ article.title }}</h1>
         <p class="article-meta muted">
           <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
           · {{ article.readingTime }} de leitura

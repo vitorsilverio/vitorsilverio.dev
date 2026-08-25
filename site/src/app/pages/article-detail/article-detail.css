@@ -3,7 +3,7 @@
 }
 
 .article-wrap {
-  max-width: 720px;
+  max-width: var(--maxw);
 }
 
 .back {
@@ -19,6 +19,10 @@
 .article-header h1 {
   font-size: clamp(1.8rem, 5vw, 2.6rem);
   margin: 0.75rem 0 0.5rem;
+}
+
+.article-header h1:focus {
+  outline: none;
 }
 
 .tags {

@@ -1,9 +1,12 @@
 import { afterNextRender, Component, effect, ElementRef, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import { ThemeService } from './theme.service';
 import { ConsentBanner } from './shared/consent/consent-banner';
 import { ConsentService } from './shared/consent/consent.service';
 import { SeoService } from './shared/seo.service';
+import { PLATFORM_ID } from '@angular/core';
 
 interface NavLink {
   readonly path: string;
@@ -22,11 +25,42 @@ export class App {
   protected readonly seo = inject(SeoService);
   private readonly host = inject(ElementRef);
   protected readonly menuOpen = signal(false);
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private firstNav = true;
+  private lastTrigger: string | null = null;
 
   constructor() {
     // Aplica o consentimento salvo só após a hidratação (cliente), igual aos
     // comentários: nada de GA no pré-render e sem mismatch de hidratação.
     afterNextRender(() => this.consent.applyStored());
+
+    // Acessibilidade SPA: em navegação por link (avanço), move o foco para o
+    // <h1> da página (ou <main>) — o scroll volta ao topo via withInMemoryScrolling.
+    // No "voltar" (popstate) preserva a posição anterior e não rouba o foco.
+    if (this.isBrowser) {
+      this.router.events
+        .pipe(filter((e) => e instanceof NavigationStart || e instanceof NavigationEnd))
+        .subscribe((e) => {
+          if (e instanceof NavigationStart) {
+            this.lastTrigger = e.navigationTrigger ?? null;
+            return;
+          }
+          if (this.firstNav) {
+            this.firstNav = false;
+            return;
+          }
+          if (this.lastTrigger === 'popstate') return;
+          setTimeout(() => {
+            const main = this.document.querySelector('main');
+            const target =
+              (main?.querySelector('h1') as HTMLElement | null) ??
+              (main as HTMLElement | null);
+            target?.focus();
+          }, 0);
+        });
+    }
 
     // Dados estruturados globais (Person + WebSite).
     effect(() => {
