@@ -82,6 +82,12 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
    `public/sitemap.xml` com as `<url>` das páginas + de cada artigo, já incluindo
    `<image:image>` com o cover PNG de cada post e o `og-default.png` na home).
    Não editar o `sitemap.xml` à mão — ele é gerado.
+6. Rodar os geradores de assets/SEO a partir de `articles.ts`:
+   `node scripts/gen-covers.mjs && node scripts/gen-cover-pngs.mjs &&
+    node scripts/gen-sitemap.mjs && node scripts/gen-feed.mjs`
+   (`gen-cover-pngs` depende de `@resvg/resvg-js`; se não estiver instalado,
+   `npm i -D @resvg/resvg-js` antes). Isso cria a capa SVG+PNG do novo post,
+   atualiza o sitemap e o `feed.xml` (RSS).
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.

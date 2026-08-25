@@ -28,6 +28,49 @@
         <router-outlet />
       </div>
 
+      <nav class="article-nav" aria-label="Navegação entre artigos">
+        @if (prev(); as p) {
+          <a class="nav-card" routerLink="/artigos/{{ p.slug }}">
+            <span class="nav-dir">← Anterior</span>
+            <span class="nav-title">{{ p.title }}</span>
+          </a>
+        }
+        @if (next(); as n) {
+          <a class="nav-card nav-next" routerLink="/artigos/{{ n.slug }}">
+            <span class="nav-dir">Próximo →</span>
+            <span class="nav-title">{{ n.title }}</span>
+          </a>
+        }
+      </nav>
+
+      @if (related().length) {
+        <section class="related" aria-label="Artigos relacionados">
+          <h2>Artigos relacionados</h2>
+          <ul class="related-list">
+            @for (r of related(); track r.slug) {
+              <li>
+                <a class="related-card" routerLink="/artigos/{{ r.slug }}">
+                  <img
+                    class="related-cover"
+                    [src]="'/assets/covers/' + r.slug + '.svg'"
+                    [alt]="r.title"
+                    width="1200"
+                    height="630"
+                  />
+                  <span class="related-title">{{ r.title }}</span>
+                  <span class="related-meta muted">{{ formattedDate(r.date) }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+
+      <app-share-buttons
+        [url]="'https://vitorsilverio.dev/artigos/' + article.slug"
+        [title]="article.title"
+      />
+
       <app-giscus-comments [term]="article.slug" />
     </div>
   </article>

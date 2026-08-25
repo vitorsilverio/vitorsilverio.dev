@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Vítor Silvério — Artigos</title>
+    <link>https://vitorsilverio.dev/artigos</link>
+    <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
+    <language>pt-BR</language>
+    <lastBuildDate>Thu, 15 Jan 2026 03:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Boas-vindas ao meu canto na internet</title>
+      <link>https://vitorsilverio.dev/artigos/boas-vindas</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/boas-vindas</guid>
+      <pubDate>Thu, 15 Jan 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Por que criei este site e como pretendo usá-lo para documentar meus estudos e projetos.]]></description>
+    </item>
+    <item>
+      <title>Angular Signals na prática</title>
+      <link>https://vitorsilverio.dev/artigos/angular-signals-na-pratica</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/angular-signals-na-pratica</guid>
+      <pubDate>Mon, 02 Feb 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Uma introdução prática ao sistema de reatividade baseado em signals e como ele muda a forma de escrever componentes.]]></description>
+    </item>
+    <item>
+      <title>Criando um executável ARM e rodando no arm-box</title>
+      <link>https://vitorsilverio.dev/artigos/hello-armbox</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/hello-armbox</guid>
+      <pubDate>Sun, 23 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Mão na massa: escreva um hello world em assembly ARM, monte um ELF real e rode no arm-box (o runner sobre o arm-jitter).]]></description>
+    </item>
+    <item>
+      <title>Setup do ambiente ARM</title>
+      <link>https://vitorsilverio.dev/artigos/ambiente-arm</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/ambiente-arm</guid>
+      <pubDate>Mon, 24 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.]]></description>
+    </item>
+    <item>
+      <title>Fundamentos da arquitetura ARM</title>
+      <link>https://vitorsilverio.dev/artigos/fundamentos-arm</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fundamentos-arm</guid>
+      <pubDate>Tue, 25 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.]]></description>
+    </item>
+  </channel>
+</rss>

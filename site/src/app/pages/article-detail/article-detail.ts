@@ -4,11 +4,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { articles, type ArticleMeta } from '../../data/articles';
 import { GiscusComments } from '../../shared/giscus/giscus-comments';
+import { ShareButtons } from '../../shared/share-buttons';
 import { SeoService } from '../../shared/seo.service';
 import { formatPtDate } from '../../shared/date.util';
 
 @Component({
-  imports: [RouterLink, RouterOutlet, GiscusComments],
+  imports: [RouterLink, RouterOutlet, GiscusComments, ShareButtons],
   selector: 'app-article-detail',
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',
@@ -36,6 +37,39 @@ export class ArticleDetail {
   protected readonly article = computed<ArticleMeta | undefined>(() =>
     articles.find((a) => a.slug === this.slug()),
   );
+
+  private readonly sorted = [...articles].sort((a, b) =>
+    a.date.localeCompare(b.date),
+  );
+
+  protected readonly prev = computed<ArticleMeta | undefined>(() => {
+    const a = this.article();
+    if (!a) return undefined;
+    const i = this.sorted.findIndex((x) => x.slug === a.slug);
+    return i > 0 ? this.sorted[i - 1] : undefined;
+  });
+
+  protected readonly next = computed<ArticleMeta | undefined>(() => {
+    const a = this.article();
+    if (!a) return undefined;
+    const i = this.sorted.findIndex((x) => x.slug === a.slug);
+    return i >= 0 && i < this.sorted.length - 1 ? this.sorted[i + 1] : undefined;
+  });
+
+  protected readonly related = computed<ArticleMeta[]>(() => {
+    const a = this.article();
+    if (!a) return [];
+    return articles
+      .filter((x) => x.slug !== a.slug)
+      .map((x) => ({
+        x,
+        score: x.tags.filter((t) => a.tags.includes(t)).length,
+      }))
+      .filter((o) => o.score > 0)
+      .sort((p, q) => q.score - p.score || q.x.date.localeCompare(p.x.date))
+      .slice(0, 3)
+      .map((o) => o.x);
+  });
 
   constructor() {
     effect(() => {
