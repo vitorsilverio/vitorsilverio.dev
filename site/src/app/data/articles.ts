@@ -44,4 +44,12 @@ export const articles: readonly ArticleMeta[] = [
       'Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.',
     tags: ['ARM', 'Tutorial', 'arm-jitter', 'armbox', 'Toolchain'],
   },
+  {
+    slug: 'fundamentos-arm',
+    title: 'Fundamentos da arquitetura ARM',
+    date: '2026-08-25',
+    readingTime: '12 min',
+    excerpt: 'Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.',
+    tags: ['ARM', 'Tutorial', 'Arquitetura', 'Registradores', 'Instruction Set'],
+  },
 ];

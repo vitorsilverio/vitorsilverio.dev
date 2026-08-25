@@ -116,6 +116,11 @@
       @for (s of socialLinks; track s.label) {
         <a [href]="s.href" [attr.aria-label]="s.label" target="_blank" rel="noopener">{{ s.label }}</a>
       }
+      <button type="button" class="privacy-link" (click)="consent.reset()">
+        Privacidade
+      </button>
     </nav>
   </div>
 </footer>
+
+<app-consent-banner />

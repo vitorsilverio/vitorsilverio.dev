@@ -1,0 +1,61 @@
+.consent-banner {
+  position: fixed;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  background: #1e1b4b;
+  color: #f8fafc;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.consent-text {
+  margin: 0;
+  flex: 1 1 260px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.consent-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.consent-actions button {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.btn-accept {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.btn-reject {
+  background: transparent;
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-accept:hover,
+.btn-reject:hover {
+  filter: brightness(1.12);
+}
+
+.btn-accept:focus-visible,
+.btn-reject:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}

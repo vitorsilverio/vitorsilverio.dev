@@ -6,3 +6,4 @@
 /artigos/angular-signals-na-pratica
 /artigos/hello-armbox
 /artigos/ambiente-arm
+/artigos/fundamentos-arm

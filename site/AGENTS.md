@@ -83,3 +83,11 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.
+
+## Decisões e ambiguidades
+
+- Quando uma ferramenta/recurso citado **não existir** ou não estiver disponível (ex.: GDB no
+  arm-box, dependência ausente), **pergunte ao usuário o que fazer** antes de substituir por uma
+  alternativa. Não escolha a alternativa sozinho — apresente a limitação e peça a decisão
+  (ex.: "o arm-box ainda não tem GDB; quer que eu (a) espere, (b) use qemu-arm como alternativa,
+  ou (c) outro?").

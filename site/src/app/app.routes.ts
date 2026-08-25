@@ -15,6 +15,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/ambiente-arm').then(
       (m) => m.ArticleAmbienteArm,
     ),
+  'fundamentos-arm': () =>
+    import('./pages/article-detail/posts/fundamentos-arm').then((m) => m.ArticleFundamentosArm),
 } as const;
 
 export const routes: Routes = [

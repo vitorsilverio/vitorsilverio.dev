@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { afterNextRender, Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ThemeService } from './theme.service';
+import { ConsentBanner } from './shared/consent/consent-banner';
+import { ConsentService } from './shared/consent/consent.service';
 
 interface NavLink {
   readonly path: string;
@@ -8,14 +10,21 @@ interface NavLink {
 }
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, ConsentBanner],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
   protected readonly theme = inject(ThemeService);
+  protected readonly consent = inject(ConsentService);
   protected readonly menuOpen = signal(false);
+
+  constructor() {
+    // Aplica o consentimento salvo só após a hidratação (cliente), igual aos
+    // comentários: nada de GA no pré-render e sem mismatch de hidratação.
+    afterNextRender(() => this.consent.applyStored());
+  }
 
   protected readonly navLinks: readonly NavLink[] = [
     { path: '/', label: 'Início' },
