@@ -74,3 +74,13 @@
     text-align: left;
   }
 }
+
+.article-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SeoService } from '../../shared/seo.service';
 
 interface ExperienceItem {
   readonly role: string;
@@ -30,6 +31,8 @@ interface CertificationItem {
   styleUrl: './resume.css',
 })
 export class Resume {
+  private readonly seo = inject(SeoService);
+
   protected readonly name = 'Vítor Silvério Rodrigues';
   protected readonly headline = 'Analista Programador · Software Developer';
   protected readonly location = 'São Paulo, Brasil';
@@ -131,4 +134,13 @@ export class Resume {
     { label: 'GitHub', href: 'https://github.com/vitorsilverio' },
     { label: 'ORCID', href: 'https://orcid.org/0000-0002-0977-7196' },
   ];
+
+  constructor() {
+    this.seo.set({
+      title: 'Currículo',
+      description:
+        'Currículo de Vítor Silvério Rodrigues: experiência em desenvolvimento de software, formação em Análise e Desenvolvimento de Sistemas e projetos com ARM e Angular.',
+      url: '/curriculo',
+    });
+  }
 }

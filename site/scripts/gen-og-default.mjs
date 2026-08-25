@@ -1,0 +1,51 @@
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { writeFileSync } from 'node:fs';
+import { Resvg } from '@resvg/resvg-js';
+
+const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = resolve(SITE_ROOT, 'public/assets');
+const ACCENT = '#60a5fa';
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Vítor Silvério">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="22%" r="60%">
+      <stop offset="0%" stop-color="${ACCENT}" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="${ACCENT}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g stroke="${ACCENT}" stroke-opacity="0.22" stroke-width="2" fill="none">
+    <path d="M780 90 H1120 V250 H960 V470 H1120"/>
+    <path d="M840 150 H1060 V360 H900"/>
+    <circle cx="780" cy="90" r="6" fill="${ACCENT}"/>
+    <circle cx="1120" cy="250" r="6" fill="${ACCENT}"/>
+    <circle cx="960" cy="470" r="6" fill="${ACCENT}"/>
+    <circle cx="840" cy="150" r="6" fill="${ACCENT}"/>
+    <circle cx="1060" cy="360" r="6" fill="${ACCENT}"/>
+    <circle cx="900" cy="360" r="6" fill="${ACCENT}"/>
+  </g>
+  <text x="80" y="120" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" letter-spacing="6" fill="#c7d2fe">VÍTOR SILVÉRIO</text>
+  <text x="80" y="320" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" fill="#e2e8f0">Engenharia de Software</text>
+  <text x="80" y="394" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" fill="#e2e8f0">ARM, Emulação &amp; Tecnologia</text>
+  <text x="80" y="500" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="2" fill="${ACCENT}">PROJETOS · CURRÍCULO · ARTIGOS</text>
+</svg>
+`;
+
+writeFileSync(resolve(OUT, 'og-default.svg'), svg, 'utf8');
+
+const resvg = new Resvg(svg, {
+  fitTo: { mode: 'width', value: 1200 },
+  font: {
+    fontFiles: ['C:\\Windows\\Fonts\\segoeui.ttf', 'C:\\Windows\\Fonts\\arial.ttf'],
+    loadSystemFonts: false,
+  },
+});
+writeFileSync(resolve(OUT, 'og-default.png'), resvg.render().asPng());
+
+console.log('✓ og-default.svg + og-default.png gerados em public/assets/');

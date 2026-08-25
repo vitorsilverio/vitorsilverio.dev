@@ -3,6 +3,14 @@
     <div class="container article-wrap">
       <a class="back" routerLink="/artigos">← Voltar aos artigos</a>
 
+      <img
+        class="article-cover"
+        [src]="'/assets/covers/' + article.slug + '.svg'"
+        [alt]="article.title"
+        width="1200"
+        height="630"
+      />
+
       <header class="article-header">
         <div class="tags">
           @for (tag of article.tags; track tag) {

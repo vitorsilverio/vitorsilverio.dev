@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/projetos</loc>
@@ -24,25 +25,30 @@
     <loc>https://vitorsilverio.dev/artigos/boas-vindas</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/boas-vindas.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/angular-signals-na-pratica</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/angular-signals-na-pratica.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/hello-armbox</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/hello-armbox.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/ambiente-arm</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/ambiente-arm.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/fundamentos-arm</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/fundamentos-arm.png</image:loc></image:image>
   </url>
 </urlset>

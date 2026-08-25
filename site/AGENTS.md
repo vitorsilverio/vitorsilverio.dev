@@ -78,8 +78,10 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
    `'<slug>': () => import('./pages/article-detail/posts/<slug>').then((m) => m.Article<Slug>)`.
 4. Adicionar a rota em `src/prerender-routes.txt` (`/artigos/<slug>`), senão o pré-render
    não gera o HTML estático do artigo.
-5. Adicionar a `<url>` correspondente em `public/sitemap.xml` (`https://vitorsilverio.dev/artigos/<slug>`),
-   senão o artigo fica de fora do sitemap.
+5. Rodar `node scripts/gen-sitemap.mjs` (ler `src/app/data/articles.ts` e regenera
+   `public/sitemap.xml` com as `<url>` das páginas + de cada artigo, já incluindo
+   `<image:image>` com o cover PNG de cada post e o `og-default.png` na home).
+   Não editar o `sitemap.xml` à mão — ele é gerado.
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.

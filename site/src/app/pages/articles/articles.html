@@ -34,8 +34,15 @@
     @if (filteredArticles().length > 0) {
       <ul class="article-list">
         @for (article of filteredArticles(); track article.slug) {
-          <li class="article-item">
-            <a class="article-row" [routerLink]="['/artigos', article.slug]">
+           <li class="article-item">
+             <img
+               class="article-cover"
+               [src]="'/assets/covers/' + article.slug + '.svg'"
+               [alt]="article.title"
+               width="1200"
+               height="630"
+             />
+             <a class="article-row" [routerLink]="['/artigos', article.slug]">
               <div class="article-text">
                 <h2>{{ article.title }}</h2>
                 <p class="muted">{{ article.excerpt }}</p>
