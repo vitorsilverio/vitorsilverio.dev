@@ -1,6 +1,6 @@
 import { afterNextRender, Component, effect, ElementRef, inject, signal } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { ThemeService } from './theme.service';
 import { ConsentBanner } from './shared/consent/consent-banner';
@@ -28,6 +28,19 @@ export class App {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  // Recuperação pós-deploy: se um lazy chunk falhar (bundle antigo em cache
+  // após novo deploy aponta para hashes que não existem mais), recarrega a
+  // página para baixar o index.html novo em vez de quebrar o SPA.
+  private readonly routerErrors = this.router.events
+    .pipe(filter((e): e is NavigationError => e instanceof NavigationError))
+    .subscribe((e) => {
+      if (!this.isBrowser) return;
+      const msg = (e.error as Error | undefined)?.message ?? '';
+      if (/chunk|import|fetch|module/i.test(msg)) {
+        this.document.defaultView?.location.reload();
+      }
+    });
   private firstNav = true;
   private lastTrigger: string | null = null;
 
