@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, effect } from '@angular/core';
 import { SeoService } from '../../shared/seo.service';
 
 interface ExperienceItem {
@@ -32,6 +32,7 @@ interface CertificationItem {
 })
 export class Resume {
   private readonly seo = inject(SeoService);
+  private readonly host = inject(ElementRef);
 
   protected readonly name = 'Vítor Silvério Rodrigues';
   protected readonly headline = 'Analista Programador · Software Developer';
@@ -141,6 +142,31 @@ export class Resume {
       description:
         'Currículo de Vítor Silvério Rodrigues: experiência em desenvolvimento de software, formação em Análise e Desenvolvimento de Sistemas e projetos com ARM e Angular.',
       url: '/curriculo',
+    });
+
+    // Marca /curriculo como página de autor (E-E-A-T): ProfilePage -> Person.
+    effect(() => {
+      const host = this.host.nativeElement as HTMLElement;
+      this.seo.setJsonLd(
+        'ld-author',
+        {
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          mainEntity: {
+            '@type': 'Person',
+            name: this.name,
+            url: 'https://vitorsilverio.dev/',
+            sameAs: [
+              'https://www.linkedin.com/in/vitorsilverio/',
+              'https://github.com/vitorsilverio',
+              'https://orcid.org/0000-0002-0977-7196',
+            ],
+            jobTitle: this.headline,
+            description: this.summary,
+          },
+        },
+        host,
+      );
     });
   }
 }

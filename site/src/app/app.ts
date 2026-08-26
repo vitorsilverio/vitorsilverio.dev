@@ -72,6 +72,7 @@ export class App {
           '@type': 'WebSite',
           name: 'Vítor Silvério',
           url: 'https://vitorsilverio.dev/',
+          image: 'https://vitorsilverio.dev/assets/og-default.png',
         },
         host,
       );
@@ -86,6 +87,9 @@ export class App {
             'https://www.linkedin.com/in/vitorsilverio/',
             'https://github.com/vitorsilverio',
           ],
+          jobTitle: 'Desenvolvedor de software',
+          description:
+            'Criador do arm-jitter e do arm-box (emulador/runner ARM em Java); estudante e desenvolvedor interessado em arquitetura ARM, Angular e web.',
         },
         host,
       );

@@ -6,6 +6,7 @@ const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ARTICLES_TS = resolve(SITE_ROOT, 'src/app/data/articles.ts');
 const OUT = resolve(SITE_ROOT, 'public/sitemap.xml');
 const BASE = 'https://vitorsilverio.dev';
+const TODAY = new Date().toISOString().slice(0, 10);
 
 // GitHub Pages redireciona "/pasta" -> "/pasta/"; o sitemap deve apontar
 // direto para a forma canônica com barra para evitar 301 no crawl.
@@ -14,9 +15,9 @@ const withSlash = (p) => (p === '/' || p.endsWith('/') ? p : `${p}/`);
 const src = readFileSync(ARTICLES_TS, 'utf8');
 const re =
   /slug:\s*'([^']+)'[\s\S]*?title:\s*'([^']*)'[\s\S]*?date:\s*'([^']+)'/g;
-const slugs = [];
+const articles = [];
 let m;
-while ((m = re.exec(src))) slugs.push(m[1]);
+while ((m = re.exec(src))) articles.push({ slug: m[1], date: m[3] });
 
 const staticPages = [
   { loc: '/', priority: '1.0', changefreq: 'weekly', image: `${BASE}/assets/og-default.png` },
@@ -33,14 +34,16 @@ for (const p of staticPages) {
     : '';
   urls.push(`  <url>
     <loc>${BASE}${withSlash(p.loc)}</loc>
+    <lastmod>${TODAY}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>${img}
   </url>`);
 }
 
-for (const slug of slugs) {
+for (const { slug, date } of articles) {
   urls.push(`  <url>
     <loc>${BASE}/artigos/${slug}/</loc>
+    <lastmod>${date}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>${BASE}/assets/covers/${slug}.png</image:loc></image:image>
@@ -54,4 +57,4 @@ ${urls.join('\n')}
 `;
 
 writeFileSync(OUT, xml, 'utf8');
-console.log(`✓ sitemap.xml gerado (${slugs.length} artigos + ${staticPages.length} páginas estáticas).`);
+  console.log(`✓ sitemap.xml gerado (${articles.length} artigos + ${staticPages.length} páginas estáticas).`);
