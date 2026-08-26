@@ -7,6 +7,10 @@ const ARTICLES_TS = resolve(SITE_ROOT, 'src/app/data/articles.ts');
 const OUT = resolve(SITE_ROOT, 'public/sitemap.xml');
 const BASE = 'https://vitorsilverio.dev';
 
+// GitHub Pages redireciona "/pasta" -> "/pasta/"; o sitemap deve apontar
+// direto para a forma canônica com barra para evitar 301 no crawl.
+const withSlash = (p) => (p === '/' || p.endsWith('/') ? p : `${p}/`);
+
 const src = readFileSync(ARTICLES_TS, 'utf8');
 const re =
   /slug:\s*'([^']+)'[\s\S]*?title:\s*'([^']*)'[\s\S]*?date:\s*'([^']+)'/g;
@@ -28,7 +32,7 @@ for (const p of staticPages) {
     ? `\n    <image:image><image:loc>${p.image}</image:loc></image:image>`
     : '';
   urls.push(`  <url>
-    <loc>${BASE}${p.loc}</loc>
+    <loc>${BASE}${withSlash(p.loc)}</loc>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>${img}
   </url>`);
@@ -36,7 +40,7 @@ for (const p of staticPages) {
 
 for (const slug of slugs) {
   urls.push(`  <url>
-    <loc>${BASE}/artigos/${slug}</loc>
+    <loc>${BASE}/artigos/${slug}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>${BASE}/assets/covers/${slug}.png</image:loc></image:image>

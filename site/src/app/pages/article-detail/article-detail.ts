@@ -82,7 +82,7 @@ export class ArticleDetail {
         });
         return;
       }
-      const url = `https://vitorsilverio.dev/artigos/${article.slug}`;
+      const url = `https://vitorsilverio.dev/artigos/${article.slug}/`;
       const host = this.host.nativeElement as HTMLElement;
       this.seo.set({
         title: article.title,
@@ -131,7 +131,7 @@ export class ArticleDetail {
               '@type': 'ListItem',
               position: 2,
               name: 'Artigos',
-              item: 'https://vitorsilverio.dev/artigos',
+              item: 'https://vitorsilverio.dev/artigos/',
             },
             {
               '@type': 'ListItem',

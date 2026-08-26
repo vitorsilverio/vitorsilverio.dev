@@ -49,9 +49,28 @@ export class SeoService {
     }
 
     if (data.url) {
-      const fullUrl = data.url.startsWith('http') ? data.url : `${BASE_URL}${data.url}`;
+      const fullUrl = this.withTrailingSlash(
+        data.url.startsWith('http') ? data.url : `${BASE_URL}${data.url}`,
+      );
       this.meta.updateTag({ property: 'og:url', content: fullUrl });
       this.setCanonical(fullUrl);
+    }
+  }
+
+  /**
+   * GitHub Pages (nginx) redireciona "/pasta" -> "/pasta/" quando existe
+   * pasta/index.html. Para evitar 301 no crawl e divergência de canonical,
+   * canonical/og:url usam sempre a forma com barra final (exceto a raiz).
+   */
+  private withTrailingSlash(url: string): string {
+    try {
+      const u = new URL(url);
+      if (u.pathname.length > 1 && !u.pathname.endsWith('/')) {
+        u.pathname += '/';
+      }
+      return u.toString();
+    } catch {
+      return url;
     }
   }
 

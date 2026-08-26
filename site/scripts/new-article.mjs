@@ -134,7 +134,7 @@ if (pre.includes(preLine)) {
 
 // 5) sitemap.xml
 let sm = read(SITEMAP);
-const smLoc = `${BASE_URL}/artigos/${slug}`;
+  const smLoc = `${BASE_URL}/artigos/${slug}/`;
 if (sm.includes(smLoc)) {
   log('• sitemap.xml já tem esta URL — pulando.');
 } else {

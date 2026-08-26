@@ -7,52 +7,52 @@
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/projetos</loc>
+    <loc>https://vitorsilverio.dev/projetos/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/curriculo</loc>
+    <loc>https://vitorsilverio.dev/curriculo/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos</loc>
+    <loc>https://vitorsilverio.dev/artigos/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/boas-vindas</loc>
+    <loc>https://vitorsilverio.dev/artigos/boas-vindas/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/boas-vindas.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/angular-signals-na-pratica</loc>
+    <loc>https://vitorsilverio.dev/artigos/angular-signals-na-pratica/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/angular-signals-na-pratica.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/hello-armbox</loc>
+    <loc>https://vitorsilverio.dev/artigos/hello-armbox/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/hello-armbox.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/ambiente-arm</loc>
+    <loc>https://vitorsilverio.dev/artigos/ambiente-arm/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/ambiente-arm.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/fundamentos-arm</loc>
+    <loc>https://vitorsilverio.dev/artigos/fundamentos-arm/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/fundamentos-arm.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</loc>
+    <loc>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/carga-e-armazenamento-arm.png</image:loc></image:image>
