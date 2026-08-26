@@ -99,6 +99,9 @@ export class App {
           sameAs: [
             'https://www.linkedin.com/in/vitorsilverio/',
             'https://github.com/vitorsilverio',
+            'https://scholar.google.com/citations?user=Ry3UMIoAAAAJ',
+            'https://orcid.org/0000-0002-0977-7196',
+            'https://lattes.cnpq.br/0431947295963541',
           ],
           jobTitle: 'Desenvolvedor de software',
           description:

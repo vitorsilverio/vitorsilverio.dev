@@ -134,6 +134,8 @@ export class Resume {
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/vitorsilverio/' },
     { label: 'GitHub', href: 'https://github.com/vitorsilverio' },
     { label: 'ORCID', href: 'https://orcid.org/0000-0002-0977-7196' },
+    { label: 'Google Scholar', href: 'https://scholar.google.com/citations?user=Ry3UMIoAAAAJ' },
+    { label: 'Lattes', href: 'https://lattes.cnpq.br/0431947295963541' },
   ];
 
   constructor() {
@@ -160,6 +162,8 @@ export class Resume {
               'https://www.linkedin.com/in/vitorsilverio/',
               'https://github.com/vitorsilverio',
               'https://orcid.org/0000-0002-0977-7196',
+              'https://scholar.google.com/citations?user=Ry3UMIoAAAAJ',
+              'https://lattes.cnpq.br/0431947295963541',
             ],
             jobTitle: this.headline,
             description: this.summary,
