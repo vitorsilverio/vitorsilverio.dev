@@ -41,5 +41,12 @@
       <pubDate>Tue, 25 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.]]></description>
     </item>
+    <item>
+      <title>Carga e armazenamento no ARM: LDR, STR e seu primeiro laço</title>
+      <link>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</guid>
+      <pubDate>Wed, 26 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.]]></description>
+    </item>
   </channel>
 </rss>

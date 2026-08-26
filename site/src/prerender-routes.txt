@@ -7,3 +7,4 @@
 /artigos/hello-armbox
 /artigos/ambiente-arm
 /artigos/fundamentos-arm
+/artigos/carga-e-armazenamento-arm

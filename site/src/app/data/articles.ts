@@ -52,4 +52,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.',
     tags: ['ARM', 'Tutorial', 'Arquitetura', 'Registradores', 'Instruction Set'],
   },
+  {
+    slug: 'carga-e-armazenamento-arm',
+    title: 'Carga e armazenamento no ARM: LDR, STR e seu primeiro laço',
+    date: '2026-08-26',
+    readingTime: '9 min',
+    excerpt: 'Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.',
+    tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Load/Store'],
+  },
 ];

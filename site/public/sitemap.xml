@@ -51,4 +51,10 @@
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/fundamentos-arm.png</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/carga-e-armazenamento-arm.png</image:loc></image:image>
+  </url>
 </urlset>
