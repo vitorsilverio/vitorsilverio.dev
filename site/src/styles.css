@@ -37,6 +37,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reserva o espaço da scrollbar desde o primeiro paint: evita o "pulo"
+     lateral do conteúdo centralizado quando a barra de rolagem aparece
+     (causa comum de CLS em desktop). */
+  scrollbar-gutter: stable;
 }
 
 body {

@@ -153,3 +153,9 @@
   }
 }
 
+/* Reserva espaço para os comentários (Giscus é injetado via JS após o
+   primeiro paint): evita crescimento tardio da página (CLS). */
+.giscus {
+  min-height: 160px;
+}
+
