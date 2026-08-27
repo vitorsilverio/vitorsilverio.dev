@@ -64,4 +64,13 @@ export const projects: readonly Project[] = [
     repoUrl: gh('virtual-arm-box'),
     year: '—',
   },
+  {
+    name: 'estudai',
+    description:
+      'Plataforma de estudos para concursos públicos com ajuda de IA (Estudar + AI = Estudai).',
+    tags: ['Angular', 'IA', 'Educação', 'Concursos'],
+    repoUrl: 'https://github.com/vitorsilverio/estudai',
+    liveUrl: 'https://vitorsilverio.github.io/estudai/#/',
+    year: '—',
+  },
 ];
