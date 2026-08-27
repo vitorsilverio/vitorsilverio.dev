@@ -19,6 +19,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/fundamentos-arm').then((m) => m.ArticleFundamentosArm),
   'carga-e-armazenamento-arm': () =>
     import('./pages/article-detail/posts/carga-e-armazenamento-arm').then((m) => m.ArticleCargaEArmazenamentoArm),
+  'gdb-no-armbox': () =>
+    import('./pages/article-detail/posts/gdb-no-armbox').then((m) => m.ArticleGdbNoArmbox),
 } as const;
 
 export const routes: Routes = [

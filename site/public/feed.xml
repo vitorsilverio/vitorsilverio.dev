@@ -48,5 +48,12 @@
       <pubDate>Wed, 26 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.]]></description>
     </item>
+    <item>
+      <title>Depurando ARM com GDB no arm-box: código instrução a instrução</title>
+      <link>https://vitorsilverio.dev/artigos/gdb-no-armbox</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/gdb-no-armbox</guid>
+      <pubDate>Thu, 27 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.]]></description>
+    </item>
   </channel>
 </rss>

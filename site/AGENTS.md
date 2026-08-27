@@ -92,6 +92,24 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.
 
+## Convenções de conteúdo dos artigos (curso ARM)
+
+Para reforçar o aprendizado e a escaneabilidade, todo artigo do curso DEVE incluir
+tabelas de consulta (acessíveis: `<caption>`, `scope="col"`/`scope="row"`). Recomendado:
+
+- **Tabela de glossário/resumo do foco da aula** perto do início ou fim, listando os
+  conceitos-chave (ex.: novas instruções ARM, flags do CPSR, modelos de endereçamento).
+- **Tabela de comandos** quando o artigo envolver ferramentas (ex.: GDB — `break`,
+  `stepi`, `info registers cpsr`, `x/4xw`, `watch`). Explicar a sintaxe de comandos
+  não óbvios (ex.: `x/<N><formato><tamanho> <endereço>`).
+- **Exemplo prático rodável no arm-box** (código + comandos de montagem/execução) e,
+  quando fizer sentido, uma sessão de depuração anotada mostrando registradores/flags
+  mudando instrução a instrução.
+- **Referências cruzadas** com `routerLink` para artigos anteriores da série (padrão já
+  usado em `carga-e-armazenamento-arm` e `gdb-no-armbox`).
+- Estilo: português natural, "o ARM" (masc., marca/ISA) e "arquitetura ARM" (fem.);
+  código em `<pre><code class="language-armasm">` / `language-bash`.
+
 ## Decisões e ambiguidades
 
 - Quando uma ferramenta/recurso citado **não existir** ou não estiver disponível (ex.: GDB no

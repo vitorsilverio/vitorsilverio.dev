@@ -60,4 +60,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.',
     tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Load/Store'],
   },
+  {
+    slug: 'gdb-no-armbox',
+    title: 'Depurando ARM com GDB no arm-box: código instrução a instrução',
+    date: '2026-08-27',
+    readingTime: '9 min',
+    excerpt: 'O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.',
+    tags: ['ARM', 'GDB', 'armbox', 'Debug', 'Tutorial'],
+  },
 ];

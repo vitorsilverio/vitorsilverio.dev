@@ -8,3 +8,4 @@
 /artigos/ambiente-arm
 /artigos/fundamentos-arm
 /artigos/carga-e-armazenamento-arm
+/artigos/gdb-no-armbox
