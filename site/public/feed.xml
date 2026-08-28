@@ -55,5 +55,12 @@
       <pubDate>Thu, 27 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.]]></description>
     </item>
+    <item>
+      <title>Decodificando instruções ARM à mão com o objdump (bit a bit)</title>
+      <link>https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump</guid>
+      <pubDate>Fri, 28 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.]]></description>
+    </item>
   </channel>
 </rss>

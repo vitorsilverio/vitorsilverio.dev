@@ -68,4 +68,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.',
     tags: ['ARM', 'GDB', 'armbox', 'Debug', 'Tutorial'],
   },
+  {
+    slug: 'decodificando-instrucoes-arm-objdump',
+    title: 'Decodificando instruções ARM à mão com o objdump (bit a bit)',
+    date: '2026-08-28',
+    readingTime: '9 min',
+    excerpt: 'Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.',
+    tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Objdump', 'Decodificação'],
+  },
 ];
