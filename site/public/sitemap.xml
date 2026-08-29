@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/projetos/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/curriculo/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -80,5 +80,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/decodificando-instrucoes-arm-objdump.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha/</loc>
+    <lastmod>2026-08-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/sub-rotinas-arm-bl-bx-pilha.png</image:loc></image:image>
   </url>
 </urlset>

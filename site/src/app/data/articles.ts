@@ -76,4 +76,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.',
     tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Objdump', 'Decodificação'],
   },
+  {
+    slug: 'sub-rotinas-arm-bl-bx-pilha',
+    title: 'Sub-rotinas em ARM: BL/BX, pilha e convenção de chamada',
+    date: '2026-08-29',
+    readingTime: '9 min',
+    excerpt: 'Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.',
+    tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Sub-rotinas', 'Chamada'],
+  },
 ];

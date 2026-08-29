@@ -62,5 +62,12 @@
       <pubDate>Fri, 28 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.]]></description>
     </item>
+    <item>
+      <title>Sub-rotinas em ARM: BL/BX, pilha e convenção de chamada</title>
+      <link>https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha</guid>
+      <pubDate>Sat, 29 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.]]></description>
+    </item>
   </channel>
 </rss>
