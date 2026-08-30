@@ -69,5 +69,12 @@
       <pubDate>Sat, 29 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.]]></description>
     </item>
+    <item>
+      <title>Flags e desvios condicionais: N/Z/C/V, bge/blt/bne</title>
+      <link>https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais</guid>
+      <pubDate>Sun, 30 Aug 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.]]></description>
+    </item>
   </channel>
 </rss>

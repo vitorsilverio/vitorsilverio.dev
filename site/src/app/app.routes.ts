@@ -25,6 +25,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/decodificando-instrucoes-arm-objdump').then((m) => m.ArticleDecodificandoInstrucoesArmObjdump),
   'sub-rotinas-arm-bl-bx-pilha': () =>
     import('./pages/article-detail/posts/sub-rotinas-arm-bl-bx-pilha').then((m) => m.ArticleSubRotinasArmBlBxPilha),
+  'flags-e-desvios-condicionais': () =>
+    import('./pages/article-detail/posts/flags-e-desvios-condicionais').then((m) => m.ArticleFlagsEDesviosCondicionais),
 } as const;
 
 export const routes: Routes = [

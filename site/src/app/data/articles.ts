@@ -84,4 +84,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.',
     tags: ['ARM', 'Assembly', 'arm-jitter', 'armbox', 'Tutorial', 'Sub-rotinas', 'Chamada'],
   },
+  {
+    slug: 'flags-e-desvios-condicionais',
+    title: 'Flags e desvios condicionais: N/Z/C/V, bge/blt/bne',
+    date: '2026-08-30',
+    readingTime: '9 min',
+    excerpt: 'O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.',
+    tags: ['ARM', 'Assembly', 'flags', 'CPSR', 'condicionais', 'Tutorial'],
+  },
 ];
