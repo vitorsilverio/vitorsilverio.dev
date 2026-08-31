@@ -1,6 +1,6 @@
 > Building...
 ÔêÜ Building...
-Application bundle generation failed. [2.997 seconds] - 2026-08-30T04:32:45.692Z
+Application bundle generation failed. [3.451 seconds] - 2026-08-31T03:08:26.229Z
 
 X [ERROR] TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig. [plugin angular-compiler]
 

@@ -27,6 +27,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/sub-rotinas-arm-bl-bx-pilha').then((m) => m.ArticleSubRotinasArmBlBxPilha),
   'flags-e-desvios-condicionais': () =>
     import('./pages/article-detail/posts/flags-e-desvios-condicionais').then((m) => m.ArticleFlagsEDesviosCondicionais),
+  'thumb-e-thumb-2': () =>
+    import('./pages/article-detail/posts/thumb-e-thumb-2').then((m) => m.ArticleThumbEThumb2),
 } as const;
 
 export const routes: Routes = [

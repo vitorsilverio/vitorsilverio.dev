@@ -92,4 +92,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.',
     tags: ['ARM', 'Assembly', 'flags', 'CPSR', 'condicionais', 'Tutorial'],
   },
+  {
+    slug: 'thumb-e-thumb-2',
+    title: 'Thumb e Thumb-2: instruções de 16/32 bits',
+    date: '2026-08-31',
+    readingTime: '9 min',
+    excerpt: 'Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.',
+    tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'armbox', 'Tutorial'],
+  },
 ];
