@@ -47,13 +47,13 @@ export class Resume {
       company: 'Fundunesp',
       period: 'Set 2022 — Atual',
       description:
-        'Atuação em produção acadêmica na Universidade Estadual Paulista (Unesp).',
+        'Desenvolvimento de sistemas para Universidade Estadual Paulista (Unesp). Princpais Projetos: Portal Docentes Unesp, Repositório Institucional Unesp, SIGAD, Evoto - modulo de inscrições e  Assina Unesp.',
     },
     {
       role: 'Professor',
       company: 'Fatec de São Roque',
       period: 'Out 2025 — Jul 2026',
-      description: 'Ministrou aulas no período noturno.',
+      description: 'Ministrou aulas na graduação de Sistemas para Internet. Disciplinas: Padrões de Projeto de Sítios de Internet I e II, e Desenvolvimento Mobile e Arquitetura Orientada a Serviços.',
     },
     {
       role: 'Analista Programador',
@@ -87,7 +87,7 @@ export class Resume {
     {
       course: 'Tecnologia em Análise e Desenvolvimento de Sistemas',
       school: 'Faculdade de Tecnologia de Sorocaba (FATEC)',
-      period: '—',
+      period: '2009 — 2012',
     },
     {
       course: 'Especialização em Cyber Security',
@@ -99,19 +99,15 @@ export class Resume {
   protected readonly skills: readonly SkillGroup[] = [
     {
       area: 'Linguagens',
-      items: ['Java', 'TypeScript', 'Delphi', 'SQL / PL-SQL (Oracle)'],
+      items: ['Java', 'TypeScript', 'Python'],
     },
     {
       area: 'Backend & Dados',
-      items: ['Oracle', 'ERP', 'Repositórios institucionais', 'JSF'],
+      items: ['Oracle', 'Postgres', 'Spring Boot', 'JSF', 'Pandas', 'Docker', 'REST APIs'],
     },
     {
       area: 'Frontend & Web',
       items: ['Angular', 'Swing', 'HTML & CSS', 'Acessibilidade (WCAG)'],
-    },
-    {
-      area: 'Em aprendizado',
-      items: ['Angular Signals', 'RxJS', 'Testes com Vitest', 'Performance web'],
     },
   ];
 
