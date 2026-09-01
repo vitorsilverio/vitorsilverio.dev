@@ -29,6 +29,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/flags-e-desvios-condicionais').then((m) => m.ArticleFlagsEDesviosCondicionais),
   'thumb-e-thumb-2': () =>
     import('./pages/article-detail/posts/thumb-e-thumb-2').then((m) => m.ArticleThumbEThumb2),
+  'instrucoes-condicionais-thumb': () =>
+    import('./pages/article-detail/posts/instrucoes-condicionais-thumb').then((m) => m.ArticleInstrucoesCondicionaisThumb),
 } as const;
 
 export const routes: Routes = [

@@ -83,5 +83,12 @@
       <pubDate>Mon, 31 Aug 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.]]></description>
     </item>
+    <item>
+      <title>Instruções condicionais em Thumb: IT blocks e execução condicional</title>
+      <link>https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb</guid>
+      <pubDate>Tue, 01 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.]]></description>
+    </item>
   </channel>
 </rss>

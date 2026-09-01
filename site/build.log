@@ -6,31 +6,31 @@
 ÔêÜ Building...
 Initial chunk files | Names                                |  Raw size | Estimated transfer size
 chunk-SpdXrwpU.js   | -                                    | 139.71 kB |                41.52 kB
-main-Q3N3ULUC.js    | main                                 | 124.15 kB |                32.35 kB
+main-7ZWPA7UV.js    | main                                 | 124.26 kB |                32.36 kB
 styles-3I6W3QOJ.css | styles                               |   6.03 kB |                 1.92 kB
 
-                    | Initial total                        | 269.88 kB |                75.80 kB
+                    | Initial total                        | 269.99 kB |                75.81 kB
 
 Lazy chunk files    | Names                                |  Raw size | Estimated transfer size
 chunk-Z6Byn4XT.js   | -                                    |  27.94 kB |                 9.86 kB
-chunk-Bwm30S_n.js   | decodificando-instrucoes-arm-objdump |  17.22 kB |                 5.48 kB
-chunk-a3xwlw6i.js   | fundamentos-arm                      |  16.19 kB |                 5.53 kB
-chunk-nG11OjXQ.js   | article-detail                       |  15.72 kB |                 5.16 kB
-chunk-B0K5AWe_.js   | flags-e-desvios-condicionais         |  14.84 kB |                 4.41 kB
-chunk-52lTTqoI.js   | gdb-no-armbox                        |  13.97 kB |                 4.70 kB
-chunk-DZ90QRZe.js   | sub-rotinas-arm-bl-bx-pilha          |  12.23 kB |                 4.11 kB
-chunk-B9EJhkrx.js   | thumb-e-thumb-2                      |  11.61 kB |                 3.97 kB
-chunk-BVbtWv6C.js   | resume                               |   8.64 kB |                 2.99 kB
-chunk-CJbq5MFS.js   | hello-armbox                         |   7.75 kB |                 2.98 kB
-chunk-OOaoYak5.js   | carga-e-armazenamento-arm            |   7.50 kB |                 2.99 kB
-chunk-BH6lr7Xj.js   | ambiente-arm                         |   6.16 kB |                 2.49 kB
-chunk-BFviwXah.js   | projects                             |   5.74 kB |                 1.94 kB
-chunk-BwlIC-NR.js   | articles                             |   5.30 kB |                 1.96 kB
-chunk-DUBXNf5e.js   | -                                    |   3.98 kB |                 1.55 kB
-...and 4 more lazy chunks files. Use "--verbose" to show all the files.
+chunk-gr7IwjWj.js   | decodificando-instrucoes-arm-objdump |  17.22 kB |                 5.48 kB
+chunk-CKbekwTd.js   | fundamentos-arm                      |  16.19 kB |                 5.53 kB
+chunk-KsI7J7Yn.js   | article-detail                       |  15.72 kB |                 5.14 kB
+chunk-XrWxlDKj.js   | flags-e-desvios-condicionais         |  14.84 kB |                 4.41 kB
+chunk-DJqaJbX2.js   | gdb-no-armbox                        |  13.97 kB |                 4.71 kB
+chunk-B3Y-qOHM.js   | instrucoes-condicionais-thumb        |  12.50 kB |                 3.83 kB
+chunk-DdT1jN5l.js   | sub-rotinas-arm-bl-bx-pilha          |  12.23 kB |                 4.11 kB
+chunk-DXNqk0jT.js   | thumb-e-thumb-2                      |  11.61 kB |                 3.96 kB
+chunk-Rwx7-tHe.js   | resume                               |   8.64 kB |                 3.01 kB
+chunk-CAX7htTF.js   | hello-armbox                         |   7.75 kB |                 2.98 kB
+chunk-QkV0kucI.js   | carga-e-armazenamento-arm            |   7.50 kB |                 2.99 kB
+chunk-HswTKItn.js   | ambiente-arm                         |   6.16 kB |                 2.49 kB
+chunk-hieZh6L7.js   | projects                             |   5.74 kB |                 1.94 kB
+chunk-Dw7WVtbg.js   | articles                             |   5.30 kB |                 1.96 kB
+...and 5 more lazy chunks files. Use "--verbose" to show all the files.
 
-Prerendered 15 static routes.
-Application bundle generation complete. [11.775 seconds] - 2026-08-31T03:08:15.178Z
+Prerendered 16 static routes.
+Application bundle generation complete. [4.502 seconds] - 2026-09-01T10:51:37.151Z
 
 Output location: C:\Users\user\IdeaProjects\vitorsilverio.dev\site\dist\site
 

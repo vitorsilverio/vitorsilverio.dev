@@ -13,3 +13,4 @@
 /artigos/sub-rotinas-arm-bl-bx-pilha
 /artigos/flags-e-desvios-condicionais
 /artigos/thumb-e-thumb-2
+/artigos/instrucoes-condicionais-thumb

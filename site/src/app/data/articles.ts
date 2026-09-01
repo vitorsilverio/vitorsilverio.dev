@@ -100,4 +100,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.',
     tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'armbox', 'Tutorial'],
   },
+  {
+    slug: 'instrucoes-condicionais-thumb',
+    title: 'Instruções condicionais em Thumb: IT blocks e execução condicional',
+    date: '2026-09-01',
+    readingTime: '9 min',
+    excerpt: 'No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.',
+    tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'IT', 'condicionais', 'Tutorial'],
+  },
 ];
