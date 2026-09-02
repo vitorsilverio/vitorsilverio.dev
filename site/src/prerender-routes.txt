@@ -14,3 +14,4 @@
 /artigos/flags-e-desvios-condicionais
 /artigos/thumb-e-thumb-2
 /artigos/instrucoes-condicionais-thumb
+/artigos/manipulacao-bits-thumb

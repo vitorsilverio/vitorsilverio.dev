@@ -90,5 +90,12 @@
       <pubDate>Tue, 01 Sep 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.]]></description>
     </item>
+    <item>
+      <title>Manipulação de bits em Thumb: AND, ORR, EOR, BIC, BFI, BFC e shift register</title>
+      <link>https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</guid>
+      <pubDate>Wed, 02 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[No ARM Thumb, os bits de um registrador são manipuláveis individualmente com instruções lógicas e de deslocamento. ANDS, ORRS, EORS, BICS, BFI, BFC e LSL/LSR/ASR são o kit de ferramentas do embedded — cada bit tem um propósito no controle de periféricos.]]></description>
+    </item>
   </channel>
 </rss>

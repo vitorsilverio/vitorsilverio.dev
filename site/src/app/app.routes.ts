@@ -31,6 +31,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/thumb-e-thumb-2').then((m) => m.ArticleThumbEThumb2),
   'instrucoes-condicionais-thumb': () =>
     import('./pages/article-detail/posts/instrucoes-condicionais-thumb').then((m) => m.ArticleInstrucoesCondicionaisThumb),
+  'manipulacao-bits-thumb': () =>
+    import('./pages/article-detail/posts/manipulacao-bits-thumb').then((m) => m.ArticleManipulacaoBitsThumb),
 } as const;
 
 export const routes: Routes = [

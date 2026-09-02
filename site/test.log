@@ -1,6 +1,13 @@
 > Building...
 ÔêÜ Building...
-Application bundle generation failed. [2.215 seconds] - 2026-09-01T10:51:41.589Z
+Application bundle generation failed. [2.620 seconds] - 2026-09-02T11:19:09.790Z
+
+Ôû▓ [WARNING] NG8113: All imports are unused [plugin angular-compiler]
+
+    src/app/pages/article-detail/posts/manipulacao-bits-thumb.ts:6:2:
+      6 Ôöé   imports: [RouterLink],
+        ÔòÁ   ~~~~~~~
+
 
 X [ERROR] TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig. [plugin angular-compiler]
 

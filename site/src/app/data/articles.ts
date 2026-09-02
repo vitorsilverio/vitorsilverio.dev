@@ -108,4 +108,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.',
     tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'IT', 'condicionais', 'Tutorial'],
   },
+  {
+    slug: 'manipulacao-bits-thumb',
+    title: 'Manipulação de bits em Thumb: AND, ORR, EOR, BIC, BFI, BFC e shift register',
+    date: '2026-09-02',
+    readingTime: '9 min',
+    excerpt: 'No ARM Thumb, os bits de um registrador são manipuláveis individualmente com instruções lógicas e de deslocamento. ANDS, ORRS, EORS, BICS, BFI, BFC e LSL/LSR/ASR são o kit de ferramentas do embedded — cada bit tem um propósito no controle de periféricos.',
+    tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'Bits', 'AND', 'ORR', 'EOR', 'BIC', 'BFI', 'BFC', 'Tutorial'],
+  },
 ];
