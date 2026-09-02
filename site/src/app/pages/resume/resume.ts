@@ -60,14 +60,20 @@ export class Resume {
       company: 'Fundunesp — Coordenadoria Geral de Bibliotecas',
       period: 'Fev 2014 — Ago 2022',
       description:
-        'Desenvolveu o Portal Docentes Unesp, o Repositório Institucional Unesp e a Biblioteca Digital da Unesp.',
+        'Atuação pela Coordenadoria Geral de Bibliotecas da Unesp, na área de produção acadêmica. Desenvolveu o Portal Docentes Unesp, o Repositório Institucional Unesp e a Biblioteca Digital da Unesp.',
+    },
+    {
+      role: 'Analista de Sistemas',
+      company: 'Prodesp — Cia de Processamento de Dados do Estado de São Paulo',
+      period: 'Fev 2014',
+      description: 'Desenvolvimento do sistema da Secretaria Escolar Digital.',
     },
     {
       role: 'Analista de Sistemas / Desenvolvedor Java',
       company: 'EB Soluções em Informática',
       period: 'Nov 2012 — Jan 2014',
       description:
-        'Análise de requisitos, desenvolvimento Java Desktop com Swing e Oracle Forms, ERP em Java e banco de dados Oracle.',
+        'Análise de requisitos, desenvolvimento Java Desktop com Swing e Oracle Forms, ERP em Java, testes e suporte a cliente com banco de dados Oracle.',
     },
     {
       role: 'Analista de Sistemas / Programador Delphi',
@@ -80,6 +86,12 @@ export class Resume {
       company: 'EFAP — Rede do Saber',
       period: 'Jul 2011 — Mar 2012',
       description: 'Suporte a videoconferências com Tandberg.',
+    },
+    {
+      role: 'Estagiário',
+      company: 'Faculdade de Tecnologia de Sorocaba (FATEC)',
+      period: 'Ago 2010 — Jun 2011',
+      description: 'Suporte ao usuário e manutenção de máquinas.',
     },
   ];
 
@@ -114,6 +126,26 @@ export class Resume {
   protected readonly languages: readonly string[] = ['Português (nativo)', 'Inglês', 'Japonês'];
 
   protected readonly certifications: readonly CertificationItem[] = [
+    {
+      title: 'Machine Learning: classificação com SKLearn',
+      issuer: 'Alura',
+      year: '2022',
+    },
+    {
+      title: 'Spring Boot e Teste: Profiles, Testes e Deploy',
+      issuer: 'Alura',
+      year: '2022',
+    },
+    {
+      title: 'Spring Boot API REST: construa uma API',
+      issuer: 'Alura',
+      year: '2022',
+    },
+    {
+      title: 'Spring Boot API Rest: Segurança da API, Cache e Monitoramento',
+      issuer: 'Alura',
+      year: '2022',
+    },
     {
       title: 'Linux LPI Essentials',
       issuer: 'Alura',
