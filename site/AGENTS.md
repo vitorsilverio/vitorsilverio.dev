@@ -90,9 +90,10 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
    não gera o HTML estático do artigo.
 5. Rodar `npm run gen:assets` (o gerador já roda no fim; o `prebuild` também roda em
    todo `npm run build`). Encadeia: `gen-covers` → `gen-cover-pngs` → `gen-sitemap` →
-   `gen-feed` → `gen-llms`. Regenera capa SVG+PNG, `public/sitemap.xml`, `public/feed.xml`
-   (RSS) e `public/llms.txt` (llmstxt.org) a partir de `articles.ts`. Não editar esses
-   arquivos à mão. (`gen-cover-pngs` depende de `@resvg/resvg-js`.)
+   `gen-feed` → `gen-llms` → `gen-examples`. Regenera capa SVG+PNG, `public/sitemap.xml`,
+   `public/feed.xml` (RSS), `public/llms.txt` (llmstxt.org) e `public/curso-arm/exemplos/`
+   (espelho de `DOCS/curso-arm/exemplos/`, para os exemplos serem baixáveis do site).
+   Não editar esses arquivos à mão. (`gen-cover-pngs` depende de `@resvg/resvg-js`.)
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.

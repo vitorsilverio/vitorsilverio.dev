@@ -58,5 +58,23 @@
         </li>
       }
     </ol>
+
+    <section class="examples card" aria-labelledby="ex-title">
+      <h2 id="ex-title">Exemplos de código</h2>
+      <p class="muted">
+        Os fontes de assembly usados nos artigos, montados e testados com o
+        <code>arm-none-eabi</code> e rodados no <code>arm-box</code>. Cada
+        <code>.s</code> tem o <code>.elf</code> pré-montado no mesmo diretório.
+      </p>
+      <ul class="example-list">
+        @for (ex of examples; track ex.file) {
+          <li>
+            <a [href]="'/curso-arm/exemplos/' + ex.file">{{ ex.file }}</a>
+            <span class="example-lesson">{{ ex.lesson }}</span>
+            <span class="muted">{{ ex.desc }}</span>
+          </li>
+        }
+      </ul>
+    </section>
   </div>
 </section>

@@ -154,3 +154,43 @@ a.lesson-link:hover {
     justify-self: start;
   }
 }
+
+.examples {
+  margin-top: 1.25rem;
+  padding: 1.5rem;
+}
+
+.examples h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.example-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.example-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.example-list a {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.example-lesson {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "gen:assets": "node scripts/gen-covers.mjs && node scripts/gen-cover-pngs.mjs && node scripts/gen-sitemap.mjs && node scripts/gen-feed.mjs && node scripts/gen-llms.mjs",
+    "gen:assets": "node scripts/gen-covers.mjs && node scripts/gen-cover-pngs.mjs && node scripts/gen-sitemap.mjs && node scripts/gen-feed.mjs && node scripts/gen-llms.mjs && node scripts/gen-examples.mjs",
     "prebuild": "npm run gen:assets",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",

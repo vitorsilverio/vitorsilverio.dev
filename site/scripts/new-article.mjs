@@ -295,6 +295,11 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
     const text = this.parser.parseInline(tokens);
     const t = title ? ` title="${escapeHtml(title)}"` : '';
     if (/^\/(?!\/)/.test(href)) {
+      // Caminho interno com extensão de arquivo (/curso-arm/exemplos/x.s,
+      // /feed.xml, ...) = asset estático servido direto, não uma rota do SPA.
+      if (/\.[a-z0-9]+([#?].*)?$/i.test(href)) {
+        return `<a href="${href}"${t}>${text}</a>`;
+      }
       const m = href.match(/^\/artigos\/([^/#?]+)/);
       if (m && knownSlugs.size && !knownSlugs.has(m[1])) {
         deadLinks.push(href);

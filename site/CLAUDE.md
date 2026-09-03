@@ -83,7 +83,8 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
 4. Adicionar a rota em `src/prerender-routes.txt` (`/artigos/<slug>`), senão o pré-render
    não gera o HTML estático do artigo.
 5. `npm run gen:assets` (roda no fim do gerador e no `prebuild`): regenera capas,
-   `public/sitemap.xml`, `public/feed.xml` e `public/llms.txt` a partir de `articles.ts`.
+   `public/sitemap.xml`, `public/feed.xml`, `public/llms.txt` e
+   `public/curso-arm/exemplos/` (espelho de `DOCS/curso-arm/exemplos/`).
    Não editar esses arquivos à mão.
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar

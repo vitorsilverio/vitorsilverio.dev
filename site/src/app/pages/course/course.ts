@@ -28,6 +28,15 @@ export class Course {
     { label: 'n3dsemu', href: 'https://github.com/vitorsilverio/n3dsemu' },
   ];
 
+  // Exemplos de código da trilha, servidos em /curso-arm/exemplos/<file>
+  // (espelho de DOCS/curso-arm/exemplos/ via scripts/gen-examples.mjs).
+  // Cada .s tem o .elf pré-montado ao lado.
+  protected readonly examples = [
+    { file: 'cpsr.s', lesson: 'M1.1', desc: 'Lê o CPSR em três momentos — N e Z mudando.' },
+    { file: 'anat.s', lesson: 'M1.3', desc: 'Dez instruções para ver a codificação no objdump.' },
+    { file: 'pcoffset.s', lesson: 'M1.4', desc: 'Prova que R15 lê como "instrução + 8".' },
+  ];
+
   protected readonly total = computed(() =>
     this.modules.reduce((n, mod) => n + mod.lessons.length, 0),
   );
