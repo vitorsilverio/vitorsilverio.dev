@@ -97,5 +97,12 @@
       <pubDate>Wed, 02 Sep 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[No ARM Thumb, os bits de um registrador são manipuláveis individualmente com instruções lógicas e de deslocamento. ANDS, ORRS, EORS, BICS, BFI, BFC e LSL/LSR/ASR são o kit de ferramentas do embedded — cada bit tem um propósito no controle de periféricos.]]></description>
     </item>
+    <item>
+      <title>Semihosting e syscalls: como o arm-box traduz chamadas de sistema EABI para o host</title>
+      <link>https://vitorsilverio.dev/artigos/semihosting</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/semihosting</guid>
+      <pubDate>Thu, 03 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Semihosting é o mecanismo que permite que código rodando em um alvo ARM (ou emulador como o arm-box) faça chamadas ao sistema operacional do host — leitura de console, escrita de arquivos, saída do programa. O arm-box intercepta e traduz essas chamadas EABI.]]></description>
+    </item>
   </channel>
 </rss>

@@ -116,6 +116,7 @@ export class App {
     { path: '/', label: 'Início' },
     { path: '/projetos', label: 'Projetos' },
     { path: '/curriculo', label: 'Currículo' },
+    { path: '/curso-arm', label: 'Curso ARM' },
     { path: '/artigos', label: 'Artigos' },
   ];
 

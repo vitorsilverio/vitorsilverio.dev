@@ -5,7 +5,8 @@
       <h1 tabindex="-1">Artigos</h1>
       <p>
         Anotações e aprendizados sobre tecnologia — muitos redigidos com apoio de
-        IA enquanto estudo. Novos textos entram aqui.
+        IA enquanto estudo. Novos textos entram aqui —
+        <a href="/feed.xml">assine o RSS</a> para acompanhar.
       </p>
     </header>
 
@@ -14,6 +15,7 @@
         type="button"
         class="tag"
         [class.active]="!selectedTag()"
+        [attr.aria-pressed]="!selectedTag()"
         (click)="clearFilter()"
       >
         Todos

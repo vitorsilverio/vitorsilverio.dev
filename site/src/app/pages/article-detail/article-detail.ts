@@ -5,11 +5,12 @@ import { filter, map } from 'rxjs';
 import { articles, type ArticleMeta } from '../../data/articles';
 import { GiscusComments } from '../../shared/giscus/giscus-comments';
 import { ShareButtons } from '../../shared/share-buttons';
+import { ArticleCta } from '../../shared/article-cta/article-cta';
 import { SeoService } from '../../shared/seo.service';
 import { formatPtDate } from '../../shared/date.util';
 
 @Component({
-  imports: [RouterLink, RouterOutlet, GiscusComments, ShareButtons],
+  imports: [RouterLink, RouterOutlet, GiscusComments, ShareButtons, ArticleCta],
   selector: 'app-article-detail',
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-flags-e-desvios-condicionais',
   template: `
     <p>
@@ -104,7 +102,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>V = 1</code> se o resultado <strong>overflowou</strong> em
       complemento de dois (signed overflow). Para <code>SUB</code>:
     </p>
-    <pre><code class="language-text">V = (Rn[31] != op2[31]) && (result[31] != Rn[31])</code></pre>
+    <pre><code class="language-text">V = (Rn[31] != op2[31]) &amp;&amp; (result[31] != Rn[31])</code></pre>
     <p>
       Ou seja: se os sinais dos operandos são diferentes e o sinal do
       resultado é diferente do sinal do primeiro operando, deu overflow.
@@ -119,7 +117,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       Cada condição (bits 31..28) é uma combinação lógica de N, Z, C, V.
       Tabela com os mais usados:
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Desvios condicionais e suas flags</caption>
       <thead>
         <tr><th scope="col">Cond</th><th scope="col">Mnemônico</th><th scope="col">Expressão lógica</th><th scope="col">Quando usar</th></tr>
@@ -137,7 +135,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>1101</code></th><td>LE</td><td>Z == 1 ou N != V</td><td>Menor ou igual (com sinal)</td></tr>
         <tr><th scope="row"><code>1110</code></th><td>AL</td><td>sempre</td><td>Executa sempre (default)</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Exemplo trabalhado: por que o laço funciona</h2>
     <p>
@@ -195,7 +193,7 @@ bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
     </p>
 
     <h2>Glossário: como testar cada flag</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Flags e como inspecioná-las</caption>
       <thead>
         <tr><th scope="col">Flag</th><th scope="col">Bit</th><th scope="col">Testar no GDB</th></tr>
@@ -206,7 +204,7 @@ bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
         <tr><th scope="row">C</th><td>29</td><td><code>p/t $cpsr</code> → bit 29</td></tr>
         <tr><th scope="row">V</th><td>28</td><td><code>p/t $cpsr</code> → bit 28</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>

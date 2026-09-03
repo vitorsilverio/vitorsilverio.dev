@@ -1,0 +1,35 @@
+# Vítor Silvério
+
+> Site pessoal de Vítor Silvério, desenvolvedor de software. Projetos de emulação e runtime ARM em Java (arm-jitter, arm-box), currículo e artigos técnicos sobre arquitetura ARM e Assembly, Angular e desenvolvimento web — muitos escritos com apoio de IA.
+
+Idioma: português (pt-BR). Ao reutilizar trechos, cite a fonte com link para a página original.
+
+## Páginas
+
+- [Início](https://vitorsilverio.dev/): apresentação e últimos artigos
+- [Curso de Arquitetura ARM](https://vitorsilverio.dev/curso-arm): trilha prática de arquitetura ARM (arm-jitter, armbox e emuladores), do ARMv4T ao AArch64
+- [Artigos](https://vitorsilverio.dev/artigos): índice completo de artigos
+- [Projetos](https://vitorsilverio.dev/projetos): emuladores e ferramentas em Java (arm-jitter, arm-box, gbaemu, gbcemu, ndsemu, n3dsemu)
+- [Currículo](https://vitorsilverio.dev/curriculo): experiência, formação, certificações e contato
+
+## Artigos
+
+- [Semihosting e syscalls: como o arm-box traduz chamadas de sistema EABI para o host](https://vitorsilverio.dev/artigos/semihosting): Semihosting é o mecanismo que permite que código rodando em um alvo ARM (ou emulador como o arm-box) faça chamadas ao sistema operacional do host — leitura de console, escrita de arquivos, saída do programa. O arm-box intercepta e traduz essas chamadas EABI.
+- [Manipulação de bits em Thumb: AND, ORR, EOR, BIC, BFI, BFC e shift register](https://vitorsilverio.dev/artigos/manipulacao-bits-thumb): No ARM Thumb, os bits de um registrador são manipuláveis individualmente com instruções lógicas e de deslocamento. ANDS, ORRS, EORS, BICS, BFI, BFC e LSL/LSR/ASR são o kit de ferramentas do embedded — cada bit tem um propósito no controle de periféricos.
+- [Instruções condicionais em Thumb: IT blocks e execução condicional](https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb): No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.
+- [Thumb e Thumb-2: instruções de 16/32 bits](https://vitorsilverio.dev/artigos/thumb-e-thumb-2): Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.
+- [Flags e desvios condicionais: N/Z/C/V, bge/blt/bne](https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais): O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.
+- [Sub-rotinas em ARM: BL/BX, pilha e convenção de chamada](https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha): Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.
+- [Decodificando instruções ARM à mão com o objdump (bit a bit)](https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump): Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.
+- [Depurando ARM com GDB no arm-box: código instrução a instrução](https://vitorsilverio.dev/artigos/gdb-no-armbox): O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.
+- [Carga e armazenamento no ARM: LDR, STR e seu primeiro laço](https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm): Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.
+- [Fundamentos da arquitetura ARM](https://vitorsilverio.dev/artigos/fundamentos-arm): Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.
+- [Setup do ambiente ARM](https://vitorsilverio.dev/artigos/ambiente-arm): Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.
+- [Criando um executável ARM e rodando no arm-box](https://vitorsilverio.dev/artigos/hello-armbox): Mão na massa: escreva um hello world em assembly ARM, monte um ELF real e rode no arm-box (o runner sobre o arm-jitter).
+- [Angular Signals na prática](https://vitorsilverio.dev/artigos/angular-signals-na-pratica): Uma introdução prática ao sistema de reatividade baseado em signals e como ele muda a forma de escrever componentes.
+- [Boas-vindas ao meu canto na internet](https://vitorsilverio.dev/artigos/boas-vindas): Por que criei este site e como pretendo usá-lo para documentar meus estudos e projetos.
+
+## Optional
+
+- [Feed RSS](https://vitorsilverio.dev/feed.xml): novos artigos
+- [Sitemap](https://vitorsilverio.dev/sitemap.xml): todas as URLs

@@ -23,6 +23,7 @@ const staticPages = [
   { loc: '/', priority: '1.0', changefreq: 'weekly', image: `${BASE}/assets/og-default.png` },
   { loc: '/projetos', priority: '0.8', changefreq: 'monthly' },
   { loc: '/curriculo', priority: '0.8', changefreq: 'monthly' },
+  { loc: '/curso-arm', priority: '0.9', changefreq: 'weekly' },
   { loc: '/artigos', priority: '0.9', changefreq: 'weekly' },
 ];
 

@@ -6,7 +6,7 @@
       <img
         class="article-cover"
         [src]="'/assets/covers/' + article.slug + '.svg'"
-        [alt]="article.title"
+        alt=""
         width="1200"
         height="630"
       />
@@ -17,7 +17,7 @@
             <a class="tag tag-link" routerLink="/artigos" [queryParams]="{ tag }">{{ tag }}</a>
           }
         </div>
-         <h1 #articleTitle tabindex="-1">{{ article.title }}</h1>
+        <h1 tabindex="-1">{{ article.title }}</h1>
         <p class="article-meta muted">
           <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
           · {{ article.readingTime }} de leitura
@@ -53,7 +53,7 @@
                   <img
                     class="related-cover"
                     [src]="'/assets/covers/' + r.slug + '.svg'"
-                    [alt]="r.title"
+                    alt=""
                     width="1200"
                     height="630"
                   />
@@ -70,6 +70,8 @@
         [url]="'https://vitorsilverio.dev/artigos/' + article.slug + '/'"
         [title]="article.title"
       />
+
+      <app-article-cta />
 
       <app-giscus-comments [term]="article.slug" />
     </div>

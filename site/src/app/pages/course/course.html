@@ -1,0 +1,62 @@
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Trilha</span>
+      <h1 tabindex="-1">Arquitetura ARM na prática</h1>
+      <p>
+        Curso técnico baseado em código real: o emulador <code>arm-jitter</code> e
+        seus consumidores (<code>armbox</code>, <code>gbaemu</code>,
+        <code>ndsemu</code>, <code>n3dsemu</code>, <code>virtual-arm-box</code>).
+        Todo conceito vem com assembly que você compila e roda. Do ARMv4T do Game
+        Boy Advance até o AArch64.
+      </p>
+      <p class="muted progress">
+        {{ published() }} de {{ total() }} lições publicadas · uma nova por dia.
+        <a href="/feed.xml">Assine o RSS</a> para acompanhar.
+      </p>
+      <nav class="resources" aria-label="Código e referência dos projetos">
+        @for (r of resources; track r.href) {
+          <a [href]="r.href" target="_blank" rel="noopener">{{ r.label }}</a>
+        }
+      </nav>
+    </header>
+
+    <ol class="modules">
+      @for (mod of modules; track mod.code) {
+        <li class="module card">
+          <div class="module-head">
+            <span class="module-code">{{ mod.code }}</span>
+            <h2>{{ mod.name }}</h2>
+          </div>
+          <p class="muted module-summary">{{ mod.summary }}</p>
+
+          <ol class="lessons">
+            @for (lesson of mod.lessons; track lesson.slug) {
+              <li class="lesson" [class.is-planned]="lesson.status === 'planned'">
+                @if (lesson.status === 'published') {
+                  <a class="lesson-link" [routerLink]="['/artigos', lesson.slug]">
+                    <span class="lesson-code">{{ lesson.code }}</span>
+                    <span class="lesson-body">
+                      <span class="lesson-title">{{ lesson.title }}</span>
+                      <span class="lesson-blurb muted">{{ lesson.blurb }}</span>
+                    </span>
+                    <span class="lesson-badge published">ler →</span>
+                  </a>
+                } @else {
+                  <div class="lesson-link" aria-disabled="true">
+                    <span class="lesson-code">{{ lesson.code }}</span>
+                    <span class="lesson-body">
+                      <span class="lesson-title">{{ lesson.title }}</span>
+                      <span class="lesson-blurb muted">{{ lesson.blurb }}</span>
+                    </span>
+                    <span class="lesson-badge planned">em breve</span>
+                  </div>
+                }
+              </li>
+            }
+          </ol>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

@@ -62,24 +62,29 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 Os artigos são componentes standalone em `src/app/pages/article-detail/posts/<slug>.ts`,
 listados em `src/app/data/articles.ts` e roteados de forma lazy via `postLoaders` em
 `src/app/app.routes.ts`. Para NÃO esquecer nenhuma etapa (e manter o SEO do pré-render),
-**use sempre o script automatizado**:
+**use sempre o script automatizado** — de um Markdown padrão (`proximos-artigos/*.md`):
 
 ```bash
-npm run novo-artigo -- --slug <slug-kebab> --title "Título" --tags "Tag1,Tag2" --excerpt "Resumo"
+npm run novo-artigo -- --from proximos-artigos/<arquivo>.md
 ```
+
+ou por flags (`--slug <slug-kebab> --title "..." --tags "A,B" --excerpt "..."`) para um stub.
 
 O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar os 4 pontos:
 
-1. Criar `src/app/pages/article-detail/posts/<slug>.ts` com `hostDirectives: [HighlightDirective]`
-   e `imports: [RouterLink]` (o highlight deve viver DENTRO de cada post, não no `article-detail`).
+1. Criar `src/app/pages/article-detail/posts/<slug>.ts` — componente standalone, só
+   `imports: [RouterLink]` quando houver link interno. Syntax highlight é **build-time**
+   (tokens do Prism já gravados no template pelo gerador / `scripts/highlight-posts.mjs`);
+   não há diretiva de highlight em runtime.
 2. Registrar o post em `src/app/data/articles.ts` (array `articles`): `slug`, `title`, `date`
    (`YYYY-MM-DD`), `readingTime`, `excerpt`, `tags`.
 3. Adicionar o loader lazy em `postLoaders` (`src/app/app.routes.ts`):
    `'<slug>': () => import('./pages/article-detail/posts/<slug>').then((m) => m.Article<Slug>)`.
 4. Adicionar a rota em `src/prerender-routes.txt` (`/artigos/<slug>`), senão o pré-render
    não gera o HTML estático do artigo.
-5. Adicionar a `<url>` correspondente em `public/sitemap.xml` (`https://vitorsilverio.dev/artigos/<slug>`),
-   senão o artigo fica de fora do sitemap.
+5. `npm run gen:assets` (roda no fim do gerador e no `prebuild`): regenera capas,
+   `public/sitemap.xml`, `public/feed.xml` e `public/llms.txt` a partir de `articles.ts`.
+   Não editar esses arquivos à mão.
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.

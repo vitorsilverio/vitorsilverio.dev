@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-carga-e-armazenamento-arm',
   template: `
     <p>
@@ -44,10 +42,10 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       (<code>r0</code> no nosso exemplo) mais um <em>offset</em>. Há três
       sabores, e vale decorar porque eles aparecem em quase todo programa real:
     </p>
-    <pre><code class="language-armasm">ldr   r1, [r0]          @ offset 0 (sem deslocamento)
-ldr   r1, [r0, #8]      @ pré-indexado: usa r0+8 (r0 NÃO muda)
-ldr   r1, [r0, #8]!     @ pré-indexado com writeback: r0 = r0+8
-ldr   r1, [r0], #8      @ pós-indexado: usa r0, DEPOIS r0 = r0+8</code></pre>
+    <pre><code class="language-armasm">ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span>          @ offset <span class="token number">0</span> <span class="token punctuation">(</span>sem deslocamento<span class="token punctuation">)</span>
+ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">]</span>      @ pré<span class="token operator">-</span>indexado: usa <span class="token register symbol">r0</span><span class="token operator">+</span><span class="token number">8</span> <span class="token punctuation">(</span><span class="token register symbol">r0</span> NÃO muda<span class="token punctuation">)</span>
+ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token operator">!</span>     @ pré<span class="token operator">-</span>indexado com writeback: <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r0</span><span class="token operator">+</span><span class="token number">8</span>
+ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>      @ pós<span class="token operator">-</span>indexado: usa <span class="token register symbol">r0</span><span class="token punctuation">,</span> DEPOIS <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r0</span><span class="token operator">+</span><span class="token number">8</span></code></pre>
     <p>
       O <strong>pós-indexado</strong> (<code>[r0], #4</code>) é o truque que
       usaremos para varrer um vetor: a gente lê o elemento e já empurra o
@@ -69,32 +67,32 @@ ldr   r1, [r0], #8      @ pós-indexado: usa r0, DEPOIS r0 = r0+8</code></pre>
 
 .data
 nums:
-    .word 3, 7, 1, 9, 4
-len = (. - nums) / 4
+    .word <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">4</span>
+len <span class="token operator">=</span> <span class="token punctuation">(</span>. <span class="token operator">-</span> nums<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">4</span>
 result:
-    .word 0
+    .word <span class="token number">0</span>
 
 .text
 _start:
-    ldr   r0, =nums        @ r0 = ponteiro para o vetor
-    mov   r1, #0           @ r1 = soma acumulada
-    mov   r2, #0           @ r2 = índice i
-    ldr   r3, =len         @ r3 = total de elementos
+    ldr   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span>nums        @ <span class="token register symbol">r0</span> <span class="token operator">=</span> ponteiro para o vetor
+    mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>           @ <span class="token register symbol">r1</span> <span class="token operator">=</span> soma acumulada
+    mov   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>           @ <span class="token register symbol">r2</span> <span class="token operator">=</span> índice i
+    ldr   <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token operator">=</span>len         @ <span class="token register symbol">r3</span> <span class="token operator">=</span> total de elementos
 
 loop:
-    cmp   r2, r3           @ i == len?
-    bge   done             @ sim -> termina
-    ldr   r4, [r0], #4     @ r4 = nums[i]; r0 += 4 (próximo)
-    add   r1, r1, r4       @ soma += nums[i]
-    add   r2, r2, #1       @ i++
+    cmp   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r3</span>           @ i <span class="token operator">==</span> len<span class="token operator">?</span>
+    bge   done             @ sim <span class="token operator">-</span><span class="token operator">></span> termina
+    ldr   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>     @ <span class="token register symbol">r4</span> <span class="token operator">=</span> nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token comment">; r0 += 4 (próximo)</span>
+    add   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span>       @ soma <span class="token operator">+</span><span class="token operator">=</span> nums<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+    add   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>       @ i<span class="token operator">+</span><span class="token operator">+</span>
     b     loop             @ volta
 
 done:
-    ldr   r5, =result
-    str   r1, [r5]         @ armazena a soma na memória (STR!)
-    mov   r0, r1           @ código de saída = soma
-    mov   r7, #1           @ syscall 1 = exit
-    svc   #0</code></pre>
+    ldr   <span class="token register symbol">r5</span><span class="token punctuation">,</span> <span class="token operator">=</span>result
+    str   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r5</span><span class="token punctuation">]</span>         @ armazena a soma na memória <span class="token punctuation">(</span>STR<span class="token operator">!</span><span class="token punctuation">)</span>
+    mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>           @ código de saída <span class="token operator">=</span> soma
+    mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>           @ syscall <span class="token number">1</span> <span class="token operator">=</span> exit
+    svc   <span class="token operator">#</span><span class="token number">0</span></code></pre>
 
     <p>Passo a passo do que está acontecendo:</p>
     <ul>
@@ -120,14 +118,14 @@ done:
 
     <h2>Montando, ligando e rodando</h2>
     <p>Geramos um ELF estático idêntico ao do hello world:</p>
-    <pre><code class="language-bash">arm-none-eabi-as -march=armv5te sum.s -o sum.o
-arm-none-eabi-ld -static -o sum.elf sum.o</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv5te sum.s <span class="token parameter variable">-o</span> sum.o
+arm-none-eabi-ld <span class="token parameter variable">-static</span> <span class="token parameter variable">-o</span> sum.elf sum.o</code></pre>
     <p>
       Rodamos com o <code>--check</code> para garantir que o JIT e o
       interpretador IR do arm-jitter concordam, e pedimos o código de saída:
     </p>
-    <pre><code class="language-bash">java -jar target/armbox-1.0-SNAPSHOT.jar --check sum.elf
-echo $?   # 24  (3+7+1+9+4)</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar <span class="token parameter variable">--check</span> sum.elf
+<span class="token builtin class-name">echo</span> <span class="token variable">$?</span>   <span class="token comment"># 24  (3+7+1+9+4)</span></code></pre>
     <p>
       Se aparecer <strong>24</strong>, parabéns: você acabou de ler e escrever
       memória de verdade num núcleo ARM emulado em Java. O <code>--check</code>

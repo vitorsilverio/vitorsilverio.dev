@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-sub-rotinas-arm-bl-bx-pilha',
   template: `
     <p>
@@ -25,20 +23,20 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>arm-none-eabi-as -march=armv5te</code> e desmontamos — os bytes
       abaixo são reais:
     </p>
-    <pre><code class="language-armasm">00008000 &lt;add2&gt;:
-    8000: e92d4010  push  &#123;r4, lr&#125;
-    8004: e1a04000  mov   r4, r0
-    8008: e0844001  add   r4, r4, r1
-    800c: e1a00004  mov   r0, r4
-    8010: e8bd4010  pop   &#123;r4, lr&#125;
-    8014: e12fff1e  bx    lr
+    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>add2<span class="token operator">></span>:
+    <span class="token number">8000</span>: e92d4010  push  &#123;<span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">lr</span>&#125;
+    <span class="token number">8004</span>: e1a04000  mov   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span>
+    <span class="token number">8008</span>: e0844001  add   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    800c: e1a00004  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span>
+    <span class="token number">8010</span>: e8bd4010  pop   &#123;<span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">lr</span>&#125;
+    <span class="token number">8014</span>: e12fff1e  bx    <span class="token register symbol">lr</span>
 
-00008018 &lt;_start&gt;:
-    8018: e3a00003  mov   r0, #3
-    801c: e3a01004  mov   r1, #4
-    8020: ebfffff6  bl    8000 &lt;add2&gt;
-    8024: e3a07001  mov   r7, #1
-    8028: ef000000  svc   0x00000000</code></pre>
+<span class="token number">00008018</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
+    <span class="token number">8018</span>: e3a00003  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
+    801c: e3a01004  mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
+    <span class="token number">8020</span>: ebfffff6  bl    <span class="token number">8000</span> <span class="token operator">&lt;</span>add2<span class="token operator">></span>
+    <span class="token number">8024</span>: e3a07001  mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token number">8028</span>: ef000000  svc   <span class="token number">0x00000000</span></code></pre>
     <p>
       O <code>_start</code> coloca <code>3</code> em <code>r0</code> e
       <code>4</code> em <code>r1</code>, chama <code>add2</code> e, quando
@@ -137,7 +135,7 @@ lista de registradores (bits 15..0) = 0x4010 = bits 4 (r4) e 14 (lr) setados</co
       contrato que C, assembly e o <code>arm-box</code> respeitam para
       conversarem. Resumo:
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Papéis dos registradores na chamada (AAPCS)</caption>
       <thead>
         <tr><th scope="col">Registrador</th><th scope="col">Papel</th></tr>
@@ -150,7 +148,7 @@ lista de registradores (bits 15..0) = 0x4010 = bits 4 (r4) e 14 (lr) setados</co
         <tr><th scope="row"><code>r14</code></th><td><code>lr</code> — link register (retorno do <code>BL</code>).</td></tr>
         <tr><th scope="row"><code>r15</code></th><td><code>pc</code> — program counter.</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       No nosso exemplo: argumentos em <code>r0,r1</code>, retorno em
       <code>r0</code>, e <code>r4</code> (callee-saved) foi salvo/restaurado com
@@ -158,7 +156,7 @@ lista de registradores (bits 15..0) = 0x4010 = bits 4 (r4) e 14 (lr) setados</co
     </p>
 
     <h2>Glossário: instruções e comandos de chamada</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Comandos e instruções de sub-rotina</caption>
       <thead>
         <tr><th scope="col">Instrução / Comando</th><th scope="col">O que faz</th></tr>
@@ -171,7 +169,7 @@ lista de registradores (bits 15..0) = 0x4010 = bits 4 (r4) e 14 (lr) setados</co
         <tr><th scope="row"><code>arm-none-eabi-objdump -d f.elf</code></th><td>Mostra os bytes das chamadas para decodificar.</td></tr>
         <tr><th scope="row"><code>info registers lr</code></th><td>No GDB: inspecta o endereço de retorno salvo.</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>

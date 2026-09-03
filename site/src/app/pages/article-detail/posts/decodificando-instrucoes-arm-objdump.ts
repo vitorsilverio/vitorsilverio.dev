@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-decodificando-instrucoes-arm-objdump',
   template: `
     <p>
@@ -25,22 +23,22 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       >
       (aquele que soma <code>3,7,1,9,4</code>) e rodamos:
     </p>
-    <pre><code class="language-bash">arm-none-eabi-objdump -d sum.elf</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</code></pre>
     <p>O trecho que importa (o laço) é este — e os bytes abaixo são reais:</p>
-    <pre><code class="language-armasm">00008010 &lt;loop&gt;:
-    8010: e1520003  cmp   r2, r3
-    8014: aa000003  bge   8028 &lt;done&gt;
-    8018: e4904004  ldr   r4, [r0], #4
-    801c: e0811004  add   r1, r1, r4
-    8020: e2822001  add   r2, r2, #1
-    8024: eaffff9  b     8010 &lt;loop&gt;
+    <pre><code class="language-armasm"><span class="token number">00008010</span> <span class="token operator">&lt;</span>loop<span class="token operator">></span>:
+    <span class="token number">8010</span>: e1520003  cmp   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r3</span>
+    <span class="token number">8014</span>: aa000003  bge   <span class="token number">8028</span> <span class="token operator">&lt;</span>done<span class="token operator">></span>
+    <span class="token number">8018</span>: e4904004  ldr   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
+    801c: e0811004  add   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span>
+    <span class="token number">8020</span>: e2822001  add   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token number">8024</span>: eaffff9  b     <span class="token number">8010</span> <span class="token operator">&lt;</span>loop<span class="token operator">></span>
 
-00008028 &lt;done&gt;:
-    8028: e59f5010  ldr   r5, [pc, #16]
-    802c: e5851000  str   r1, [r5]
-    8030: e1a00001  mov   r0, r1
-    8034: e3a07001  mov   r7, #1
-    8038: ef000000  svc   0x00000000</code></pre>
+<span class="token number">00008028</span> <span class="token operator">&lt;</span>done<span class="token operator">></span>:
+    <span class="token number">8028</span>: e59f5010  ldr   <span class="token register symbol">r5</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>pc<span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">16</span><span class="token punctuation">]</span>
+    802c: e5851000  str   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r5</span><span class="token punctuation">]</span>
+    <span class="token number">8030</span>: e1a00001  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    <span class="token number">8034</span>: e3a07001  mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token number">8038</span>: ef000000  svc   <span class="token number">0x00000000</span></code></pre>
     <p>
       Cada linha tem três colunas: o <strong>endereço</strong> (onde a
       instrução está na memória), os <strong>4 bytes</strong> da instrução
@@ -85,7 +83,7 @@ bits  11..0    operand2    (segundo operando)</code></pre>
       O <code>bge</code> do nosso laço só desvia se o resultado foi "maior ou
       igual". Isso vive no cond. Tabela dos mais usados:
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Códigos de condição ARM (bits 31..28)</caption>
       <thead>
         <tr><th scope="col">Cond (bin)</th><th scope="col">Mnemônico</th><th scope="col">Significado</th></tr>
@@ -100,11 +98,11 @@ bits  11..0    operand2    (segundo operando)</code></pre>
         <tr><th scope="row"><code>1101</code></th><td>LE</td><td>Less or equal (Z = 1 ou N != V).</td></tr>
         <tr><th scope="row"><code>0010</code> / <code>0011</code></th><td>CS / CC</td><td>Carry set / clear (útil para unsigned).</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Glossário: opcodes de processamento de dados</h2>
     <p>Os 4 bits do <code>opcode</code> (bits 24..21) determinam a operação:</p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Principais opcodes (bits 24..21)</caption>
       <thead>
         <tr><th scope="col">Opcode (bin)</th><th scope="col">Mnemônico</th><th scope="col">Operação</th></tr>
@@ -119,7 +117,7 @@ bits  11..0    operand2    (segundo operando)</code></pre>
         <tr><th scope="row"><code>1010</code></th><td>CMP</td><td>subtrai e <strong>só</strong> atualiza flags (Rd ignorado)</td></tr>
         <tr><th scope="row"><code>1110</code></th><td>BIC</td><td>clear bit (AND com o complemento)</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Decodificando na prática</h2>
 
@@ -221,7 +219,7 @@ Rn=0 (r0) | Rd=4 (r4) | offset imediato = 4</code></pre>
       Para repetir em casa (a mesma toolchain do
       <a routerLink="/artigos/ambiente-arm">ambiente ARM</a>):
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Comandos para montar, ligar e desmontar</caption>
       <thead>
         <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
@@ -233,7 +231,7 @@ Rn=0 (r0) | Rd=4 (r4) | offset imediato = 4</code></pre>
         <tr><th scope="row"><code>info registers cpsr</code></th><td>No GDB: mostra as flags que o <code>cmp</code> mudou.</td></tr>
         <tr><th scope="row"><code>x/4xw $r0</code></th><td>No GDB: inspeciona 4 palavras a partir de <code>r0</code>.</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com esses bits</h2>
     <p>

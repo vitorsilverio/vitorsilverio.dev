@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-gdb-no-armbox',
   template: `
     <p>
@@ -50,19 +48,19 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <a routerLink="/artigos/hello-armbox">primeiro artigo</a>):
     </p>
     <pre><code class="language-bash">mvn package
-java -jar target/armbox-*.jar --gdb=3333 testdata/hello.elf</code></pre>
+<span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-*.jar <span class="token parameter variable">--gdb</span><span class="token operator">=</span><span class="token number">3333</span> testdata/hello.elf</code></pre>
     <p>
       Ele imprime algo e <strong>para</strong>, esperando o GDB. Em outro
       terminal, conectamos o cliente (aqui usando a toolchain
       <code>arm-none-eabi</code>, da mesma forma que compilamos os exemplos):
     </p>
-    <pre><code class="language-bash">arm-none-eabi-gdb testdata/hello.elf -ex "target remote :3333"</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-gdb testdata/hello.elf <span class="token parameter variable">-ex</span> <span class="token string">"target remote :3333"</span></code></pre>
     <p>
       Funciona tanto em 32-bit quanto em AArch64 — basta trocar a toolchain e a
       flag de arquitetura:
     </p>
-    <pre><code class="language-bash">java -jar target/armbox-*.jar --arch=aarch64 --gdb=3333 testdata/hello-aarch64.elf
-aarch64-none-elf-gdb testdata/hello-aarch64.elf -ex "target remote :3333"</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-*.jar <span class="token parameter variable">--arch</span><span class="token operator">=</span>aarch64 <span class="token parameter variable">--gdb</span><span class="token operator">=</span><span class="token number">3333</span> testdata/hello-aarch64.elf
+aarch64-none-elf-gdb testdata/hello-aarch64.elf <span class="token parameter variable">-ex</span> <span class="token string">"target remote :3333"</span></code></pre>
 
     <h2>Comandos básicos de GDB (cola rápida)</h2>
     <p>
@@ -75,7 +73,7 @@ aarch64-none-elf-gdb testdata/hello-aarch64.elf -ex "target remote :3333"</code>
       quantidade e o <code>w</code> por <code>b</code> (byte),
       <code>h</code> (halfword) ou <code>g</code> (8 bytes) conforme o dado.
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Principais comandos GDB usados neste artigo</caption>
       <thead>
         <tr>
@@ -121,7 +119,7 @@ aarch64-none-elf-gdb testdata/hello-aarch64.elf -ex "target remote :3333"</code>
           <td>Mostra o código desmontado ao redor do PC.</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Exemplo: depurando o laço de soma</h2>
     <p>
@@ -147,13 +145,13 @@ r3      0x5               @ len = 5</code></pre>
       <code>ldr r4, [r0], #4</code> carrega o primeiro elemento <em>e</em>
       empurra o ponteiro, e como o <code>add r1, r1, r4</code> acumula:
     </p>
-    <pre><code class="language-text">(gdb) si            @ ldr r4, [r0], #4   -> r4 = 3, r0 avança 4 bytes
-(gdb) si            @ add r1, r1, r4     -> r1 = 3
-(gdb) si            @ add r2, r2, #1      -> r2 = 1
+    <pre><code class="language-text">(gdb) si            @ ldr r4, [r0], #4   -&gt; r4 = 3, r0 avança 4 bytes
+(gdb) si            @ add r1, r1, r4     -&gt; r1 = 3
+(gdb) si            @ add r2, r2, #1      -&gt; r2 = 1
 (gdb) si            @ b loop
 (gdb) si            @ cmp r2, r3
-(gdb) si            @ ldr r4, [r0], #4   -> r4 = 7
-(gdb) si            @ add r1, r1, r4     -> r1 = 10
+(gdb) si            @ ldr r4, [r0], #4   -&gt; r4 = 7
+(gdb) si            @ add r1, r1, r4     -&gt; r1 = 10
 (gdb) info registers r1 r2
 r1      0xa               @ 3 + 7 = 10
 r2      0x2               @ i = 2</code></pre>

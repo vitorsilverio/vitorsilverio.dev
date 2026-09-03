@@ -15,7 +15,9 @@ const SCRIPT_ID = 'giscus-script';
 
 @Component({
   selector: 'app-giscus-comments',
-  template: `<div class="giscus" aria-label="Comentários"></div>`,
+  // <section> (não <div>): recebe role=region e aceita aria-label — <div> sem
+  // role não pode ter aria-label (regra axe "aria-prohibited-attr").
+  template: `<section class="giscus" aria-label="Comentários"></section>`,
 })
 export class GiscusComments implements AfterViewInit {
   private readonly platformId = inject(PLATFORM_ID);

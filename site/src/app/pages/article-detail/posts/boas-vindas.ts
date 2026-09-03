@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   selector: 'app-article-boas-vindas',
-  hostDirectives: [HighlightDirective],
   template: `
     <p>
       Bem-vindo ao meu canto na internet! Criei este espaço para reunir três

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-ambiente-arm',
   template: `
     <p>
@@ -52,18 +50,18 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <strong>JDK 25</strong> (recomendo o JBR). Você também precisa do Maven
       para buildar tudo.
     </p>
-    <pre><code class="language-bash">java -version
-mvn -version</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-version</span>
+mvn <span class="token parameter variable">-version</span></code></pre>
     <p>Se faltar algo, instale pelo seu gerenciador:</p>
-    <pre><code class="language-bash"># Linux (apt + sdkman)
-sudo apt install maven
-sdk install java 25.0.1-jbr
+    <pre><code class="language-bash"><span class="token comment"># Linux (apt + sdkman)</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> maven
+sdk <span class="token function">install</span> <span class="token function">java</span> <span class="token number">25.0</span>.1-jbr
 
-# macOS (Homebrew)
-brew install openjdk@25 maven
+<span class="token comment"># macOS (Homebrew)</span>
+brew <span class="token function">install</span> openjdk@25 maven
 
-# Windows (Scoop)
-scoop install openjdk25 maven</code></pre>
+<span class="token comment"># Windows (Scoop)</span>
+scoop <span class="token function">install</span> openjdk25 maven</code></pre>
 
     <h2>2. Toolchain ARM bare-metal</h2>
     <p>
@@ -72,17 +70,17 @@ scoop install openjdk25 maven</code></pre>
       nenhuma libc do Linux. É ele que vai montar, ligar e desmontar nossos
       binários.
     </p>
-    <pre><code class="language-bash"># Debian/Ubuntu
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi gdb-multiarch
+    <pre><code class="language-bash"><span class="token comment"># Debian/Ubuntu</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gcc-arm-none-eabi binutils-arm-none-eabi gdb-multiarch
 
-# macOS (Homebrew)
-brew install --cask gcc-arm-embedded
+<span class="token comment"># macOS (Homebrew)</span>
+brew <span class="token function">install</span> <span class="token parameter variable">--cask</span> gcc-arm-embedded
 
-# Windows — devkitARM (mesma origem citada no hello-armbox)
-pacman -S arm-none-eabi-gcc</code></pre>
+<span class="token comment"># Windows — devkitARM (mesma origem citada no hello-armbox)</span>
+pacman <span class="token parameter variable">-S</span> arm-none-eabi-gcc</code></pre>
     <p>Confira se everything está no PATH:</p>
-    <pre><code class="language-bash">arm-none-eabi-gcc --version
-arm-none-eabi-objdump --version</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-gcc <span class="token parameter variable">--version</span>
+arm-none-eabi-objdump <span class="token parameter variable">--version</span></code></pre>
 
     <h2>3. Clonar e buildar</h2>
     <p>
@@ -90,16 +88,16 @@ arm-none-eabi-objdump --version</code></pre>
       <code>mvn install</code> para publicá-lo no seu <code>~/.m2</code> local,
       de onde ele vira uma dependência utilizável nos seus próprios experimentos.
     </p>
-    <pre><code class="language-bash">git clone https://github.com/vitorsilverio/arm-jitter
-cd arm-jitter
-mvn install          # publica em ~/.m2 para uso como biblioteca</code></pre>
+    <pre><code class="language-bash"><span class="token function">git</span> clone https://github.com/vitorsilverio/arm-jitter
+<span class="token builtin class-name">cd</span> arm-jitter
+mvn <span class="token function">install</span>          <span class="token comment"># publica em ~/.m2 para uso como biblioteca</span></code></pre>
     <p>
       Já o <strong>arm-box</strong> vira um executável. O
       <code>mvn package</code> produz o jar que usamos para rodar binários:
     </p>
-    <pre><code class="language-bash">git clone https://github.com/vitorsilverio/armbox
-cd armbox
-mvn package          # gera target/armbox-1.0-SNAPSHOT.jar</code></pre>
+    <pre><code class="language-bash"><span class="token function">git</span> clone https://github.com/vitorsilverio/armbox
+<span class="token builtin class-name">cd</span> armbox
+mvn package          <span class="token comment"># gera target/armbox-1.0-SNAPSHOT.jar</span></code></pre>
     <p class="muted">
       (gbaemu, ndsemu, n3dsemu e virtual-arm-box buildam com o mesmo
       <code>mvn package</code>. Deixe-os de lado por ora — voltamos a eles nos
@@ -112,14 +110,14 @@ mvn package          # gera target/armbox-1.0-SNAPSHOT.jar</code></pre>
       <a routerLink="/artigos/hello-armbox">"Criando um executável ARM e rodando no arm-box"</a
       >. O comando é simples:
     </p>
-    <pre><code class="language-bash">java -jar target/armbox-1.0-SNAPSHOT.jar hello.elf</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar hello.elf</code></pre>
     <p>Saída esperada:</p>
     <pre><code class="language-plaintext">hello from a real ELF</code></pre>
     <p>
       E já aproveite para espiar o binário — o <code>objdump</code> é a nossa
       lente de aqui pra frente:
     </p>
-    <pre><code class="language-bash">arm-none-eabi-objdump -d hello.elf | head -n 20</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-objdump <span class="token parameter variable">-d</span> hello.elf <span class="token operator">|</span> <span class="token function">head</span> <span class="token parameter variable">-n</span> <span class="token number">20</span></code></pre>
 
     <h2>Próximos passos</h2>
     <p>

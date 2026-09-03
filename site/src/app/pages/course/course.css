@@ -1,0 +1,156 @@
+:host {
+  display: block;
+}
+
+.progress {
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+}
+
+.resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.resources a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.resources a:hover {
+  color: var(--accent-strong);
+  border-bottom-color: var(--accent);
+}
+
+.modules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.module {
+  padding: 1.5rem;
+}
+
+.module-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.module-head h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.module-code {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+}
+
+.module-summary {
+  margin: 0.5rem 0 1rem;
+}
+
+.lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.lesson-link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+a.lesson-link {
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+a.lesson-link:hover {
+  border-color: var(--accent);
+  transform: translateX(2px);
+  text-decoration: none;
+}
+
+.is-planned .lesson-link {
+  background: transparent;
+  border-style: dashed;
+}
+
+.lesson-code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  align-self: start;
+  padding-top: 0.1rem;
+}
+
+.lesson-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.lesson-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.lesson-blurb {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.lesson-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+}
+
+.lesson-badge.published {
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.lesson-badge.planned {
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .lesson-link {
+    grid-template-columns: auto 1fr;
+  }
+
+  .lesson-badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

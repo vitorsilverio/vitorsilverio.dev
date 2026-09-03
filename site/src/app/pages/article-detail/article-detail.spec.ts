@@ -10,8 +10,8 @@ import { ArticleHelloArmbox } from './posts/hello-armbox';
 })
 class Host {}
 
-describe('HighlightDirective (via hostDirectives)', () => {
-  it('aplica syntax highlight (tokens do Prism) no código do artigo', () => {
+describe('Syntax highlight (build-time)', () => {
+  it('o código do artigo já vem com tokens do Prism no template', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([]), provideLocationMocks()],
     });

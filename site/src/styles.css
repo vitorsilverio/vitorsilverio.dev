@@ -236,6 +236,16 @@ button.tag:hover {
 .prose {
   font-size: 1.15rem;
   line-height: 1.75;
+  /* Quebra palavras longas (URLs, identificadores, `código inline`) em vez de
+     empurrar a largura da página e criar scroll horizontal global no mobile. */
+  overflow-wrap: break-word;
+}
+
+/* O componente de cada post (<app-article-*>) é um custom element e nasce
+   `display: inline`; sem isto, blocos largos (tabelas, <pre>) escapam do
+   contêiner e geram scroll horizontal na página inteira. */
+.prose > :not(router-outlet) {
+  display: block;
 }
 
 .prose h2 {
@@ -300,6 +310,21 @@ button.tag:hover {
 
 .prose a:hover {
   text-decoration-thickness: 2px;
+}
+
+/* Contêiner de rolagem para conteúdo largo (tabelas, blocos de código com
+   linhas longas). O scroll fica NA área afetada, não na página inteira.
+   Uso no template do artigo: <div class="scroll-x"><table>…</table></div> */
+.scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
+  /* momentum scroll no iOS + espaço para a barra não cobrir a última linha */
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-x > table,
+.scroll-x > pre {
+  margin-block: 0;
 }
 
 .prose table {

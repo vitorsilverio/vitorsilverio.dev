@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-hello-armbox',
   template: `
     <p>
@@ -68,22 +66,22 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
 .global _start
 
 _start:
-    @ write(1, msg, msg_len)  -- fd=stdout, buffer, tamanho
-    mov   r0, #1            @ fd = 1 (stdout)
-    ldr   r1, =msg          @ ponteiro para a string
-    ldr   r2, =msg_len      @ número de bytes
-    mov   r7, #4            @ syscall 4 = write
-    svc   #0
+    @ write<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> msg<span class="token punctuation">,</span> msg_len<span class="token punctuation">)</span>  <span class="token operator">-</span><span class="token operator">-</span> fd<span class="token operator">=</span>stdout<span class="token punctuation">,</span> buffer<span class="token punctuation">,</span> tamanho
+    mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>            @ fd <span class="token operator">=</span> <span class="token number">1</span> <span class="token punctuation">(</span>stdout<span class="token punctuation">)</span>
+    ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span>msg          @ ponteiro para a string
+    ldr   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">=</span>msg_len      @ número de bytes
+    mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>            @ syscall <span class="token number">4</span> <span class="token operator">=</span> write
+    svc   <span class="token operator">#</span><span class="token number">0</span>
 
-    @ exit(42)  -- código de saída visível no shell
-    mov   r0, #42
-    mov   r7, #1            @ syscall 1 = exit
-    svc   #0
+    @ exit<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>  <span class="token operator">-</span><span class="token operator">-</span> código de saída visível no shell
+    mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">42</span>
+    mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>            @ syscall <span class="token number">1</span> <span class="token operator">=</span> exit
+    svc   <span class="token operator">#</span><span class="token number">0</span>
 
 .data
 msg:
-    .ascii "hello from a real ELF\\n"
-msg_len = . - msg          @ tamanho calculado em link-time</code></pre>
+    .ascii <span class="token string">"hello from a real ELF\\n"</span>
+msg_len <span class="token operator">=</span> . <span class="token operator">-</span> msg          @ tamanho calculado em link<span class="token operator">-</span>time</code></pre>
 
     <p>Decodificando o que escrevemos:</p>
     <ul>
@@ -109,8 +107,8 @@ msg_len = . - msg          @ tamanho calculado em link-time</code></pre>
       <code>e_entry</code> do ELF — é de lá que o arm-box começa a executar.
     </p>
 
-    <pre><code class="language-bash">arm-none-eabi-as -march=armv5te hello.s -o hello.o
-arm-none-eabi-ld -static -o hello.elf hello.o</code></pre>
+    <pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv5te hello.s <span class="token parameter variable">-o</span> hello.o
+arm-none-eabi-ld <span class="token parameter variable">-static</span> <span class="token parameter variable">-o</span> hello.elf hello.o</code></pre>
 
     <p>
       Quer conferir o binário antes de rodar? <code>arm-none-eabi-objdump -d hello.elf</code>
@@ -121,7 +119,7 @@ arm-none-eabi-ld -static -o hello.elf hello.o</code></pre>
     <h2>Rodando no arm-box</h2>
     <p>Com o <code>arm-box</code> já buildado:</p>
 
-    <pre><code class="language-bash">java -jar target/armbox-1.0-SNAPSHOT.jar hello.elf</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar hello.elf</code></pre>
 
     <p>Saída esperada:</p>
     <pre><code class="language-plaintext">hello from a real ELF</code></pre>
@@ -146,7 +144,7 @@ arm-none-eabi-ld -static -o hello.elf hello.o</code></pre>
         primeira divergência — prova que os dois motores concordam.
       </li>
     </ul>
-    <pre><code class="language-bash">java -jar target/armbox-1.0-SNAPSHOT.jar --check hello.elf</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar <span class="token parameter variable">--check</span> hello.elf</code></pre>
 
     <h2>Próximos passos</h2>
     <p>

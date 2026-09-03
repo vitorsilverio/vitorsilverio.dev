@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   selector: 'app-article-signals',
-  hostDirectives: [HighlightDirective],
   template: `
     <p>
       O Angular evoluiu bastante nos últimos anos, e uma das mudanças mais
@@ -19,14 +17,14 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       atualizado.
     </p>
 
-    <pre><code class="language-typescript">import {{ '{' }} signal, computed {{ '}' }} from '@angular/core';
+    <pre><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> <span class="token string">'&#123;'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span> signal<span class="token punctuation">,</span> computed <span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> <span class="token string">'&#125;'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
 
-count = signal(0);
-double = computed(() =&gt; this.count() * 2);
+count <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+double <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-increment() {{ '{' }}
-  this.count.update((c) =&gt; c + 1);
-{{ '}' }}</code></pre>
+<span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> <span class="token string">'&#123;'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>count<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">=></span> c <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> <span class="token string">'&#125;'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></code></pre>
 
     <h2>Por que importa?</h2>
     <ul>

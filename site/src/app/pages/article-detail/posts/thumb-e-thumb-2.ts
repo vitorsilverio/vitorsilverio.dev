@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-thumb-e-thumb-2',
   template: `
     <p>
@@ -62,26 +60,26 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       Montamos a mesma função simples (soma dois números) nos dois modos.
       Primeiro o <strong>ARM</strong> (já conhecido):
     </p>
-    <pre><code class="language-armasm">00008018 &lt;_start&gt;:
-    8018: e3a00003  mov   r0, #3
-    801c: e3a01004  mov   r1, #4
-    8020: eb000000  bl    8028 &lt;add_arm&gt;
-    8024: ef000000  svc   0
+    <pre><code class="language-armasm"><span class="token number">00008018</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
+    <span class="token number">8018</span>: e3a00003  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
+    801c: e3a01004  mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
+    <span class="token number">8020</span>: eb000000  bl    <span class="token number">8028</span> <span class="token operator">&lt;</span>add_arm<span class="token operator">></span>
+    <span class="token number">8024</span>: ef000000  svc   <span class="token number">0</span>
 
-00008028 &lt;add_arm&gt;:
-    8028: e0800001  add   r0, r0, r1
-    802c: e12fff1e  bx    lr</code></pre>
+<span class="token number">00008028</span> <span class="token operator">&lt;</span>add_arm<span class="token operator">></span>:
+    <span class="token number">8028</span>: e0800001  add   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    802c: e12fff1e  bx    <span class="token register symbol">lr</span></code></pre>
     <p>Agora o <strong>Thumb</strong> — bytes reais do devkitARM:</p>
-    <pre><code class="language-armasm">00008000 &lt;_start&gt;:
-    8000: 2003       movs  r0, #3
-    8002: 2104       movs  r1, #4
-    8004: f000 f802  bl    800c &lt;add_thumb&gt;
-    8008: 2701       movs  r7, #1
-    800a: df00       svc   0
+    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
+    <span class="token number">8000</span>: <span class="token number">2003</span>       movs  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
+    <span class="token number">8002</span>: <span class="token number">2104</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
+    <span class="token number">8004</span>: f000 f802  bl    800c <span class="token operator">&lt;</span>add_thumb<span class="token operator">></span>
+    <span class="token number">8008</span>: <span class="token number">2701</span>       movs  <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    800a: df00       svc   <span class="token number">0</span>
 
-0000800c &lt;add_thumb&gt;:
-    800c: 1840       adds  r0, r0, r1
-    800e: 4770       bx    lr</code></pre>
+0000800c <span class="token operator">&lt;</span>add_thumb<span class="token operator">></span>:
+    800c: <span class="token number">1840</span>       adds  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    800e: <span class="token number">4770</span>       bx    <span class="token register symbol">lr</span></code></pre>
     <p>
       Repare: as instruções do <code>_start</code> em Thumb ocupam
       <strong>2 bytes cada</strong> (0x2003, 0x2104, 0x2701, 0xdf00), enquanto
@@ -174,7 +172,7 @@ halfword 2: 0xf802  →  offset de 22 bits com sinal</code></pre>
     <p>
       A mesma função (<code>add_arm</code> vs <code>add_thumb</code>):
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Comparação de tamanho</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Instruções</th><th scope="col">Tamanho</th></tr>
@@ -183,7 +181,7 @@ halfword 2: 0xf802  →  offset de 22 bits com sinal</code></pre>
         <tr><th scope="row">ARM</th><td><code>add r0, r0, r1</code> + <code>bx lr</code></td><td>2 × 4 = 8 bytes</td></tr>
         <tr><th scope="row">Thumb</th><td><code>adds r0, r0, r1</code> + <code>bx lr</code></td><td>2 × 2 = 4 bytes</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       Metade do tamanho. Num programa real com centenas de funções, a
       economia é significativa — e menos código = menos fetch = menos
@@ -191,7 +189,7 @@ halfword 2: 0xf802  →  offset de 22 bits com sinal</code></pre>
     </p>
 
     <h2>Glossário: instruções e comandos</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Comandos para trabalhar com Thumb</caption>
       <thead>
         <tr><th scope="col">Comando / Instrução</th><th scope="col">O que faz</th></tr>
@@ -204,7 +202,7 @@ halfword 2: 0xf802  →  offset de 22 bits com sinal</code></pre>
         <tr><th scope="row"><code>-march=armv6k -mthumb</code></th><td>Monta em modo Thumb com a toolchain.</td></tr>
         <tr><th scope="row"><code>arm-none-eabi-objdump -d -j .text</code></th><td>Mostra os bytes (16/32 bits) para decodificar.</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>

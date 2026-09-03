@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
-  imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-manipulacao-bits-thumb',
   template: `
     <p>
@@ -30,12 +26,12 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       Operand2</code> + flags. É a instrução clássica para <strong>extrair</strong> ou
       <strong>testar</strong> um bit específico.
     </p>
-    <pre><code class="language-armasm">    /* ARM (32-bit) */
-    ANDS r0, r1, #0x0F      ; e211000f
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token punctuation">(</span><span class="token number">32</span><span class="token operator">-</span>bit<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">ANDS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>      <span class="token comment">; e211000f</span>
 
-    /* Thumb-2 (32-bit wide) */
-    ANDS.W r0, r1, #0x0F    ; f011 000f</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token punctuation">(</span><span class="token number">32</span><span class="token operator">-</span>bit wide<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">ANDS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f011 000f</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th><th scope="col">Codificação</th></tr>
@@ -44,19 +40,19 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E2 11 00 0F</code></td><td>32-bit</td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 11 00 0F</code></td><td>32-bit wide</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3><code>ORR</code> / <code>ORRS</code> — setar bits</h3>
     <p>
       <code>ORRS Rd, Rn, Operand2</code> → <code>Rd = Rn OR
       Operand2</code> + flags. Liga bits específicos.
     </p>
-    <pre><code class="language-armasm">    /* ARM */
-    ORRS r0, r1, #0x0F      ; e391000f
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">ORRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>      <span class="token comment">; e391000f</span>
 
-    /* Thumb-2 */
-    ORRS.W r0, r1, #0x0F    ; f051 000f</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">ORRS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f051 000f</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
@@ -65,7 +61,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E3 91 00 0F</code></td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 51 00 0F</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3><code>EOR</code> / <code>EORS</code> — alternar (toggle) bits</h3>
     <p>
@@ -73,12 +69,12 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       Operand2</code> + flags. XOR com 1 inverte o bit; XOR com 0 mantém.
       Útil para <strong>toggle</strong>.
     </p>
-    <pre><code class="language-armasm">    /* ARM */
-    EORS r0, r1, #0x01      ; e2310001
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">EORS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>      <span class="token comment">; e2310001</span>
 
-    /* Thumb-2 */
-    EORS.W r0, r1, #0x01    ; f091 000f</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">EORS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>    <span class="token comment">; f091 000f</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
@@ -87,19 +83,19 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E2 31 00 01</code></td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 91 00 01</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3><code>BIC</code> / <code>BICS</code> — bit clear (AND com complemento)</h3>
     <p>
       <code>BICS Rd, Rn, Operand2</code> → <code>Rd = Rn AND NOT(Operand2)</code>.
       O jeito mais direto de <strong>limpar</strong> bits específicos sem afetar os demais.
     </p>
-    <pre><code class="language-armasm">    /* ARM */
-    BICS r0, r1, #0xF0      ; e3d100f0
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">BICS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0xF0</span>      <span class="token comment">; e3d100f0</span>
 
-    /* Thumb-2 */
-    BICS.W r0, r1, #0xF0    ; f031 00f0</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">BICS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0xF0</span>    <span class="token comment">; f031 00f0</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
@@ -108,7 +104,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E3 D1 00 F0</code></td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 31 00 F0</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       <strong>Dica:</strong> <code>BIC Rn, Rm, #mask</code> limpa os bits de
       <code>Rn</code> indicados por <code>mask</code>. Equivale a
@@ -120,12 +116,12 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>MVNS Rd, Operand2</code> → <code>Rd = NOT(Operand2)</code>.
       Carrega o valor bit-a-bit invertido. Útil para máscaras rápidas.
     </p>
-    <pre><code class="language-armasm">    /* ARM */
-    MVN r0, #0              ; e3e00000
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">MVN</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>              <span class="token comment">; e3e00000</span>
 
-    /* Thumb-2 */
-    MVN.W r0, #0            ; f06f 0000</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">MVN.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>            <span class="token comment">; f06f 0000</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
@@ -134,7 +130,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E3 E0 00 00</code></td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 6F 00 00</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       <strong>Detalhe:</strong> <code>MVN r0, #0</code> →
       <code>0xFFFFFFFF</code>. O <code>imm12</code> codifica
@@ -147,12 +143,12 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       flags <strong>sem armazenar</strong> resultado. Perfeito para verificar se
       um bit está ligado.
     </p>
-    <pre><code class="language-armasm">    /* ARM */
-    TST r0, #0x04           ; e3100004
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">TST</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x04</span>           <span class="token comment">; e3100004</span>
 
-    /* Thumb-2 */
-    TST.W r0, #0x04         ; f010 0f04</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">TST.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x04</span>         <span class="token comment">; f010 0f04</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
@@ -161,7 +157,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row">ARM</th><td><code>E3 10 00 04</code></td></tr>
         <tr><th scope="row">Thumb-2</th><td><code>F0 10 0F 04</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       <strong>Nota:</strong> <code>TST</code> é um pseudo-código do
       processador — o assembler traduz para <code>ANDS</code> sem destination
@@ -170,7 +166,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
     </p>
 
     <h2>Tabela: operações lógicas (bytes verificados)</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Operações lógicas — ARM vs Thumb-2</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">ARM (hex)</th><th scope="col">Thumb-2 (hex)</th><th scope="col">Tamanho</th><th scope="col">flags?</th></tr>
@@ -183,14 +179,14 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>MVN</code></th><td><code>E3E00000</code></td><td><code>F06F0000</code></td><td>32b / 32b wide</td><td>Não</td></tr>
         <tr><th scope="row"><code>TST</code></th><td><code>E3100004</code></td><td><code>F0100F04</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Shifts e rotações</h2>
     <p>
       O ARM usa <strong>barrel shifter</strong> — o hardware desloca o
       operando em 1 ciclo. As instruções principais:
     </p>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Instruções de shift</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">Efeito</th><th scope="col">Exemplo</th></tr>
@@ -201,21 +197,21 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>ASR Rd, Rm, #n</code></th><td>Deslocamento aritmético direita (sinal preservado)</td><td><code>ASR r0, r1, #1</code> → divisão signed</td></tr>
         <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação à direita com carry</td><td><code>ROR r0, r1, #8</code></td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h3>Bytes verificados</h3>
-    <pre><code class="language-armasm">    /* ARM */
-    LSL r0, r1, #3          ; e1a00181
-    LSR r0, r1, #2          ; e1a00121
-    ASR r0, r1, #1          ; e1a000c1
-    ROR r0, r1, #8          ; e1a00461
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LSL</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>          <span class="token comment">; e1a00181</span>
+    <span class="token instruction keyword">LSR</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>          <span class="token comment">; e1a00121</span>
+    <span class="token instruction keyword">ASR</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>          <span class="token comment">; e1a000c1</span>
+    <span class="token instruction keyword">ROR</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>          <span class="token comment">; e1a00461</span>
 
-    /* Thumb-2 */
-    LSLS r0, r1, #3         ; 00c8  (16-bit!)
-    LSRS r0, r1, #2         ; 0888  (16-bit!)
-    ASRS r0, r1, #1         ; 1048  (16-bit!)
-    MOVS r0, r1, ROR #8     ; ea5f 2031  (Thumb-2 não tem ROR standalone → via MOVS)</code></pre>
-    <table>
+    <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LSLS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>         <span class="token comment">; 00c8  (16-bit!)</span>
+    <span class="token instruction keyword">LSRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>         <span class="token comment">; 0888  (16-bit!)</span>
+    <span class="token instruction keyword">ASRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>         <span class="token comment">; 1048  (16-bit!)</span>
+    <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ROR <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; ea5f 2031  (Thumb-2 não tem ROR standalone → via MOVS)</span></code></pre>
+    <div class="scroll-x"><table>
       <caption>Shifts — bytes verificados (devkitARM)</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">ARM (hex)</th><th scope="col">Thumb (hex)</th><th scope="col">Tamanho</th></tr>
@@ -226,7 +222,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>ASR</code></th><td><code>E1 A0 00 C1</code></td><td><code>10 48</code></td><td>32b / 16b</td></tr>
         <tr><th scope="row"><code>ROR</code></th><td><code>E1 A0 04 61</code></td><td><code>EA 5F 20 31</code></td><td>32b / 32b (via MOVS)</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       <strong>Ponto-chave:</strong> <code>LSLS</code>, <code>LSRS</code>,
       <code>ASRS</code> com imediato são instruções de <strong>16 bits</strong> em
@@ -255,9 +251,9 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       bits de <code>Rn</code> (a partir do LSB) em <code>Rd</code>, a partir da
       posição <code>lsb</code>.
     </p>
-    <pre><code class="language-armasm">    bfii r0, r1, #4, #3    ; insere r1[2:0] em r0[6:4]</code></pre>
-    <pre><code class="language-armasm">00000000 &lt;thumb_bfi&gt;:
-  36:	f361 1006 	bfi	r0, r1, #4, #3</code></pre>
+    <pre><code class="language-armasm">    bfii <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>    <span class="token comment">; insere r1[2:0] em r0[6:4]</span></code></pre>
+    <pre><code class="language-armasm"><span class="token number">00000000</span> <span class="token operator">&lt;</span>thumb_bfi<span class="token operator">></span>:
+  <span class="token number">36</span>:	f361 <span class="token number">1006</span> 	bfi	<span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span></code></pre>
     <p>Bytes: <code>F3 61 10 06</code></p>
 
     <h3><code>BFC</code> — Bit Field Clear</h3>
@@ -265,9 +261,9 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>BFC Rd, #lsb, #width</code> limpa <code>width</code> bits a partir
       de <code>lsb</code> em <code>Rd</code>, sem alterar os demais.
     </p>
-    <pre><code class="language-armasm">    bfc r0, #4, #12         ; limpa bits 4..15</code></pre>
-    <pre><code class="language-armasm">00000000 &lt;thumb_bfc&gt;:
-  3c:	f36f 100f 	bfc	r0, #4, #12</code></pre>
+    <pre><code class="language-armasm">    bfc <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">12</span>         <span class="token comment">; limpa bits 4..15</span></code></pre>
+    <pre><code class="language-armasm"><span class="token number">00000000</span> <span class="token operator">&lt;</span>thumb_bfc<span class="token operator">></span>:
+  3c:	f36f 100f 	bfc	<span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">12</span></code></pre>
     <p>Bytes: <code>F3 6F 10 0F</code></p>
 
     <h3><code>UBFX</code> — Unsigned Bit Field Extract</h3>
@@ -276,13 +272,13 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>Rn</code> a partir de <code>lsb</code> e zero-extende em
       <code>Rd</code>.
     </p>
-    <pre><code class="language-armasm">    ubfx r0, r1, #8, #8     ; extrai byte 1 de R0</code></pre>
-    <pre><code class="language-armasm">00000000 &lt;thumb_ubfx&gt;:
-  42:	f3c1 2007 	ubfx	r0, r1, #8, #8</code></pre>
+    <pre><code class="language-armasm">    ubfx <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; extrai byte 1 de R0</span></code></pre>
+    <pre><code class="language-armasm"><span class="token number">00000000</span> <span class="token operator">&lt;</span>thumb_ubfx<span class="token operator">></span>:
+  <span class="token number">42</span>:	f3c1 <span class="token number">2007</span> 	ubfx	<span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span></code></pre>
     <p>Bytes: <code>F3 C1 20 07</code></p>
 
     <h2>Tabela: instruções de campo de bits</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>BFI, BFC, UBFX — bytes verificados</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">Bytes (hex)</th><th scope="col">Tamanho</th><th scope="col">Disponível em</th><th scope="col">Uso típico</th></tr>
@@ -292,10 +288,10 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>BFC</code></th><td><code>F36F100F</code></td><td>32 bits</td><td>Thumb-2 only</td><td>Limpar registrador de periférico</td></tr>
         <tr><th scope="row"><code>UBFX</code></th><td><code>F3C12007</code></td><td>32 bits</td><td>Thumb-2 only</td><td>Leer campos de periférico</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Comparativo ARM vs Thumb-2: o que muda de fato</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Diferenças entre ARM mode e Thumb-2</caption>
       <thead>
         <tr><th scope="col">Aspecto</th><th scope="col">ARM mode</th><th scope="col">Thumb-2</th></tr>
@@ -307,7 +303,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></th><td><strong>Não existe</strong></td><td>Disponível (32 bits)</td></tr>
         <tr><th scope="row">Density de código</th><td>Menor</td><td>Maior (16-bit shifts)</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>
       <strong>Implicação prática:</strong> em Cortex-M (somente Thumb-2), o
       código de manipulação de bits tende a ser <strong>mais compacto</strong>
@@ -315,23 +311,23 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
     </p>
 
     <h2>Exemplo prático: configurando bits de um registrador de periférico</h2>
-    <pre><code class="language-armasm">    /* Supondo GPIOA base em 0x40020000 */
-    LDR  r0, =0x40020000     ; base do GPIOA
+    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> Supondo GPIOA base em <span class="token number">0x40020000</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x40020000</span>     <span class="token comment">; base do GPIOA</span>
 
-    /* Configura PA0 como output: setar bit 0 do MODER */
-    LDR  r1, =0x00000001
-    ORRS r0, r0, r1          ; r0 = r0 OR 1 → ligar bit 0
-    STR  r0, [r0, #0x00]     ; escreve no MODER
+    <span class="token operator">/</span><span class="token operator">*</span> Configura PA0 como output: setar bit <span class="token number">0</span> do MODER <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x00000001</span>
+    <span class="token instruction keyword">ORRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>          <span class="token comment">; r0 = r0 OR 1 → ligar bit 0</span>
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span>     <span class="token comment">; escreve no MODER</span>
 
-    /* Liga LED no PA0: setar bit no ODR */
-    LDR  r1, =0x00000001
-    ORRS r0, r0, r1
-    STR  r0, [r0, #0x14]     ; ODR offset 0x14
+    <span class="token operator">/</span><span class="token operator">*</span> Liga LED no PA0: setar bit no ODR <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x00000001</span>
+    <span class="token instruction keyword">ORRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>     <span class="token comment">; ODR offset 0x14</span>
 
-    /* Limpa bit 0 do ODR (desliga LED) */
-    LDR  r1, =0xFFFFFFFE
-    BICS r0, r0, r1
-    STR  r0, [r0, #0x14]</code></pre>
+    <span class="token operator">/</span><span class="token operator">*</span> Limpa bit <span class="token number">0</span> do ODR <span class="token punctuation">(</span>desliga LED<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0xFFFFFFFE</span>
+    <span class="token instruction keyword">BICS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span></code></pre>
 
     <h2>Quando usar cada instrução</h2>
     <ul>
@@ -353,7 +349,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
     </p>
 
     <h2>Glossário: instruções</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Instruções de manipulação de bits</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">O que faz</th></tr>
@@ -371,10 +367,10 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>BFC Rd, #lsb, #width</code></th><td>Limpa campo de bits (Thumb-2 only)</td></tr>
         <tr><th scope="row"><code>UBFX Rd, Rn, #lsb, #width</code></th><td>Extrai campo unsigned (Thumb-2 only)</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>Glossário: comandos</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Comandos de montagem e depuração</caption>
       <thead>
         <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
@@ -386,7 +382,7 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
         <tr><th scope="row"><code>arm-none-eabi-as</code></th><td>Monta assembly</td></tr>
         <tr><th scope="row"><code>arm-none-eabi-objdump -d</code></th><td>Mostra bytes e instruções</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>

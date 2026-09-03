@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-fundamentos-arm',
   template: `
     <p>
@@ -166,12 +164,12 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       Como só <code>LDR</code>/<code>STR</code> tocam memória, o ARM coloca toda
       a flexibilidade de endereçamento nesses operandos. Os principais:
     </p>
-    <pre><code class="language-armasm">add  r0, r1, #5            @ imediato: r0 = r1 + 5
-add  r0, r1, r2            @ registrador: r0 = r1 + r2
-ldr  r0, [r1, r2, LSL #2]  @ registrador deslocado: r0 = mem[r1 + r2*4]
-ldr  r0, =tabela           @ PC-relative: carrega endereço de 'tabela'
-ldr  r0, [r1, #4]!         @ pré-indexado com writeback (!): r1 = r1+4
-ldr  r0, [r1], #4          @ pós-indexado: usa r1 e depois r1 = r1+4</code></pre>
+    <pre><code class="language-armasm">add  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>            @ imediato: <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token number">5</span>
+add  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span>            @ registrador: <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token register symbol">r2</span>
+ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> LSL <span class="token operator">#</span><span class="token number">2</span><span class="token punctuation">]</span>  @ registrador deslocado: <span class="token register symbol">r0</span> <span class="token operator">=</span> mem<span class="token punctuation">[</span><span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token register symbol">r2</span><span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">]</span>
+ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span>tabela           @ PC<span class="token operator">-</span>relative: carrega endereço de 'tabela'
+ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token operator">!</span>         @ pré<span class="token operator">-</span>indexado com writeback <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">)</span>: <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token register symbol">r1</span><span class="token operator">+</span><span class="token number">4</span>
+ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>          @ pós<span class="token operator">-</span>indexado: usa <span class="token register symbol">r1</span> e depois <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token register symbol">r1</span><span class="token operator">+</span><span class="token number">4</span></code></pre>
     <p>
       O <code>LSL #2</code> é o que faz um array de 4 bytes virar "índice vezes
       4" sem instrução extra — muito comum em acessos a tabelas.
@@ -193,18 +191,18 @@ ldr  r0, [r1], #4          @ pós-indexado: usa r1 e depois r1 = r1+4</code></pr
       arm-box, inspecione o CPSR:
     </p>
     <pre><code class="language-armasm">        .syntax unified
-        .arch armv7-a
+        .arch armv7<span class="token operator">-</span>a
         .text
         .global _start
 
 _start:
-        mov   r0, #10         @ r0 = 10
-        mov   r1, #3          @ r1 = 3
-        adds  r2, r0, r1      @ r2 = 13  -> CPSR reflete (Z=0, N=0)
-        subs  r3, r1, r1      @ r3 = 0   -> flag Z = 1
-        subs  r4, r0, #20     @ r4 = -10 -> flag N = 1
-        mov   r0, #0          @ código de saída
-        bx    lr</code></pre>
+        mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">10</span>         @ <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token number">10</span>
+        mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>          @ <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token number">3</span>
+        adds  <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>      @ <span class="token register symbol">r2</span> <span class="token operator">=</span> <span class="token number">13</span>  <span class="token operator">-</span><span class="token operator">></span> CPSR reflete <span class="token punctuation">(</span>Z<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> N<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+        subs  <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>      @ <span class="token register symbol">r3</span> <span class="token operator">=</span> <span class="token number">0</span>   <span class="token operator">-</span><span class="token operator">></span> flag Z <span class="token operator">=</span> <span class="token number">1</span>
+        subs  <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">20</span>     @ <span class="token register symbol">r4</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">10</span> <span class="token operator">-</span><span class="token operator">></span> flag N <span class="token operator">=</span> <span class="token number">1</span>
+        mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>          @ código de saída
+        bx    <span class="token register symbol">lr</span></code></pre>
     <p>
       Repare no <code>S</code> obrigatório: sem ele, nenhuma flag mudaria e a
       execução condicional deixaria de fazer sentido.
@@ -225,13 +223,13 @@ _start:
       <code>brew install qemu</code> (macOS).
     </p>
     <p>Terminal 1 — sobe o binário sob o gdbserver do qemu na porta 1234:</p>
-    <pre><code class="language-bash">qemu-arm -g 1234 flags.elf</code></pre>
+    <pre><code class="language-bash">qemu-arm <span class="token parameter variable">-g</span> <span class="token number">1234</span> flags.elf</code></pre>
     <p>Terminal 2 — abre o GDB, aponta para a arquitetura e conecta:</p>
     <pre><code class="language-bash">gdb-multiarch flags.elf
-(gdb) set architecture arm
-(gdb) target remote localhost:1234
-(gdb) break _start
-(gdb) continue</code></pre>
+<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">set</span> architecture arm
+<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> target remote localhost:1234
+<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">break</span> _start
+<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">continue</span></code></pre>
     <p>
       Agora vá passo a passo com <code>stepi</code> (ou <code>si</code>) e
       inspecione o estado a cada instrução. Comece pelo

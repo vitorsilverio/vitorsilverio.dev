@@ -1,6 +1,7 @@
 /
 /projetos
 /curriculo
+/curso-arm
 /artigos
 /artigos/boas-vindas
 /artigos/angular-signals-na-pratica
@@ -15,3 +16,4 @@
 /artigos/thumb-e-thumb-2
 /artigos/instrucoes-condicionais-thumb
 /artigos/manipulacao-bits-thumb
+/artigos/semihosting

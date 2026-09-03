@@ -33,6 +33,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/instrucoes-condicionais-thumb').then((m) => m.ArticleInstrucoesCondicionaisThumb),
   'manipulacao-bits-thumb': () =>
     import('./pages/article-detail/posts/manipulacao-bits-thumb').then((m) => m.ArticleManipulacaoBitsThumb),
+  'semihosting': () =>
+    import('./pages/article-detail/posts/semihosting').then((m) => m.ArticleSemihosting),
 } as const;
 
 export const routes: Routes = [
@@ -51,6 +53,11 @@ export const routes: Routes = [
     path: 'curriculo',
     loadComponent: () => import('./pages/resume/resume').then((m) => m.Resume),
     title: 'Currículo · Vítor Silvério',
+  },
+  {
+    path: 'curso-arm',
+    loadComponent: () => import('./pages/course/course').then((m) => m.Course),
+    title: 'Curso de Arquitetura ARM · Vítor Silvério',
   },
   {
     path: 'artigos',

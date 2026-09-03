@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HighlightDirective } from '../../../shared/highlight.directive';
 
 @Component({
   imports: [RouterLink],
-  hostDirectives: [HighlightDirective],
   selector: 'app-article-instrucoes-condicionais-thumb',
   template: `
     <p>
@@ -37,15 +35,15 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
       <code>LSL</code>/<code>LSR</code>/<code>ASR</code>. Para o resto, você
       precisa de um branch:
     </p>
-    <pre><code class="language-armasm">00008000 &lt;_start&gt;:
-    8000: 2003       movs  r0, #3
-    8002: 2805       cmp   r0, #5
-    8004: db01       blt.n 800a &lt;less&gt;
-    8006: 2101       movs  r1, #1
-    8008: e000       b.n   800c &lt;done&gt;
-    800a: 2100       movs  r1, #0
-    800c: 2701       movs  r7, #1
-    800e: df00       svc   0</code></pre>
+    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
+    <span class="token number">8000</span>: <span class="token number">2003</span>       movs  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
+    <span class="token number">8002</span>: <span class="token number">2805</span>       cmp   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>
+    <span class="token number">8004</span>: db01       blt.n 800a <span class="token operator">&lt;</span>less<span class="token operator">></span>
+    <span class="token number">8006</span>: <span class="token number">2101</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token number">8008</span>: e000       b.n   800c <span class="token operator">&lt;</span>done<span class="token operator">></span>
+    800a: <span class="token number">2100</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
+    800c: <span class="token number">2701</span>       movs  <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    800e: df00       svc   <span class="token number">0</span></code></pre>
     <p>
       Oito instruções, 16 bytes. Dois branches (<code>BLT</code> e
       <code>B</code>) — cada um pode causar penalty se o predictor errar.
@@ -80,14 +78,14 @@ import { HighlightDirective } from '../../../shared/highlight.directive';
     <p>
       O mesmo exemplo com IT block (bytes reais, ARMv7-A):
     </p>
-    <pre><code class="language-armasm">00008000 &lt;_start&gt;:
-    8000: f04f 0003  mov.w r0, #3
-    8004: 2805       cmp   r0, #5
-    8006: bfb4       ite   lt
-    8008: 2100       movlt r1, #0
-    800a: 2101       movge r1, #1
-    800c: f04f 0701  mov.w r7, #1
-    8010: df00       svc   0</code></pre>
+    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
+    <span class="token number">8000</span>: f04f <span class="token number">0003</span>  mov.w <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
+    <span class="token number">8004</span>: <span class="token number">2805</span>       cmp   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>
+    <span class="token number">8006</span>: bfb4       ite   lt
+    <span class="token number">8008</span>: <span class="token number">2100</span>       movlt <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
+    800a: <span class="token number">2101</span>       movge <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    800c: f04f <span class="token number">0701</span>  mov.w <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token number">8010</span>: df00       svc   <span class="token number">0</span></code></pre>
     <p>
       Sete instruções, 18 bytes. Parece maior — mas não tem
       <strong>nenhum branch</strong>. O <code>ITE</code> instrui o
@@ -110,7 +108,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
         O <code>firstcond</code> (bits 7..4) é o código da condição do
         <strong>primeiro</strong> bloco (THEN). Para <code>LT</code>, é
         <code>1011</code>.
-        <table>
+        <div class="scroll-x"><table>
           <caption>Tabela de Condições</caption>
           <thead>
             <tr><th scope="col">Código</th><th scope="col">Condição</th></tr>
@@ -133,7 +131,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
             <tr><td>1110</td><td>AL (Always / Unconditional)</td></tr>
             <tr><td>1111</td><td>Reserved / Unpredictable</td></tr>
           </tbody>
-        </table>
+        </table></div>
       </li>
       <li>
       A <strong>máscara</strong> (bits 3..0) tem 4 bits e define quantas
@@ -148,7 +146,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
       </ol>
       Portanto, a sequência final une o THEN obrigatório da primeira instrução com o ELSE calculado da segunda: <strong><code>ITE</code></strong>.
 
-      <table>
+      <div class="scroll-x"><table>
         <caption>Tabela de máscaras possíveis e como elas se traduzem em instruções THEN/ELSE dependendo do valor de firstcond[0]</caption>
         <thead>
           <tr><th scope="col">mask</th><th scope="col">Terminador</th><th scope="col">Qtd. de Instruções</th><th scope="col">Se firstcond[0] == 0</th><th scope="col">Se firstcond[0] == 1</th></tr>
@@ -170,7 +168,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
           <tr><td>1101</td><td>Bit 0</td><td>4</td><td>ITEET</td><td>ITTTE</td></tr>
           <tr><td>1111</td><td>Bit 0</td><td>4</td><td>ITEEE</td><td>ITTTT</td></tr>
       </tbody>
-      </table>
+      </table></div>
     </li>
       <li>
       O assembler automaticamente <strong>inverte</strong> a condição para
@@ -203,7 +201,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
     </ul>
 
     <h2>Glossário: instruções e comandos</h2>
-    <table>
+    <div class="scroll-x"><table>
       <caption>Instruções IT e comandos relacionados</caption>
       <thead>
         <tr><th scope="col">Instrução / Comando</th><th scope="col">O que faz</th></tr>
@@ -215,7 +213,7 @@ bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e
         <tr><th scope="row"><code>-march=armv7-a -mthumb</code></th><td>Monta Thumb-2 com IT blocks.</td></tr>
         <tr><th scope="row"><code>arm-none-eabi-objdump -d</code></th><td>Mostra os bytes IT + instruções condicionais.</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>

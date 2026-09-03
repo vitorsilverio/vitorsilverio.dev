@@ -6,7 +6,14 @@ import { routes } from './app.routes';
 import axe from 'axe-core';
 
 describe('Acessibilidade (axe-core)', () => {
-  const paths = ['/', '/projetos', '/curriculo', '/artigos', '/artigos/hello-armbox'];
+  const paths = [
+    '/',
+    '/projetos',
+    '/curriculo',
+    '/curso-arm',
+    '/artigos',
+    '/artigos/hello-armbox',
+  ];
 
   beforeEach(() => {
     // Garante isolamento: remove fixtures de outros specs que possam ter
@@ -44,19 +51,6 @@ describe('Acessibilidade (axe-core)', () => {
       });
 
       if (results.violations.length) {
-        require('fs').writeFileSync(
-          'axe-fail.json',
-          JSON.stringify(
-            results.violations.map((v) => ({
-              id: v.id,
-              help: v.help,
-              impact: v.impact,
-              nodes: v.nodes.map((n) => ({ html: n.html, target: n.target })),
-            })),
-            null,
-            2,
-          ),
-        );
         const summary = results.violations
           .map(
             (v) =>
