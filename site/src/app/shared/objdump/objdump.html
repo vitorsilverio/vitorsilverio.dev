@@ -1,0 +1,35 @@
+<figure class="od">
+  @if (legenda()) {
+    <figcaption class="od-cap">{{ legenda() }}</figcaption>
+  }
+
+  <div class="scroll-x od-box">
+    <div class="od-body">
+      @for (l of linhas(); track $index) {
+        @switch (l.tipo) {
+          @case ('rotulo') {
+            <div class="od-rot">
+              <span class="od-adr">{{ l.endereco }}</span>
+              <span class="od-lbl">&lt;{{ l.rotulo }}&gt;:</span>
+            </div>
+          }
+          @case ('insn') {
+            <div class="od-l" [class.hi]="destaque() === $index">
+              <span class="od-adr" [style.width.ch]="larg().adr">{{ l.endereco }}:</span>
+              <span class="od-byt" [style.width.ch]="larg().byt">{{ l.bytes }}</span>
+              <span class="od-mne" [style.width.ch]="larg().mne">{{ l.mnem }}</span>
+              <!-- os tokens não podem ter espaço entre si: tudo numa linha só -->
+              <span class="od-ops">@for (t of l.ops; track $index) {<span [class]="'ot-' + t.t">{{ t.v }}</span>}</span>
+              @if (l.coment) {
+                <span class="od-cmt">{{ l.coment }}</span>
+              }
+            </div>
+          }
+          @default {
+            <div class="od-txt">{{ l.texto }}</div>
+          }
+        }
+      }
+    </div>
+  </div>
+</figure>

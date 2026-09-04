@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Objdump } from '../../../shared/objdump/objdump';
 
 @Component({
+  imports: [Objdump],
   selector: 'app-article-semihosting',
   template: `
 <h2>O que é semihosting?</h2>
@@ -55,12 +57,14 @@ import { Component } from '@angular/core';
     movs <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
     bkpt <span class="token operator">#</span><span class="token number">0xAB</span>           @ semihosting call
     b .</code></pre>
-<pre><code class="language-text">00000000 &lt;msg-0xa&gt;:
+<app-objdump
+      listagem="00000000 &lt;msg-0xa&gt;:
    0:	2020      	movs	r0, #32        @ 0x20 = SYS_WRITE0
    2:	4903      	ldr	r1, [pc, #12]
    4:	2200      	movs	r2, #0
    6:	beab      	bkpt	0x00ab        @ semihosting entry
-   8:	e7fe      	b.n	8</code></pre>
+   8:	e7fe      	b.n	8"
+    />
 <div class="scroll-x">
   <table>
     <thead>

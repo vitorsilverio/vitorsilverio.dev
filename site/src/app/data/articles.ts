@@ -124,4 +124,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Semihosting é o mecanismo que permite que código rodando em um alvo ARM (ou emulador como o arm-box) faça chamadas ao sistema operacional do host — leitura de console, escrita de arquivos, saída do programa. O arm-box intercepta e traduz essas chamadas EABI.',
     tags: ['ARM', 'Semihosting', 'Syscalls', 'EABI', 'arm-box', 'Debug', 'Tutorial'],
   },
+  {
+    slug: 'por-que-emular-arm',
+    title: 'Por que emular ARM (e por que isso ensina arquitetura)',
+    date: '2026-09-04',
+    readingTime: '9 min',
+    excerpt: 'Escrever um emulador é o melhor laboratório de arquitetura que existe: você é obrigado a implementar a semântica exata de cada instrução, flag e modo. Esta é a abertura de uma trilha que ensina o ARM a partir de código real — o arm-jitter e os emuladores construídos sobre ele.',
+    tags: ['ARM', 'Emulação', 'arm-jitter', 'Arquitetura', 'Trilha', 'Tutorial'],
+  },
 ];

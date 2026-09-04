@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BitField } from '../../../shared/bit-field/bit-field';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, BitField],
   selector: 'app-article-flags-e-desvios-condicionais',
   template: `
     <p>
@@ -23,13 +24,15 @@ import { RouterLink } from '@angular/router';
       registrador de 32 bits. Os 4 bits mais significativos são as flags que
       nos interessam:
     </p>
-    <pre><code class="language-text">31  30  29  28  27..0
- N   Z   C   V   (modo, interrupção, etc.)
-
- N = Negative   — bit 31 do resultado
- Z = Zero       — 1 se resultado == 0
- C = Carry      — carry out (ADD) / NOT borrow (SUB)
- V = Overflow   — overflow com sinal</code></pre>
+    <app-bit-field
+      titulo="CPSR — os quatro bits que os desvios condicionais consultam"
+      [inicial]="0"
+      campos="1  | N     | ? | \`Negative\`. Cópia do bit 31 do resultado: 1 quando ele é negativo em complemento de dois.
+              1  | Z     | ? | \`Zero\`. 1 quando o resultado deu exatamente zero — é o bit que o \`beq\`/\`bne\` lê.
+              1  | C     | ? | \`Carry\`. No \`ADD\` é o vai-um que saiu do bit 31; no \`SUB\` é o *NOT borrow*, então \`0 - 1\` deixa C em 0.
+              1  | V     | ? | \`Overflow\` com sinal: 1 quando o resultado estourou a faixa de complemento de dois, mesmo sem carry.
+              28 | resto | ? | Modo de processador, máscaras de interrupção, bit T de Thumb, estado do bloco \`IT\` — nada disso entra na decisão de um desvio condicional."
+    />
     <p>
       Quando uma instrução tem o bit <code>S = 1</code> (ex.:
       <code>CMP</code>, <code>ADDS</code>, <code>MOVS</code>), ela escreve
@@ -44,8 +47,18 @@ import { RouterLink } from '@angular/router';
       <code>sum.elf</code> (do
       <a routerLink="/artigos/carga-e-armazenamento-arm">artigo de carga e armazenamento</a>):
     </p>
-    <pre><code class="language-text">e1520003  cmp r2, r3
-  cond=1110 (AL) | 00 | I=0 | opcode=1010 (CMP) | S=1 | Rn=2 (r2) | Rd=ignorado | op2=reg r3</code></pre>
+    <app-bit-field
+      titulo="e1520003 = cmp r2, r3"
+      [inicial]="4"
+      campos="4  | cond     | 1110         | \`1110\` = AL: a comparação em si sempre executa.
+              2  | —        | 00           | Família \`00\`: processamento de dados.
+              1  | I        | 0            | Operando 2 é registrador.
+              4  | opcode   | 1010         | \`1010\` = CMP.
+              1  | S        | 1            | Aqui está o ponto do artigo: no \`CMP\` o \`S\` é obrigatório. A instrução existe só para escrever N/Z/C/V.
+              4  | Rn       | 0010         | Primeiro operando: \`r2\`.
+              4  | Rd       | 0000         | Descartado — o resultado da subtração não vai para registrador nenhum.
+              12 | operand2 | 000000000011 | Segundo operando: \`r3\`."
+    />
     <ul>
       <li>O <code>S = 1</code> é o que faz o CMP escrever no CPSR.</li>
       <li>

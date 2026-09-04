@@ -35,6 +35,21 @@ export class Course {
     { file: 'cpsr.s', lesson: 'M1.1', desc: 'Lê o CPSR em três momentos — N e Z mudando.' },
     { file: 'anat.s', lesson: 'M1.3', desc: 'Dez instruções para ver a codificação no objdump.' },
     { file: 'pcoffset.s', lesson: 'M1.4', desc: 'Prova que R15 lê como "instrução + 8".' },
+    { file: 'soma.c', lesson: 'M2.1', desc: 'Soma de 1 a n — compilada em -O0 e -O2.' },
+    { file: 'thumb1.s', lesson: 'M2.3', desc: 'Laço Thumb de 16 bits para decodificar à mão.' },
+    { file: 'fib.s', lesson: 'M3.1', desc: 'Fibonacci iterativo; retorno via exit code.' },
+    { file: 'max.s', lesson: 'M3.1', desc: 'Máximo de dois números sem um único desvio.' },
+    { file: 'user.ld', lesson: 'M3.2', desc: 'Linker script mínimo para os exemplos user-mode.' },
+    { file: 'soma5.s', lesson: 'M3.2', desc: 'Soma de vetor; ligado com user.ld, extraído com objcopy.' },
+    { file: 'java/TraceSoma.java', lesson: 'M3.4', desc: 'Embute o arm-jitter e traça o laço instrução a instrução.' },
+    { file: 'svc.s', lesson: 'M4.1', desc: 'Duas instruções que disparam uma exceção SWI.' },
+    { file: 'java/ExcecaoSwi.java', lesson: 'M4.1', desc: 'Mostra a entrada no vetor 0x08: troca de modo, SPSR, LR.' },
+    { file: 'isa-v5te.s', lesson: 'M5.2', desc: 'Instruções novas do ARMv5TE (CLZ, BLX, DSP).' },
+    { file: 'isa-v6k.s', lesson: 'M5.3', desc: 'ARMv6K: LDREX/STREX, SIMD paralelo, REV, SETEND.' },
+    { file: 'isa-thumb2.s', lesson: 'M5.4', desc: 'Thumb-2: MOVW/MOVT, IT block, formas .W.' },
+    { file: 'isa-v7a-vfp.s', lesson: 'M5.5', desc: 'ARMv7-A + VFPv2: bitfield, SDIV, RBIT, VADD.F64.' },
+    { file: 'hello-cortexm.c', lesson: 'M5.6', desc: 'Firmware bare-metal Cortex-M com tabela de vetores.' },
+    { file: 'ldrex.s', lesson: 'M7.2', desc: 'Incremento atômico com LDREX/STREX e retry.' },
   ];
 
   protected readonly total = computed(() =>

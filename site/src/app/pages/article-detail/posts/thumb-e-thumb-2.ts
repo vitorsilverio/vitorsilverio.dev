@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Objdump } from '../../../shared/objdump/objdump';
+import { BitField } from '../../../shared/bit-field/bit-field';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Objdump, BitField],
   selector: 'app-article-thumb-e-thumb-2',
   template: `
     <p>
@@ -60,26 +62,30 @@ import { RouterLink } from '@angular/router';
       Montamos a mesma função simples (soma dois números) nos dois modos.
       Primeiro o <strong>ARM</strong> (já conhecido):
     </p>
-    <pre><code class="language-armasm"><span class="token number">00008018</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
-    <span class="token number">8018</span>: e3a00003  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
-    801c: e3a01004  mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
-    <span class="token number">8020</span>: eb000000  bl    <span class="token number">8028</span> <span class="token operator">&lt;</span>add_arm<span class="token operator">></span>
-    <span class="token number">8024</span>: ef000000  svc   <span class="token number">0</span>
+    <app-objdump
+      listagem="00008018 &lt;_start&gt;:
+    8018: e3a00003  mov   r0, #3
+    801c: e3a01004  mov   r1, #4
+    8020: eb000000  bl    8028 &lt;add_arm&gt;
+    8024: ef000000  svc   0
 
-<span class="token number">00008028</span> <span class="token operator">&lt;</span>add_arm<span class="token operator">></span>:
-    <span class="token number">8028</span>: e0800001  add   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    802c: e12fff1e  bx    <span class="token register symbol">lr</span></code></pre>
+00008028 &lt;add_arm&gt;:
+    8028: e0800001  add   r0, r0, r1
+    802c: e12fff1e  bx    lr"
+    />
     <p>Agora o <strong>Thumb</strong> — bytes reais do devkitARM:</p>
-    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
-    <span class="token number">8000</span>: <span class="token number">2003</span>       movs  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
-    <span class="token number">8002</span>: <span class="token number">2104</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
-    <span class="token number">8004</span>: f000 f802  bl    800c <span class="token operator">&lt;</span>add_thumb<span class="token operator">></span>
-    <span class="token number">8008</span>: <span class="token number">2701</span>       movs  <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    800a: df00       svc   <span class="token number">0</span>
+    <app-objdump
+      listagem="00008000 &lt;_start&gt;:
+    8000: 2003       movs  r0, #3
+    8002: 2104       movs  r1, #4
+    8004: f000 f802  bl    800c &lt;add_thumb&gt;
+    8008: 2701       movs  r7, #1
+    800a: df00       svc   0
 
-0000800c <span class="token operator">&lt;</span>add_thumb<span class="token operator">></span>:
-    800c: <span class="token number">1840</span>       adds  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    800e: <span class="token number">4770</span>       bx    <span class="token register symbol">lr</span></code></pre>
+0000800c &lt;add_thumb&gt;:
+    800c: 1840       adds  r0, r0, r1
+    800e: 4770       bx    lr"
+    />
     <p>
       Repare: as instruções do <code>_start</code> em Thumb ocupam
       <strong>2 bytes cada</strong> (0x2003, 0x2104, 0x2701, 0xdf00), enquanto
@@ -96,10 +102,13 @@ import { RouterLink } from '@angular/router';
     </p>
 
     <h3><code>movs r0, #3</code> = <code>0x2003</code></h3>
-    <pre><code class="language-text">0x2003 = 0010 0000 0000 0011
-bits 15..11 = 00100  →  MOV imediato (formato T1)
-bits 10..8  = 000    →  Rd = r0
-bits 7..0   = 00000011 → imm8 = 3</code></pre>
+    <app-bit-field
+      titulo="0x2003 = movs r0, #3 — 16 bits"
+      [inicial]="0"
+      campos="5 | op   | 00100    | \`00100\` = MOV imediato, formato T1. O opcode ocupa 5 bits — bem menos que os 8 do ARM.
+              3 | Rd   | 000      | Destino: \`r0\`. Três bits só alcançam \`r0\`–\`r7\`.
+              8 | imm8 | 00000011 | Imediato: \`3\`. São 8 bits diretos, de 0 a 255 — sem a rotação que o ARM usa."
+    />
     <ul>
       <li>O opcode ocupa 5 bits (15..11) — muito menor que os 8 bits do ARM.</li>
       <li>
@@ -112,11 +121,14 @@ bits 7..0   = 00000011 → imm8 = 3</code></pre>
     </ul>
 
     <h3><code>adds r0, r0, r1</code> = <code>0x1840</code></h3>
-    <pre><code class="language-text">0x1840 = 0001 1000 0100 0000
-bits 15..9  = 0001100  →  ADD registrador (formato T1)
-bits 8..6   = 001      →  Rm = r1
-bits 5..3   = 000      →  Rn = r0
-bits 2..0   = 000      →  Rd = r0</code></pre>
+    <app-bit-field
+      titulo="0x1840 = adds r0, r0, r1 — 16 bits"
+      [inicial]="0"
+      campos="7 | op | 0001100 | \`0001100\` = ADD entre registradores, formato T1. Repare que o corte é outro: aqui o opcode come 7 bits, não 5.
+              3 | Rm | 001     | Segundo operando: \`r1\`.
+              3 | Rn | 000     | Primeiro operando: \`r0\`.
+              3 | Rd | 000     | Destino: \`r0\`. Três registradores em 3 bits cada — é por isso que esta forma do Thumb-1 só enxerga \`r0\`–\`r7\`."
+    />
     <ul>
       <li>
         O <code>adds</code> (com S implícito em Thumb) atualiza as
@@ -130,11 +142,14 @@ bits 2..0   = 000      →  Rd = r0</code></pre>
     </ul>
 
     <h3><code>bx lr</code> = <code>0x4770</code></h3>
-    <pre><code class="language-text">0x4770 = 0100 0111 0111 0000
-bits 15..8 = 01000111  →  BX (formato T1)
-bit 7      = 0         →  BX (não BLX)
-bits 6..3  = 1110      →  Rm = r14 (lr)
-bits 2..0  = 000       →  (ignorado)</code></pre>
+    <app-bit-field
+      titulo="0x4770 = bx lr — 16 bits"
+      [inicial]="2"
+      campos="8 | op | 01000111 | \`01000111\` = BX, formato T1.
+              1 | L  | 0        | \`0\` = \`BX\`. Em \`1\` seria \`BLX\`: troca para ARM e salva o retorno em \`lr\`.
+              4 | Rm | 1110     | Registrador alvo: \`14\` = \`lr\`. Repare que ele está nos bits 6..3, não nos mais baixos como no ARM — e são 4 bits, então esta forma alcança \`r0\`–\`r15\`.
+              3 | —  | 000      | Ignorado."
+    />
     <ul>
       <li>
         O <code>Rm</code> está nos bits 6..3 (não nos bits 2..0 como no
@@ -152,10 +167,14 @@ bits 2..0  = 000       →  (ignorado)</code></pre>
       de um offset grande + o bit de link. No Thumb-2, ele ocupa
       <strong>dois halfwords</strong> (4 bytes):
     </p>
-    <pre><code class="language-text">f000 f802  →  bl 800c &lt;add_thumb&gt;
-
-halfword 1: 0xf000  →  prefixo do BL (bit H seleciona qual metade)
-halfword 2: 0xf802  →  offset de 22 bits com sinal</code></pre>
+    <app-bit-field
+      titulo="f000 f802 = bl 800c &lt;add_thumb&gt; — dois halfwords, 32 bits"
+      [inicial]="3"
+      campos="5  | prefixo | 11110       | Marca o primeiro halfword do par. É o que diz ao decodificador que a instrução ainda não acabou.
+              11 | off_hi  | 00000000000 | Metade alta do deslocamento, vinda do primeiro halfword.
+              5  | sufixo  | 11111       | Segundo halfword. \`11111\` = \`BL\`; \`11101\` seria \`BLX\`, que ainda troca para ARM.
+              11 | off_lo  | 00000000010 | Metade baixa: \`2\`. O deslocamento final é \`(off_hi &lt;&lt; 12) | (off_lo &lt;&lt; 1)\` = \`4\`, e o alvo é \`(PC + 4) + 4\` = \`0x800c\`."
+    />
     <ul>
       <li>
         O offset é codificado nos dois halfwords e, como no ARM, o alvo é

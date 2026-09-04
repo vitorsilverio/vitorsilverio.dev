@@ -35,6 +35,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/manipulacao-bits-thumb').then((m) => m.ArticleManipulacaoBitsThumb),
   'semihosting': () =>
     import('./pages/article-detail/posts/semihosting').then((m) => m.ArticleSemihosting),
+  'por-que-emular-arm': () =>
+    import('./pages/article-detail/posts/por-que-emular-arm').then((m) => m.ArticlePorQueEmularArm),
 } as const;
 
 export const routes: Routes = [

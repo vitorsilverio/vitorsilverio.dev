@@ -1,0 +1,121 @@
+:host {
+  display: block;
+  margin: 1.6rem 0;
+}
+
+.od {
+  margin: 0;
+}
+
+.od-cap {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+/* Mesma "cara" do <pre> da prosa, para o artigo não parecer remendado. */
+.od-box {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 10px;
+}
+
+.od-body {
+  padding: 0.95rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--code-fg);
+  font-variant-numeric: tabular-nums;
+  /* uma listagem não deve quebrar linha: melhor rolar */
+  width: max-content;
+  min-width: 100%;
+}
+
+/*
+ * Linha = flex. Duas razões: as colunas ficam alinhadas por largura em `ch`
+ * (calculada do conteúdo), e o flex descarta os nós de espaço em branco que o
+ * template deixa entre os elementos — o que num <pre> viraria linha extra.
+ */
+.od-l {
+  display: flex;
+  gap: 1.15rem;
+  /* recuo em relação ao rótulo, como na saída do objdump */
+  padding-left: 1.6rem;
+}
+
+.od-rot {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Separa blocos (<loop>:, <done>:) sem depender de linha em branco. */
+.od-rot:not(:first-child) {
+  margin-top: 0.9rem;
+}
+
+.od-adr,
+.od-byt,
+.od-mne {
+  flex: none;
+}
+
+.od-mne {
+  color: var(--code-mne);
+  font-weight: 600;
+}
+
+.od-adr {
+  color: var(--code-dim);
+}
+
+.od-byt {
+  color: var(--code-byt);
+}
+
+.od-ops {
+  /* preserva o espaçamento exato dos operandos */
+  white-space: pre;
+  flex: 0 1 auto;
+}
+
+.od-cmt {
+  color: var(--code-dim);
+  font-style: italic;
+  flex: none;
+}
+
+.od-txt {
+  color: var(--code-fg);
+  white-space: pre;
+}
+
+/* Destaque de uma linha específica (a instrução em discussão no texto). */
+.od-l.hi {
+  background: color-mix(in srgb, var(--code-mne) 16%, transparent);
+  box-shadow: inset 3px 0 0 var(--code-mne);
+  margin-inline: -1.1rem;
+  padding-left: 2.7rem;
+  padding-right: 1.1rem;
+}
+
+/* ---- tokens dos operandos ---- */
+.ot-reg {
+  color: var(--code-reg);
+}
+
+.ot-imm,
+.ot-num {
+  color: var(--code-imm);
+}
+
+.ot-lbl,
+.od-lbl {
+  color: var(--code-lbl);
+}
+
+.ot-txt {
+  color: var(--code-dim);
+}

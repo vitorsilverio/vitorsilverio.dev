@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Objdump } from '../../../shared/objdump/objdump';
+import { BitField } from '../../../shared/bit-field/bit-field';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Objdump, BitField],
   selector: 'app-article-instrucoes-condicionais-thumb',
   template: `
     <p>
@@ -35,15 +37,17 @@ import { RouterLink } from '@angular/router';
       <code>LSL</code>/<code>LSR</code>/<code>ASR</code>. Para o resto, você
       precisa de um branch:
     </p>
-    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
-    <span class="token number">8000</span>: <span class="token number">2003</span>       movs  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
-    <span class="token number">8002</span>: <span class="token number">2805</span>       cmp   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>
-    <span class="token number">8004</span>: db01       blt.n 800a <span class="token operator">&lt;</span>less<span class="token operator">></span>
-    <span class="token number">8006</span>: <span class="token number">2101</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    <span class="token number">8008</span>: e000       b.n   800c <span class="token operator">&lt;</span>done<span class="token operator">></span>
-    800a: <span class="token number">2100</span>       movs  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
-    800c: <span class="token number">2701</span>       movs  <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    800e: df00       svc   <span class="token number">0</span></code></pre>
+    <app-objdump
+      listagem="00008000 &lt;_start&gt;:
+    8000: 2003       movs  r0, #3
+    8002: 2805       cmp   r0, #5
+    8004: db01       blt.n 800a &lt;less&gt;
+    8006: 2101       movs  r1, #1
+    8008: e000       b.n   800c &lt;done&gt;
+    800a: 2100       movs  r1, #0
+    800c: 2701       movs  r7, #1
+    800e: df00       svc   0"
+    />
     <p>
       Oito instruções, 16 bytes. Dois branches (<code>BLT</code> e
       <code>B</code>) — cada um pode causar penalty se o predictor errar.
@@ -78,14 +82,16 @@ import { RouterLink } from '@angular/router';
     <p>
       O mesmo exemplo com IT block (bytes reais, ARMv7-A):
     </p>
-    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
-    <span class="token number">8000</span>: f04f <span class="token number">0003</span>  mov.w <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
-    <span class="token number">8004</span>: <span class="token number">2805</span>       cmp   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>
-    <span class="token number">8006</span>: bfb4       ite   lt
-    <span class="token number">8008</span>: <span class="token number">2100</span>       movlt <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
-    800a: <span class="token number">2101</span>       movge <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    800c: f04f <span class="token number">0701</span>  mov.w <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    <span class="token number">8010</span>: df00       svc   <span class="token number">0</span></code></pre>
+    <app-objdump
+      listagem="00008000 &lt;_start&gt;:
+    8000: f04f 0003  mov.w r0, #3
+    8004: 2805       cmp   r0, #5
+    8006: bfb4       ite   lt
+    8008: 2100       movlt r1, #0
+    800a: 2101       movge r1, #1
+    800c: f04f 0701  mov.w r7, #1
+    8010: df00       svc   0"
+    />
     <p>
       Sete instruções, 18 bytes. Parece maior — mas não tem
       <strong>nenhum branch</strong>. O <code>ITE</code> instrui o
@@ -98,11 +104,13 @@ import { RouterLink } from '@angular/router';
     <p>
       <code>ITE LT</code> = <code>0xbfb4</code>. Vamos bit a bit:
     </p>
-    <pre><code class="language-text">0xbfb4 = 1011 1111 1011 0100
-bits 15..8  = 10111111  →  opcode IT
-bits 7..4   = 1011      →  firstcond = LT (1010 = GE, 1011 = LT, 1100 = GT, 1101 = LE, 1110 = AL, EQ = 0000, etc.)
-bits 3..0   = 0100       →  máscara: Vai depender de quntas instruções TE e se firscond é impar ou par.
-</code></pre>
+    <app-bit-field
+      titulo="0xbfb4 = ite lt — 16 bits"
+      [inicial]="2"
+      campos="8 | op        | 10111111 | \`10111111\` = o opcode do \`IT\`. Ele não executa nada: só condiciona as instruções seguintes.
+              4 | firstcond | 1011     | \`1011\` = LT. É a condição da primeira instrução coberta; as marcadas com \`E\` usam a condição oposta. (\`0000\` = EQ, \`1010\` = GE, \`1100\` = GT, \`1101\` = LE, \`1110\` = AL.)
+              4 | mask      | 0100     | Codifica quantas instruções o bloco cobre e o padrão T/E de cada uma. Depende da paridade de \`firstcond\`, e é o campo que o \`ITSTATE\` do CPSR consome instrução a instrução."
+    />
     <ul>
       <li>
         O <code>firstcond</code> (bits 7..4) é o código da condição do

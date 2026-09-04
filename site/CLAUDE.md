@@ -89,3 +89,51 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar
 (pré-render das rotas + tipos) e `npm run test`.
+
+## Componentes de conteúdo (usar no lugar de `<pre>` quando couber)
+
+Dois blocos especiais no markdown viram componente — o gerador cuida do import.
+
+**Fita de bits anotada** (`app-bit-field`): uma linha por campo,
+`bits | nome | valor | descrição`, do bit mais significativo para o menos. O
+intervalo (`31:28`) é derivado da soma das larguras, então não há como divergir.
+Crase na descrição vira `<code>`. Use sempre que o artigo decodificar uma palavra.
+
+````markdown
+```bitfield e0810002 = add r0, r1, r2
+4  | cond     | 1110         | `1110` = AL: sempre executa.
+2  | —        | 00           | Família `00`: processamento de dados.
+12 | operand2 | 000000000010 | Segundo operando: `r2`.
+```
+````
+
+**Listagem de objdump** (`app-objdump`): colore por coluna — endereço, bytes,
+mnemônico, operandos (registrador/imediato/rótulo) e comentário. O Prism sozinho
+não dá conta porque a saída do objdump não é uma linguagem, são colunas com
+semânticas diferentes. Mantenha os TABs do objdump; sem eles, duas ou mais
+espaços também funcionam.
+
+````markdown
+```objdump Trecho do laço em sum.elf
+00008010 <loop>:
+    8010: e1520003  cmp   r2, r3
+    8014: aa000003  bge   8028 <done>
+```
+````
+
+Ambos são pré-renderizados (sem JS no primeiro paint) e passam no axe.
+
+**Detecção automática.** Listagem de objdump tem forma reconhecível (endereço,
+bytes em hex, mnemônico), então o gerador converte sozinho — a cerca pode ser
+` ```text ` ou ` ```armasm ` e vira `<app-objdump>` do mesmo jeito. A regra exige
+duas linhas de instrução e 70% das linhas casando, para não capturar sessão de
+GDB ou saída de shell.
+
+Layout de campos de bits **não** é convertido sozinho: o formato é livre demais e
+uma largura errada produz um diagrama que *mente*. O gerador só avisa e você
+troca a cerca por ` ```bitfield `.
+
+Para os artigos já publicados: `npm run migra-blocos -- --dry-run` relata,
+`npm run migra-blocos` aplica. A regra de reconhecimento é a mesma
+(`scripts/lib/blocos.mjs`), então gerador e migração nunca divergem.
+

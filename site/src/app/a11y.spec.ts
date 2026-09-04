@@ -13,6 +13,7 @@ describe('Acessibilidade (axe-core)', () => {
     '/curso-arm',
     '/artigos',
     '/artigos/hello-armbox',
+    '/artigos/decodificando-instrucoes-arm-objdump',
   ];
 
   beforeEach(() => {

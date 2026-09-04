@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Objdump } from '../../../shared/objdump/objdump';
+import { BitField } from '../../../shared/bit-field/bit-field';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Objdump, BitField],
   selector: 'app-article-sub-rotinas-arm-bl-bx-pilha',
   template: `
     <p>
@@ -23,20 +25,22 @@ import { RouterLink } from '@angular/router';
       <code>arm-none-eabi-as -march=armv5te</code> e desmontamos — os bytes
       abaixo são reais:
     </p>
-    <pre><code class="language-armasm"><span class="token number">00008000</span> <span class="token operator">&lt;</span>add2<span class="token operator">></span>:
-    <span class="token number">8000</span>: e92d4010  push  &#123;<span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">lr</span>&#125;
-    <span class="token number">8004</span>: e1a04000  mov   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span>
-    <span class="token number">8008</span>: e0844001  add   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    800c: e1a00004  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span>
-    <span class="token number">8010</span>: e8bd4010  pop   &#123;<span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">lr</span>&#125;
-    <span class="token number">8014</span>: e12fff1e  bx    <span class="token register symbol">lr</span>
+    <app-objdump
+      listagem="00008000 &lt;add2&gt;:
+    8000: e92d4010  push  {r4, lr}
+    8004: e1a04000  mov   r4, r0
+    8008: e0844001  add   r4, r4, r1
+    800c: e1a00004  mov   r0, r4
+    8010: e8bd4010  pop   {r4, lr}
+    8014: e12fff1e  bx    lr
 
-<span class="token number">00008018</span> <span class="token operator">&lt;</span>_start<span class="token operator">></span>:
-    <span class="token number">8018</span>: e3a00003  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>
-    801c: e3a01004  mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
-    <span class="token number">8020</span>: ebfffff6  bl    <span class="token number">8000</span> <span class="token operator">&lt;</span>add2<span class="token operator">></span>
-    <span class="token number">8024</span>: e3a07001  mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    <span class="token number">8028</span>: ef000000  svc   <span class="token number">0x00000000</span></code></pre>
+00008018 &lt;_start&gt;:
+    8018: e3a00003  mov   r0, #3
+    801c: e3a01004  mov   r1, #4
+    8020: ebfffff6  bl    8000 &lt;add2&gt;
+    8024: e3a07001  mov   r7, #1
+    8028: ef000000  svc   0x00000000"
+    />
     <p>
       O <code>_start</code> coloca <code>3</code> em <code>r0</code> e
       <code>4</code> em <code>r1</code>, chama <code>add2</code> e, quando
@@ -50,8 +54,14 @@ import { RouterLink } from '@angular/router';
       (bits [27:26] = <code>10</code>), mas com o bit de <strong>link</strong>
       ligado:
     </p>
-    <pre><code class="language-text">ebfffff6
-cond=1110 (AL) | 10 (desvio) | L=1 (BL: salva retorno) | offset = 0xfffff6</code></pre>
+    <app-bit-field
+      titulo="ebfffff6 = bl add2"
+      [inicial]="2"
+      campos="4  | cond     | 1110                     | \`1110\` = AL: sempre chama.
+              3  | 101      | 101                      | Família de desvio.
+              1  | L        | 1                        | \`L = 1\` é o que separa \`BL\` de \`B\`: grava o endereço de retorno em \`lr\` antes de pular.
+              24 | offset24 | 111111111111111111110110 | Deslocamento com sinal, em palavras: \`-10\`. Negativo porque a chamada aponta para trás. O alvo é \`(PC + 8) + (offset &lt;&lt; 2)\`."
+    />
     <ul>
       <li>
         O <code>BL</code> faz duas coisas: desvia para <code>add2</code>
@@ -78,8 +88,15 @@ cond=1110 (AL) | 10 (desvio) | L=1 (BL: salva retorno) | offset = 0xfffff6</code
       <code>bx lr</code> = <code>e12fff1e</code> copia <code>LR</code> para o
       <code>PC</code> e encerra a função:
     </p>
-    <pre><code class="language-text">e12fff1e
-cond=1110 (AL) | família especial de branch-exchange | Rm = lr (r14) nos bits 3..0 = 1110</code></pre>
+    <app-bit-field
+      titulo="e12fff1e = bx lr"
+      [inicial]="4"
+      campos="4  | cond | 1110         | \`1110\` = AL.
+              8  | op   | 00010010     | Opcode do branch-exchange. Repare que ele ocupa oito bits: o \`BX\` não é da família de desvio do \`B\`/\`BL\` — vive no espaço de instruções especiais.
+              12 | SBO  | 111111111111 | \`Should Be One\`: doze bits que o ARM exige em 1 e ignora. Sobra histórica do encoding — é de onde vêm os três \`f\` no meio do hex.
+              4  | op2  | 0001         | \`0001\` = \`BX\`. \`0011\` seria \`BLX\` (salva retorno em \`lr\`) e \`0010\` seria \`BXJ\`.
+              4  | Rm   | 1110         | Registrador com o endereço de destino: \`14\` = \`lr\`. É o último nibble do hex, o \`e\`. O bit 0 do valor lido decide se a volta é em ARM ou Thumb."
+    />
     <ul>
       <li>
         O <code>Rm</code> (registrador de destino) é o <code>lr</code> — dá para
@@ -105,9 +122,19 @@ cond=1110 (AL) | família especial de branch-exchange | Rm = lr (r14) nos bits 3
       a pilha: <code>stmdb sp!, &#123;r4, lr&#125;</code> e
       <code>ldmia sp!, &#123;r4, lr&#125;</code>.
     </p>
-    <pre><code class="language-text">e92d4010 (push)
-cond=1110 (AL) | 10 (transferência múltipla) | Rn = sp (13) | writeback '!'
-lista de registradores (bits 15..0) = 0x4010 = bits 4 (r4) e 14 (lr) setados</code></pre>
+    <app-bit-field
+      titulo="e92d4010 = push {r4, lr}"
+      [inicial]="8"
+      campos="4  | cond    | 1110             | \`1110\` = AL.
+              3  | 100     | 100              | Família de transferência múltipla — outro corte da palavra, diferente do desvio e do processamento de dados.
+              1  | P       | 1                | \`P = 1\`: decrementa antes de escrever (pre-decrement).
+              1  | U       | 0                | \`U = 0\`: decrementa. Junto com \`P = 1\` é o modo \`DB\`, que é como a pilha ARM cresce — para baixo.
+              1  | S       | 0                | Sem transferência do banco de User.
+              1  | W       | 1                | \`W = 1\`: writeback. É o \`!\` do \`stmdb sp!\` — o \`sp\` fica atualizado depois.
+              1  | L       | 0                | \`L = 0\`: é escrita. \`push\` é um \`store\`; o \`pop\` correspondente tem \`L = 1\`.
+              4  | Rn      | 1101             | Base: \`13\` = \`sp\`.
+              16 | reglist | 0100000000010000 | Um bit por registrador, de \`r0\` (bit 0) a \`r15\` (bit 15). Acesos aqui: o bit 4 (\`r4\`) e o bit 14 (\`lr\`) — \`0x4010\`. É por isso que \`push\` de vários registradores custa uma instrução só."
+    />
     <ul>
       <li>
         Os bits <code>15..0</code> formam uma <em>máscara</em> de 16 bits, um

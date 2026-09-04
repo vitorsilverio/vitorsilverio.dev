@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { marked } from 'marked';
 import { highlightCode } from './lib/highlight.mjs';
+import { ehObjdump, pareceBitField } from './lib/blocos.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -41,7 +42,7 @@ const USAGE =
 // --------------------------------------------------------------------------
 let mdMeta = null;
 let mdTemplate = null;
-let mdUsesRouterLink = false;
+let mdUsa = { routerLink: false, bitField: false, objdump: false };
 
 if (opts.from) {
   const mdPath = resolve(SITE_ROOT, opts.from);
@@ -56,9 +57,9 @@ if (opts.from) {
       (m) => m[1],
     ),
   );
-  const { html, usesRouterLink } = mdBodyToHtml(mdMeta.body, knownSlugs);
+  const { html, usa } = mdBodyToHtml(mdMeta.body, knownSlugs);
   mdTemplate = html;
-  mdUsesRouterLink = usesRouterLink;
+  mdUsa = usa;
 }
 
 const slug = opts.slug ?? mdMeta?.slug;
@@ -68,8 +69,13 @@ if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
 }
 
 const title = opts.title ?? mdMeta?.title ?? slug;
-const excerpt =
-  opts.excerpt ?? mdMeta?.excerpt ?? 'TODO: escreva o resumo (excerpt) do artigo.';
+// O excerpt é renderizado como texto puro (card do índice, RSS, og:description,
+// llms.txt), então crase de markdown apareceria literal.
+const excerpt = (
+  opts.excerpt ??
+  mdMeta?.excerpt ??
+  'TODO: escreva o resumo (excerpt) do artigo.'
+).replace(/`/g, '');
 const readingTime = opts['reading-time'] ?? mdMeta?.readingTime ?? '9 min';
 const tags = (opts.tags ? opts.tags.split(',') : (mdMeta?.tags ?? ['Artigo']))
   .map((t) => t.trim())
@@ -228,6 +234,13 @@ function escapeHtml(s) {
     .replace(/>/g, '&gt;');
 }
 
+/// Conteúdo que vai dentro de um atributo HTML (`listagem="…"`, `campos="…"`).
+/// Quebras de linha são preservadas — Angular aceita atributo multilinha, e
+/// tanto o objdump quanto a fita são formatos de uma entrada por linha.
+function escAttr(s) {
+  return escapeHtml(s).replace(/"/g, '&quot;');
+}
+
 /**
  * Converte o corpo Markdown para HTML pronto para o template inline do Angular:
  * - fences ```lang -> <pre><code class="language-lang">
@@ -239,8 +252,10 @@ function escapeHtml(s) {
  *   "Artigos relacionados" que o próprio article-detail já renderiza)
  */
 function mdBodyToHtml(body, knownSlugs = new Set()) {
-  let usesRouterLink = false;
+  const usa = { routerLink: false, bitField: false, objdump: false };
   const deadLinks = [];
+  const candidatosBf = [];
+  let autoObjdump = 0;
 
   // Remove a linha de "Referências cruzadas" (e sua régua/linhas em branco).
   let src = body.replace(
@@ -260,9 +275,41 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
 
   const renderer = new marked.Renderer();
 
+  // A "linguagem" do fence é o tipo; o resto da linha vira legenda.
+  //   ```objdump  Trecho do laço
+  //   ```bitfield e0810002 = add r0, r1, r2
   renderer.code = ({ text, lang }) => {
-    const l = (lang || 'text').trim().split(/\s+/)[0] || 'text';
-    const { html, langClass } = highlightCode(text, l);
+    const info = (lang || '').trim();
+    const tipo = info.split(/\s+/)[0] || 'text';
+    const legenda = info.slice(tipo.length).trim();
+
+    if (tipo === 'objdump') {
+      usa.objdump = true;
+      const l = legenda ? `\n      legenda="${escAttr(legenda)}"` : '';
+      return `<app-objdump${l}\n      listagem="${escAttr(text)}"\n    />\n`;
+    }
+    if (tipo === 'bitfield') {
+      usa.bitField = true;
+      const l = legenda ? `\n      titulo="${escAttr(legenda)}"` : '';
+      return `<app-bit-field${l}\n      campos="${escAttr(text)}"\n    />\n`;
+    }
+
+    // Detecção automática: listagem de objdump tem forma reconhecível
+    // (endereço, bytes em hex, mnemônico), então não exige fence especial.
+    if (ehObjdump(text)) {
+      usa.objdump = true;
+      autoObjdump++;
+      const l = legenda ? `\n      legenda="${escAttr(legenda)}"` : '';
+      return `<app-objdump${l}\n      listagem="${escAttr(text)}"\n    />\n`;
+    }
+
+    // Layout de bits NÃO é convertido sozinho: o formato é livre demais e uma
+    // largura errada produz um diagrama que mente. Só avisa o autor.
+    if (pareceBitField(text)) {
+      candidatosBf.push(text.split('\n')[0].trim().slice(0, 60));
+    }
+
+    const { html, langClass } = highlightCode(text, tipo);
     return `<pre><code class="${langClass}">${html}</code></pre>\n`;
   };
 
@@ -305,7 +352,7 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
         deadLinks.push(href);
         return text; // artigo ainda não publicado: mantém o texto, sem link
       }
-      usesRouterLink = true;
+      usa.routerLink = true;
       return `<a routerLink="${href}"${t}>${text}</a>`;
     }
     if (/^https?:\/\//.test(href)) {
@@ -330,8 +377,18 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
         [...new Set(deadLinks)].join('\n  '),
     );
   }
+  if (autoObjdump) {
+    console.log(`• ${autoObjdump} bloco(s) reconhecido(s) como objdump → <app-objdump>`);
+  }
+  if (candidatosBf.length) {
+    console.warn(
+      `⚠ ${candidatosBf.length} bloco(s) parecem layout de campos de bits.\n` +
+        `  Troque a cerca por \`\`\`bitfield para virar <app-bit-field> (ver AGENTS.md):\n  ` +
+        candidatosBf.join('\n  '),
+    );
+  }
 
-  return { html: html.trim(), usesRouterLink };
+  return { html: html.trim(), usa };
 }
 
 /** Monta o arquivo .ts do componente do post. */
@@ -339,15 +396,31 @@ function buildPostComponent() {
   const bodyHtml = mdTemplate ?? stubTemplate();
   // Escapa para caber numa template string (crase e ${ ) — sem perder o texto.
   const safe = bodyHtml.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '$\\{');
-  const wantsRouterLink = mdTemplate ? mdUsesRouterLink : true;
-  const importLine = wantsRouterLink
-    ? "import { RouterLink } from '@angular/router';\n"
-    : '';
-  const importsMeta = wantsRouterLink ? '  imports: [RouterLink],\n' : '';
+
+  // O stub (sem `--from`) já vem com um link, então importa RouterLink.
+  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false };
+
+  const nomes = [];
+  const linhas = [];
+  if (usa.routerLink) {
+    nomes.push('RouterLink');
+    linhas.push("import { RouterLink } from '@angular/router';");
+  }
+  if (usa.bitField) {
+    nomes.push('BitField');
+    linhas.push("import { BitField } from '../../../shared/bit-field/bit-field';");
+  }
+  if (usa.objdump) {
+    nomes.push('Objdump');
+    linhas.push("import { Objdump } from '../../../shared/objdump/objdump';");
+  }
+
+  const importLines = linhas.length ? linhas.join('\n') + '\n' : '';
+  const importsMeta = nomes.length ? `  imports: [${nomes.join(', ')}],\n` : '';
 
   return (
     `import { Component } from '@angular/core';\n` +
-    importLine +
+    importLines +
     `\n@Component({\n` +
     importsMeta +
     `  selector: 'app-article-${slug}',\n` +

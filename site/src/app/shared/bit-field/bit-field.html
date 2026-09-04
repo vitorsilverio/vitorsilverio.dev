@@ -1,0 +1,44 @@
+<figure class="bf">
+  @if (titulo()) {
+    <figcaption class="bf-cap">{{ titulo() }}</figcaption>
+  }
+
+  <div class="scroll-x">
+    <div class="bf-row" role="group" [attr.aria-label]="'Campos de ' + total() + ' bits'">
+      @for (c of lista(); track $index) {
+        <button
+          type="button"
+          class="bf-f"
+          [class.on]="ativo() === $index"
+          [style.flex-grow]="c.bits"
+          [attr.aria-pressed]="ativo() === $index"
+          (click)="selecionar($index)"
+          (mouseenter)="selecionar($index)"
+          (focus)="selecionar($index)"
+        >
+          <span class="bf-v">{{ c.valor }}</span>
+          <span class="bf-n">{{ c.nome }}</span>
+          <span class="bf-b">{{ c.faixa }}</span>
+          <span class="visually-hidden">
+            , {{ c.bits }} {{ c.bits === 1 ? 'bit' : 'bits' }}.
+            @for (t of c.desc; track $index) {{{ t.texto }}}
+          </span>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (campoAtivo(); as c) {
+    <p class="bf-leg" aria-hidden="true">
+      <b>{{ c.nome }}</b>
+      <span class="bf-leg-b">{{ c.faixa }} · {{ c.bits }} {{ c.bits === 1 ? 'bit' : 'bits' }}</span>
+      @for (t of c.desc; track $index) {
+        @if (t.code) {
+          <code>{{ t.texto }}</code>
+        } @else {
+          {{ t.texto }}
+        }
+      }
+    </p>
+  }
+</figure>

@@ -30,7 +30,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M0.1',
         title: 'Por que emular ARM (e por que isso ensina arquitetura)',
         slug: 'por-que-emular-arm',
-        status: 'planned',
+        status: 'published',
         blurb:
           'O ecossistema arm-jitter + armbox + gbaemu/ndsemu/n3dsemu + virtual-arm-box.',
       },

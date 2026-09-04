@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BitField } from '../../../shared/bit-field/bit-field';
+import { Objdump } from '../../../shared/objdump/objdump';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, BitField, Objdump],
   selector: 'app-article-decodificando-instrucoes-arm-objdump',
   template: `
     <p>
@@ -25,20 +27,23 @@ import { RouterLink } from '@angular/router';
     </p>
     <pre><code class="language-bash">arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</code></pre>
     <p>O trecho que importa (o laço) é este — e os bytes abaixo são reais:</p>
-    <pre><code class="language-armasm"><span class="token number">00008010</span> <span class="token operator">&lt;</span>loop<span class="token operator">></span>:
-    <span class="token number">8010</span>: e1520003  cmp   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r3</span>
-    <span class="token number">8014</span>: aa000003  bge   <span class="token number">8028</span> <span class="token operator">&lt;</span>done<span class="token operator">></span>
-    <span class="token number">8018</span>: e4904004  ldr   <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>
-    801c: e0811004  add   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span>
-    <span class="token number">8020</span>: e2822001  add   <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    <span class="token number">8024</span>: eaffff9  b     <span class="token number">8010</span> <span class="token operator">&lt;</span>loop<span class="token operator">></span>
+    <app-objdump
+      legenda="Trecho do laço em sum.elf — os bytes são reais"
+      listagem="00008010 &lt;loop&gt;:
+    8010: e1520003  cmp   r2, r3
+    8014: aa000003  bge   8028 &lt;done&gt;
+    8018: e4904004  ldr   r4, [r0], #4
+    801c: e0811004  add   r1, r1, r4
+    8020: e2822001  add   r2, r2, #1
+    8024: eafffff9  b     8010 &lt;loop&gt;
 
-<span class="token number">00008028</span> <span class="token operator">&lt;</span>done<span class="token operator">></span>:
-    <span class="token number">8028</span>: e59f5010  ldr   <span class="token register symbol">r5</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>pc<span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">16</span><span class="token punctuation">]</span>
-    802c: e5851000  str   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r5</span><span class="token punctuation">]</span>
-    <span class="token number">8030</span>: e1a00001  mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    <span class="token number">8034</span>: e3a07001  mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
-    <span class="token number">8038</span>: ef000000  svc   <span class="token number">0x00000000</span></code></pre>
+00008028 &lt;done&gt;:
+    8028: e59f5010  ldr   r5, [pc, #16]
+    802c: e5851000  str   r1, [r5]
+    8030: e1a00001  mov   r0, r1
+    8034: e3a07001  mov   r7, #1
+    8038: ef000000  svc   0x00000000"
+    />
     <p>
       Cada linha tem três colunas: o <strong>endereço</strong> (onde a
       instrução está na memória), os <strong>4 bytes</strong> da instrução
@@ -69,14 +74,18 @@ import { RouterLink } from '@angular/router';
     <p>
       Para processamento de dados, o formato (do bit 31 ao 0) é este:
     </p>
-    <pre><code class="language-text">bits  31..28   cond        (condição de execução)
-bits  27..26   00          (família: dados)
-bit   25       I           (1 = operando é imediato; 0 = registrador+shift)
-bits  24..21   opcode      (qual operação: ADD, MOV, CMP…)
-bit   20       S           (1 = atualiza flags do CPSR)
-bits  19..16   Rn          (registrador fonte 1)
-bits  15..12   Rd          (registrador destino)
-bits  11..0    operand2    (segundo operando)</code></pre>
+    <app-bit-field
+      titulo="Formato de processamento de dados — x = depende da instrução"
+      [inicial]="0"
+      campos="4  | cond     | xxxx         | Condição de execução. Quase tudo começa com \`1110\` (AL, sempre).
+              2  | —        | 00           | Fixo: é o que marca a família de processamento de dados.
+              1  | I        | x            | \`1\` = o operando 2 é imediato; \`0\` = registrador, possivelmente com shift.
+              4  | opcode   | xxxx         | Qual operação: ADD, MOV, CMP, SUB…
+              1  | S        | x            | \`1\` = atualiza as flags N/Z/C/V do CPSR. É o sufixo \`S\` do assembly.
+              4  | Rn       | xxxx         | Registrador fonte 1.
+              4  | Rd       | xxxx         | Registrador destino.
+              12 | operand2 | xxxxxxxxxxxx | Segundo operando: imediato com rotação, ou registrador com shift."
+    />
 
     <h2>Glossário: códigos de condição (campo cond)</h2>
     <p>
@@ -123,10 +132,18 @@ bits  11..0    operand2    (segundo operando)</code></pre>
 
     <h3><code>mov r3, #5</code> = <code>e3a03005</code></h3>
     <p>Dá para ler tudo sem adivinhação:</p>
-    <pre><code class="language-text">e3a03005
-31     27 26 25   24 23 22 21   20   19..16  15..12  11............0
-1110 [ 00 ]  1 [ 1  1  0  1 ]  0  [ 0000 ] [ 0011 ] [ 0000 0000 0101 ]
-cond  00   I    MOV(1101)    S=0   Rn=0     Rd=r3    imm: rot=0, val=5</code></pre>
+    <app-bit-field
+      titulo="e3a03005 = mov r3, #5"
+      [inicial]="3"
+      campos="4  | cond     | 1110         | \`1110\` = AL: executa sempre. É por isso que quase toda instrução começa com \`e\`.
+              2  | —        | 00           | Família \`00\`: processamento de dados.
+              1  | I        | 1            | \`I = 1\`: o segundo operando é um imediato, não um registrador.
+              4  | opcode   | 1101         | \`1101\` = MOV.
+              1  | S        | 0            | \`S = 0\`: não atualiza as flags do CPSR.
+              4  | Rn       | 0000         | Não usado pelo MOV — o valor vem só do operando 2.
+              4  | Rd       | 0011         | Destino: \`r3\`.
+              12 | operand2 | 000000000101 | Imediato de 8 bits com rotação: \`rot = 0\`, \`val = 5\` → simplesmente \`5\`. É assim que constante pequena cabe numa instrução só."
+    />
     <ul>
       <li><code>e</code> = cond <code>1110</code> = AL (sempre).</li>
       <li><code>00</code> em [27:26] = família dados.</li>
@@ -146,8 +163,18 @@ cond  00   I    MOV(1101)    S=0   Rn=0     Rd=r3    imm: rot=0, val=5</code></p
       O <code>cmp</code> é a chave do laço — ele é quem alimenta o
       <code>bge</code>.
     </p>
-    <pre><code class="language-text">e1520003
-cond=1110 (AL) | 00 | I=0 | opcode=1010 (CMP) | S=1 | Rn=2 (r2) | Rd=ignorado | op2=reg r3</code></pre>
+    <app-bit-field
+      titulo="e1520003 = cmp r2, r3"
+      [inicial]="4"
+      campos="4  | cond     | 1110         | \`1110\` = AL: sempre executa.
+              2  | —        | 00           | Família \`00\`: processamento de dados.
+              1  | I        | 0            | \`I = 0\`: o operando 2 é um registrador.
+              4  | opcode   | 1010         | \`1010\` = CMP.
+              1  | S        | 1            | \`S = 1\` — e no CMP ele é obrigatório: a instrução só existe para mexer nas flags.
+              4  | Rn       | 0010         | Primeiro operando: \`r2\`.
+              4  | Rd       | 0000         | Descartado. O CMP não guarda resultado em lugar nenhum.
+              12 | operand2 | 000000000011 | Segundo operando: registrador \`r3\`, sem shift."
+    />
     <ul>
       <li><code>opcode 1010</code> = CMP; <code>S = 1</code> força atualizar o CPSR.</li>
       <li>
@@ -163,8 +190,18 @@ cond=1110 (AL) | 00 | I=0 | opcode=1010 (CMP) | S=1 | Rn=2 (r2) | Rd=ignorado | 
 
     <h3><code>add r1, r1, r4</code> = <code>e0811004</code></h3>
     <p>O coração da soma acumulada:</p>
-    <pre><code class="language-text">e0811004
-cond=1110 (AL) | 00 | I=0 | opcode=0100 (ADD) | S=0 | Rn=1 (r1) | Rd=1 (r1) | op2=reg r4</code></pre>
+    <app-bit-field
+      titulo="e0811004 = add r1, r1, r4"
+      [inicial]="3"
+      campos="4  | cond     | 1110         | \`1110\` = AL: sempre executa.
+              2  | —        | 00           | Família \`00\`: processamento de dados.
+              1  | I        | 0            | \`I = 0\`: o operando 2 é um registrador.
+              4  | opcode   | 0100         | \`0100\` = ADD.
+              1  | S        | 0            | \`S = 0\`: a soma do laço não mexe nas flags — quem mexe é o \`cmp\`.
+              4  | Rn       | 0001         | Primeiro operando: \`r1\`.
+              4  | Rd       | 0001         | Destino: \`r1\` de novo. Mesmo registrador dos dois lados é o que faz a soma acumular.
+              12 | operand2 | 000000000100 | Segundo operando: registrador \`r4\`."
+    />
     <ul>
       <li><code>opcode 0100</code> = ADD; <code>Rn = r1</code>, <code>Rd = r1</code>, operando2 = <code>r4</code>.</li>
       <li>Portanto: <code>r1 = r1 + r4</code> — a soma acumulada cresce.</li>
@@ -172,8 +209,14 @@ cond=1110 (AL) | 00 | I=0 | opcode=0100 (ADD) | S=0 | Rn=1 (r1) | Rd=1 (r1) | op
 
     <h3><code>bge 8028</code> = <code>aa000003</code></h3>
     <p>O desvio usa outra família (bits [27:26] = <code>10</code>):</p>
-    <pre><code class="language-text">aa000003
-cond=1010 (GE) | 10 (desvio) | L=0 (B, não BL) | offset = 0x000003</code></pre>
+    <app-bit-field
+      titulo="aa000003 = bge 8028 &lt;done&gt;"
+      [inicial]="3"
+      campos="4  | cond     | 1010                     | \`1010\` = GE. Só desvia se o \`cmp\` anterior deu \`r2 >= r3\`.
+              3  | 101      | 101                      | Família de desvio. Repare que aqui são \`3\` bits, não os \`2\` do processamento de dados — é outro corte da palavra.
+              1  | L        | 0                        | \`L = 0\`: é \`B\`, não \`BL\`. Se fosse 1, o endereço de retorno iria para \`lr\`.
+              24 | offset24 | 000000000000000000000011 | Deslocamento com sinal, em palavras: \`3\`. O alvo é \`(PC + 8) + (offset << 2)\`."
+    />
     <ul>
       <li>
         <code>cond 1010</code> = GE (greater or equal) — só pula se o
@@ -193,9 +236,21 @@ cond=1010 (GE) | 10 (desvio) | L=0 (B, não BL) | offset = 0x000003</code></pre>
 
     <h3><code>ldr r4, [r0], #4</code> = <code>e4904004</code></h3>
     <p>Família load/store (bits [27:26] = <code>01</code>):</p>
-    <pre><code class="language-text">e4904004
-cond=1110 (AL) | 01 (load/store) | [25:20]=modo de endereçamento
-Rn=0 (r0) | Rd=4 (r4) | offset imediato = 4</code></pre>
+    <app-bit-field
+      titulo="e4904004 = ldr r4, [r0], #4"
+      [inicial]="3"
+      campos="4  | cond     | 1110         | \`1110\` = AL: sempre executa.
+              2  | 01       | 01           | Família \`01\`: transferência simples de dados (load/store).
+              1  | I        | 0            | Cuidado: aqui o \`I\` é invertido em relação ao processamento de dados. \`I = 0\` significa que o offset É imediato.
+              1  | P        | 0            | \`P = 0\`: pós-indexado. Lê no endereço de \`r0\` e só depois soma o offset.
+              1  | U        | 1            | \`U = 1\`: soma o offset ao base. Em 0, subtrairia.
+              1  | B        | 0            | \`B = 0\`: transfere uma palavra de 32 bits. Em 1, seria um byte (\`ldrb\`).
+              1  | W        | 0            | No pós-indexado o writeback é implícito, então \`W\` fica em 0. É por isso que \`r0\` anda sozinho sem um \`add\` extra.
+              1  | L        | 1            | \`L = 1\`: é leitura (\`ldr\`). Em 0 seria \`str\`.
+              4  | Rn       | 0000         | Registrador base: \`r0\`, o ponteiro do vetor.
+              4  | Rd       | 0100         | Destino da leitura: \`r4\`.
+              12 | offset12 | 000000000100 | Offset imediato: \`4\` — o tamanho de uma palavra."
+    />
     <ul>
       <li><code>Rn = r0</code> (o ponteiro), <code>Rd = r4</code> (destino da leitura).</li>
       <li>

@@ -10,7 +10,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "novo-artigo": "node scripts/new-article.mjs",
-    "highlight-posts": "node scripts/highlight-posts.mjs"
+    "highlight-posts": "node scripts/highlight-posts.mjs",
+    "prompts": "node scripts/gen-prompts.mjs",
+    "migra-blocos": "node scripts/migra-blocos.mjs"
   },
   "private": true,
   "packageManager": "npm@11.13.0",

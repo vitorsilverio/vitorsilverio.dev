@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  margin: 1.75rem 0;
+}
+
+.bf {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.1rem 1.15rem 0.9rem;
+}
+
+.bf-cap {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+}
+
+.bf-row {
+  display: flex;
+  gap: 3px;
+  /* Abaixo disto os campos de 1 bit ficam ilegíveis: melhor rolar. */
+  min-width: 34rem;
+}
+
+.bf-f {
+  flex-basis: 0;
+  min-width: 2.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  align-items: center;
+  padding: 0.55rem 0.25rem 0.5rem;
+  border: 1px solid transparent;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.bf-f:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.bf-f:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.bf-f:hover {
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+}
+
+.bf-f.on {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.bf-v {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  /* valores longos (Operand2) não podem empurrar a fita */
+  overflow-wrap: anywhere;
+}
+
+.bf-n {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  opacity: 0.78;
+}
+
+.bf-b {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
+.bf-leg {
+  margin: 0.95rem 0 0;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--muted);
+  /* evita o salto de altura ao trocar de campo */
+  min-height: 3.1em;
+}
+
+.bf-leg b {
+  font-family: var(--mono);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.bf-leg-b {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0 0.5rem 0 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.bf-leg code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  padding: 0.08em 0.3em;
+  border-radius: 4px;
+  color: var(--text);
+}

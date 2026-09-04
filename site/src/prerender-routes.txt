@@ -17,3 +17,4 @@
 /artigos/instrucoes-condicionais-thumb
 /artigos/manipulacao-bits-thumb
 /artigos/semihosting
+/artigos/por-que-emular-arm
