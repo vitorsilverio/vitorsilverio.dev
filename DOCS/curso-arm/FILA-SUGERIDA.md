@@ -18,7 +18,7 @@
 | # | Data | Módulo · Lição | Slug | Fonte principal |
 |--:|------|----------------|------|-----------------|
 | ~~1~~ | ✅ 2026-09-04 | M0.1 Por que emular ARM | `por-que-emular-arm` | **publicado** |
-| 2 | 2026-09-05 | M0.3 Convenções de assembly | `convencoes-assembly-arm` | `armbox/testdata/hello.s` |
+| ~~2~~ | ✅ 2026-09-05 | M0.3 Convenções de assembly | `convencoes-assembly-arm` | **publicado** |
 | 3 | 2026-09-06 | M1.1 Registradores e CPSR | `registradores-e-cpsr-arm` | `arm-jitter` `CpuMode`/`CpsrRegister` |
 | 4 | 2026-09-07 | M1.3 Anatomia da instrução ARM | `anatomia-instrucao-arm` | cross-link decode |
 | 5 | 2026-09-08 | M1.4 Fetch–decode–execute | `fetch-decode-execute-armcore` | `ArmCore.step()` |

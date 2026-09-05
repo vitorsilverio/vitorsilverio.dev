@@ -368,8 +368,14 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
   // seções; no site o padrão é sem <hr>. Remove as réguas temáticas.
   html = html.replace(/<hr\s*\/?>\n?/g, '');
 
-  // Angular: neutraliza interpolação/binding que possa existir no conteúdo.
-  html = html.replace(/\{\{/g, '&#123;&#123;').replace(/\}\}/g, '&#125;&#125;');
+  // Angular: TODA chave vira entidade, não só o par `{{`/`}}`.
+  //
+  // Uma chave solta basta para o parser tentar ler uma mensagem ICU e explodir
+  // — foi o que aconteceu com `{cond}` escrito como código inline na prosa
+  // (`\`{cond}\``), que o marked entrega como <code>{cond}</code>. O template
+  // de um post é HTML estático, sem control flow, então não há nada em `{}`
+  // que precise sobreviver.
+  html = html.replace(/\{/g, '&#123;').replace(/\}/g, '&#125;');
 
   if (deadLinks.length) {
     console.warn(

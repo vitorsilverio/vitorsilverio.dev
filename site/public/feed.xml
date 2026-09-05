@@ -111,5 +111,12 @@
       <pubDate>Fri, 04 Sep 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Escrever um emulador é o melhor laboratório de arquitetura que existe: você é obrigado a implementar a semântica exata de cada instrução, flag e modo. Esta é a abertura de uma trilha que ensina o ARM a partir de código real — o arm-jitter e os emuladores construídos sobre ele.]]></description>
     </item>
+    <item>
+      <title>Convenções de assembly da trilha</title>
+      <link>https://vitorsilverio.dev/artigos/convencoes-assembly-arm</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/convencoes-assembly-arm</guid>
+      <pubDate>Sat, 05 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Antes de decodificar binário, um acordo de notação: qual sintaxe de assembly a trilha usa (UAL), quais diretivas do GNU assembler aparecem nos listings, e como ler a saída do objdump — endereço, bytes de codificação e mnemônico.]]></description>
+    </item>
   </channel>
 </rss>

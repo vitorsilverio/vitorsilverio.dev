@@ -45,7 +45,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M0.3',
         title: 'Convenções de assembly da trilha',
         slug: 'convencoes-assembly-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'Unified Assembler Language, GAS e como os listings aparecem aqui.',
       },
     ],

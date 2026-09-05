@@ -132,4 +132,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Escrever um emulador é o melhor laboratório de arquitetura que existe: você é obrigado a implementar a semântica exata de cada instrução, flag e modo. Esta é a abertura de uma trilha que ensina o ARM a partir de código real — o arm-jitter e os emuladores construídos sobre ele.',
     tags: ['ARM', 'Emulação', 'arm-jitter', 'Arquitetura', 'Trilha', 'Tutorial'],
   },
+  {
+    slug: 'convencoes-assembly-arm',
+    title: 'Convenções de assembly da trilha',
+    date: '2026-09-05',
+    readingTime: '9 min',
+    excerpt: 'Antes de decodificar binário, um acordo de notação: qual sintaxe de assembly a trilha usa (UAL), quais diretivas do GNU assembler aparecem nos listings, e como ler a saída do objdump — endereço, bytes de codificação e mnemônico.',
+    tags: ['ARM', 'Assembly', 'Toolchain', 'objdump', 'Trilha', 'Tutorial'],
+  },
 ];
