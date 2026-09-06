@@ -66,7 +66,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M1.1',
         title: 'Registradores e CPSR: banking, modos e SPSR',
         slug: 'registradores-e-cpsr-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'R0–R15, flags N/Z/C/V, modos de CPU e register banking.',
       },
       {

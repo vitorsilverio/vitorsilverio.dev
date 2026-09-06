@@ -140,4 +140,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Antes de decodificar binário, um acordo de notação: qual sintaxe de assembly a trilha usa (UAL), quais diretivas do GNU assembler aparecem nos listings, e como ler a saída do objdump — endereço, bytes de codificação e mnemônico.',
     tags: ['ARM', 'Assembly', 'Toolchain', 'objdump', 'Trilha', 'Tutorial'],
   },
+  {
+    slug: 'registradores-e-cpsr-arm',
+    title: 'Registradores e CPSR: banking, modos e SPSR',
+    date: '2026-09-06',
+    readingTime: '12 min',
+    excerpt: 'O ARM de 32 bits tem 16 registradores visíveis — mas quantos existem de verdade depende do modo em que a CPU está. Este artigo destrincha R0–R15, o CPSR bit a bit, o register banking por modo e o SPSR, e mostra como o arm-jitter modela tudo isso em CpsrRegister, CpuMode e ArmCore.',
+    tags: ['ARM', 'Registradores', 'CPSR', 'Modos', 'arm-jitter', 'Tutorial'],
+  },
 ];

@@ -19,3 +19,4 @@
 /artigos/semihosting
 /artigos/por-que-emular-arm
 /artigos/convencoes-assembly-arm
+/artigos/registradores-e-cpsr-arm

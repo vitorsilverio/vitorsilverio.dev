@@ -39,6 +39,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/por-que-emular-arm').then((m) => m.ArticlePorQueEmularArm),
   'convencoes-assembly-arm': () =>
     import('./pages/article-detail/posts/convencoes-assembly-arm').then((m) => m.ArticleConvencoesAssemblyArm),
+  'registradores-e-cpsr-arm': () =>
+    import('./pages/article-detail/posts/registradores-e-cpsr-arm').then((m) => m.ArticleRegistradoresECpsrArm),
 } as const;
 
 export const routes: Routes = [
