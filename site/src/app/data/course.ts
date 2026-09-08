@@ -87,7 +87,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M1.4',
         title: 'Fetch–decode–execute e o ArmCore.step()',
         slug: 'fetch-decode-execute-armcore',
-        status: 'planned',
+        status: 'published',
         blurb: 'O que um núcleo faz por instrução, mapeado para o código real.',
       },
     ],

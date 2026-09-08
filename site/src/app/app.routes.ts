@@ -43,6 +43,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/registradores-e-cpsr-arm').then((m) => m.ArticleRegistradoresECpsrArm),
   'anatomia-instrucao-arm': () =>
     import('./pages/article-detail/posts/anatomia-instrucao-arm').then((m) => m.ArticleAnatomiaInstrucaoArm),
+  'fetch-decode-execute-armcore': () =>
+    import('./pages/article-detail/posts/fetch-decode-execute-armcore').then((m) => m.ArticleFetchDecodeExecuteArmcore),
 } as const;
 
 export const routes: Routes = [

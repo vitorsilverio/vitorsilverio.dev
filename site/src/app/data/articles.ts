@@ -156,4 +156,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Toda instrução ARM de 32 bits segue o mesmo esqueleto: 4 bits de condição, um punhado de bits de opcode e um Operand2 de 12 bits que esconde o barrel shifter. Este artigo abre o formato campo a campo, com encodings reais do objdump, e mostra como o arm-jitter extrai exatamente esses campos em ArmDecoder.',
     tags: ['ARM', 'Assembly', 'Decodificação', 'Barrel shifter', 'arm-jitter', 'Tutorial'],
   },
+  {
+    slug: 'fetch-decode-execute-armcore',
+    title: 'Fetch–decode–execute e o ArmCore.step()',
+    date: '2026-09-08',
+    readingTime: '12 min',
+    excerpt: 'Um processador não "roda um programa": ele repete um ciclo de três passos — buscar, decodificar, executar. Este artigo mostra o ciclo, o pipeline que faz o PC parecer adiantado, e como tudo isso vira o método ArmCore.step() do arm-jitter — com um trace real que prova o offset de +8 do R15.',
+    tags: ['ARM', 'Pipeline', 'Emulação', 'arm-jitter', 'ArmCore', 'Tutorial'],
+  },
 ];
