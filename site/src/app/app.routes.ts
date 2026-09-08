@@ -41,6 +41,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/convencoes-assembly-arm').then((m) => m.ArticleConvencoesAssemblyArm),
   'registradores-e-cpsr-arm': () =>
     import('./pages/article-detail/posts/registradores-e-cpsr-arm').then((m) => m.ArticleRegistradoresECpsrArm),
+  'anatomia-instrucao-arm': () =>
+    import('./pages/article-detail/posts/anatomia-instrucao-arm').then((m) => m.ArticleAnatomiaInstrucaoArm),
 } as const;
 
 export const routes: Routes = [

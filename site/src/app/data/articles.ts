@@ -148,4 +148,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'O ARM de 32 bits tem 16 registradores visíveis — mas quantos existem de verdade depende do modo em que a CPU está. Este artigo destrincha R0–R15, o CPSR bit a bit, o register banking por modo e o SPSR, e mostra como o arm-jitter modela tudo isso em CpsrRegister, CpuMode e ArmCore.',
     tags: ['ARM', 'Registradores', 'CPSR', 'Modos', 'arm-jitter', 'Tutorial'],
   },
+  {
+    slug: 'anatomia-instrucao-arm',
+    title: 'Anatomia de uma instrução ARM',
+    date: '2026-09-07',
+    readingTime: '12 min',
+    excerpt: 'Toda instrução ARM de 32 bits segue o mesmo esqueleto: 4 bits de condição, um punhado de bits de opcode e um Operand2 de 12 bits que esconde o barrel shifter. Este artigo abre o formato campo a campo, com encodings reais do objdump, e mostra como o arm-jitter extrai exatamente esses campos em ArmDecoder.',
+    tags: ['ARM', 'Assembly', 'Decodificação', 'Barrel shifter', 'arm-jitter', 'Tutorial'],
+  },
 ];

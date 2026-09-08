@@ -80,7 +80,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M1.3',
         title: 'Anatomia de uma instrução ARM',
         slug: 'anatomia-instrucao-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'Formato {cond}{S}, Operand2, barrel shifter e addressing modes.',
       },
       {
