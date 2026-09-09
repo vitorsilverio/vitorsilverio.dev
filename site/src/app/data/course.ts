@@ -101,7 +101,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M2.1',
         title: 'Do C ao binário ARM: gcc + objdump',
         slug: 'do-c-ao-binario-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'Compilando, lendo a desmontagem e entendendo seções e símbolos.',
       },
       {

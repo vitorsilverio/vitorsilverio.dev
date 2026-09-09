@@ -45,6 +45,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/anatomia-instrucao-arm').then((m) => m.ArticleAnatomiaInstrucaoArm),
   'fetch-decode-execute-armcore': () =>
     import('./pages/article-detail/posts/fetch-decode-execute-armcore').then((m) => m.ArticleFetchDecodeExecuteArmcore),
+  'do-c-ao-binario-arm': () =>
+    import('./pages/article-detail/posts/do-c-ao-binario-arm').then((m) => m.ArticleDoCAoBinarioArm),
 } as const;
 
 export const routes: Routes = [

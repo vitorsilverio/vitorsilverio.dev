@@ -164,4 +164,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Um processador não "roda um programa": ele repete um ciclo de três passos — buscar, decodificar, executar. Este artigo mostra o ciclo, o pipeline que faz o PC parecer adiantado, e como tudo isso vira o método ArmCore.step() do arm-jitter — com um trace real que prova o offset de +8 do R15.',
     tags: ['ARM', 'Pipeline', 'Emulação', 'arm-jitter', 'ArmCore', 'Tutorial'],
   },
+  {
+    slug: 'do-c-ao-binario-arm',
+    title: 'Do C ao binário ARM: gcc + objdump',
+    date: '2026-09-09',
+    readingTime: '11 min',
+    excerpt: 'Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 13 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.',
+    tags: ['ARM', 'C', 'gcc', 'objdump', 'Compilador', 'Tutorial'],
+  },
 ];

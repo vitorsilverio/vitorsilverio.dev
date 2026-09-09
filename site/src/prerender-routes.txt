@@ -22,3 +22,4 @@
 /artigos/registradores-e-cpsr-arm
 /artigos/anatomia-instrucao-arm
 /artigos/fetch-decode-execute-armcore
+/artigos/do-c-ao-binario-arm
