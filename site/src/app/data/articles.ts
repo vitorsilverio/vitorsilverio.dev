@@ -172,4 +172,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 13 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.',
     tags: ['ARM', 'C', 'gcc', 'objdump', 'Compilador', 'Tutorial'],
   },
+  {
+    slug: 'decodificando-thumb-a-mao',
+    title: 'Decodificando Thumb à mão',
+    date: '2026-09-10',
+    readingTime: '11 min',
+    excerpt: 'Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.',
+    tags: ['ARM', 'Thumb', 'Decodificação', 'Binário', 'arm-jitter', 'Tutorial'],
+  },
 ];

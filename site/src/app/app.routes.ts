@@ -47,6 +47,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/fetch-decode-execute-armcore').then((m) => m.ArticleFetchDecodeExecuteArmcore),
   'do-c-ao-binario-arm': () =>
     import('./pages/article-detail/posts/do-c-ao-binario-arm').then((m) => m.ArticleDoCAoBinarioArm),
+  'decodificando-thumb-a-mao': () =>
+    import('./pages/article-detail/posts/decodificando-thumb-a-mao').then((m) => m.ArticleDecodificandoThumbAMao),
 } as const;
 
 export const routes: Routes = [

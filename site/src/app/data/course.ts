@@ -115,7 +115,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M2.3',
         title: 'Decodificando Thumb à mão',
         slug: 'decodificando-thumb-a-mao',
-        status: 'planned',
+        status: 'published',
         blurb: 'Os formatos de 16 bits, imediatos e deslocamentos.',
       },
       {

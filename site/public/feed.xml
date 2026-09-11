@@ -146,5 +146,12 @@
       <pubDate>Wed, 09 Sep 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 13 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.]]></description>
     </item>
+    <item>
+      <title>Decodificando Thumb à mão</title>
+      <link>https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao</guid>
+      <pubDate>Thu, 10 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.]]></description>
+    </item>
   </channel>
 </rss>
