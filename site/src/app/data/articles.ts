@@ -180,4 +180,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.',
     tags: ['ARM', 'Thumb', 'Decodificação', 'Binário', 'arm-jitter', 'Tutorial'],
   },
+  {
+    slug: 'decoder-do-arm-jitter',
+    title: 'Como o decoder do arm-jitter funciona',
+    date: '2026-09-11',
+    readingTime: '14 min',
+    excerpt: 'Decodificar à mão é o começo. O arm-jitter faz o mesmo em Java, mas não para na DecodedInstruction: ele eleva blocos inteiros para uma representação intermediária imutável e roda um otimizador em cima. Este artigo segue os bytes de 0xe0810002 até virarem IrOp — e mostra o otimizador apagando código morto.',
+    tags: ['ARM', 'Emulação', 'arm-jitter', 'IR', 'Decodificação', 'Compilador', 'Tutorial'],
+  },
 ];

@@ -129,7 +129,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M2.5',
         title: 'Como o decoder do arm-jitter funciona',
         slug: 'decoder-do-arm-jitter',
-        status: 'planned',
+        status: 'published',
         blurb: 'bytes → DecodedInstruction → IR, e por que existe um otimizador.',
       },
     ],

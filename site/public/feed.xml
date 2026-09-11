@@ -153,5 +153,12 @@
       <pubDate>Thu, 10 Sep 2026 03:00:00 GMT</pubDate>
       <description><![CDATA[Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.]]></description>
     </item>
+    <item>
+      <title>Como o decoder do arm-jitter funciona</title>
+      <link>https://vitorsilverio.dev/artigos/decoder-do-arm-jitter</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decoder-do-arm-jitter</guid>
+      <pubDate>Fri, 11 Sep 2026 03:00:00 GMT</pubDate>
+      <description><![CDATA[Decodificar à mão é o começo. O arm-jitter faz o mesmo em Java, mas não para na DecodedInstruction: ele eleva blocos inteiros para uma representação intermediária imutável e roda um otimizador em cima. Este artigo segue os bytes de 0xe0810002 até virarem IrOp — e mostra o otimizador apagando código morto.]]></description>
+    </item>
   </channel>
 </rss>

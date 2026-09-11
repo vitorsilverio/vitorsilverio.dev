@@ -24,7 +24,7 @@
 | 5 | 2026-09-08 | M1.4 Fetch–decode–execute | `fetch-decode-execute-armcore` | `ArmCore.step()` |
 | 6 | 2026-09-09 | M2.1 Do C ao binário | `do-c-ao-binario-arm` | `hello-float.c`, `hello-thumb2.c` |
 | 7 | 2026-09-10 | M2.3 Decodificar Thumb à mão | `decodificando-thumb-a-mao` | `thumb2-torture.s` |
-| 8 | 2026-09-11 | M2.5 O decoder do arm-jitter | `decoder-do-arm-jitter` | `decoder`, `ir`/`ir.opt` |
+| ~~8~~ | ✅ 2026-09-11 | M2.5 O decoder do arm-jitter | `decoder-do-arm-jitter` | **publicado** |
 | 9 | 2026-09-12 | M3.1 Primeiro programa em assembly | `primeiro-programa-assembly-arm` | complementa soma/sub-rotinas |
 | 10 | 2026-09-13 | M3.2 Montar e ligar | `montar-e-ligar-arm` | `flash.ld`, `build-testdata.ps1` |
 | 11 | 2026-09-14 | M3.4 arm-jitter via API Java | `arm-jitter-api-java` | `arm-jitter/docs/USAGE.md` |

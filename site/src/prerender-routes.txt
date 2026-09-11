@@ -24,3 +24,4 @@
 /artigos/fetch-decode-execute-armcore
 /artigos/do-c-ao-binario-arm
 /artigos/decodificando-thumb-a-mao
+/artigos/decoder-do-arm-jitter
