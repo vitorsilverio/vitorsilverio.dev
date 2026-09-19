@@ -51,6 +51,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/decodificando-thumb-a-mao').then((m) => m.ArticleDecodificandoThumbAMao),
   'decoder-do-arm-jitter': () =>
     import('./pages/article-detail/posts/decoder-do-arm-jitter').then((m) => m.ArticleDecoderDoArmJitter),
+  'primeiro-programa-assembly-arm': () =>
+    import('./pages/article-detail/posts/primeiro-programa-assembly-arm').then((m) => m.ArticlePrimeiroProgramaAssemblyArm),
 } as const;
 
 export const routes: Routes = [

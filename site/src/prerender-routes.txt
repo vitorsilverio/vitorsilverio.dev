@@ -25,3 +25,4 @@
 /artigos/do-c-ao-binario-arm
 /artigos/decodificando-thumb-a-mao
 /artigos/decoder-do-arm-jitter
+/artigos/primeiro-programa-assembly-arm

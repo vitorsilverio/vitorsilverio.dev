@@ -143,7 +143,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M3.1',
         title: 'Primeiro programa em assembly ARM',
         slug: 'primeiro-programa-assembly-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'Fibonacci e máximo de dois números; retorno com BX lr.',
       },
       {

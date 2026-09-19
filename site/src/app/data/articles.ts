@@ -188,4 +188,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Decodificar à mão é o começo. O arm-jitter faz o mesmo em Java, mas não para na DecodedInstruction: ele eleva blocos inteiros para uma representação intermediária imutável e roda um otimizador em cima. Este artigo segue os bytes de 0xe0810002 até virarem IrOp — e mostra o otimizador apagando código morto.',
     tags: ['ARM', 'Emulação', 'arm-jitter', 'IR', 'Decodificação', 'Compilador', 'Tutorial'],
   },
+  {
+    slug: 'primeiro-programa-assembly-arm',
+    title: 'Primeiro programa em assembly ARM',
+    date: '2026-09-19',
+    readingTime: '16 min',
+    excerpt: 'Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo *exit code*. O max sai em três instruções, sem um único desvio.',
+    tags: ['ARM', 'Assembly', 'arm-box', 'Predicação', 'Tutorial'],
+  },
 ];
