@@ -26,3 +26,4 @@
 /artigos/decodificando-thumb-a-mao
 /artigos/decoder-do-arm-jitter
 /artigos/primeiro-programa-assembly-arm
+/artigos/montar-e-ligar-arm

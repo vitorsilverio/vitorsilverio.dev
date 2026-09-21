@@ -196,4 +196,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo *exit code*. O max sai em três instruções, sem um único desvio.',
     tags: ['ARM', 'Assembly', 'arm-box', 'Predicação', 'Tutorial'],
   },
+  {
+    slug: 'montar-e-ligar-arm',
+    title: 'Montando e ligando um executável ARM',
+    date: '2026-09-20',
+    readingTime: '11 min',
+    excerpt: 'Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um *linker script* de verdade e o objcopy que extrai os bytes crus.',
+    tags: ['ARM', 'Assembly', 'Linker', 'ELF', 'Toolchain', 'Tutorial'],
+  },
 ];

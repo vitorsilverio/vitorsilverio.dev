@@ -164,7 +164,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M3.2',
         title: 'Montando e ligando um executável ARM',
         slug: 'montar-e-ligar-arm',
-        status: 'planned',
+        status: 'published',
         blurb: 'as + ld (ou gcc), linker script, mapa de memória e vetor de reset.',
       },
       {
