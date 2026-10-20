@@ -196,6 +196,15 @@ core<span class="token punctuation">.</span><span class="token function">configu
 <li><a routerLink="/artigos/decoder-do-arm-jitter">O decoder do arm-jitter</a> — como os bytes viram <code>DecodedInstruction</code> e <code>IrBlock</code>.</li>
 <li><a routerLink="/artigos/montar-e-ligar-arm">Montando e ligando um executável ARM</a> — como o <code>soma5.bin</code> foi produzido a partir do <code>.s</code>.</li>
 </ul>
+<h2>Referências</h2>
+<ul>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (ARM DDI 0406C). Fonte normativa para os modos do processador, os registradores em banco, o layout do <code>CPSR</code> (flags <code>N Z C V</code>, bits <code>I</code>/<code>F</code>, campo <code>M</code>) e os vetores de exceção, incluindo o de <code>SVC</code>.</li>
+<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils). Descreve a pseudo-instrução <code>ADR</code> e sua tradução para um <code>ADD</code>/<code>SUB</code> relativo ao PC.</li>
+<li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub, licença BSD-3-Clause). <code>AddressSpace</code>, <code>ArmCore</code>, <code>ArmTraceListener</code> e <code>JitRuntimeFactory</code>; o README traz o exemplo mínimo de uso.</li>
+<li><a href="https://central.sonatype.com/artifact/dev.vitorsilverio/arm-jitter/1.3.0" target="_blank" rel="noopener"><code>dev.vitorsilverio:arm-jitter:1.3.0</code> no Maven Central</a>. Coordenadas e versões publicadas da biblioteca.</li>
+<li>Oracle — <a href="https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html" target="_blank" rel="noopener"><em>The java Command</em>, Java SE 25 &amp; JDK 25</a>. Opção <code>-cp</code>/<code>--class-path</code> e o separador <code>;</code> (Windows) ou <code>:</code> (demais sistemas).</li>
+<li>Martin Korth — <a href="https://problemkaputt.de/gbatek.htm#gbainterruptcontrol" target="_blank" rel="noopener"><em>GBATEK</em>, seção &quot;GBA Interrupt Control&quot;</a>. Valores iniciais de <code>SP_svc</code> (<code>03007FE0h</code>) e <code>SP_irq</code> (<code>03007FA0h</code>) deixados pela BIOS do GBA; a seção &quot;GBA Memory Map&quot; do mesmo documento dá o início da ROM do cartucho em <code>08000000h</code>.</li>
+</ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 3, lição 4.</em></p>
 `,
 })
