@@ -1,6 +1,6 @@
 ---
 name: artigo
-description: Escrever, revisar ou publicar um artigo do blog vitorsilverio.dev (inclusive os da trilha ARM em site/proximos-artigos/). Use sempre que for criar um artigo, pegar um rascunho da fila, publicar o "artigo do dia" ou revisar um artigo já existente. Garante que todo artigo seja lido de forma independente, com introdução, desenvolvimento, exemplos, glossário, comandos e conclusão.
+description: Escrever, revisar ou publicar um artigo do blog vitorsilverio.dev (inclusive os da trilha ARM em site/proximos-artigos/). Use sempre que for criar um artigo, pegar um rascunho da fila, publicar o "artigo do dia" ou revisar um artigo já existente. Garante que todo artigo seja lido de forma independente, com introdução, desenvolvimento, exemplos, glossário, comandos, conclusão e referências verificadas.
 ---
 
 # Artigo do blog
@@ -30,7 +30,13 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
 4. **Glossário** (`## Glossário`): tabela `| Termo | O que é |` com todo termo técnico, classe ou sigla usado no texto. Cada definição deve ser compreensível sem ler o resto do artigo.
 5. **Comandos** (`## Comandos`): tabela `| Comando | O que faz |` com todo comando de shell que aparece no artigo, incluindo variações por SO (`;` vs `:` no classpath, etc.). Omita só se o artigo não tiver nenhum comando.
 6. **Conclusão** (`## Conclusão`): o que o leitor aprendeu, em 1–2 parágrafos ou bullets, e onde isso se aplica. Depois disso, um "Próximo passo" ou "Para ir além" com links **opcionais**. A conclusão precisa fechar o raciocínio por conta própria. Não pode ser só "no próximo artigo...".
-7. Rodapé da trilha (`*Trilha: ... · Módulo X, lição Y.*`) quando for artigo de curso.
+7. **Referências** (`## Referências`), depois do "Para ir além": as fontes que sustentam o que o artigo afirma. São elas que dão credibilidade ao texto. Lista com marcadores, uma fonte por item, no formato *Autor/Organização — Título (edição/versão, ano), seção quando houver*, com link quando existir. Tipos, por ordem de preferência:
+   - **documentação primária**: manuais de referência da Arm (ex.: *ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition*, DDI 0406C; *ARMv7-M*, DDI 0403; *Armv8-A*, DDI 0487; *Procedure Call Standard*, AAPCS), manuais do GNU `as`/`ld`/GDB, especificação da JVM, docs oficiais de Angular/Java;
+   - **código-fonte** dos projetos citados (`arm-jitter`, `arm-box`, emuladores) apontando arquivo ou classe;
+   - **livros** (autor, título, edição, editora, ano; ISBN quando souber com certeza);
+   - **referências técnicas reconhecidas da comunidade** (ex.: GBATEK para GBA/NDS, 3dbrew para 3DS).
+   Regras: cite a **seção específica** do manual sempre que o artigo afirma algo dele (layout do `CPSR`, vetor de exceção, codificação de instrução). **Nunca invente** URL, número de seção, ISBN ou edição: confira cada link com WebFetch antes de publicar e, se não conseguir confirmar um detalhe, cite sem o detalhe. Links internos do blog **não** contam como referência (eles vão no "Para ir além").
+8. Rodapé da trilha (`*Trilha: ... · Módulo X, lição Y.*`) quando for artigo de curso.
 
 ## Checklist de revisão (rode em todo artigo, rascunho ou não)
 
@@ -39,6 +45,7 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
 - [ ] Links internos apontam para `/artigos/<slug>` **publicados**. Rascunhos usam `/curso-arm` como placeholder: troque pelo artigo real se ele já existir em `site/src/app/data/articles.ts`. Se não existir, reescreva para não depender dele.
 - [ ] Glossário cobre todo termo técnico do texto. Comandos cobre todo comando.
 - [ ] Conclusão existe e se sustenta sozinha.
+- [ ] Seção de Referências existe. Toda afirmação técnica não óbvia tem fonte. Todo link foi aberto e confere. Nenhum dado bibliográfico foi inventado.
 - [ ] **Todo código foi verificado de verdade**, não só lido:
   - Assembly ARM: montar/ligar com o toolchain (devkitARM/devkitA64, fora do PATH, ver memória `arm-toolchain-paths`) e, se o artigo mostra saída, rodar no `armbox`.
   - Java contra o `arm-jitter`: compilar **cada trecho**, não só o arquivo de exemplo, com o `javac` da JBR 25 (`/c/Users/user/.jdks/jbr-25.0.3/bin`; o `java` do PATH é GraalVM 17) contra `~/.m2/repository/dev/vitorsilverio/arm-jitter/<v>/arm-jitter-<v>.jar` (**não** o `-javadoc.jar`). Confira assinaturas com `javap`. Rascunhos já citaram sobrecargas inexistentes e nomes de parâmetro errados.
