@@ -204,4 +204,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um *linker script* de verdade e o objcopy que extrai os bytes crus.',
     tags: ['ARM', 'Assembly', 'Linker', 'ELF', 'Toolchain', 'Tutorial'],
   },
+  {
+    slug: 'arm-jitter-api-java',
+    title: 'Usando o arm-jitter direto pela API Java',
+    date: '2026-10-20',
+    readingTime: '16 min',
+    excerpt: 'O arm-box é um runner pronto. Mas o arm-jitter é uma biblioteca — dá para embutir num programa Java de 40 linhas, carregar um binário num AddressSpace, e andar instrução a instrução lendo os registradores. Este artigo faz isso e mostra o trace real de um laço de soma.',
+    tags: ['ARM', 'arm-jitter', 'Java', 'Emulação', 'API', 'Tutorial'],
+  },
 ];

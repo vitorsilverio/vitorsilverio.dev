@@ -178,7 +178,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M3.4',
         title: 'Usando o arm-jitter direto pela API Java',
         slug: 'arm-jitter-api-java',
-        status: 'planned',
+        status: 'published',
         blurb: 'AddressSpace + ArmCore + trace listener para inspecionar registradores.',
       },
       {

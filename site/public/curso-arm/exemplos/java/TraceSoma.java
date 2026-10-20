@@ -34,7 +34,7 @@ public final class TraceSoma {
 
         core.setTraceListener(new ArmTraceListener() {
             @Override public void afterInstruction(ArmCore c, DecodedInstruction insn) {
-                System.out.printf("pc=%08X  %-18s r0=%2d r2=%d cpsr=%08X%n",
+                System.out.printf("pc=%08X  %-8s r0=%2d r2=%d cpsr=%08X%n",
                         insn.address(), insn.kind(),
                         c.register(0), c.register(2), c.cpsr().get());
             }

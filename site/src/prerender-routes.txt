@@ -27,3 +27,4 @@
 /artigos/decoder-do-arm-jitter
 /artigos/primeiro-programa-assembly-arm
 /artigos/montar-e-ligar-arm
+/artigos/arm-jitter-api-java

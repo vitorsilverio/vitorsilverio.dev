@@ -1,0 +1,202 @@
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  imports: [RouterLink],
+  selector: 'app-article-arm-jitter-api-java',
+  template: `
+<p>Para executar um programa escrito para um processador ARM num computador comum (x86), é preciso um <strong>emulador</strong>: um software que lê as instruções ARM uma a uma e reproduz o efeito de cada uma. Nesta trilha, esse papel vem sendo feito pelo <code>arm-box</code>, um programa de linha de comando que recebe um executável ARM (<code>.elf</code>), monta a memória, executa e devolve o resultado. É prático, mas é uma caixa fechada: o mapa de memória, o que acontece numa chamada de sistema e o momento de parar são decisões dele, não suas.</p>
+<p>Por baixo do <code>arm-box</code> está o <strong><code>arm-jitter</code></strong>, a biblioteca Java que de fato decodifica e executa as instruções ARM. Ela pode ser usada sem o <code>arm-box</code>. É assim que você escreveria o seu próprio emulador (de um console, de uma placa), um teste automatizado que confere os registradores depois de cada instrução, ou um script que observa um binário rodando.</p>
+<p>Neste artigo você vai escrever esse programa hospedeiro mínimo — umas 40 linhas de Java que:</p>
+<ol>
+<li>carregam um programa ARM numa memória que <strong>você</strong> define;</li>
+<li>criam um núcleo ARM apontado para essa memória;</li>
+<li>executam o programa instrução por instrução, imprimindo registradores e flags a cada passo.</li>
+</ol>
+<p>No fim você vai saber ler o <em>trace</em> resultante, trocar o interpretador por um compilador JIT e preparar o processador para começar num estado arbitrário — os três usos mais comuns da biblioteca.</p>
+<p><strong>O que você precisa:</strong> um JDK 25 ou mais novo (a biblioteca é compilada para Java 25), o <code>arm-jitter-1.3.0.jar</code> (como baixar está logo abaixo) e os dois arquivos de exemplo linkados na seção &quot;O programa ARM&quot;. Não é preciso toolchain ARM nem saber escrever assembly: o binário já vem montado, e o código dele é explicado linha por linha.</p>
+<h2>Uma biblioteca, não um programa</h2>
+<p>O <code>arm-jitter</code> não tem <code>main</code>: ele não roda sozinho. Ele é um <em>core</em> (o núcleo do processador emulado) que um programa <strong>hospedeiro</strong> — o seu — cria e controla. As peças mínimas são três:</p>
+<ul>
+<li><strong><code>AddressSpace</code></strong> — a interface do barramento de memória. Toda leitura ou escrita que o processador emulado faz passa por ela. Você implementa <code>read8/16/32</code> e <code>write8/16/32</code> (ler/escrever 1, 2 ou 4 bytes) e decide o que existe em cada endereço.</li>
+<li><strong><code>ArmCore</code></strong> — o processador em si: os 16 registradores (<code>r0</code>–<code>r15</code>, sendo <code>r15</code> o PC, contador de programa), o registrador de status <code>CPSR</code>, e a lógica de buscar, decodificar e executar instruções.</li>
+<li><strong><code>SwiDispatcher</code></strong> — o que fazer quando o programa executa <code>SVC</code>, a instrução de chamada ao sistema operacional. <code>SwiDispatcher.empty()</code> significa &quot;nenhum tratamento especial&quot;: o processador faz o que um ARM real faria e desvia para o <strong>vetor de exceção</strong> (um endereço fixo baixo, onde o sistema operacional instalaria seu tratador).</li>
+</ul>
+<p>A biblioteca está no Maven Central. Num projeto Maven, a dependência é:</p>
+<pre><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>dev.vitorsilverio<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>arm-jitter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>Sem Maven no projeto, basta o jar. <code>mvn dependency:get -Dartifact=dev.vitorsilverio:arm-jitter:1.3.0</code> o baixa para <code>~/.m2/repository/dev/vitorsilverio/arm-jitter/1.3.0/arm-jitter-1.3.0.jar</code>; copie-o para a pasta do exemplo.</p>
+<h2>O programa ARM</h2>
+<p>O programa emulado soma os números <code>3, 7, 1, 9, 4</code> e deixa o resultado (<code>24</code>) no registrador <code>r0</code>. O fonte é <a href="/curso-arm/exemplos/soma5.s"><code>soma5.s</code></a>:</p>
+<pre><code class="language-armasm">_start:
+    adr     <span class="token register symbol">r1</span><span class="token punctuation">,</span> nums          @ <span class="token register symbol">r1</span> <span class="token operator">=</span> endereço do vetor
+    mov     <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>            @ <span class="token register symbol">r2</span> <span class="token operator">=</span> contador <span class="token punctuation">(</span><span class="token number">5</span> elementos<span class="token punctuation">)</span>
+    mov     <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>            @ <span class="token register symbol">r0</span> <span class="token operator">=</span> acumulador
+<span class="token number">1</span>:  ldr     <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>      @ <span class="token register symbol">r3</span> <span class="token operator">=</span> <span class="token operator">*</span><span class="token register symbol">r1</span><span class="token comment">; depois r1 += 4</span>
+    add     <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r3</span>        @ <span class="token register symbol">r0</span> <span class="token operator">+</span><span class="token operator">=</span> <span class="token register symbol">r3</span>
+    subs    <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>        @ <span class="token register symbol">r2</span> <span class="token operator">-</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> atualizando as flags
+    bne     1b                @ volta ao rótulo <span class="token number">1</span> se o resultado não foi zero
+    mov     <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>            @ número da chamada <span class="token string">"exit"</span>
+    svc     <span class="token operator">#</span><span class="token number">0</span>                @ chama o sistema operacional
+nums:
+    .word   <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">4</span></code></pre>
+<p>Algumas leituras para quem não está acostumado com assembly ARM:</p>
+<ul>
+<li><code>ldr r3, [r1], #4</code> lê 4 bytes da memória no endereço <code>r1</code> e, <strong>depois</strong>, soma 4 a <code>r1</code> — andando para o próximo elemento.</li>
+<li>O <code>s</code> de <code>subs</code> pede que a subtração atualize as <strong>flags</strong> do <code>CPSR</code> (<code>N</code> negativo, <code>Z</code> zero, <code>C</code> carry, <code>V</code> overflow). O <code>bne</code> (&quot;<em>branch if not equal</em>&quot;) só desvia se <code>Z</code> estiver desligado, ou seja, enquanto o contador não chegou a zero.</li>
+<li><code>svc #0</code> com <code>r7 = 1</code> é a forma de pedir &quot;encerre o programa&quot; a um Linux ARM.</li>
+</ul>
+<p>O que a biblioteca vai receber é <a href="/curso-arm/exemplos/soma5.bin"><code>soma5.bin</code></a>: esses 56 bytes já montados, sem cabeçalho nenhum (14 instruções/palavras de 4 bytes), pensados para morar a partir do endereço <code>0x00010000</code>.</p>
+<h2>O hospedeiro em Java</h2>
+<p><a href="/curso-arm/exemplos/java/TraceSoma.java"><code>TraceSoma.java</code></a> carrega <code>soma5.bin</code> numa RAM que começa em <code>0x00010000</code>, instala um <em>trace listener</em> (um objeto avisado depois de cada instrução executada) e dá 23 passos:</p>
+<pre><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">BASE</span> <span class="token operator">=</span> <span class="token number">0x00010000</span><span class="token punctuation">;</span>
+
+<span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> image <span class="token operator">=</span> <span class="token class-name">Files</span><span class="token punctuation">.</span><span class="token function">readAllBytes</span><span class="token punctuation">(</span><span class="token class-name">Path</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">AddressSpace</span> ram <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AddressSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">read8</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> image<span class="token punctuation">[</span>a <span class="token operator">-</span> <span class="token constant">BASE</span><span class="token punctuation">]</span> <span class="token operator">&amp;</span> <span class="token number">0xFF</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">read16</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token function">read8</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token function">read8</span><span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">read32</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token function">read16</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span><span class="token function">read16</span><span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">write8</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> v<span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> image<span class="token punctuation">[</span>a <span class="token operator">-</span> <span class="token constant">BASE</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> v<span class="token punctuation">;</span> <span class="token function">notifyWrite</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">write16</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> v<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token function">write8</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token function">write8</span><span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> v <span class="token operator">>></span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">write32</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> v<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token function">write16</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token function">write16</span><span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">,</span> v <span class="token operator">>></span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token class-name">ArmCore</span> core <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArmCore</span><span class="token punctuation">(</span>ram<span class="token punctuation">,</span> <span class="token class-name">SwiDispatcher</span><span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+core<span class="token punctuation">.</span><span class="token function">setProgramCounter</span><span class="token punctuation">(</span><span class="token constant">BASE</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+core<span class="token punctuation">.</span><span class="token function">setTraceListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ArmTraceListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span> <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterInstruction</span><span class="token punctuation">(</span><span class="token class-name">ArmCore</span> c<span class="token punctuation">,</span> <span class="token class-name">DecodedInstruction</span> insn<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"pc=%08X  %-8s r0=%2d r2=%d cpsr=%08X%n"</span><span class="token punctuation">,</span>
+                insn<span class="token punctuation">.</span><span class="token function">address</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> insn<span class="token punctuation">.</span><span class="token function">kind</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                c<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> c<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> c<span class="token punctuation">.</span><span class="token function">cpsr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">23</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    core<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"--- r0 final = "</span> <span class="token operator">+</span> core<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Parte por parte:</p>
+<ul>
+<li><strong>A memória</strong> é só o array de bytes do arquivo. O endereço ARM <code>a</code> vira o índice <code>a - BASE</code>. Os <code>read16</code>/<code>read32</code> montam o valor em <em>little-endian</em> (byte menos significativo primeiro), que é a ordem usada pelo ARM nesse modo.</li>
+<li><strong><code>notifyWrite(a)</code></strong> avisa a biblioteca que um endereço mudou. Isso importa porque o <code>arm-jitter</code> guarda em cache blocos de instruções já decodificados; se o programa escrever sobre o próprio código (<em>self-modifying code</em>, SMC), o bloco antigo precisa ser descartado. Este programa nunca faz isso, mas é boa prática chamar.</li>
+<li><strong><code>new ArmCore(ram, SwiDispatcher.empty())</code></strong> cria o processador ligado a essa memória; <code>setProgramCounter(BASE)</code> aponta o PC para a primeira instrução.</li>
+<li><strong><code>core.step()</code></strong> executa exatamente uma instrução. A cada uma, o listener imprime o endereço, o tipo da instrução e os registradores que interessam.</li>
+</ul>
+<p><strong>Por que 23 passos?</strong> São 3 instruções de preparação mais 5 voltas de 4 instruções no laço. O passo 24 seria o <code>mov r7, #1</code> e o 25, o <code>svc</code>. Com <code>SwiDispatcher.empty()</code>, o <code>svc</code> desvia para o vetor de exceção em <code>0x00000008</code> — um endereço que não existe na nossa RAM. A leitura dá índice negativo no array e o Java lança <code>ArrayIndexOutOfBoundsException</code>. Parar antes é a forma mais simples de evitar isso. (O <code>arm-box</code> resolve com um <code>SwiDispatcher</code> que trata o <code>exit</code> e devolve <code>r0</code> como <em>exit code</em>.)</p>
+<h2>Compilar e rodar</h2>
+<pre><code class="language-bash">javac <span class="token parameter variable">-cp</span> arm-jitter-1.3.0.jar TraceSoma.java
+<span class="token function">java</span>  <span class="token parameter variable">-cp</span> <span class="token string">"arm-jitter-1.3.0.jar;."</span> TraceSoma soma5.bin      <span class="token comment"># ':' em vez de ';' no Linux/macOS</span></code></pre>
+<pre><code class="language-text">pc=00010000  ADD      r0= 0 r2=0 cpsr=000000D3
+pc=00010004  MOV      r0= 0 r2=5 cpsr=000000D3
+pc=00010008  MOV      r0= 0 r2=5 cpsr=000000D3
+pc=0001000C  LOAD     r0= 0 r2=5 cpsr=000000D3
+pc=00010010  ADD      r0= 3 r2=5 cpsr=000000D3
+pc=00010014  SUB      r0= 3 r2=4 cpsr=200000D3
+pc=00010018  BRANCH   r0= 3 r2=4 cpsr=200000D3
+pc=0001000C  LOAD     r0= 3 r2=4 cpsr=200000D3
+pc=00010010  ADD      r0=10 r2=4 cpsr=200000D3
+   ...
+pc=00010010  ADD      r0=24 r2=1 cpsr=200000D3
+pc=00010014  SUB      r0=24 r2=0 cpsr=600000D3
+pc=00010018  BRANCH   r0=24 r2=0 cpsr=600000D3
+--- r0 final = 24</code></pre>
+<p>O que o trace revela:</p>
+<ul>
+<li><strong>A segunda coluna</strong> é o <code>InstructionKind</code> da <code>DecodedInstruction</code>: a categoria que o decodificador atribuiu à instrução (<code>ADD</code>, <code>LOAD</code>, <code>SUB</code>, <code>BRANCH</code>). O <code>adr r1, nums</code> aparece como <code>ADD</code> porque <code>adr</code> não é uma instrução de verdade: o montador o traduz para <code>add r1, pc, #28</code>, &quot;o endereço desta instrução mais um deslocamento&quot;.</li>
+<li><strong>O laço é visível nos endereços:</strong> depois de <code>0x00010018</code> (o <code>bne</code>), o PC volta para <code>0x0001000C</code> (o <code>ldr</code>), e <code>r0</code> cresce <code>3 → 10 → 11 → 20 → 24</code> enquanto <code>r2</code> desce de 5 a 0.</li>
+<li><strong><code>cpsr</code> começa em <code>0x000000D3</code>.</strong> Os 5 bits baixos do <code>CPSR</code> dizem o <strong>modo</strong> do processador; <code>0xD3</code> = <code>1101 0011</code> dá <code>I=1</code> e <code>F=1</code> (interrupções IRQ e FIQ mascaradas) e modo <code>10011</code> = <strong>Supervisor</strong>, o modo privilegiado em que um ARM real sai do <em>reset</em>. Um <code>new ArmCore(...)</code> nasce assim. (O <code>arm-box</code> troca para o modo System, <code>0xDF</code>, antes de rodar; aqui não trocamos, e para este programa não faz diferença.)</li>
+<li><strong>O bit <code>C</code> (bit 29, <code>0x20000000</code>) liga depois do primeiro <code>subs</code>.</strong> Na subtração, o ARM define <code>C = 1</code> quando <strong>não</strong> houve empréstimo (<em>borrow</em>): <code>5 - 1</code> não precisou, então <code>C</code> liga e fica ligado o laço todo.</li>
+<li><strong><code>0x60000000</code> na última linha</strong> = bits 30 e 29 = <code>Z</code> e <code>C</code>. O <code>subs</code> que fez <code>1 - 1 = 0</code> ligou o <code>Z</code>, e é esse <code>Z</code> que faz o <code>bne</code> seguinte <strong>não</strong> desviar — o laço termina.</li>
+</ul>
+<h2>Trocando o backend</h2>
+<p><code>core.step()</code> usa o <strong>interpretador</strong>: decodifica e executa uma instrução por vez. É lento, mas perfeito para depurar e observar. Para velocidade, o <code>arm-jitter</code> tem um <strong>JIT</strong> (<em>just-in-time compiler</em>): ele agrupa instruções em <strong>blocos</strong> (sequências que terminam num desvio), traduz cada bloco para uma representação intermediária (<strong>IR</strong>) e compila essa IR para bytecode da JVM, que a própria JVM depois otimiza.</p>
+<pre><code class="language-java"><span class="token comment">// bytecode JVM, tiered (tier frio interpretado + tier quente compilado):</span>
+<span class="token class-name">JitRuntime</span> runtime <span class="token operator">=</span> <span class="token class-name">JitRuntimeFactory</span><span class="token punctuation">.</span><span class="token function">armThumb</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">long</span> cycles <span class="token operator">=</span> core<span class="token punctuation">.</span><span class="token function">runBlocks</span><span class="token punctuation">(</span>runtime<span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// executa até 256 blocos</span>
+
+<span class="token comment">// interpretador de IR puro — o oráculo de testes:</span>
+<span class="token class-name">JitRuntime</span> oracle <span class="token operator">=</span> <span class="token class-name">JitRuntimeFactory</span><span class="token punctuation">.</span><span class="token function">interpretedArmThumb</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// os dois em paralelo, aborta na primeira divergência:</span>
+<span class="token class-name">JitRuntime</span> check <span class="token operator">=</span> <span class="token class-name">JitRuntimeFactory</span><span class="token punctuation">.</span><span class="token function">divergenceCheckingArmThumb</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token class-name">ArmArchitecture</span><span class="token punctuation">.</span><span class="token constant">ARMV5TE</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Os três consomem o mesmo bloco de IR (<code>IrBlock</code>) produzido pelo decodificador; só muda quem o executa — por isso se chamam <em>backends</em>. O de divergência roda cada bloco pelos dois caminhos e para na primeira diferença, o que é útil para caçar bugs no compilador.</p>
+<p>Uma consequência prática: sob <code>runBlocks</code>, o <code>afterInstruction</code> do trace <strong>não dispara</strong>, porque um bloco compilado executa de uma vez, sem pontos de parada entre as instruções. Para observar a execução nesse modo existem <code>beforeBlock</code>/<code>afterBlock</code>, chamados a cada bloco.</p>
+<h2>Começando num estado arbitrário</h2>
+<p>Num aparelho real, o processador sai do <em>reset</em>, roda o código de boot (a <strong>BIOS</strong> ou <em>bootloader</em>) e só então salta para o programa principal, já num modo e com pilhas configurados. Um emulador de console costuma pular essa etapa e começar direto no estado em que a BIOS deixaria o processador.</p>
+<p>Isso exige cuidado porque o ARM tem <strong>registradores em banco</strong>: alguns registradores, como o <code>r13</code> (o ponteiro de pilha, SP), têm uma cópia separada para cada modo. Ao entrar em modo IRQ, o processador passa a enxergar o <code>r13</code> do IRQ, e não o do Supervisor. Por isso é preciso preencher a pilha de cada modo e trocar PC e <code>CPSR</code> juntos, para o banco certo ficar ativo:</p>
+<pre><code class="language-java">core<span class="token punctuation">.</span><span class="token function">setBankedRegister</span><span class="token punctuation">(</span><span class="token class-name">CpuMode</span><span class="token punctuation">.</span><span class="token constant">SUPERVISOR</span><span class="token punctuation">,</span> <span class="token number">13</span><span class="token punctuation">,</span> <span class="token number">0x03007FE0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// SP do modo Supervisor</span>
+core<span class="token punctuation">.</span><span class="token function">setBankedRegister</span><span class="token punctuation">(</span><span class="token class-name">CpuMode</span><span class="token punctuation">.</span><span class="token constant">IRQ</span><span class="token punctuation">,</span> <span class="token number">13</span><span class="token punctuation">,</span> <span class="token number">0x03007FA0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment">// SP do modo IRQ</span>
+core<span class="token punctuation">.</span><span class="token function">configureExecutionState</span><span class="token punctuation">(</span>
+        <span class="token number">0x08000000</span><span class="token punctuation">,</span> <span class="token class-name">CpuMode</span><span class="token punctuation">.</span><span class="token constant">SYSTEM</span><span class="token punctuation">,</span> <span class="token class-name">InstructionSet</span><span class="token punctuation">.</span><span class="token constant">ARM</span><span class="token punctuation">,</span>
+        <span class="token comment">/* irqDisabled = */</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">/* fiqDisabled = */</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Os endereços acima são os de um Game Boy Advance (pilhas na RAM interna em <code>0x03007Fxx</code>, cartucho a partir de <code>0x08000000</code>); num outro aparelho, você usaria o mapa de memória dele.</p>
+<h2>Glossário</h2>
+<div class="scroll-x">
+  <table>
+    <thead>
+      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Emulador</th><td>software que executa programas de outra arquitetura reproduzindo o efeito de cada instrução</td></tr>
+      <tr><th scope="row">Hospedeiro</th><td>o programa (aqui, em Java) que cria e controla o núcleo emulado</td></tr>
+      <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa código ARM, por interpretação ou JIT</td></tr>
+      <tr><th scope="row"><code>arm-box</code></th><td>executor de linha de comando construído sobre o <code>arm-jitter</code></td></tr>
+      <tr><th scope="row"><code>AddressSpace</code></th><td>interface do barramento de memória: <code>read</code>/<code>write</code> de 8/16/32 bits</td></tr>
+      <tr><th scope="row"><code>ArmCore</code></th><td>o processador emulado: registradores, <code>CPSR</code>, busca/decodificação/execução</td></tr>
+      <tr><th scope="row"><code>SwiDispatcher</code></th><td>política para a instrução <code>SVC</code>: tratar no hospedeiro ou desviar para o vetor de exceção</td></tr>
+      <tr><th scope="row"><code>SVC</code></th><td><em>supervisor call</em>: instrução com que um programa pede um serviço ao sistema operacional (antigo <code>SWI</code>)</td></tr>
+      <tr><th scope="row">Vetor de exceção</th><td>endereço fixo (<code>0x08</code> para <code>SVC</code>) para onde o processador desvia numa exceção</td></tr>
+      <tr><th scope="row">PC</th><td><em>program counter</em> (<code>r15</code>): endereço da instrução sendo executada</td></tr>
+      <tr><th scope="row"><code>CPSR</code></th><td><em>current program status register</em>: flags <code>N Z C V</code>, máscaras de interrupção e modo atual</td></tr>
+      <tr><th scope="row">Flags <code>N Z C V</code></th><td>negativo, zero, carry (na subtração: &quot;não houve empréstimo&quot;), overflow</td></tr>
+      <tr><th scope="row">Modo (Supervisor, System, IRQ...)</th><td>nível de privilégio e contexto do processador; cada um pode ter registradores próprios</td></tr>
+      <tr><th scope="row">Registrador em banco</th><td>registrador com uma cópia por modo, como o <code>r13</code> (SP)</td></tr>
+      <tr><th scope="row"><em>Trace listener</em></th><td>objeto notificado depois de cada instrução (<code>afterInstruction</code>) ou bloco</td></tr>
+      <tr><th scope="row"><code>DecodedInstruction</code> / <code>InstructionKind</code></th><td>instrução já decodificada / sua categoria (<code>ADD</code>, <code>LOAD</code>, <code>BRANCH</code>...)</td></tr>
+      <tr><th scope="row">SMC</th><td><em>self-modifying code</em>: programa que escreve sobre o próprio código</td></tr>
+      <tr><th scope="row"><code>notifyWrite</code></th><td>aviso do <code>AddressSpace</code> de que um endereço mudou, para invalidar blocos em cache</td></tr>
+      <tr><th scope="row"><em>Little-endian</em></th><td>ordem de bytes com o menos significativo no endereço mais baixo</td></tr>
+      <tr><th scope="row">Interpretador</th><td>executa uma instrução por vez, sem compilar</td></tr>
+      <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução</td></tr>
+      <tr><th scope="row">Bloco</th><td>sequência de instruções que termina num desvio; unidade do JIT</td></tr>
+      <tr><th scope="row">IR / <code>IrBlock</code></th><td>representação intermediária de um bloco, comum a todos os backends</td></tr>
+      <tr><th scope="row">Backend</th><td>quem executa a IR: bytecode JVM, interpretador de IR, ou ambos com checagem</td></tr>
+      <tr><th scope="row"><code>JitRuntime</code></th><td>o runtime de execução por blocos, criado por <code>JitRuntimeFactory</code></td></tr>
+      <tr><th scope="row">BIOS</th><td>código de boot gravado no aparelho, que prepara o processador antes do programa</td></tr>
+      <tr><th scope="row"><code>configureExecutionState</code></th><td>define PC, modo, conjunto de instruções (ARM/Thumb) e máscaras IRQ/FIQ de uma vez</td></tr>
+    </tbody>
+  </table>
+</div>
+<h2>Comandos</h2>
+<div class="scroll-x">
+  <table>
+    <thead>
+      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row"><code>mvn dependency:get -Dartifact=dev.vitorsilverio:arm-jitter:1.3.0</code></th><td>baixa a biblioteca do Maven Central para <code>~/.m2/repository</code></td></tr>
+      <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar TraceSoma.java</code></th><td>compila o hospedeiro usando a biblioteca no classpath</td></tr>
+      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar;.&quot; TraceSoma soma5.bin</code></th><td>roda o hospedeiro no Windows (classpath separado por <code>;</code>)</td></tr>
+      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar:.&quot; TraceSoma soma5.bin</code></th><td>o mesmo no Linux/macOS (separador <code>:</code>)</td></tr>
+    </tbody>
+  </table>
+</div>
+<h2>Conclusão</h2>
+<p>Um emulador ARM embutível precisa de pouco: uma implementação de <code>AddressSpace</code> que diz o que existe em cada endereço, um <code>ArmCore</code> apontado para ela e um laço que chama <code>step()</code>. Com isso você controla tudo que o <code>arm-box</code> decidia por você — onde fica a memória, quando parar, o que acontece num <code>SVC</code> — e ganha visibilidade total: cada instrução, cada registrador, cada flag.</p>
+<p>O trace também mostrou, na prática, a mecânica de um laço em ARM: o <code>subs</code> atualiza as flags, e o <code>bne</code> só lê o <code>Z</code>. Quando a velocidade importar, o mesmo núcleo roda sob um <code>JitRuntime</code>, trocando a observação instrução a instrução pela execução em blocos compilados. E, para emular um aparelho específico, <code>setBankedRegister</code> e <code>configureExecutionState</code> colocam o processador no estado em que o código de boot o deixaria.</p>
+<h3>Para ir além</h3>
+<ul>
+<li><a routerLink="/artigos/gdb-no-armbox">Depurando ARM com GDB no arm-box</a> — a mesma observação passo a passo, mas pelo GDB.</li>
+<li><a routerLink="/artigos/fetch-decode-execute-armcore">Fetch–decode–execute e o ArmCore.step()</a> — o que acontece dentro de cada <code>step()</code>.</li>
+<li><a routerLink="/artigos/decoder-do-arm-jitter">O decoder do arm-jitter</a> — como os bytes viram <code>DecodedInstruction</code> e <code>IrBlock</code>.</li>
+<li><a routerLink="/artigos/montar-e-ligar-arm">Montando e ligando um executável ARM</a> — como o <code>soma5.bin</code> foi produzido a partir do <code>.s</code>.</li>
+</ul>
+<p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 3, lição 4.</em></p>
+`,
+})
+export class ArticleArmJitterApiJava {}

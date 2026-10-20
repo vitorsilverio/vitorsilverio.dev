@@ -27,7 +27,7 @@
 | ~~8~~ | ✅ 2026-09-11 | M2.5 O decoder do arm-jitter | `decoder-do-arm-jitter` | **publicado** |
 | 9 | 2026-09-12 | M3.1 Primeiro programa em assembly | `primeiro-programa-assembly-arm` | complementa soma/sub-rotinas |
 | 10 | 2026-09-13 | M3.2 Montar e ligar | `montar-e-ligar-arm` | `flash.ld`, `build-testdata.ps1` |
-| 11 | 2026-09-14 | M3.4 arm-jitter via API Java | `arm-jitter-api-java` | `arm-jitter/docs/USAGE.md` |
+| ~~11~~ | ✅ 2026-10-20 | M3.4 arm-jitter via API Java | `arm-jitter-api-java` | **publicado** |
 | 12 | 2026-09-15 | M4.1 O Core | `dentro-do-emulador-o-core` | `ArmCore`, `configureExecutionState` |
 | 13 | 2026-09-16 | M4.2 Memória e MMIO | `memoria-e-mmio-no-emulador` | `AddressSpace`, `PagedAddressSpace` |
 | 14 | 2026-09-17 | M4.3 IR, otimizador e backends | `ir-otimizador-e-backends` | `ir.opt`, `codegen.jvm` |

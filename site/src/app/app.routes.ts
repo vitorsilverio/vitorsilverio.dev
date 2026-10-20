@@ -55,6 +55,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/primeiro-programa-assembly-arm').then((m) => m.ArticlePrimeiroProgramaAssemblyArm),
   'montar-e-ligar-arm': () =>
     import('./pages/article-detail/posts/montar-e-ligar-arm').then((m) => m.ArticleMontarELigarArm),
+  'arm-jitter-api-java': () =>
+    import('./pages/article-detail/posts/arm-jitter-api-java').then((m) => m.ArticleArmJitterApiJava),
 } as const;
 
 export const routes: Routes = [
