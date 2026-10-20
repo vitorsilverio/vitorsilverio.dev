@@ -160,7 +160,8 @@ a:hover {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
 }
 
-.tag {
+/* :not(.token) — o Prism marca tags XML/HTML como `token tag`, que não são badges. */
+.tag:not(.token) {
   display: inline-flex;
   align-items: center;
   font-size: 0.75rem;
