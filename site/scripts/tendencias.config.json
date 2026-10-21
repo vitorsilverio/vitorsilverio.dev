@@ -1,0 +1,47 @@
+{
+  "//": "Temas e termos padrão do npm run tendencias. Edite à vontade. O primeiro termo de cada tema é o 'principal' (usado onde a fonte tem cota baixa, como a busca do GitHub). Hacker News procura os termos no TÍTULO, então prefira termos curtos e comuns.",
+  "temas": [
+    {
+      "id": "arm-emulacao",
+      "nome": "Arquitetura ARM e emulação",
+      "termos": ["ARM64", "ARM assembly", "emulator"],
+      "lobstersTags": ["hardware", "osdev"],
+      "devtoTags": ["arm", "emulation"]
+    },
+    {
+      "id": "baixo-nivel",
+      "nome": "Programação de baixo nível e assembly",
+      "termos": ["assembly", "RISC-V", "JIT"],
+      "lobstersTags": ["assembly", "compilers"],
+      "devtoTags": ["assembly", "riscv"]
+    },
+    {
+      "id": "java-jvm",
+      "nome": "Java e JVM",
+      "termos": ["Java", "JVM", "GraalVM"],
+      "lobstersTags": ["java"],
+      "devtoTags": ["java", "jvm"]
+    },
+    {
+      "id": "angular-frontend",
+      "nome": "Angular e front-end",
+      "termos": ["Angular", "TypeScript"],
+      "lobstersTags": [],
+      "devtoTags": ["angular", "typescript"]
+    }
+  ],
+  "blogs": [
+    {
+      "id": "angular-blog",
+      "nome": "Angular Blog",
+      "url": "https://blog.angular.dev/feed",
+      "tema": "angular-frontend"
+    },
+    {
+      "id": "inside-java",
+      "nome": "Inside Java (Oracle)",
+      "url": "https://inside.java/feed.xml",
+      "tema": "java-jvm"
+    }
+  ]
+}

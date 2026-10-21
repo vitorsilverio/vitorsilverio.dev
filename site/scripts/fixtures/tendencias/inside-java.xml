@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Inside Java</title>
+  <entry>
+    <title>JEP targeted to JDK 28: 543: Structured Concurrency</title>
+    <link rel="alternate" href="https://inside.java/2026/10/21/jep543-target-jdk28/" />
+    <category term="JDK 28" />
+    <category term="Project Loom" />
+    <author>
+      <name>Alan Bateman</name>
+    </author>
+    <author>
+      <name>Ron Pressler</name>
+    </author>
+    <author>
+      <name>Viktor Klang</name>
+    </author>
+    <id>https://inside.java/2026/10/21/jep543-target-jdk28/</id>
+    <updated>2026-10-21T00:00:00Z</updated>
+    <published>2026-10-21T00:00:00Z</published>
+    <summary type="html">&lt;p&gt;The following JEP is targeted to JDK 28: 543: Structured Concurrency&lt;/p&gt;</summary>
+    <dc:date>2026-10-21T00:00:00Z</dc:date>
+  </entry>
+  <entry>
+    <title>Reflect, Transform, Accelerate: Bringing GPU Computing to Java</title>
+    <link rel="alternate" href="https://inside.java/2026/10/20/devoxxbelgium-bringing-gpu-computing-to-java/" />
+    <category term="Artificial Intelligence" />
+    <category term="Project Babylon" />
+    <author>
+      <name>Juan Fumero</name>
+    </author>
+    <id>https://inside.java/2026/10/20/devoxxbelgium-bringing-gpu-computing-to-java/</id>
+    <updated>2026-10-20T00:00:00Z</updated>
+    <published>2026-10-20T00:00:00Z</published>
+    <summary type="html">&lt;p&gt;Java’s code reflection API, developed in OpenJDK Project Babylon, opens a new path to targeting foreign programming models directly from Java—including GPUs. This talk introduces the Heterogeneous Accelerator Toolkit (HAT), a Java parallel programming framework that accelerates modern workloads on specialised hardware through three core stages: reflect, transform, and accelerate. Through examples of tensor-core programming and matrix multiplication—fundamental building blocks for AI and natural-language processing—we demonstrate HAT in action. We also explore performance analysis and tuning of the CUDA backend with NVIDIA Nsight Compute and Nsight Systems, from profiling generated kernels to identifying optimisation opportunities.&lt;/p&gt;</summary>
+    <dc:date>2026-10-20T00:00:00Z</dc:date>
+  </entry>
+</feed>

@@ -1,0 +1,46 @@
+[
+  {
+    "short_id": "xhe1vl",
+    "created_at": "2026-10-05T19:59:38.397-05:00",
+    "title": "Why Continuations are Coming to Java (2019)",
+    "url": "https://www.infoq.com/presentations/continuations-java/",
+    "score": 2,
+    "comment_count": 1,
+    "tags": [
+      "api",
+      "java",
+      "programming",
+      "transcript",
+      "video"
+    ],
+    "comments_url": "https://lobste.rs/s/xhe1vl/why_continuations_are_coming_java_2019"
+  },
+  {
+    "short_id": "j7kltq",
+    "created_at": "2026-09-30T08:35:52.964-05:00",
+    "title": "Turbo Haskell",
+    "url": "https://comonad.com/reader/2026/turbo-haskell/",
+    "score": 33,
+    "comment_count": 5,
+    "tags": [
+      "haskell",
+      "java",
+      "programming",
+      "vibecoding"
+    ],
+    "comments_url": "https://lobste.rs/s/j7kltq/turbo_haskell"
+  },
+  {
+    "short_id": "stczr0",
+    "created_at": "2026-09-22T10:52:41.006-05:00",
+    "title": "why java class files start with 0xCAFEBABE",
+    "url": "https://radio-weblogs.com/0100490/2003/01/28.html",
+    "score": 1,
+    "comment_count": 1,
+    "tags": [
+      "historical",
+      "java"
+    ],
+    "comments_url": "https://lobste.rs/s/stczr0/why_java_class_files_start_with"
+  }
+]

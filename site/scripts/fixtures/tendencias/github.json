@@ -1,0 +1,24 @@
+{
+  "total_count": 4357,
+  "incomplete_results": false,
+  "items": [
+    {
+      "full_name": "uxazu/AEmulator",
+      "html_url": "https://github.com/uxazu/AEmulator",
+      "description": "Android emulator that emulates older Android firmware versions.",
+      "created_at": "2026-09-24T09:34:56Z",
+      "stargazers_count": 336,
+      "forks_count": 41,
+      "language": "C"
+    },
+    {
+      "full_name": "BrinooTk/PS5X360",
+      "html_url": "https://github.com/BrinooTk/PS5X360",
+      "description": "Experimental Xbox 360 emulator for PlayStation 5, built on Xenia Canary with native audio, DualSense input and RADV Vulkan graphics.",
+      "created_at": "2026-10-03T23:11:38Z",
+      "stargazers_count": 334,
+      "forks_count": 34,
+      "language": "C++"
+    }
+  ]
+}

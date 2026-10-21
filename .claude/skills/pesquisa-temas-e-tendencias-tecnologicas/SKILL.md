@@ -13,12 +13,17 @@ Antes de pesquisar, leia `site/src/app/data/articles.ts` (o que já foi publicad
 
 ## Fontes
 
-Use as ferramentas disponíveis: WebSearch e WebFetch e, se houver MCP de notícias ou redes sociais configurado na sessão, use também. Cubra mais de um tipo de fonte:
+**Primeira coleta: a ferramenta do site.** Em `site/`, rode `npm run -s tendencias -- --json`. Ela consulta, sem chave de API e com poucas requisições, Hacker News (Algolia), Lobsters, GitHub (repositórios criados na janela), dev.to, TabNews, Google Notícias (pt-BR e en-US) e feeds de blogs oficiais (Angular Blog, Inside Java), agrupa por tema e devolve **sinais objetivos** por tema: fontes independentes, volume, recência (itens nas últimas 48 h, mediana de idade), engajamento (pontos, comentários, estrelas, reações) e presença em PT-BR (TabNews, Google Notícias pt-BR). Também marca `jaPublicado` e lista os `artigosRelacionados` do site, para evitar repetição. Ela **não dá nota**: ranquear segundo os critérios abaixo é o seu trabalho.
 
-- **Comunidades de desenvolvedores**: Hacker News (API em https://hn.algolia.com/api), Reddit (r/programming, r/emulation, r/embedded, r/angular, r/java), Lobsters, dev.to, TabNews (comunidade brasileira).
-- **Repositórios**: GitHub Trending (https://github.com/trending), por linguagem quando fizer sentido.
-- **Notícias**: veículos de tecnologia internacionais e brasileiros, blogs oficiais (Arm, Angular, Java/OpenJDK, Node.js).
-- **X.com**: não há API disponível por padrão. Use a busca web restrita ao domínio (`site:x.com` ou `site:twitter.com`) e perfis oficiais. Se um MCP de redes sociais estiver configurado, prefira-o. Registre a limitação quando ela afetar a conclusão.
+- Temas e termos padrão ficam em `site/scripts/tendencias.config.json` (editável). Para outro assunto: `--termo "Rust"` (repetível; `--sem-padrao` usa só os termos dados). Outras opções: `--tema java-jvm`, `--fonte hn,tabnews`, `--dias 14`, `--limite 20` (0 = todos os itens). Esquema do JSON e detalhes no topo de `site/scripts/tendencias.ts`.
+- Leia o campo `fontes`: fonte com `status: "falhou"` não foi avaliada e isso entra no relatório. O Hacker News procura o termo no título; no Google Notícias o link é um redirecionamento e não há métricas; o GitHub mostra só repositórios *criados* na janela (não o github.com/trending).
+- Os itens e números da ferramenta já são evidência com link. Depois, **aprofunde com WebSearch e WebFetch**: abra os 3 a 5 itens mais fortes, ache fontes primárias e confirme o que importa para o artigo.
+
+Complementos (a ferramenta não cobre):
+
+- **Reddit**: responde 403 sem OAuth; não há coleta gratuita. Só via WebSearch com `site:reddit.com`, ou MCP se configurado.
+- **X.com**: não há API gratuita. Use a busca web restrita ao domínio (`site:x.com` ou `site:twitter.com`) e perfis oficiais; se um MCP de redes sociais estiver configurado, prefira-o. Registre a limitação quando ela afetar a conclusão.
+- **Notícias e blogs fora dos feeds configurados**: veículos de tecnologia internacionais e brasileiros, blog da Arm, OpenJDK, Node.js. Via WebSearch/WebFetch.
 - **Interesse de busca**: Google Trends (https://trends.google.com/trends/), comparando termos em português e inglês.
 - **Desempenho do próprio site**: rode a análise da skill `analise-desempenho` (`npm run metricas`) e cruze com os artigos que estão indo bem. Se a ferramenta não rodar, diga que essa dimensão não foi avaliada.
 

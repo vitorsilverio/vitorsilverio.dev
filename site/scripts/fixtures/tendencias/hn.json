@@ -1,0 +1,32 @@
+{
+  "hits": [
+    {
+      "objectID": "50118804",
+      "title": "Show HN: Wasmga.me – Homebrew and open-source games running on WebAssembly",
+      "url": "https://wasmga.me/",
+      "points": 3,
+      "num_comments": 0,
+      "created_at": "2026-10-16T14:29:52Z",
+      "created_at_i": 1792160992
+    },
+    {
+      "objectID": "50124392",
+      "title": "Show HN: Pogi – AWS, Google Cloud and Azure on your machine, in one binary",
+      "url": "https://github.com/nrndev/pogi",
+      "points": 1,
+      "num_comments": 0,
+      "created_at": "2026-10-16T20:44:38Z",
+      "created_at_i": 1792183478
+    },
+    {
+      "objectID": "50123777",
+      "title": "Show HN: Gondwana, a code-first C#/.NET game engine with WebGL",
+      "url": "https://github.com/Isthimius/Gondwana",
+      "points": 4,
+      "num_comments": 2,
+      "created_at": "2026-10-16T20:01:59Z",
+      "created_at_i": 1792180919
+    }
+  ],
+  "nbHits": 4
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel>
+<item>
+            <title><![CDATA[Node.js 24.22.0 (LTS)]]></title>
+            <link>https://nodejs.org/en/blog/release/v24.22.0</link>
+            <guid isPermaLink="false">/blog/release/v24.22.0?1791991608742</guid>
+            <pubDate>Wed, 14 Oct 2026 15:26:48 GMT</pubDate>
+        </item>
+<item>
+            <title><![CDATA[Node.js 26.12.0 (Current)]]></title>
+            <link>https://nodejs.org/en/blog/release/v26.12.0</link>
+            <guid isPermaLink="false">/blog/release/v26.12.0?1791991386239</guid>
+            <pubDate>Wed, 14 Oct 2026 15:23:06 GMT</pubDate>
+        </item>
+</channel></rss>

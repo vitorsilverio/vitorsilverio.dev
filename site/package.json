@@ -13,7 +13,8 @@
     "highlight-posts": "node scripts/highlight-posts.mjs",
     "prompts": "node scripts/gen-prompts.mjs",
     "migra-blocos": "node scripts/migra-blocos.mjs",
-    "metricas": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ga-metricas.ts"
+    "metricas": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/ga-metricas.ts",
+    "tendencias": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/tendencias.ts"
   },
   "private": true,
   "packageManager": "npm@11.13.0",
