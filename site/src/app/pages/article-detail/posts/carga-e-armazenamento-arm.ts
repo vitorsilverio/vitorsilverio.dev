@@ -6,41 +6,76 @@ import { RouterLink } from '@angular/router';
   selector: 'app-article-carga-e-armazenamento-arm',
   template: `
     <p>
-      No artigo anterior vimos a <a routerLink="/artigos/fundamentos-arm"
-        >arquitetura ARM por cima</a
-      >: banco de registradores, modos e o conjunto de instruções. Mas arquitetura
-      só "cola" quando a gente suja a mão. Neste texto vamos exercitar a parte que
-      mais assusta quem chega do C ou do Java: <strong>como o ARM acessa memória</strong
-      >. Spoiler — o ARM segue o modelo <em>load/store</em>, e isso muda tudo.
+      Quem vem do C ou do Java escreve <code>soma += v[i]</code> sem pensar em
+      como o processador chega até <code>v[i]</code>. Em ARM, esse caminho é
+      explícito: <strong>só instruções específicas de carga e armazenamento
+      tocam a memória</strong>, e todas as outras trabalham com registradores.
+      Este artigo mostra o que isso significa na prática, com um programa em
+      assembly (a linguagem de máquina em forma de texto) que soma um vetor de
+      cinco números, escreve o resultado de volta na memória e o devolve como
+      <em>exit code</em> (o número que todo processo devolve ao sistema ao
+      terminar).
+    </p>
+    <p>
+      O programa roda no <code>arm-box</code>, um programa de linha de comando
+      escrito em Java que carrega executáveis ARM de 32 bits (formato ELF) e os
+      executa como um Linux faria, sobre o <code>arm-jitter</code>, a biblioteca
+      Java que decodifica e executa as instruções ARM.
+    </p>
+    <p>Até o fim você vai:</p>
+    <ol>
+      <li>entender o modelo <em>load/store</em> e os modos de endereçamento de <code>LDR</code>/<code>STR</code>;</li>
+      <li>escrever um laço com <code>cmp</code> e <code>bge</code> que varre um vetor;</li>
+      <li>montar, ligar e rodar o programa, e confirmar com o GDB que a soma foi mesmo gravada na memória.</li>
+    </ol>
+    <p>
+      <strong>O que você precisa:</strong> o toolchain <code>arm-none-eabi-*</code>
+      (por exemplo o <a href="https://devkitpro.org/" target="_blank" rel="noopener">devkitARM</a>),
+      um JDK 25 e o <code>target/armbox.jar</code> gerado por <code>mvn package</code> no
+      <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">repositório do <code>arm-box</code></a>.
+      Com um Java mais antigo o <code>arm-box</code> nem inicia (<code>UnsupportedClassVersionError</code>).
+      O código completo está em
+      <a href="/curso-arm/exemplos/carga-e-armazenamento-arm-sum.s"><code>carga-e-armazenamento-arm-sum.s</code></a>.
+      Não é preciso saber assembly de antemão.
     </p>
 
-    <h2>Load/store: só LDR e STR tocam a memória</h2>
+    <h2>Load/store: só as instruções de carga e armazenamento tocam a memória</h2>
     <p>
       Em arquiteturas CISC (x86, por exemplo) você faz
       <code>add eax, [ebx]</code> — soma direto lendo da memória. O ARM
       <strong>não</strong>. Todas as instruções de processamento de dados
       (<code>add</code>, <code>sub</code>, <code>and</code>, <code>mov</code>…)
       operam <em>só</em> entre registradores ou com immediatos. Para ler ou
-      escrever memória existem exatamente duas portas:
+      escrever memória existem instruções próprias. As duas básicas são:
     </p>
     <ul>
       <li><code>LDR</code> — <em>load</em>: memória → registrador.</li>
       <li><code>STR</code> — <em>store</em>: registrador → memória.</li>
     </ul>
     <p>
-      Isso parece limitação, mas é o que torna o conjunto enxuto e o ciclo de
-      instrução previsível — exatamente o que o <code>arm-jitter</code> emula
-      quando decodifica cada opcode. Se você veio do
-      <a routerLink="/artigos/hello-armbox">hello world no arm-box</a>, já usou
-      <code>ldr r1, =msg</code> sem perceber: era um <code>LDR</code> buscando o
-      endereço da string numa <em>literal pool</em>.
+      Há variantes para bytes e meias-palavras (<code>LDRB</code>, <code>STRB</code>,
+      <code>LDRH</code>, <code>STRH</code>) e para vários registradores de uma vez
+      (<code>LDM</code>, <code>STM</code>, <code>PUSH</code>, <code>POP</code>), mas todas seguem a mesma
+      regra: fora delas, nada acessa a memória. Este artigo usa só <code>LDR</code> e <code>STR</code>.
+    </p>
+    <p>
+      Isso parece limitação, mas simplifica a decodificação: toda instrução de
+      processamento de dados tem a mesma forma, e o acesso à memória fica concentrado
+      num grupo pequeno de instruções. Um detalhe que aparece logo no programa abaixo:
+      <code>ldr r1, =msg</code> (a forma <code>=</code> é uma pseudo-instrução do montador)
+      também é um <code>LDR</code>. O montador guarda o valor de 32 bits numa
+      <em>literal pool</em> (um bloco de constantes colocado perto do código) e gera um
+      <code>ldr</code> relativo ao PC que o busca de lá. É assim que se carrega um endereço
+      completo num registrador, como mostra o
+      <a routerLink="/artigos/hello-armbox">hello world no arm-box</a>.
     </p>
 
     <h2>Os modos de endereçamento do LDR/STR</h2>
     <p>
       O endereço de memória é calculado a partir de um registrador base
-      (<code>r0</code> no nosso exemplo) mais um <em>offset</em>. Há três
-      sabores, e vale decorar porque eles aparecem em quase todo programa real:
+      (<code>r0</code> no nosso exemplo) mais um <em>offset</em> (deslocamento).
+      Há três sabores (offset simples, pré-indexado e pós-indexado, este com
+      ou sem atualização do registrador base), e vale conhecê-los porque aparecem em quase todo programa real:
     </p>
     <pre><code class="language-armasm">ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">]</span>          @ offset <span class="token number">0</span> <span class="token punctuation">(</span>sem deslocamento<span class="token punctuation">)</span>
 ldr   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">]</span>      @ pré<span class="token operator">-</span>indexado: usa <span class="token register symbol">r0</span><span class="token operator">+</span><span class="token number">8</span> <span class="token punctuation">(</span><span class="token register symbol">r0</span> NÃO muda<span class="token punctuation">)</span>
@@ -57,8 +92,8 @@ ldr   <span class="token register symbol">r1</span><span class="token punctuatio
       Vamos escrever um programa que soma os elementos de um vetor em
       <code>.data</code> e encerra com a soma como <em>exit code</em> — assim
       dá para conferir o resultado com <code>echo $?</code>. O arm-box roda
-      binários <strong>ARMv5–ARMv7</strong>, então montamos com
-      <code>-march=armv5te</code> (a mesma ISA do hello world).
+      por padrão código <strong>ARMv5TE</strong> (a versão da arquitetura ARM, ISA, com extensões
+      de DSP e Thumb), então montamos com <code>-march=armv5te</code>.
     </p>
 
     <pre><code class="language-armasm">.syntax unified
@@ -117,32 +152,130 @@ done:
     </ul>
 
     <h2>Montando, ligando e rodando</h2>
-    <p>Geramos um ELF estático idêntico ao do hello world:</p>
+    <p>Geramos um ELF estático (o <code>-static</code> é inofensivo aqui: o <code>ld</code> não liga bibliotecas por conta própria):</p>
     <pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv5te sum.s <span class="token parameter variable">-o</span> sum.o
 arm-none-eabi-ld <span class="token parameter variable">-static</span> <span class="token parameter variable">-o</span> sum.elf sum.o</code></pre>
     <p>
       Rodamos com o <code>--check</code> para garantir que o JIT e o
       interpretador IR do arm-jitter concordam, e pedimos o código de saída:
     </p>
-    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar <span class="token parameter variable">--check</span> sum.elf
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar <span class="token parameter variable">--check</span> sum.elf
 <span class="token builtin class-name">echo</span> <span class="token variable">$?</span>   <span class="token comment"># 24  (3+7+1+9+4)</span></code></pre>
     <p>
       Se aparecer <strong>24</strong>, parabéns: você acabou de ler e escrever
       memória de verdade num núcleo ARM emulado em Java. O <code>--check</code>
-      não reclamou, então JIT e interpretador calcularam a mesma soma.
+      não reclamou, então JIT e interpretador calcularam a mesma soma (o interpretador, <code>--interp</code>,
+      e a execução padrão, em JIT, também devolvem 24 quando rodados isoladamente).
     </p>
 
-    <h2>Por que isso importa para o curso</h2>
+    <h2>Conferindo o STR com o GDB</h2>
     <p>
-      Carga e armazenamento são a fronteira entre a CPU e o mundo exterior. Todo
-      acesso a arrays, structs, pilha de chamadas e até argumentos de função
-      passa por <code>LDR</code>/<code>STR</code>. Dominar os modos de
-      endereçamento (especialmente o writeback) é o que separa quem "copia
-      assembly de stackoverflow" de quem entende o que o processador faz. No
-      próximo texto vamos abrir o <code>objdump</code> desse ELF e
-      <strong>decodificar instruções ARM à mão</strong>, bit a bit — a mesma
-      leitura que o decodificador do arm-jitter faz. Até lá!
+      O <em>exit code</em> só prova o valor de <code>r1</code>. Para ver o <code>str</code> gravando na
+      memória, rode o <code>arm-box</code> com o stub GDB (<code>--gdb=PORT</code>, que espera um depurador
+      conectar) e peça um breakpoint logo depois do <code>str</code>. No <code>objdump</code> esse ponto é o
+      endereço <code>0x8030</code> (<code>mov r0, r1</code>, a instrução seguinte ao <code>str</code>):
     </p>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar <span class="token parameter variable">--gdb</span><span class="token operator">=</span><span class="token number">3406</span> sum.elf
+<span class="token comment"># em outro terminal:</span>
+arm-none-eabi-gdb <span class="token parameter variable">-q</span> <span class="token parameter variable">-batch</span> sum.elf <span class="token parameter variable">-ex</span> <span class="token string">"target remote :3406"</span> <span class="token punctuation">\\</span>
+  <span class="token parameter variable">-ex</span> <span class="token string">"x/6dw &amp;nums"</span> <span class="token parameter variable">-ex</span> <span class="token string">"break *0x8030"</span> <span class="token parameter variable">-ex</span> <span class="token string">"continue"</span> <span class="token punctuation">\\</span>
+  <span class="token parameter variable">-ex</span> <span class="token string">"info registers r0 r1 pc"</span> <span class="token parameter variable">-ex</span> <span class="token string">"x/6dw &amp;nums"</span></code></pre>
+    <pre><code class="language-text">0x00008000 in _start ()
+0x9044:	3	7	1	9
+0x9054:	4	0
+Breakpoint 1 at 0x8030
+
+Breakpoint 1, 0x00008030 in done ()
+r0             0x9058              36952
+r1             0x18                24
+pc             0x8030              0x8030 &lt;done+8&gt;
+0x9044:	3	7	1	9
+0x9054:	4	24</code></pre>
+    <p>
+      O vetor ocupa de <code>0x9044</code> a <code>0x9057</code> (cinco palavras) e logo depois vem
+      <code>result</code>, em <code>0x9054+4 = 0x9058</code>: a sexta palavra impressa é <code>0</code> antes e
+      <code>24</code> depois, e <code>r1 = 0x18 = 24</code>. Repare também que <code>r0</code> terminou em
+      <code>0x9058</code>: o <code>ldr r4, [r0], #4</code> avançou o ponteiro cinco vezes e ele parou
+      exatamente no fim do vetor, sobre <code>result</code> (os endereços vêm do <code>nm</code> e do
+      <code>objdump</code> do ELF gerado; podem mudar com outra versão do toolchain).
+    </p>
+
+    <h2>Glossário</h2>
+    <div class="scroll-x">
+      <table>
+        <thead>
+          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+        </thead>
+        <tbody>
+        <tr><th scope="row">Load/store</th><td>modelo em que só instruções de carga e armazenamento acessam a memória; o resto opera em registradores</td></tr>
+        <tr><th scope="row"><code>LDR</code> / <code>STR</code></th><td><em>load</em> / <em>store</em> de uma palavra de 32 bits: memória → registrador / registrador → memória</td></tr>
+        <tr><th scope="row"><em>Offset</em></th><td>deslocamento somado ao registrador base para formar o endereço</td></tr>
+        <tr><th scope="row">Pré-indexado</th><td><code>[r0, #8]</code>: usa <code>r0+8</code> como endereço; com <code>!</code> grava o resultado de volta em <code>r0</code> (<em>writeback</em>)</td></tr>
+        <tr><th scope="row">Pós-indexado</th><td><code>[r0], #4</code>: usa <code>r0</code> como endereço e só depois soma 4 a <code>r0</code></td></tr>
+        <tr><th scope="row"><em>Literal pool</em></th><td>bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
+        <tr><th scope="row"><code>cmp</code></th><td>compara dois valores (subtrai e descarta o resultado) e atualiza as flags</td></tr>
+        <tr><th scope="row"><code>bge</code></th><td><em>branch if greater or equal</em>: desvia se, na comparação com sinal, o primeiro valor for maior ou igual ao segundo</td></tr>
+        <tr><th scope="row">Flags</th><td>bits <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code> do registrador de estado, atualizados por <code>cmp</code></td></tr>
+        <tr><th scope="row"><em>Exit code</em></th><td>número devolvido pelo processo ao terminar; aqui a soma, via <code>exit(r0)</code></td></tr>
+        <tr><th scope="row"><code>svc</code></th><td><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code> (1 = exit)</td></tr>
+        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável usado pelo toolchain GNU e pelo Linux</td></tr>
+        <tr><th scope="row"><code>arm-box</code></th><td>programa Java que executa ELFs ARM de 32 bits como um Linux user-mode</td></tr>
+        <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa instruções ARM</td></tr>
+        <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
+        <tr><th scope="row">ISA</th><td><em>instruction set architecture</em>: o conjunto de instruções de uma arquitetura</td></tr>
+        <tr><th scope="row">Stub GDB</th><td>servidor do protocolo remoto do GDB embutido no <code>arm-box</code>, ativado por <code>--gdb=PORT</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Comandos</h2>
+    <div class="scroll-x">
+      <table>
+        <thead>
+          <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+        </thead>
+        <tbody>
+        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te sum.s -o sum.o</code></th><td>monta <code>sum.s</code> em código-objeto</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-ld -static -o sum.elf sum.o</code></th><td>liga o objeto num ELF executável</td></tr>
+        <tr><th scope="row"><code>java -jar target/armbox.jar --check sum.elf</code></th><td>roda no <code>arm-box</code> com JIT e interpretador em paralelo, abortando se divergirem</td></tr>
+        <tr><th scope="row"><code>echo $?</code></th><td>mostra o <em>exit code</em> do último comando (no <code>cmd</code> do Windows, <code>echo %ERRORLEVEL%</code>)</td></tr>
+        <tr><th scope="row"><code>java -jar target/armbox.jar --gdb=3406 sum.elf</code></th><td>sobe o stub GDB na porta 3406 e espera um depurador</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-gdb -q -batch sum.elf -ex "target remote :3406" -ex ...</code></th><td>conecta ao stub e executa os comandos <code>-ex</code> em lote</td></tr>
+        <tr><th scope="row"><code>x/6dw &amp;nums</code> (no GDB)</th><td>mostra 6 palavras de 32 bits, em decimal, a partir de <code>nums</code></td></tr>
+        <tr><th scope="row"><code>break *0x8030</code> / <code>continue</code> (no GDB)</th><td>põe um breakpoint no endereço e executa até ele</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Conclusão</h2>
+    <p>
+      No ARM, memória só se acessa por instruções de carga e armazenamento; o resto é registrador. O
+      <code>ldr r4, [r0], #4</code> pós-indexado lê um elemento e já aponta para o próximo, e junto de
+      <code>cmp</code> + <code>bge</code> forma o laço de varredura que aparece em praticamente todo código
+      que percorre um vetor. O programa rodou no <code>arm-box</code> com o mesmo resultado (24) em JIT, em
+      interpretador e no <code>--check</code>, e o GDB confirmou que o <code>str</code> gravou a soma na
+      memória.
+    </p>
+    <p>
+      O mesmo padrão vale para arrays, <em>structs</em> e a pilha de chamadas. Argumentos de função, por
+      outro lado, entram em <code>r0</code>–<code>r3</code> e só vão à memória quando passam de quatro ou
+      quando a função precisa guardar registradores.
+    </p>
+    <h3>Para ir além</h3>
+    <ul>
+      <li><a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão com o objdump</a> — como ler os bits do <code>ldr</code> e do <code>str</code> acima.</li>
+      <li><a routerLink="/artigos/gdb-no-armbox">Depurando ARM com GDB no arm-box</a> — a sessão do GDB em detalhe.</li>
+      <li><a routerLink="/artigos/sub-rotinas-arm-bl-bx-pilha">Sub-rotinas em ARM</a> — a pilha, onde <code>LDR</code>/<code>STR</code> em lote (<code>PUSH</code>/<code>POP</code>) entram em cena.</li>
+    </ul>
+
+    <h2>Referências</h2>
+    <ul>
+      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C), capítulo A8, seção &quot;Memory accesses&quot;: endereçamento por offset, pré-indexado e pós-indexado, e as descrições de <code>LDR</code> e <code>STR</code>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils): a forma <code>ldr Rd, =expressão</code> e o uso da <em>literal pool</em>.</li>
+      <li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenção ARM EABI (número da chamada em <code>r7</code>).</li>
+      <li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener"><em>Procedure Call Standard for the Arm Architecture</em></a> (AAPCS32), seção 6.1.1 <em>Core registers</em>: <code>r0</code>–<code>r3</code> para argumentos.</li>
+      <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>arm-box</code></a> (GitHub): opções <code>--check</code>, <code>--interp</code> e <code>--gdb=PORT</code>.</li>
+    </ul>
   `,
 })
 export class ArticleCargaEArmazenamentoArm {}
