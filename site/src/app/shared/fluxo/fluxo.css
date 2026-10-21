@@ -1,0 +1,147 @@
+:host {
+  display: block;
+  margin: 1.75rem 0;
+  container-type: inline-size;
+}
+
+.fl {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.1rem 1.15rem 1rem;
+}
+
+.fl-cap {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+}
+
+/* Base: pilha vertical (celular). */
+ol.fl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.fl-box {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  text-align: center;
+}
+
+.fl-box .fl-nome {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: transparent;
+  padding: 0;
+  overflow-wrap: anywhere;
+}
+
+.fl-papel {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.fl-step {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.15rem 0;
+  color: var(--accent-strong);
+  text-align: center;
+}
+
+.fl-verbo {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.fl-step .fl-cmd {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: transparent;
+  padding: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Seta para baixo: haste + ponta, só CSS. */
+.fl-seta {
+  order: 3;
+  position: relative;
+  width: 2px;
+  height: 1.1rem;
+  background: currentColor;
+  margin-top: 0.2rem;
+}
+
+.fl-seta::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* Telas largas (largura do próprio componente): fila horizontal. */
+@container (min-width: 40rem) {
+  ol.fl-list {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .fl-box {
+    flex: 0 1 auto;
+    padding: 0.8rem 1.1rem;
+  }
+
+  .fl-step {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Seta para a direita, abaixo do verbo e acima do comando não: fica entre eles. */
+  .fl-seta {
+    order: 2;
+    width: 100%;
+    max-width: 7rem;
+    height: 2px;
+    margin: 0.2rem 0;
+  }
+
+  .fl-seta::after {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%) rotate(-45deg);
+  }
+
+  .fl-step .fl-cmd {
+    order: 3;
+  }
+}

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Fluxo } from '../../../shared/fluxo/fluxo';
 import { Objdump } from '../../../shared/objdump/objdump';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Fluxo, Objdump],
   selector: 'app-article-montar-e-ligar-arm',
   template: `
 <p>Quem escreve o primeiro programa em assembly ARM costuma digitar duas linhas de comando sem saber direito o
@@ -23,8 +24,14 @@ para rodar, um JDK 25 e o <code>target/armbox.jar</code> do
 <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">repositório do <code>arm-box</code></a>.
 Não é preciso conhecer o ELF nem linker script de antemão.</p>
 <h2>Dois passos, dois programas</h2>
-<pre><code class="language-text">soma5.s  --(arm-none-eabi-as)--&gt;  soma5.o  --(arm-none-eabi-ld)--&gt;  soma5.elf
- texto            monta            objeto           liga          executável</code></pre>
+<app-fluxo
+  titulo="Do código-fonte ao executável"
+  itens="soma5.s | código-fonte
+         > arm-none-eabi-as | monta
+         soma5.o | objeto
+         > arm-none-eabi-ld | liga
+         soma5.elf | executável"
+/>
 <ul>
 <li><strong><code>as</code></strong> resolve mnemônicos em bytes de instrução, mas deixa os endereços <strong>relativos ao início de cada seção</strong> e marca com <em>relocations</em> tudo que depende de um endereço absoluto.</li>
 <li><strong><code>ld</code></strong> decide onde cada seção vai na memória, soma os offsets, resolve os símbolos entre objetos e grava um ELF com um <strong>entry point</strong>.</li>

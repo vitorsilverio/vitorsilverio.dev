@@ -1,0 +1,21 @@
+<figure class="fl">
+  @if (titulo()) {
+    <figcaption class="fl-cap">{{ titulo() }}</figcaption>
+  }
+  <ol class="fl-list">
+    @for (item of lista(); track $index) {
+      @if (item.tipo === 'artefato') {
+        <li class="fl-box">
+          <code class="fl-nome">{{ item.principal }}</code>
+          <span class="fl-papel">{{ item.detalhe }}</span>
+        </li>
+      } @else {
+        <li class="fl-step">
+          <span class="fl-seta" aria-hidden="true"></span>
+          <span class="fl-verbo">{{ item.detalhe }}</span>
+          <code class="fl-cmd">{{ item.principal }}</code>
+        </li>
+      }
+    }
+  </ol>
+</figure>
