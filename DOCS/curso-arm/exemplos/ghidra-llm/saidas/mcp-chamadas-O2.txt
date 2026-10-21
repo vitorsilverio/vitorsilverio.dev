@@ -1,0 +1,283 @@
+servidor: ghidra-mcp 1.30.0 | protocolo: 2025-11-25
+28 ferramentas: get_program_info, list_functions, list_methods, search_functions_by_name, list_classes, list_namespaces, list_segments, list_imports, list_exports, list_data_items, list_strings, get_function_by_address, decompile_function, decompile_function_by_address, disassemble_function, get_xrefs_to, get_xrefs_from, get_function_xrefs, get_function_calls, read_memory, rename_function_by_address, rename_function, rename_data, rename_variable, set_function_prototype, set_local_variable_type, set_decompiler_comment, set_disassembly_comment
+
+>>> get_program_info {}
+{
+  "name": "cofre-O2.elf",
+  "project_path": "/cofre-O2.elf",
+  "executable_path": "//caminho/para/ghidra-llm/cofre-O2.elf",
+  "executable_format": "Executable and Linking Format (ELF)",
+  "language_id": "ARM:LE:32:v8",
+  "compiler_spec": "default",
+  "processor": "ARM",
+  "endian": "little",
+  "pointer_size": 4,
+  "image_base": "00010000",
+  "min_address": "00010000",
+  "max_address": "_elfSectionHeaders::00000117",
+  "memory_size": 1107,
+  "function_count": 7,
+  "external_function_count": 0,
+  "entry_points": [
+    "00010020",
+    "00010064",
+    "00010000",
+    "00010016",
+    "000100b0",
+    "00010010",
+    "00010038"
+  ],
+  "md5": "3c3afa2ae640614efe4ae46974384810",
+  "sha256": "f80a0402adba353d450c591089d48e86756efd04e5152c9e5cbf3d8c1234fd32"
+}
+
+>>> list_functions {}
+{
+  "items": [
+    {
+      "name": "escreve",
+      "address": "00010000"
+    },
+    {
+      "name": "sai",
+      "address": "00010010"
+    },
+    {
+      "name": "_start",
+      "address": "00010016"
+    },
+    {
+      "name": "soma_ate",
+      "address": "00010020"
+    },
+    {
+      "name": "mistura",
+      "address": "00010038"
+    },
+    {
+      "name": "chave_ok",
+      "address": "00010064"
+    },
+    {
+      "name": "c_start",
+      "address": "000100b0"
+    }
+  ],
+  "offset": 0,
+  "limit": 100,
+  "total": 7,
+  "has_more": false
+}
+
+>>> decompile_function {'name': 'chave_ok'}
+{
+  "function": {
+    "name": "chave_ok",
+    "address": "00010064"
+  },
+  "code": "\r\nbool chave_ok(char *param_1)\r\n\r\n{\r\n  char *pcVar1;\r\n  uint uVar2;\r\n  byte *pbVar3;\r\n  char *pcVar4;\r\n  uint uVar5;\r\n  \r\n  pcVar1 = param_1;\r\n  if (*param_1 != '\\0') {\r\n    do {\r\n      pcVar4 = pcVar1;\r\n      pcVar1 = pcVar4 + 1;\r\n    } while (*pcVar1 != '\\0');\r\n    if (pcVar4 + -7 == param_1) {\r\n      pbVar3 = (byte *)(param_1 + -1);\r\n      uVar2 = 0x1505;\r\n      do {\r\n        pbVar3 = pbVar3 + 1;\r\n        uVar5 = (uint)*pbVar3 ^ (uVar2 >> 0x1b | uVar2 << 5);\r\n        uVar2 = uVar5 * -0x61c8864f;\r\n      } while ((byte *)(param_1 + 7) != pbVar3);\r\n      return uVar5 == 0xc003375e;\r\n    }\r\n  }\r\n  return false;\r\n}\r\n\r\n",
+  "truncated": false
+}
+
+>>> get_function_calls {'address': '0x100b0'}
+{
+  "function": {
+    "name": "c_start",
+    "address": "000100b0"
+  },
+  "callers": {
+    "items": [
+      {
+        "call_site": "0001001a",
+        "caller": {
+          "name": "_start",
+          "address": "00010016"
+        },
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true
+      }
+    ],
+    "offset": 0,
+    "limit": 100,
+    "total": 1,
+    "has_more": false
+  },
+  "callees": {
+    "items": [
+      {
+        "call_site": "000100b8",
+        "target": "00010064",
+        "name": "chave_ok",
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true,
+        "external": false
+      },
+      {
+        "call_site": "000100c2",
+        "target": "00010000",
+        "name": "escreve",
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true,
+        "external": false
+      },
+      {
+        "call_site": "000100c8",
+        "target": "00010010",
+        "name": "sai",
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true,
+        "external": false
+      },
+      {
+        "call_site": "000100d6",
+        "target": "00010000",
+        "name": "escreve",
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true,
+        "external": false
+      },
+      {
+        "call_site": "000100dc",
+        "target": "00010010",
+        "name": "sai",
+        "ref_type": "UNCONDITIONAL_CALL",
+        "direct": true,
+        "external": false
+      }
+    ],
+    "offset": 0,
+    "limit": 100,
+    "total": 5,
+    "has_more": false
+  }
+}
+
+>>> list_strings {}
+{
+  "items": [
+    {
+      "address": "000100e4",
+      "value": "acesso liberado\n",
+      "type": "string",
+      "length": 17
+    },
+    {
+      "address": "000100f8",
+      "value": "acesso negado\n",
+      "type": "string",
+      "length": 15
+    },
+    {
+      "address": ".comment::00000000",
+      "value": "GCC: (devkitARM) 16.1.0",
+      "type": "string-utf8",
+      "length": 24
+    },
+    {
+      "address": ".shstrtab::00000001",
+      "value": ".symtab",
+      "type": "string-utf8",
+      "length": 8
+    },
+    {
+      "address": ".shstrtab::00000009",
+      "value": ".strtab",
+      "type": "string-utf8",
+      "length": 8
+    },
+    {
+      "address": ".shstrtab::00000011",
+      "value": ".shstrtab",
+      "type": "string-utf8",
+      "length": 10
+    },
+    {
+      "address": ".shstrtab::0000001b",
+      "value": ".text",
+      "type": "string-utf8",
+      "length": 6
+    },
+    {
+      "address": ".shstrtab::00000021",
+      "value": ".comment",
+      "type": "string-utf8",
+      "length": 9
+    },
+    {
+      "address": ".shstrtab::0000002a",
+      "value": ".ARM.attributes",
+      "type": "string-utf8",
+      "length": 16
+    },
+    {
+      "address": ".strtab::00000001",
+      "value": "cofre.c",
+      "type": "string-utf8",
+      "length": 8
+    },
+    {
+      "address": ".strtab::00000009",
+      "value": "$t",
+      "type": "string-utf8",
+      "length": 3
+    },
+    {
+      "address": ".strtab::0000000c",
+      "value": "$d",
+      "type": "string-utf8",
+      "length": 3
+    },
+    {
+      "address": ".strtab::0000000f",
+      "value": "MSG_OK",
+      "type": "string-utf8",
+      "length": 7
+    },
+    {
+      "address": ".strtab::00000016",
+      "value": "MSG_NEGA",
+      "type": "string-utf8",
+      "length": 9
+    },
+    {
+      "address": ".strtab::0000001f",
+      "value": "soma_ate",
+      "type": "string-utf8",
+      "length": 9
+    },
+    {
+      "address": ".strtab::00000028",
+      "value": "chave_ok",
+      "type": "string-utf8",
+      "length": 9
+    },
+    {
+      "address": ".strtab::00000031",
+      "value": "escreve",
+      "type": "string-utf8",
+      "length": 8
+    },
+    {
+      "address": ".strtab::00000039",
+      "value": "c_start",
+      "type": "string-utf8",
+      "length": 8
+    },
+    {
+      "address": ".strtab::00000041",
+      "value": "sai",
+      "type": "string-utf8",
+      "length": 4
+    },
+    {
+      "address": ".strtab::00000045",
+      "value": "mistura",
+      "type": "string-utf8",
+      "length": 8
+    }
+  ],
+  "offset": 0,
+  "limit": 200,
+  "total": 20,
+  "has_more": false
+}

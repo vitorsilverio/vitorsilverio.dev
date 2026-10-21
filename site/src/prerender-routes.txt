@@ -29,3 +29,4 @@
 /artigos/primeiro-programa-assembly-arm
 /artigos/montar-e-ligar-arm
 /artigos/arm-jitter-api-java
+/artigos/ghidra-llm-binario-arm

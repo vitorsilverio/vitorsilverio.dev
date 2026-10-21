@@ -212,4 +212,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'O arm-box é um runner pronto. Mas o arm-jitter é uma biblioteca — dá para embutir num programa Java de 40 linhas, carregar um binário num AddressSpace, e andar instrução a instrução lendo os registradores. Este artigo faz isso e mostra o trace real de um laço de soma.',
     tags: ['ARM', 'arm-jitter', 'Java', 'Emulação', 'API', 'Tutorial'],
   },
+  {
+    slug: 'ghidra-llm-binario-arm',
+    title: 'Ghidra + LLM: quanto você pode confiar quando o modelo explica um binário ARM?',
+    date: '2026-10-21',
+    readingTime: '17 min',
+    excerpt: 'Importe um ELF ARM/Thumb no Ghidra, aprenda a ler o decompilador, ligue o Ghidra a um modelo de linguagem pelo protocolo MCP e confira, com o código-fonte na mão, o que o modelo acertou, onde exagerou e onde só o decompilador enganou todo mundo.',
+    tags: ['ARM', 'Thumb', 'Engenharia reversa', 'Ghidra', 'MCP', 'IA', 'Tutorial'],
+  },
 ];

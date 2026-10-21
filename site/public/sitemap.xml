@@ -212,4 +212,11 @@
     <priority>0.6</priority>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/arm-jitter-api-java.png</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/ghidra-llm-binario-arm/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/ghidra-llm-binario-arm.png</image:loc></image:image>
+  </url>
 </urlset>

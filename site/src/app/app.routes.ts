@@ -57,6 +57,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/montar-e-ligar-arm').then((m) => m.ArticleMontarELigarArm),
   'arm-jitter-api-java': () =>
     import('./pages/article-detail/posts/arm-jitter-api-java').then((m) => m.ArticleArmJitterApiJava),
+  'ghidra-llm-binario-arm': () =>
+    import('./pages/article-detail/posts/ghidra-llm-binario-arm').then((m) => m.ArticleGhidraLlmBinarioArm),
 } as const;
 
 export const routes: Routes = [

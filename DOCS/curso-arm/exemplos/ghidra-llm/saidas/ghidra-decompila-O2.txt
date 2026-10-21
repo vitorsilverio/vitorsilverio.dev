@@ -1,0 +1,154 @@
+Linguagem: ARM:LE:32:v8 | compilador: default
+==== escreve @ 00010000 (TMode=1) ====
+
+undefined8 escreve(undefined4 param_1)
+
+{
+  software_interrupt(0);
+  return CONCAT44(param_1,1);
+}
+
+
+==== sai @ 00010010 (TMode=1) ====
+
+void sai(void)
+
+{
+  software_interrupt(0);
+  do {
+                    /* WARNING: Do nothing block with infinite loop */
+  } while( true );
+}
+
+
+==== _start @ 00010016 (TMode=1) ====
+
+void _start(void)
+
+{
+  undefined4 in_stack_00000000;
+  
+  c_start(in_stack_00000000,&stack0x00000004);
+  do {
+                    /* WARNING: Do nothing block with infinite loop */
+  } while( true );
+}
+
+
+==== soma_ate @ 00010020 (TMode=1) ====
+
+int soma_ate(int param_1)
+
+{
+  int iVar1;
+  int iVar2;
+  
+  if (0 < param_1) {
+    iVar2 = 1;
+    iVar1 = 0;
+    do {
+      iVar1 = iVar1 + iVar2;
+      iVar2 = iVar2 + 1;
+    } while (iVar2 != param_1 + 1);
+    return iVar1;
+  }
+  return 0;
+}
+
+
+==== mistura @ 00010038 (TMode=1) ====
+
+uint mistura(int param_1,int param_2)
+
+{
+  uint uVar1;
+  byte *pbVar2;
+  byte *pbVar3;
+  
+  if (0 < param_2) {
+    pbVar3 = (byte *)(param_1 + -1);
+    pbVar2 = pbVar3 + param_2;
+    uVar1 = 0x1505;
+    do {
+      pbVar3 = pbVar3 + 1;
+      uVar1 = ((uint)*pbVar3 ^ (uVar1 >> 0x1b | uVar1 << 5)) * -0x61c8864f;
+    } while (pbVar3 != pbVar2);
+    return uVar1;
+  }
+  return 0x1505;
+}
+
+
+==== chave_ok @ 00010064 (TMode=1) ====
+
+bool chave_ok(char *param_1)
+
+{
+  char *pcVar1;
+  uint uVar2;
+  byte *pbVar3;
+  char *pcVar4;
+  uint uVar5;
+  
+  pcVar1 = param_1;
+  if (*param_1 != '\0') {
+    do {
+      pcVar4 = pcVar1;
+      pcVar1 = pcVar4 + 1;
+    } while (*pcVar1 != '\0');
+    if (pcVar4 + -7 == param_1) {
+      pbVar3 = (byte *)(param_1 + -1);
+      uVar2 = 0x1505;
+      do {
+        pbVar3 = pbVar3 + 1;
+        uVar5 = (uint)*pbVar3 ^ (uVar2 >> 0x1b | uVar2 << 5);
+        uVar2 = uVar5 * -0x61c8864f;
+      } while ((byte *)(param_1 + 7) != pbVar3);
+      return uVar5 == 0xc003375e;
+    }
+  }
+  return false;
+}
+
+
+==== c_start @ 000100b0 (TMode=1) ====
+WARN  Decompiling 000100b0, pcode error at 00010108: Could not follow disassembly flow into non-existing memory at 00010108 (DecompileCallback)  
+
+/* WARNING: Control flow encountered bad instruction data */
+
+void c_start(int param_1,int param_2)
+
+{
+  undefined1 uVar1;
+  int iVar2;
+  int unaff_r4;
+  int unaff_r5;
+  int unaff_r7;
+  
+  if ((param_1 < 2) || (iVar2 = chave_ok(*(undefined4 *)(param_2 + 4)), iVar2 == 0)) {
+    escreve(DAT_000100e0,0xe);
+    sai(1);
+  }
+  escreve("acesso liberado\n",0x10);
+  sai(0);
+  iVar2 = unaff_r7 << 3;
+  *(int *)(unaff_r4 + 0x34) = iVar2;
+  uVar1 = (undefined1)unaff_r5;
+  *(undefined1 *)(unaff_r4 + 0xd) = uVar1;
+  *(int *)(unaff_r5 + 0x24) = iVar2;
+  *(undefined1 *)(unaff_r4 + 9) = uVar1;
+  *(int *)(unaff_r4 + 0x44) = iVar2;
+  *(int *)(unaff_r4 + 0x34) = iVar2;
+  *(undefined1 *)(unaff_r4 + 0xd) = uVar1;
+  *(int *)(unaff_r4 + 0x74) = unaff_r5;
+  *(int *)(unaff_r4 + 0x44) = iVar2;
+                    /* WARNING: Bad instruction - Truncating control flow here */
+  halt_baddata();
+}
+
+
+INFO  ANALYZING changes made by post scripts: file:////caminho/para/ghidra-llm/cofre-O2.elf (HeadlessAnalyzer)  
+INFO  REPORT: Post-analysis succeeded for file: file:////caminho/para/ghidra-llm/cofre-O2.elf (HeadlessAnalyzer)  
+INFO  /cofre-O2.elf: file created (user) (LocalFileSystem)  
+INFO  REPORT: Save succeeded for: /cofre-O2.elf (proj1:/cofre-O2.elf) (HeadlessAnalyzer)  
+INFO  REPORT: Import succeeded (HeadlessAnalyzer)  
