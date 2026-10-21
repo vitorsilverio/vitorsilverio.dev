@@ -98,7 +98,7 @@
       <description><![CDATA[No ARM Thumb, os bits de um registrador são manipulados com AND, ORR, EOR, BIC, MVN e TST, com shifts e rotações e com os campos de bits UBFX, BFI e BFC. O artigo mostra os encodings reais de 16 e 32 bits, o read-modify-write de um periférico e a execução passo a passo no arm-jitter, e corrige a ideia de que os campos de bits são exclusivos do Thumb-2.]]></description>
     </item>
     <item>
-      <title>Semihosting e syscalls: como o arm-box traduz chamadas de sistema EABI para o host</title>
+      <title>Semihosting no arm-box: como firmware Cortex-M imprime e encerra sem sistema operacional</title>
       <link>https://vitorsilverio.dev/artigos/semihosting</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/semihosting</guid>
       <pubDate>Thu, 03 Sep 2026 03:00:00 GMT</pubDate>

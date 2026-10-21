@@ -118,7 +118,7 @@ export const articles: readonly ArticleMeta[] = [
   },
   {
     slug: 'semihosting',
-    title: 'Semihosting e syscalls: como o arm-box traduz chamadas de sistema EABI para o host',
+    title: 'Semihosting no arm-box: como firmware Cortex-M imprime e encerra sem sistema operacional',
     date: '2026-09-03',
     readingTime: '11 min',
     excerpt: 'Semihosting é o contrato que deixa firmware sem sistema operacional imprimir e encerrar pedindo serviços ao depurador ou emulador: R0 traz a operação, R1 o parâmetro e uma instrução de captura (BKPT #0xAB no Cortex-M) dispara a chamada. Este artigo mostra os números corretos das operações, roda um exemplo no arm-box e explica o que o emulador implementa e onde ele diverge da especificação.',
