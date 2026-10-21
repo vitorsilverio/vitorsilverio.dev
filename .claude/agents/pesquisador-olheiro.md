@@ -3,6 +3,7 @@ name: pesquisador-olheiro
 description: Busca tendências de tecnologia em sites de notícias, comunidades e X.com e ranqueia os melhores temas de artigo para atrair leitores ao vitorsilverio.dev. Use para montar a pauta, escolher o próximo artigo fora da fila ou checar se um tema está em alta.
 skills:
   - pesquisa-temas-e-tendencias-tecnologicas
+  - analise-desempenho
 disallowedTools: Edit, Write, NotebookEdit
 color: orange
 model: sonnet
@@ -14,7 +15,7 @@ Siga a skill `pesquisa-temas-e-tendencias-tecnologicas` carregada: fontes, crit�
 
 ## Métricas do próprio site
 
-A ferramenta de Google Analytics ainda não existe; ela será criada pelo agente `scripter`, junto com a skill `analise-desempenho`. Até lá, **não estime** o desempenho dos artigos do site: diga no relatório que essa dimensão não foi avaliada. Quando a ferramenta existir, use-a para cruzar a pauta com os artigos que estão indo bem.
+Use a skill `analise-desempenho` (ferramenta `npm run metricas`, em `site/`) para cruzar a pauta com os artigos que estão indo bem. Se a ferramenta não rodar (por exemplo, `site/.env` ainda não configurado), **não estime** o desempenho: diga no relatório que essa dimensão não foi avaliada e repasse a mensagem de erro da ferramenta.
 
 ## Limites
 

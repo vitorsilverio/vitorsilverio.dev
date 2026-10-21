@@ -20,7 +20,7 @@ Use as ferramentas disponíveis: WebSearch e WebFetch e, se houver MCP de notíc
 - **Notícias**: veículos de tecnologia internacionais e brasileiros, blogs oficiais (Arm, Angular, Java/OpenJDK, Node.js).
 - **X.com**: não há API disponível por padrão. Use a busca web restrita ao domínio (`site:x.com` ou `site:twitter.com`) e perfis oficiais. Se um MCP de redes sociais estiver configurado, prefira-o. Registre a limitação quando ela afetar a conclusão.
 - **Interesse de busca**: Google Trends (https://trends.google.com/trends/), comparando termos em português e inglês.
-- **Desempenho do próprio site**: quando existir a ferramenta de Google Analytics (skill `analise-desempenho`, ainda não criada), cruze com os artigos que estão indo bem. Até lá, diga que essa dimensão não foi avaliada.
+- **Desempenho do próprio site**: rode a análise da skill `analise-desempenho` (`npm run metricas`) e cruze com os artigos que estão indo bem. Se a ferramenta não rodar, diga que essa dimensão não foi avaliada.
 
 ## Critérios de ranqueamento
 

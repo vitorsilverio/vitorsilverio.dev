@@ -14,7 +14,10 @@ description: Escrever ferramentas e scripts de automação do site em TypeScript
 - Os scripts existentes em `site/scripts/` são Node ESM em JavaScript (`.mjs`), com código compartilhado em `scripts/lib/`. **Não reescreva um `.mjs` existente em TypeScript sem pedido**; mantenha o estilo dele ao alterá-lo.
 - **Ferramentas novas são escritas em TypeScript** (`site/scripts/<nome>.ts`) e rodam direto com `node scripts/<nome>.ts`: o Node 24 remove os tipos sozinho, sem etapa de build.
 - Isso exige **sintaxe apagável** (*erasable syntax*): sem `enum`, `namespace`, parameter properties em construtor nem `import x = require()`. Use uniões de literais (`type Modo = 'a' | 'b'`) ou objetos `as const` no lugar de `enum`. Imports relativos com a extensão explícita (`./lib/util.ts`).
-- Exponha o script como `npm run <nome>` em `site/package.json` quando for para uso recorrente.
+- `site/scripts/package.json` tem `"type": "module"` (sem ele o `tsc` trata os `.ts` como CommonJS e recusa `import.meta` e `await` de topo). Mesmo assim o Node avisa `MODULE_TYPELESS_PACKAGE_JSON` quando o script importa arquivos de `site/src/`; por isso o `npm run` usa `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/<nome>.ts`.
+- Exponha o script como `npm run <nome>` em `site/package.json` quando for para uso recorrente (veja `metricas` como modelo).
+- `.env`: leia `site/.env` com `util.parseEnv` (ou `process.loadEnvFile`), sem `dotenv`; o ambiente tem precedência; remova o BOM UTF-8 do início do arquivo antes do parse (editores do Windows o gravam); documente cada variável em `site/.env.example`.
+- Toda chamada de rede com `AbortSignal.timeout(...)`.
 - Ferramentas que acessam serviços externos (ex.: Google Analytics) leem credenciais de variáveis de ambiente ou de arquivo fora do repositório, **nunca** de arquivo versionado. Documente as variáveis no topo do script.
 
 ## Boas práticas
@@ -29,14 +32,14 @@ description: Escrever ferramentas e scripts de automação do site em TypeScript
 
 ## Testes
 
-- Testes de script ficam ao lado dele (`scripts/<nome>.test.ts`) e rodam com `npx vitest run --root scripts` (em `site/`). Isso não passa pelo `ng test`, que cobre `src/`.
+- Testes de script ficam ao lado dele (`scripts/<nome>.test.ts`) e rodam com `npx vitest run --root scripts` (em `site/`). Isso não passa pelo `ng test`, que cobre `src/`. O `scripts/vitest.config.ts` põe o cache em `site/node_modules/` (já ignorado pelo git).
 - Siga a skill `testes-unitarios`.
 
 ## Validação antes de entregar
 
 1. Checar os tipos (em `site/`):
    `npx tsc --noEmit --ignoreConfig --strict --module nodenext --moduleResolution nodenext --target es2022 --allowImportingTsExtensions --erasableSyntaxOnly --types node scripts/<nome>.ts`
-   O `--ignoreConfig` é obrigatório no TypeScript 6 quando se passa arquivo na linha de comando (o `tsconfig.json` do Angular não serve para scripts). Os tipos do Node (`@types/node`) **não** estão instalados hoje: no primeiro script TypeScript, instale com a major do Node usado no deploy (`npm install --save-dev @types/node@24`, ver `.github/workflows/deploy.yml`) e commite com o `package-lock.json`.
+   O `--ignoreConfig` é obrigatório no TypeScript 6 quando se passa arquivo na linha de comando (o `tsconfig.json` do Angular não serve para scripts). `@types/node` está instalado na major do Node usado no deploy (24, ver `.github/workflows/deploy.yml`); acompanhe a major quando o deploy mudar.
 2. Rode a ferramenta de verdade (com `--dry-run` quando ela escrever arquivos) e mostre a saída.
 3. `npx vitest run --root scripts`.
 
