@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
+  imports: [RouterLink],
   selector: 'app-article-boas-vindas',
   template: `
     <p>
@@ -16,6 +18,17 @@ import { Component } from '@angular/core';
       A melhor forma de consolidar o que aprendi é tentar explicar para os
       outros. Escrever me obriga a organizar as ideias — e publicar me mantém
       responsável por continuar estudando.
+    </p>
+
+    <h2>O que você vai encontrar aqui</h2>
+    <p>
+      Os assuntos são os que eu estudo e uso: arquitetura ARM, emulação e
+      programação de baixo nível, além de Java e Angular. A parte maior é uma
+      trilha de artigos sobre ARM, que usa emuladores que eu mesmo escrevi para
+      mostrar como o processador funciona por dentro; ela está indexada na
+      página do <a routerLink="/curso-arm">Curso de Arquitetura ARM</a>. Cada
+      artigo foi pensado para ser lido sozinho, sem exigir que você tenha lido
+      os outros.
     </p>
 
     <h2>Como os artigos são feitos</h2>
