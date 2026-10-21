@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BitField } from '../../../shared/bit-field/bit-field';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, BitField],
+  imports: [RouterLink, BitField, Nota],
   selector: 'app-article-flags-e-desvios-condicionais',
   template: `
     <p>
@@ -58,6 +59,12 @@ import { BitField } from '../../../shared/bit-field/bit-field';
       esses 4 bits no CPSR. Quando <code>S = 0</code> (a maioria das
       <code>MOV</code>/<code>ADD</code>), o CPSR não mexe.
     </p>
+    <app-nota n="1">
+      No AArch64 (ARMv8 de 64 bits) as flags N, Z, C e V ficam no estado do
+      processador (<code>PSTATE</code>) e são acessadas pelo registrador
+      <code>NZCV</code>. O nome CPSR é do AArch32, que é o assunto deste
+      artigo.
+    </app-nota>
 
     <h2>Como o CMP atualiza as flags</h2>
     <p>
@@ -87,6 +94,12 @@ import { BitField } from '../../../shared/bit-field/bit-field';
         resultado fora — mas as flags ficam.
       </li>
     </ul>
+    <app-nota n="2">
+      A mesma ideia vale para outras operações: o <code>CMN</code> faz uma
+      soma (<code>ADDS</code>), o <code>TST</code> um <code>AND</code>
+      (<code>ANDS</code>) e o <code>TEQ</code> um <code>EOR</code>
+      (<code>EORS</code>), todos só para escrever as flags.
+    </app-nota>
 
     <h2>As quatro flags, uma por uma</h2>
 
@@ -122,6 +135,12 @@ import { BitField } from '../../../shared/bit-field/bit-field';
       <li><code>C = 1</code> se <code>r2 ≥ r3</code> (sem borrow).</li>
       <li><code>C = 0</code> se <code>r2 &lt; r3</code> (borrow).</li>
     </ul>
+    <app-nota n="3">
+      O <code>HS</code> do ARM testa <code>C = 1</code> e o <code>JAE</code>
+      do x86 testa <code>CF = 0</code>. As duas perguntam "sem sinal, é maior
+      ou igual?"; a polaridade da flag é que se inverte, porque no x86 o
+      <code>CF</code> guarda o próprio borrow.
+    </app-nota>
     <p>
       Para <strong>soma</strong> (ADD/ADC), <code>C = 1</code> se houve carry
       para fora do bit 31 (overflow unsigned).

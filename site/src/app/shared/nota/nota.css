@@ -1,0 +1,71 @@
+:host {
+  display: block;
+  margin: 0 0 1.3rem;
+}
+
+.caixa {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+}
+
+.titulo {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+/* Celular: o cabeçalho vira o botão que abre e fecha a nota. */
+.titulo-botao {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  margin: -0.5rem 0 -0.25rem;
+  padding: 0.25rem 0;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--accent-strong);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.titulo-botao::before {
+  content: '▸';
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.titulo-botao[aria-expanded='true']::before {
+  transform: rotate(90deg);
+}
+
+.corpo[hidden] {
+  display: none;
+}
+
+.corpo > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titulo-botao::before {
+    transition: none;
+  }
+}

@@ -513,3 +513,79 @@ button.tag:hover {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ---- Glossário inline (diretiva appGlossario, criada em runtime): termo em botão
+   discreto + balão com a definição. Os elementos nascem fora do template do Angular,
+   por isso o estilo é global. ---- */
+.glos-termo {
+  cursor: pointer;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--accent-strong);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+}
+
+.glos-termo:hover,
+.glos-termo[aria-expanded='true'] {
+  background: var(--surface-2);
+}
+
+.glos-balao {
+  position: fixed;
+  z-index: 60;
+  display: block;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(24rem, calc(100% - 1rem));
+  padding: 0.75rem 0.9rem;
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.55;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.glos-balao[hidden] {
+  display: none;
+}
+
+.glos-def {
+  display: block;
+}
+
+.glos-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.prose tr[id] {
+  scroll-margin-top: 5rem;
+}
+
+.prose tr.glos-alvo > * {
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+@media print {
+  .glos-balao {
+    display: none;
+  }
+
+  .glos-termo {
+    text-decoration: none;
+  }
+}

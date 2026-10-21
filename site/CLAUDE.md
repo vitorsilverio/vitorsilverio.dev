@@ -191,3 +191,17 @@ wrapper das tabelas. Não renomeie `.prose` nem mude sua estrutura: a medição 
 (`ReadingTracker`) e a barra de progresso (`app-reading-progress`) usam esse elemento.
 Artigos da trilha ainda mostram "Lição X de N" (`app-lesson-badge`) e "Próximo na trilha"
 (`app-lesson-next`), a partir de `src/app/data/course.ts`.
+
+## Notas e glossário inline
+
+**Nota** (`app-nota`, `src/app/shared/nota/`): uma digressão ou ressalva curta, escrita **depois** do
+parágrafo ou da lista a que se refere, com o número à mão (o rótulo "Nota N" precisa existir no HTML
+pré-renderizado): `<app-nota n="1">texto</app-nota>` e `Nota` em `imports` do post. É uma caixa sempre
+visível no desktop; no celular começa recolhida. Use pouco: só para o que enriquece sem ser essencial.
+
+**Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
+que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
+vira um termo clicável com a definição da própria tabela (no máximo 8 por artigo; termos genéricos em
+`TERMOS_GENERICOS` ficam de fora; ocorrência já explicada entre parênteses é pulada). Controle por
+artigo: `data-glossario="nao"` numa `<tr>` da tabela tira o termo, `data-glossario="sim"` força um
+termo genérico, e `data-glossario="nao"` em qualquer elemento do texto exclui o que está dentro dele.

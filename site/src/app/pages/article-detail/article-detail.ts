@@ -21,6 +21,7 @@ import { formatPtDate } from '../../shared/date.util';
 import { ConsentService } from '../../shared/consent/consent.service';
 import { ReadingTracker } from '../../shared/analytics/reading-tracker';
 import { ProseEnhance } from '../../shared/prose/prose';
+import { Glossario } from '../../shared/prose/glossario';
 import { ProseToc } from '../../shared/prose/prose-toc';
 import { ReadingProgress } from '../../shared/prose/reading-progress';
 import { LessonBadge } from '../../shared/course/lesson-badge';
@@ -34,6 +35,7 @@ import { LessonNext } from '../../shared/course/lesson-next';
     ShareButtons,
     ArticleCta,
     ProseEnhance,
+    Glossario,
     ProseToc,
     ReadingProgress,
     LessonBadge,
