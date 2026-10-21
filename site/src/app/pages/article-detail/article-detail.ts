@@ -1,4 +1,12 @@
-import { Component, computed, effect, ElementRef, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -8,6 +16,8 @@ import { ShareButtons } from '../../shared/share-buttons';
 import { ArticleCta } from '../../shared/article-cta/article-cta';
 import { SeoService } from '../../shared/seo.service';
 import { formatPtDate } from '../../shared/date.util';
+import { ConsentService } from '../../shared/consent/consent.service';
+import { ReadingTracker } from '../../shared/analytics/reading-tracker';
 
 @Component({
   imports: [RouterLink, RouterOutlet, GiscusComments, ShareButtons, ArticleCta],
@@ -20,18 +30,17 @@ export class ArticleDetail {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly host = inject(ElementRef);
+  private readonly consent = inject(ConsentService);
+  private readonly reading = inject(ReadingTracker);
+  private readonly prose = viewChild<ElementRef<HTMLElement>>('prose');
 
   protected readonly slug = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(
-        () =>
-          this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined,
-      ),
+      map(() => this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined),
     ),
     {
-      initialValue:
-        this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined,
+      initialValue: this.activatedRoute.snapshot.firstChild?.routeConfig?.path ?? undefined,
     },
   );
 
@@ -39,9 +48,7 @@ export class ArticleDetail {
     articles.find((a) => a.slug === this.slug()),
   );
 
-  private readonly sorted = [...articles].sort((a, b) =>
-    a.date.localeCompare(b.date),
-  );
+  private readonly sorted = [...articles].sort((a, b) => a.date.localeCompare(b.date));
 
   protected readonly prev = computed<ArticleMeta | undefined>(() => {
     const a = this.article();
@@ -73,6 +80,15 @@ export class ArticleDetail {
   });
 
   constructor() {
+    // Leitura do artigo (rolagem 25/50/75/90% e tempo ativo): só com consentimento e só
+    // no navegador. Reinicia a cada artigo; a limpeza envia o tempo ao sair.
+    effect((onCleanup) => {
+      const prose = this.prose()?.nativeElement;
+      const slug = this.article()?.slug;
+      if (!prose || !slug || this.consent.consent() !== 'granted') return;
+      onCleanup(untracked(() => this.reading.watch(prose, slug)));
+    });
+
     effect(() => {
       const article = this.article();
       if (!article) {

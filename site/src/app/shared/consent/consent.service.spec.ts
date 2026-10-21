@@ -98,4 +98,24 @@ describe('ConsentService (page_view do GA4)', () => {
     navigate('/artigos/a');
     expect(pageViews()).toHaveLength(1);
   });
+
+  it('?interno=1: o config do gtag e o page_view levam traffic_type internal', () => {
+    history.replaceState(null, '', '/?interno=1');
+    navigate('/');
+    service.applyStored();
+    service.accept();
+    TestBed.tick();
+    const init = document.getElementById('ga-init')?.textContent ?? '';
+    expect(init).toContain("traffic_type: 'internal'");
+    expect(pageViews()[0][2]).toMatchObject({ traffic_type: 'internal' });
+    history.replaceState(null, '', '/');
+  });
+
+  it('sem o flag, nada de traffic_type', () => {
+    navigate('/');
+    service.accept();
+    TestBed.tick();
+    expect(document.getElementById('ga-init')?.textContent ?? '').not.toContain('traffic_type');
+    expect(pageViews()[0][2]).not.toHaveProperty('traffic_type');
+  });
 });

@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { analyticsConfig } from '../../data/analytics.config';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 export type ConsentState = 'unknown' | 'granted' | 'denied';
 
@@ -15,6 +16,7 @@ export class ConsentService {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
+  private readonly analytics = inject(AnalyticsService);
 
   // Começa como 'unknown' nos dois ambientes (SSR e cliente) para evitar
   // mismatch de hidratação. O valor real do localStorage é aplicado só depois
@@ -55,6 +57,8 @@ export class ConsentService {
     if (!this.isBrowser) {
       return;
     }
+    // Marca (ou desmarca) este navegador como interno antes de qualquer evento sair.
+    this.analytics.applyInternalParam();
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(STORAGE_KEY);
@@ -104,12 +108,11 @@ export class ConsentService {
   }
 
   private sendPageView(path: string): void {
-    const win = this.document.defaultView as
-      (Window & { gtag?: (...args: unknown[]) => void }) | null;
-    if (win && typeof win.gtag === 'function') {
+    const win = this.document.defaultView;
+    if (win) {
       // Envia título e URL reais para o GA ter dados úteis no SPA
       // (o <title> por artigo já é definido via Title service).
-      win.gtag('event', 'page_view', {
+      this.analytics.track('page_view', {
         page_path: path,
         page_title: this.document.title,
         page_location: win.location.href,
@@ -141,13 +144,18 @@ export class ConsentService {
     // send_page_view: false evita o page_view automático do 'config', que
     // duplicaria o enviado pelo efeito do construtor (que tem o título e a URL
     // corretos de cada rota do SPA).
+    // Navegador do autor (?interno=1): traffic_type = 'internal' em todos os eventos,
+    // para o filtro de dados "Internal traffic" do GA4 excluí-los.
+    const config = this.analytics.internal()
+      ? "{ send_page_view: false, traffic_type: 'internal' }"
+      : '{ send_page_view: false }';
     const init = this.document.createElement('script');
     init.id = 'ga-init';
     init.textContent = `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '${id}', { send_page_view: false });
+      gtag('config', '${id}', ${config});
     `;
     this.document.head.appendChild(init);
   }
