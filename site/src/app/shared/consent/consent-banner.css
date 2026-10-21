@@ -1,15 +1,14 @@
+/* Mobile-first: banner compacto. */
 .consent-banner {
   position: fixed;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
   z-index: 1000;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.7rem 0.8rem;
   border-radius: 12px;
   background: #1e1b4b;
   color: #f8fafc;
@@ -19,43 +18,107 @@
 
 .consent-text {
   margin: 0;
-  flex: 1 1 260px;
-  font-size: 0.9rem;
-  line-height: 1.45;
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
+/* Rejeitar e Aceitar: mesmo tamanho, mesmo peso, lado a lado. */
 .consent-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .consent-actions button {
+  flex: 1 1 0;
+  min-height: 2.75rem;
   cursor: pointer;
   border-radius: 8px;
-  padding: 0.55rem 1.1rem;
+  padding: 0.4rem 0.75rem;
   font: inherit;
+  font-size: 0.9rem;
   font-weight: 600;
-  border: 1px solid transparent;
+  border: 2px solid #f8fafc;
 }
 
-.btn-accept {
-  background: #4f46e5;
-  color: #ffffff;
-}
-
+.btn-accept,
 .btn-reject {
-  background: transparent;
-  color: #f8fafc;
-  border-color: rgba(255, 255, 255, 0.4);
+  background: #f8fafc;
+  color: #1e1b4b;
 }
 
 .btn-accept:hover,
 .btn-reject:hover {
-  filter: brightness(1.12);
+  background: #e0e7ff;
 }
 
-.btn-accept:focus-visible,
-.btn-reject:focus-visible {
-  outline: 2px solid #ffffff;
+.consent-actions button:focus-visible,
+.consent-bar-open:focus-visible {
+  outline: 3px solid #fde68a;
   outline-offset: 2px;
+}
+
+/* Barra mínima: a escolha continua pendente e acessível. */
+.consent-bar {
+  position: fixed;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: #1e1b4b;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+}
+
+.consent-bar-open {
+  min-height: 2.5rem;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 2px solid #f8fafc;
+  background: #f8fafc;
+  color: #1e1b4b;
+  font: inherit;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .consent-banner {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+  }
+
+  .consent-text {
+    flex: 1 1 260px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .consent-actions {
+    gap: 0.75rem;
+  }
+
+  .consent-actions button {
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 0.55rem 1.1rem;
+    font-size: 1rem;
+  }
+
+  .consent-bar {
+    left: 1rem;
+    bottom: 1rem;
+  }
 }
