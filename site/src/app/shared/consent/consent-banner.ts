@@ -6,10 +6,15 @@ import { ConsentService } from './consent.service';
   imports: [],
   template: `
     @if (consent.visible()) {
-      <div class="consent-banner" role="region" aria-live="polite" aria-label="Consentimento de rastreio">
+      <div
+        class="consent-banner"
+        role="region"
+        aria-live="polite"
+        aria-label="Consentimento de rastreio"
+      >
         <p class="consent-text">
-          Usamos o Google Analytics para entender como o site é usado. Nenhum
-          dado é coletado antes do seu consentimento.
+          Usamos o Google Analytics para entender como o site é usado. Nenhum dado é coletado antes
+          do seu consentimento.
         </p>
         <div class="consent-actions">
           <button type="button" class="btn-reject" (click)="consent.reject()">Rejeitar</button>
