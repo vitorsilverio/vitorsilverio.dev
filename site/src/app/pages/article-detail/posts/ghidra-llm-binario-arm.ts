@@ -15,7 +15,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <li><strong>ELF</strong> (<em>Executable and Linkable Format</em>) é o formato de executável usado em Linux e na maioria dos sistemas embarcados. Ele guarda o código, os dados, a tabela de símbolos e o endereço de entrada.</li>
 <li><strong>ARM</strong> é a família de processadores presente em celulares, consoles portáteis e microcontroladores. <strong>Thumb</strong> é o conjunto de instruções compacto do ARM: instruções de 16 bits (e, no Thumb-2, mistura de 16 e 32 bits) em vez de 32.</li>
 <li><strong>MCP</strong> (<em>Model Context Protocol</em>) é um protocolo aberto que padroniza como um aplicativo de IA (o &quot;cliente&quot;) descobre e chama ferramentas expostas por um &quot;servidor&quot;. É o que permite que o modelo peça ao Ghidra &quot;decompile esta função&quot; e receba a resposta como dado.</li>
-<li><strong>arm-box</strong> é um executor de binários ARM de Linux (como o <code>qemu-arm</code>) escrito em Java, construído sobre o <strong>arm-jitter</strong>, um emulador ARM com compilação JIT (<em>Just-In-Time</em>) para bytecode da JVM. Os dois são projetos do autor deste blog e servem aqui só para <strong>executar o binário de teste</strong> e provar o que ele faz.</li>
+<li><strong>arm-box</strong> é um executor de binários ARM de Linux (como o <code>qemu-arm</code>) escrito em Java, construído sobre o <strong>arm-jitter</strong>, um emulador ARM com compilação JIT (<em>Just-In-Time</em>) para bytecode da JVM. Os dois são projetos meus e servem aqui só para <strong>executar o binário de teste</strong> e provar o que ele faz.</li>
 </ul>
 <p><strong>O que você vai fazer até o fim:</strong></p>
 <ol>
@@ -113,7 +113,7 @@ acesso negado</code></pre>
 <p>Uma observação sobre Thumb que o ELF mostra de cara: o endereço de entrada gravado no cabeçalho é <code>0x10017</code> (<code>readelf -h</code>), enquanto o símbolo <code>_start</code> está em <code>0x10016</code>. O <strong>bit 0 ligado</strong> num endereço de código é a convenção ARM para &quot;este código é Thumb&quot; (é o que a instrução <code>BX</code> usa para trocar de estado; ver ARM ARM, na bibliografia). O endereço real da instrução continua par.</p>
 <h2>Ghidra: importar e ler o decompilador</h2>
 <h3>Pela interface gráfica</h3>
-<p>O fluxo padrão (passos da interface descritos a partir do fluxo habitual do Ghidra; confira ao reproduzir, porque o autor ainda vai registrar as telas):</p>
+<p>O fluxo pela interface, que é o das capturas abaixo:</p>
 <ol>
 <li><code>File &gt; New Project...</code>, projeto <em>Non-Shared</em>, numa pasta sua.</li>
 <li><code>File &gt; Import File...</code> e escolha <code>cofre-O2.elf</code>. O Ghidra reconhece o formato (<em>Executable and Linking Format</em>) e propõe a linguagem. Neste binário a linguagem é <strong><code>ARM:LE:32:v8</code></strong>: ARM, <em>little-endian</em>, 32 bits. Não procure por &quot;Thumb&quot; nem por &quot;v7&quot; na lista: a mesma linguagem cobre os dois conjuntos de instruções.</li>
@@ -322,7 +322,7 @@ ghidra-mcp <span class="token parameter variable">--headless</span> <span class=
       <tr><th scope="row">Colisão</th><td>Duas entradas diferentes com o mesmo hash</td></tr>
       <tr><th scope="row">Inverso multiplicativo (mod 2³²)</th><td>Número que, multiplicado pelo original módulo 2³², dá 1; existe para todo ímpar</td></tr>
       <tr><th scope="row">Alucinação</th><td>Afirmação fluente e plausível do modelo que não corresponde aos fatos</td></tr>
-      <tr><th scope="row">arm-box / arm-jitter</th><td>Executor de binários ARM Linux e emulador ARM com JIT em Java, do autor do blog</td></tr>
+      <tr><th scope="row">arm-box / arm-jitter</th><td>Executor de binários ARM Linux e emulador ARM com JIT em Java (projetos meus)</td></tr>
     </tbody>
   </table>
 </div>

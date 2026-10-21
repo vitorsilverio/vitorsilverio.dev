@@ -6,7 +6,7 @@
 2. chave_ok: conta o comprimento; exige exatamente 8; retorna mistura(chave, 8) == ALVO, com ALVO = 0x3096b5fe.
    (Sem verificacao de ponteiro nulo: e pre-condicao, nao teste.)
 3. mistura: h = 0x1505; para cada byte: h = ((h << 5) | (h >> 27)) ^ byte; h *= 0x9e3779b1. Retorna h.
-   0x9e3779b1 e uma variante da constante classica 0x9e3779b9 (= round(2^32 / phi)); o autor mudou o ultimo digito.
+   0x9e3779b1 e uma variante da constante classica 0x9e3779b9 (= round(2^32 / phi)); eu mudei o ultimo digito.
 4. Nao. O fonte escreve ALVO = 0x3096b5fe. No -O2 o gcc comparou o valor ANTES da ultima multiplicacao com
    0xc003375e = ALVO * inverso(0x9e3779b1) mod 2^32. Conferencia: 0xc003375e * 0x9e3779b1 mod 2^32 = 0x3096b5fe.
 5. A chave planejada e "ARM-2026". Como o hash tem 32 bits e a chave 64, existem muitas colisoes: qualquer string de 8

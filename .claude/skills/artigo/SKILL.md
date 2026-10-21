@@ -13,6 +13,8 @@ Alvo: `$ARGUMENTS` (slug ou caminho do `.md`). Se vier vazio e o pedido for "o a
 
 Teste prático: leia o artigo fingindo ter caído nele pelo Google. Toda vez que você precisaria clicar num link para entender a frase, o texto está falhando. Corrija explicando ali mesmo, em uma ou duas frases, e mantenha o link como "para saber mais".
 
+**Voz: primeira pessoa, como o autor.** O blog é do Vítor e ele revisa e publica tudo o que é escrito, então o texto fala por ele: "meus projetos", "compilei", "conferi no arm-box". Nunca "o autor deste blog", "o autor" ou "do autor do blog". Instruções ao leitor continuam em "você". Transcrições literais (respostas de um modelo, saídas de ferramenta) ficam como estão.
+
 Isso vale **mesmo quando já existe um rascunho pronto**. Rascunhos da fila foram escritos em sequência e costumam supor contexto dos anteriores. Sempre revise contra a estrutura abaixo antes de publicar.
 
 ## Estrutura obrigatória
