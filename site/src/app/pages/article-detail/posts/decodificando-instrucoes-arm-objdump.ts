@@ -8,25 +8,48 @@ import { Objdump } from '../../../shared/objdump/objdump';
   selector: 'app-article-decodificando-instrucoes-arm-objdump',
   template: `
     <p>
-      No <a routerLink="/artigos/gdb-no-armbox">artigo do GDB</a> a gente
-      prometeu: "abrimos o <code>objdump</code> do <code>sum.elf</code> e
-      decodificamos as instruções ARM à mão, bit a bit". Pois é hoje. Todo
-      mundo trata <code>add r1, r1, r4</code> como mágica; depois deste texto
-      você vai olhar para <code>e0811004</code> e saber exatamente o que cada
-      nibble significa. E adivinha: é <strong>exatamente</strong> a leitura que
-      o decodificador do <code>arm-jitter</code> faz para saber o que emular.
+      Um desmontador como o <code>objdump</code> mostra <code>add r1, r1, r4</code>
+      ao lado do número <code>e0811004</code>, e é fácil tratar a passagem de um
+      para o outro como mágica. Não é: cada bit da palavra de 32 bits tem um
+      papel fixo, definido pela arquitetura ARM. Este artigo mostra como
+      decodificar, à mão e bit a bit, as instruções de um laço de soma:
+      <code>mov</code>, <code>cmp</code>, <code>add</code>, <code>ldr</code> e
+      o desvio condicional <code>bge</code>. É exatamente a leitura que o
+      decodificador do <code>arm-jitter</code> faz para saber o que emular.
+    </p>
+    <p>
+      Dois nomes aparecem no texto. O <code>arm-jitter</code> é uma biblioteca
+      Java que decodifica e executa instruções ARM (um emulador) e o
+      <code>arm-box</code> é um programa de linha de comando que a usa para
+      rodar executáveis ARM. Você não precisa deles para acompanhar: basta o
+      <code>objdump</code> do GNU binutils.
+    </p>
+    <p>Até o fim você vai conseguir:</p>
+    <ol>
+      <li>separar uma palavra ARM em condição, família, opcode, registradores e operando;</li>
+      <li>decodificar à mão cinco instruções reais e conferir cada uma contra o <code>objdump</code>;</li>
+      <li>calcular o alvo de um desvio a partir do campo de deslocamento.</li>
+    </ol>
+    <p>
+      <strong>O que você precisa:</strong> o toolchain ARM bare-metal
+      (<code>arm-none-eabi-as</code>, <code>-ld</code> e <code>-objdump</code>;
+      os bytes abaixo foram gerados com o devkitARM, binutils 2.46) e o fonte
+      <a href="/curso-arm/exemplos/decodificando-instrucoes-arm-objdump.s"><code>decodificando-instrucoes-arm-objdump.s</code></a>.
+      Não é preciso saber assembly de antemão: cada instrução é explicada.
     </p>
 
     <h2>O que o objdump mostra</h2>
     <p>
-      Pegamos o <code>sum.elf</code> do
-      <a routerLink="/artigos/carga-e-armazenamento-arm"
-        >artigo de carga e armazenamento</a
-      >
-      (aquele que soma <code>3,7,1,9,4</code>) e rodamos:
+      O programa de exemplo soma o vetor <code>3, 7, 1, 9, 4</code> com um laço
+      <code>cmp</code>/<code>bge</code> e devolve <code>24</code> como código de
+      saída. O fonte completo está no arquivo linkado acima, e o
+      <a routerLink="/artigos/carga-e-armazenamento-arm">artigo de carga e armazenamento</a>
+      o explica linha a linha. Para montar, ligar e desmontar:
     </p>
-    <pre><code class="language-bash">arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</code></pre>
-    <p>O trecho que importa (o laço) é este — e os bytes abaixo são reais:</p>
+    <pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv5te decodificando-instrucoes-arm-objdump.s <span class="token parameter variable">-o</span> sum.o
+arm-none-eabi-ld <span class="token parameter variable">-static</span> <span class="token parameter variable">-o</span> sum.elf sum.o
+arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</code></pre>
+    <p>O trecho que importa (o laço) é este, com bytes e endereços reais da saída do <code>objdump</code>:</p>
     <app-objdump
       legenda="Trecho do laço em sum.elf — os bytes são reais"
       listagem="00008010 &lt;loop&gt;:
@@ -47,8 +70,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
     <p>
       Cada linha tem três colunas: o <strong>endereço</strong> (onde a
       instrução está na memória), os <strong>4 bytes</strong> da instrução
-      (um número de 32 bits, little-endian — leia da esquerda para a direita
-      como o valor <code>0xe1520003</code>) e o <strong>mnemônico</strong> que
+      (o <code>objdump</code> já os mostra como um número de 32 bits,
+      <code>0xe1520003</code>; na memória, em little-endian, os bytes estão
+      na ordem inversa: <code>03 00 52 e1</code>) e o <strong>mnemônico</strong> que
       o desmontador inferiu. Nosso trabalho é fazer o caminho inverso: dos
       bytes de volta ao mnemônico.
     </p>
@@ -131,7 +155,13 @@ import { Objdump } from '../../../shared/objdump/objdump';
     <h2>Decodificando na prática</h2>
 
     <h3><code>mov r3, #5</code> = <code>e3a03005</code></h3>
-    <p>Dá para ler tudo sem adivinhação:</p>
+    <p>
+      Este <code>mov</code> está no endereço <code>0x800c</code>, logo antes do
+      laço. No fonte ele é escrito <code>ldr r3, =len</code>; como o valor
+      <code>5</code> cabe no imediato, o montador o troca por um
+      <code>mov</code> (o que o <code>objdump</code> mostra). Dá para ler tudo
+      sem adivinhação:
+    </p>
     <app-bit-field
       titulo="e3a03005 = mov r3, #5"
       [inicial]="3"
@@ -183,8 +213,11 @@ import { Objdump } from '../../../shared/objdump/objdump';
         <code>N, Z, C, V</code>.
       </li>
       <li>
-        É exatamente o que vimos no artigo do GDB: após esse <code>cmp</code>,
-        o bit <code>Z</code> do CPSR diz se <code>r2 == r3</code>.
+        Depois desse <code>cmp</code>, o <code>CPSR</code> (registrador de
+        status do processador) guarda o resultado da comparação nas flags: por
+        exemplo, <code>Z = 1</code> quando <code>r2 == r3</code>. O
+        <a routerLink="/artigos/flags-e-desvios-condicionais">artigo sobre flags e desvios</a>
+        detalha cada uma.
       </li>
     </ul>
 
@@ -229,8 +262,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
         <code>done</code>. Bateu!
       </li>
       <li>
-        Por isso existem dois <code>add</code> seguidos por um <code>b</code> no
-        final: o laço só sai quando o <code>bge</code> decide pular.
+        O <code>b 8010</code> no fim do corpo (<code>eafffff9</code>) sempre
+        volta ao <code>cmp</code>; o laço só sai quando o <code>bge</code>
+        decide pular.
       </li>
     </ul>
 
@@ -269,7 +303,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
       </li>
     </ul>
 
-    <h2>Glossário: comandos úteis</h2>
+    <h2>Comandos</h2>
     <p>
       Para repetir em casa (a mesma toolchain do
       <a routerLink="/artigos/ambiente-arm">ambiente ARM</a>):
@@ -283,6 +317,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
         <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td>Monta o assembly em objeto.</td></tr>
         <tr><th scope="row"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td>Liga em um ELF estático (roda no arm-box).</td></tr>
         <tr><th scope="row"><code>arm-none-eabi-objdump -d f.elf</code></th><td>Desmonta e mostra os bytes de cada instrução.</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-objdump -s -j .text f.elf</code></th><td>Despeja os bytes crus da seção <code>.text</code> (na ordem da memória, little-endian).</td></tr>
         <tr><th scope="row"><code>info registers cpsr</code></th><td>No GDB: mostra as flags que o <code>cmp</code> mudou.</td></tr>
         <tr><th scope="row"><code>x/4xw $r0</code></th><td>No GDB: inspeciona 4 palavras a partir de <code>r0</code>.</td></tr>
       </tbody>
@@ -291,25 +326,67 @@ import { Objdump } from '../../../shared/objdump/objdump';
     <h2>O que o arm-jitter faz com esses bits</h2>
     <p>
       Quando o <code>arm-box</code> encontra <code>e0811004</code>, o
-      decodificador do <code>arm-jitter</code> faz exatamente este processo: lê
-      o <code>cond</code>, descarta se a condição não bate, olha os bits
-      <code>[27:26]</code> para saber que é processamento de dados, decodifica o
-      <code>opcode</code> e os registradores, e executa a operação — seja no
-      interpretador ou no JIT. Entender a codificação é entender o emulador por
-      dentro. E, como vimos no <a routerLink="/artigos/gdb-no-armbox">artigo do GDB</a>,
-      o mesmo código que você decodificou aqui é o que o <code>step</code> do GDB
-      executa instrução a instrução.
+      decodificador do <code>arm-jitter</code> (a classe <code>ArmDecoder</code>)
+      segue o mesmo caminho: lê o <code>cond</code> (guardado na instrução
+      decodificada para ser avaliado na hora de executar), checa alguns
+      encodings especiais que colidiriam com o padrão genérico (como
+      <code>movw</code>/<code>movt</code> e o espaço <code>cond = 1111</code>),
+      classifica a família pelos bits do topo, extrai <code>opcode</code> e
+      registradores e entrega o resultado ao interpretador ou ao JIT.
+      Entender a codificação é entender o emulador por dentro. O
+      <a routerLink="/artigos/decoder-do-arm-jitter">artigo sobre o decoder do arm-jitter</a>
+      mostra esse código de perto, e o
+      <a routerLink="/artigos/gdb-no-armbox">artigo do GDB</a> mostra as
+      mesmas instruções sendo executadas passo a passo.
     </p>
 
-    <h2>Próximo passo</h2>
+    <h2>Glossário</h2>
+    <div class="scroll-x"><table>
+      <thead>
+        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><code>objdump</code></th><td>ferramenta do GNU binutils que desmonta um binário: mostra endereço, bytes e mnemônico de cada instrução.</td></tr>
+        <tr><th scope="row">Mnemônico</th><td>nome simbólico da instrução (<code>add</code>, <code>cmp</code>, <code>bge</code>).</td></tr>
+        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato do executável que o ligador gera.</td></tr>
+        <tr><th scope="row">Little-endian</th><td>ordem de bytes em que o menos significativo vem primeiro na memória.</td></tr>
+        <tr><th scope="row">Nibble</th><td>grupo de 4 bits, um dígito hexadecimal.</td></tr>
+        <tr><th scope="row"><code>cond</code></th><td>campo de 4 bits do topo da instrução ARM com a condição de execução.</td></tr>
+        <tr><th scope="row"><code>CPSR</code></th><td><em>Current Program Status Register</em>: registrador de status, com as flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>.</td></tr>
+        <tr><th scope="row">Imediato</th><td>constante embutida na própria instrução.</td></tr>
+        <tr><th scope="row">Pós-indexado</th><td>modo de <code>ldr</code>/<code>str</code> que usa o endereço da base e só depois soma o deslocamento a ela (<code>[r0], #4</code>).</td></tr>
+        <tr><th scope="row"><em>Literal pool</em></th><td>área de constantes ao lado do código, lida com <code>ldr rX, [pc, #n]</code>.</td></tr>
+        <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Conclusão</h2>
     <p>
-      Até agora só vimos instruções de 32 bits fixas. O próximo texto quebra
-      essa regra: o <strong>Thumb e o Thumb-2</strong>, onde as instruções têm
-      16 ou 32 bits e o decodificador precisa olhar o <em>tamanho</em> antes do
-      opcode. É também o que o <code>--arch=thumb2</code> do arm-box exercita
-      com binários reais. Até lá — pegue qualquer <code>.elf</code> seu e tente
-      decodificar um <code>mov</code> e um <code>b</code> sem olhar o mnemônico.
+      Uma instrução ARM de 32 bits se decodifica lendo o <code>cond</code> no
+      topo, a família nos bits seguintes e depois os campos específicos:
+      opcode, <code>S</code>, registradores e operando 2 no processamento de
+      dados; <code>P/U/B/W/L</code> e offset em load/store; <code>L</code> e
+      deslocamento de 24 bits em desvios. Você decodificou cinco palavras reais
+      e conferiu cada uma contra o <code>objdump</code>, inclusive o cálculo do
+      alvo de <code>bge</code> (<code>PC + 8 + offset &lt;&lt; 2</code>). Essa
+      habilidade serve para depurar código gerado, escrever um desmontador ou
+      entender um emulador.
     </p>
+    <h2>Para ir além</h2>
+    <p>
+      Em Thumb as instruções têm 16 ou 32 bits e o formato muda conforme os bits
+      do topo: veja <a routerLink="/artigos/decodificando-thumb-a-mao">Decodificando Thumb à mão</a>.
+      Para como o <code>gcc</code> chega a essas palavras, veja
+      <a routerLink="/artigos/do-c-ao-binario-arm">Do C ao binário ARM</a>.
+      Como exercício, pegue qualquer <code>.elf</code> seu e decodifique um
+      <code>mov</code> e um <code>b</code> sem olhar o mnemônico.
+    </p>
+    <h2>Referências</h2>
+    <ul>
+      <li>Arm — <em>Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C), capítulo "ARM Instruction Set Encoding" (codificação do campo <code>cond</code>, de processamento de dados, load/store e desvios). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
+      <li>GNU Binutils — <em>objdump (GNU Binary Utilities)</em>, opções <code>-d</code> e <code>-s</code>. <a href="https://sourceware.org/binutils/docs/binutils/objdump.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/binutils/objdump.html</a></li>
+      <li>Código-fonte do <code>arm-jitter</code> v1.3.0 — <code>core/src/main/java/dev/vitorsilverio/armjitter/decoder/ArmDecoder.java</code> (método <code>decode</code>).</li>
+    </ul>
   `,
 })
 export class ArticleDecodificandoInstrucoesArmObjdump {}
