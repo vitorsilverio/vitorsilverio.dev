@@ -7,6 +7,15 @@ import { BitField } from "../../../shared/bit-field/bit-field";
   imports: [RouterLink, Objdump, BitField],
   selector: 'app-article-anatomia-instrucao-arm',
   template: `
+<p>Você abre um <code>objdump</code> de um binário ARM e vê <code>e0810002 add r0, r1, r2</code>. De onde saiu aquele <code>e0810002</code>? Em ARM de 32 bits, toda instrução é uma palavra de 32 bits dividida em campos de largura fixa: quem decide a operação, quais registradores, se há um imediato, se a instrução é condicional. Saber ler esses campos é a diferença entre confiar no desmontador e entender o que a CPU recebe. Este artigo abre o formato campo a campo, com palavras reais, e mostra como o decodificador do <code>arm-jitter</code> extrai os mesmos campos em Java.</p>
+<p>Contexto para quem chegou agora: o <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">arm-jitter</a> é uma biblioteca Java que decodifica e executa instruções ARM (um emulador), e o <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">arm-box</a> é um executor de linha de comando construído sobre ele. Aqui só o decodificador do arm-jitter importa. Até o fim você vai:</p>
+<ol>
+<li>conhecer o esqueleto das instruções de processamento de dados e de <code>LDR</code>/<code>STR</code>;</li>
+<li>decodificar à mão dez instruções a partir dos bytes do <code>objdump</code>;</li>
+<li>entender o <code>Operand2</code> (imediato rotacionado e registrador deslocado pelo <em>barrel shifter</em>);</li>
+<li>rodar um programa Java que decodifica as mesmas palavras com o <code>ArmDecoder</code>.</li>
+</ol>
+<p><strong>O que você precisa:</strong> para o <code>objdump</code>, o toolchain <code>arm-none-eabi</code> (o devkitARM serve), com o <code>.s</code> e o <code>.elf</code> linkados abaixo (o <code>.elf</code> já vem montado). Para o exemplo Java do fim, um JDK 25 ou mais novo e o <code>arm-jitter-1.4.0.jar</code> (Maven Central, <code>dev.vitorsilverio:arm-jitter:1.4.0</code>). Não é preciso saber assembly: as instruções são explicadas. Sabe-se que um <em>nibble</em> é um grupo de 4 bits, um dígito hexadecimal.</p>
 <h2>O esqueleto de 32 bits</h2>
 <p>Uma instrução de <strong>processamento de dados</strong> (o <code>ADD</code>, <code>SUB</code>, <code>MOV</code>, <code>CMP</code>, <code>AND</code>... da família) tem este layout:</p>
 <app-bit-field
@@ -36,8 +45,8 @@ import { BitField } from "../../../shared/bit-field/bit-field";
 <app-objdump
       listagem="00010000 &lt;_start&gt;:
    10000:	e0810002 	add	r0, r1, r2
-   10004:	e28100ff 	add	r0, r1, #255
-   10008:	e2810c3f 	add	r0, r1, #16128
+   10004:	e28100ff 	add	r0, r1, #255	@ 0xff
+   10008:	e2810c3f 	add	r0, r1, #16128	@ 0x3f00
    1000c:	e0810182 	add	r0, r1, r2, lsl #3
    10010:	00810002 	addeq	r0, r1, r2
    10014:	e0910002 	adds	r0, r1, r2
@@ -98,11 +107,13 @@ import { BitField } from "../../../shared/bit-field/bit-field";
     </tbody>
   </table>
 </div>
-<p>O <strong>barrel shifter</strong> é um circuito dedicado no caminho de dados: ele aplica esse shift ao operando <strong>de graça</strong>, no mesmo ciclo da operação. <code>add r0, r1, r2, lsl #3</code> é uma única instrução — um multiplicar-e-somar embutido.</p>
+<p>O <strong>barrel shifter</strong> é um circuito dedicado no caminho de dados: ele aplica esse shift ao operando <strong>sem instrução extra</strong>. <code>add r0, r1, r2, lsl #3</code> é uma única instrução — um multiplicar-e-somar embutido. (Nos núcleos clássicos como o ARM7TDMI, o deslocamento por registrador custa um ciclo interno a mais, o por imediato não.)</p>
+<p>Duas particularidades da codificação: um deslocamento imediato de 0 tem significado especial. <code>LSR #32</code> e <code>ASR #32</code> são codificados com <em>amount</em> = 0 (o assembler converte, por exemplo, <code>lsr r0, r1, #32</code> em <code>e1a00021</code>), e <code>ROR</code> com <em>amount</em> = 0 não é rotação: é o <code>RRX</code>. Por isso o montador transforma <code>ror r0, r1, #0</code> em um simples <code>mov r0, r1</code>.</p>
+
 <h2>Load/store: os bits de endereçamento</h2>
 <p><code>LDR</code>/<code>STR</code> trocam o <code>Operand2</code> por um bloco de bits de modo de endereçamento:</p>
 <app-bit-field
-  titulo="LDR/STR"
+  titulo="e4904004 = ldr r4, [r0], #4 — LDR pós-indexado"
   [inicial]="7"
   campos = "4  | cond     | 1110         | \`1110\` = AL: sempre executa.
             2  | classe   | 01           | Família \`01\`: transferência simples de dados (load/store).
@@ -146,37 +157,49 @@ import { BitField } from "../../../shared/bit-field/bit-field";
 </div>
 <p>E <code>ldrb r0, [r1]</code> (<code>e5d10000</code>) é só o bit <strong>B</strong> ligado — o nibble <code>9</code> vira <code>D</code>. Esse post-index (<code>[r1], #4</code>) é o que faz um laço de varredura de vetor andar de 4 em 4 sem uma instrução de incremento separada — exatamente o padrão do <a routerLink="/artigos/carga-e-armazenamento-arm">artigo de carga e armazenamento</a>.</p>
 <h2>Espelho no código: <code>ArmDecoder</code></h2>
-<p>O decodificador do <code>arm-jitter</code> faz, em Java, o que você acabou de fazer no papel. <code>ArmDecoder.decode(memory, address)</code>:</p>
+<p>O decodificador do <code>arm-jitter</code> (versão 1.4.0) faz, em Java, o que você acabou de fazer no papel. Início de <code>ArmDecoder.decode(memory, address)</code>:</p>
 <pre><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DecodedInstruction</span> <span class="token function">decode</span><span class="token punctuation">(</span><span class="token class-name">AddressSpace</span> memory<span class="token punctuation">,</span> <span class="token keyword">int</span> address<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">int</span> raw <span class="token operator">=</span> memory<span class="token punctuation">.</span><span class="token function">fetch32</span><span class="token punctuation">(</span>address <span class="token operator">&amp;</span> <span class="token operator">~</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Condition</span> condition <span class="token operator">=</span> <span class="token function">decodeCondition</span><span class="token punctuation">(</span>raw <span class="token operator">>>></span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// os 4 bits de cond</span>
 
     <span class="token comment">// cond == 0b1111 não é "condição": é um espaço de encoding à parte</span>
-    <span class="token comment">// (NEON, PLD, BLX imediato, CPS, barreiras) desde o ARMv5.</span>
+    <span class="token comment">// (NEON, PLD, BLX imediato, CPS, RFE, SRS, SETEND, barreiras) desde o ARMv5.</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>raw <span class="token operator">>>></span> <span class="token number">28</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0xF</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token keyword">return</span> <span class="token function">decodeUnconditional</span><span class="token punctuation">(</span>address<span class="token punctuation">,</span> raw<span class="token punctuation">,</span> condition<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
-    <span class="token comment">// ...</span>
+    <span class="token comment">// ... despacha pelos bits 27..25 para ALU, load/store, branch etc.</span>
 <span class="token punctuation">&#125;</span></code></pre>
-<p>O resultado é um <code>record</code> neutro, com os campos que você separou virando propriedades:</p>
+<p>O resultado é um <code>record</code> neutro (trecho; o real tem mais campos), em que os campos que você separou viram propriedades:</p>
 <pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">record</span> <span class="token class-name">DecodedInstruction</span><span class="token punctuation">(</span>
         <span class="token keyword">int</span> address<span class="token punctuation">,</span>
         <span class="token keyword">int</span> raw<span class="token punctuation">,</span>                       <span class="token comment">// a palavra de 32 bits, crua</span>
         <span class="token class-name">InstructionSet</span> instructionSet<span class="token punctuation">,</span>
         <span class="token class-name">Condition</span> condition<span class="token punctuation">,</span>           <span class="token comment">// &lt;- raw >>> 28</span>
-        <span class="token class-name">InstructionKind</span> kind<span class="token punctuation">,</span>          <span class="token comment">// &lt;- opcode + subdispatch</span>
+        <span class="token class-name">InstructionKind</span> kind<span class="token punctuation">,</span>          <span class="token comment">// &lt;- opcode + subdespacho</span>
         <span class="token keyword">int</span> destinationRegister<span class="token punctuation">,</span>       <span class="token comment">// &lt;- Rd, ou -1</span>
         <span class="token keyword">int</span> sourceRegister<span class="token punctuation">,</span>            <span class="token comment">// &lt;- Rn, ou -1</span>
         <span class="token keyword">int</span> secondSourceRegister<span class="token punctuation">,</span>      <span class="token comment">// &lt;- Rm, ou -1</span>
         <span class="token keyword">int</span> immediate<span class="token punctuation">,</span>                 <span class="token comment">// &lt;- imm8 JÁ rotacionado / offset / nº de SWI</span>
-        <span class="token keyword">boolean</span> immediateOperand<span class="token punctuation">,</span>      <span class="token comment">// &lt;- o bit I</span>
+        <span class="token keyword">boolean</span> immediateOperand<span class="token punctuation">,</span>      <span class="token comment">// &lt;- Operand2 é imediato</span>
         <span class="token keyword">boolean</span> setFlags<span class="token punctuation">,</span>              <span class="token comment">// &lt;- o bit S</span>
         <span class="token keyword">boolean</span> link<span class="token punctuation">,</span>                  <span class="token comment">// &lt;- BL vs B</span>
         <span class="token keyword">int</span> accessSizeBytes<span class="token punctuation">,</span>           <span class="token comment">// &lt;- 1 (bit B) ou 4</span>
-        <span class="token keyword">boolean</span> writeback<span class="token punctuation">,</span>             <span class="token comment">// &lt;- o bit W</span>
+        <span class="token keyword">boolean</span> signedAccess<span class="token punctuation">,</span>
+        <span class="token keyword">boolean</span> writeback<span class="token punctuation">,</span>             <span class="token comment">// &lt;- W, ou implícito no pós-indexado</span>
         <span class="token keyword">boolean</span> postIndexed<span class="token punctuation">,</span>           <span class="token comment">// &lt;- o bit P invertido</span>
         <span class="token comment">/* ... */</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span></code></pre>
-<p>Repare que <code>immediate</code> já vem <strong>expandido</strong>: o decoder aplica a rotação do imediato de 12 bits ali, para o resto do pipeline não precisar saber do formato <code>rotate|imm8</code>. É a mesma decisão que o montador toma na direção oposta.</p>
+<p>Repare que <code>immediate</code> já vem <strong>expandido</strong>: o decoder aplica a rotação do imediato de 12 bits ali, para o resto do pipeline não precisar saber do formato <code>rotate|imm8</code>. É a mesma decisão que o montador toma na direção oposta. Outro detalhe: <code>writeback</code> é verdadeiro também no pós-indexado, embora o bit W esteja em 0, porque o registrador base é atualizado do mesmo jeito (no código do decoder: <code>writeback || !preIndexed</code>).</p>
+<h3>Rodando o decoder</h3>
+<p>O programa <a href="/curso-arm/exemplos/java/AnatomiaDecoder.java"><code>AnatomiaDecoder.java</code></a> decodifica seis palavras desta lição (a memória é um <code>AddressSpace</code> mínimo que devolve a palavra pedida) e imprime os campos:</p>
+<pre><code class="language-bash">javac <span class="token parameter variable">-cp</span> arm-jitter-1.4.0.jar AnatomiaDecoder.java
+<span class="token function">java</span>  <span class="token parameter variable">-cp</span> <span class="token string">"arm-jitter-1.4.0.jar;."</span> AnatomiaDecoder   <span class="token comment"># Linux/macOS: use ":" no lugar de ";"</span></code></pre>
+<pre><code class="language-text">e0810002  cond=AL kind=ADD          rd= 0 rn= 1 rm= 2 imm=-      immOp=false S=false wb=false post=false
+e2810c3f  cond=AL kind=ADD          rd= 0 rn= 1 rm=-1 imm=0x3f00 immOp=true  S=false wb=false post=false
+00810002  cond=EQ kind=ADD          rd= 0 rn= 1 rm= 2 imm=-      immOp=false S=false wb=false post=false
+e0910002  cond=AL kind=ADD          rd= 0 rn= 1 rm= 2 imm=-      immOp=false S=true  wb=false post=false
+e5b10004  cond=AL kind=LOAD         rd= 0 rn= 1 rm=-1 imm=0x4    immOp=true  S=false wb=true  post=false
+e4910004  cond=AL kind=LOAD         rd= 0 rn= 1 rm=-1 imm=0x4    immOp=true  S=false wb=true  post=true</code></pre>
+<p>O que a saída confirma: <code>0x00810002</code> difere de <code>0xe0810002</code> só no <code>cond</code> (<code>EQ</code> em vez de <code>AL</code>); <code>0xe0910002</code> liga <code>S</code>; <code>0xe2810c3f</code> vira <code>imm=0x3f00</code>, o <code>imm8</code> <code>0x3f</code> já rotacionado; e as duas formas com writeback do <code>LDR</code> só se distinguem por <code>post</code>.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
   <table>
@@ -184,12 +207,18 @@ import { BitField } from "../../../shared/bit-field/bit-field";
       <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
     </thead>
     <tbody>
+      <tr><th scope="row">Instrução de processamento de dados</th><td>a família <code>ADD</code>, <code>SUB</code>, <code>MOV</code>, <code>CMP</code>, <code>AND</code>... que opera em registradores</td></tr>
+      <tr><th scope="row"><code>cond</code> / <code>AL</code></th><td>campo de 4 bits (31–28) com a condição de execução; <code>AL</code> (<em>always</em>, <code>1110</code>) = sempre executa</td></tr>
+      <tr><th scope="row"><code>Rn</code>, <code>Rd</code>, <code>Rm</code></th><td>primeiro operando, registrador destino e registrador do segundo operando</td></tr>
+      <tr><th scope="row"><code>S</code></th><td>bit 20: se 1, a instrução atualiza as flags N, Z, C e V do CPSR (sufixo <code>S</code> no assembly)</td></tr>
       <tr><th scope="row"><code>Operand2</code></th><td>o campo de 12 bits do segundo operando em data processing</td></tr>
-      <tr><th scope="row">Barrel shifter</th><td>circuito que aplica LSL/LSR/ASR/ROR ao operando no mesmo ciclo</td></tr>
+      <tr><th scope="row">Barrel shifter</th><td>circuito que aplica LSL/LSR/ASR/ROR ao operando dentro da própria instrução</td></tr>
       <tr><th scope="row">Imediato rotacionado</th><td><code>imm8</code> ror <code>2×rotate</code> — como o ARM cabe constantes de 32 bits em 12 bits</td></tr>
       <tr><th scope="row">Pre-index / post-index</th><td>offset aplicado antes / depois do acesso de memória</td></tr>
       <tr><th scope="row">Writeback</th><td>gravar o endereço calculado de volta no registrador base</td></tr>
       <tr><th scope="row">Espaço incondicional</th><td><code>cond == 1111</code>: encodings próprios, não uma condição</td></tr>
+      <tr><th scope="row">Nibble</th><td>grupo de 4 bits, um dígito hexadecimal</td></tr>
+      <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux; o <code>objdump</code> lê o <code>.elf</code> dos exemplos</td></tr>
     </tbody>
   </table>
 </div>
@@ -200,14 +229,29 @@ import { BitField } from "../../../shared/bit-field/bit-field";
       <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
     </thead>
     <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta (mnemônico + bytes)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump --disassemble --show-raw-insn</code></th><td>força a coluna de bytes</td></tr>
-      <tr><th scope="row"><code>printf &#39;%08x\\n&#39; $((0xE0810002 &amp; 0x0FF00000))</code></th><td>isola campos de um encoding na mão</td></tr>
+      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o anat.o anat.s</code></th><td>monta o assembly</td></tr>
+      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o anat.elf anat.o</code></th><td>liga, com o código em <code>0x10000</code></td></tr>
+      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta (endereço, bytes, mnemônico)</td></tr>
+      <tr><th scope="row"><code>printf '%x\\n' $(( (0xE0810002 &gt;&gt; 21) &amp; 0xF ))</code></th><td>isola um campo na mão (bits 24–21, o opcode): imprime <code>4</code>, ou seja, <code>ADD</code></td></tr>
+      <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar AnatomiaDecoder.java</code></th><td>compila o exemplo Java</td></tr>
+      <tr><th scope="row"><code>java -cp "arm-jitter-1.4.0.jar;." AnatomiaDecoder</code></th><td>roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
     </tbody>
   </table>
 </div>
-<h2>Próximo passo</h2>
-<p>Você já sabe ler uma instrução parada. O <a routerLink="/curso-arm">próximo artigo</a> coloca ela em movimento: o ciclo <strong>fetch–decode–execute</strong> e como ele vira o laço <code>ArmCore.step()</code> do emulador.</p>
+<h2>Conclusão</h2>
+<p>Uma instrução ARM de 32 bits é uma palavra com campos fixos: 4 bits de condição, a classe, o opcode e os registradores, e (em data processing) um <code>Operand2</code> de 12 bits que é ou um imediato rotacionado, ou um registrador passado pelo <em>barrel shifter</em>. Em <code>LDR</code>/<code>STR</code>, os bits <code>P</code>, <code>U</code>, <code>B</code>, <code>W</code> e <code>L</code> descrevem o modo de endereçamento. Com isso você decodifica qualquer linha do <code>objdump</code> à mão, entende por que certas constantes não cabem num <code>add</code>, e vê que o <code>ArmDecoder</code> do <code>arm-jitter</code> faz as mesmas separações. Isso serve para depurar montadores, escrever decodificadores e ler binários sem desmontador.</p>
+<h3>Para ir além</h3>
+<ul>
+<li><a routerLink="/artigos/fetch-decode-execute-armcore">Fetch–decode–execute e o ArmCore.step()</a>: a instrução parada passa a se mover;</li>
+<li><a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão com o objdump</a> e <a routerLink="/artigos/decoder-do-arm-jitter">Como o decoder do arm-jitter funciona</a>;</li>
+<li><a routerLink="/artigos/carga-e-armazenamento-arm">Carga e armazenamento</a>, que usa o pós-indexado em laços.</li>
+</ul>
+<h2>Referências</h2>
+<ul>
+<li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo A5 (<em>ARM Instruction Set Encoding</em>: codificação de data processing, <code>Operand2</code>, load/store e espaço <code>cond = 1111</code>) e a descrição do deslocamento por imediato (<code>LSR #32</code>, <code>RRX</code>). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+<li>arm-jitter 1.4.0, <code>decoder/ArmDecoder.java</code> (<code>decode</code>, tratamento de <code>cond == 0xF</code>) e <code>decoder/DecodedInstruction.java</code>. <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">github.com/vitorsilverio/arm-jitter</a></li>
+<li>GNU Binutils — <em>Using as</em>, ARM Directives (<code>.syntax</code>, <code>.arch</code>, <code>.arm</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
+</ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1, lição 3. Ver também: <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão</a>.</em></p>
 `,
 })
