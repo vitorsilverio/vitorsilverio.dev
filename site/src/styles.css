@@ -256,13 +256,6 @@ button.tag:hover {
   margin-bottom: 1.25rem;
 }
 
-.article-item .tags {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
 .btn {
   min-height: 2.75rem;
   display: inline-flex;

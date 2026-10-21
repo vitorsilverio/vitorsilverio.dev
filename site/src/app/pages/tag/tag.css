@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+.crumbs {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crumbs li:not(:last-child)::after {
+  content: '/';
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+}
+
+.crumbs li[aria-current] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--muted);
+}
+
+.count {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.saidas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 2rem 0 0;
+}

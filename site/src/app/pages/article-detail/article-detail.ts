@@ -15,6 +15,8 @@ import { GiscusComments } from '../../shared/giscus/giscus-comments';
 import { ShareButtons } from '../../shared/share-buttons';
 import { ArticleCta } from '../../shared/article-cta/article-cta';
 import { SeoService } from '../../shared/seo.service';
+import { articleJsonLd, BASE_URL, breadcrumbJsonLd } from '../../shared/seo-jsonld';
+import { tagSlug } from '../../data/tags';
 import { formatPtDate } from '../../shared/date.util';
 import { ConsentService } from '../../shared/consent/consent.service';
 import { ReadingTracker } from '../../shared/analytics/reading-tracker';
@@ -115,7 +117,7 @@ export class ArticleDetail {
         });
         return;
       }
-      const url = `https://vitorsilverio.dev/artigos/${article.slug}/`;
+      const url = `${BASE_URL}/artigos/${article.slug}/`;
       const host = this.host.nativeElement as HTMLElement;
       this.seo.set({
         title: article.title,
@@ -124,60 +126,19 @@ export class ArticleDetail {
         url: `/artigos/${article.slug}`,
         image: `/assets/covers/${article.slug}.png`,
       });
-      this.seo.setJsonLd(
-        'ld-article',
-        {
-          '@context': 'https://schema.org',
-          '@type': 'Article',
-          headline: article.title,
-          description: article.excerpt,
-          datePublished: article.date,
-          dateModified: article.date,
-          author: {
-            '@type': 'Person',
-            name: 'Vítor Silvério',
-            url: 'https://vitorsilverio.dev/',
-          },
-          publisher: {
-            '@type': 'Person',
-            name: 'Vítor Silvério',
-            url: 'https://vitorsilverio.dev/',
-          },
-          mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-          keywords: article.tags.join(', '),
-        },
-        host,
-      );
+      this.seo.setJsonLd('ld-article', articleJsonLd(article), host);
       this.seo.setJsonLd(
         'ld-breadcrumb',
-        {
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Início',
-              item: 'https://vitorsilverio.dev/',
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Artigos',
-              item: 'https://vitorsilverio.dev/artigos/',
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: article.title,
-              item: url,
-            },
-          ],
-        },
+        breadcrumbJsonLd([
+          { nome: 'Início', url: `${BASE_URL}/` },
+          { nome: 'Artigos', url: `${BASE_URL}/artigos/` },
+          { nome: article.title, url },
+        ]),
         host,
       );
     });
   }
 
   protected readonly formattedDate = (iso: string): string => formatPtDate(iso);
+  protected readonly slugDaTag = tagSlug;
 }

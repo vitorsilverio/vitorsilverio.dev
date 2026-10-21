@@ -1,192 +1,347 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vítor Silvério — Artigos</title>
-    <link>https://vitorsilverio.dev/artigos</link>
+    <link>https://vitorsilverio.dev/artigos/</link>
+    <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Thu, 15 Jan 2026 03:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 21 Oct 2026 11:00:00 GMT</lastBuildDate>
     <item>
-      <title>Boas-vindas ao meu canto na internet</title>
-      <link>https://vitorsilverio.dev/artigos/boas-vindas</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/boas-vindas</guid>
-      <pubDate>Thu, 15 Jan 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Por que criei este site e como pretendo usá-lo para documentar meus estudos e projetos.]]></description>
-    </item>
-    <item>
-      <title>Angular Signals na prática</title>
-      <link>https://vitorsilverio.dev/artigos/angular-signals-na-pratica</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/angular-signals-na-pratica</guid>
-      <pubDate>Mon, 02 Feb 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Uma introdução prática ao sistema de reatividade baseado em signals e como ele muda a forma de escrever componentes.]]></description>
-    </item>
-    <item>
-      <title>Criando um executável ARM e rodando no arm-box</title>
-      <link>https://vitorsilverio.dev/artigos/hello-armbox</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/hello-armbox</guid>
-      <pubDate>Sun, 23 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Mão na massa: escreva um hello world em assembly ARM, monte um ELF real e rode no arm-box (o runner sobre o arm-jitter).]]></description>
-    </item>
-    <item>
-      <title>Setup do ambiente ARM</title>
-      <link>https://vitorsilverio.dev/artigos/ambiente-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/ambiente-arm</guid>
-      <pubDate>Mon, 24 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.]]></description>
-    </item>
-    <item>
-      <title>Fundamentos da arquitetura ARM</title>
-      <link>https://vitorsilverio.dev/artigos/fundamentos-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fundamentos-arm</guid>
-      <pubDate>Tue, 25 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e o armbox. Compile, monte e rode um binário ARM real, e confira a saída.]]></description>
-    </item>
-    <item>
-      <title>Carga e armazenamento no ARM: LDR, STR e seu primeiro laço</title>
-      <link>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm</guid>
-      <pubDate>Wed, 26 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.]]></description>
-    </item>
-    <item>
-      <title>Depurando ARM com GDB no arm-box: código instrução a instrução</title>
-      <link>https://vitorsilverio.dev/artigos/gdb-no-armbox</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/gdb-no-armbox</guid>
-      <pubDate>Thu, 27 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.]]></description>
-    </item>
-    <item>
-      <title>Decodificando instruções ARM à mão com o objdump (bit a bit)</title>
-      <link>https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump</guid>
-      <pubDate>Fri, 28 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.]]></description>
-    </item>
-    <item>
-      <title>Sub-rotinas em ARM: BL/BX, pilha e convenção de chamada</title>
-      <link>https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha</guid>
-      <pubDate>Sat, 29 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.]]></description>
-    </item>
-    <item>
-      <title>Flags e desvios condicionais: N/Z/C/V, bge/blt/bne</title>
-      <link>https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais</guid>
-      <pubDate>Sun, 30 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.]]></description>
-    </item>
-    <item>
-      <title>Thumb e Thumb-2: instruções de 16/32 bits</title>
-      <link>https://vitorsilverio.dev/artigos/thumb-e-thumb-2</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/thumb-e-thumb-2</guid>
-      <pubDate>Mon, 31 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.]]></description>
-    </item>
-    <item>
-      <title>Instruções condicionais em Thumb: IT blocks e execução condicional</title>
-      <link>https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb</guid>
-      <pubDate>Tue, 01 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[No Thumb original só o desvio é condicional; o Thumb-2 devolve a execução condicional com os blocos IT. Veja o mesmo if/else com e sem desvio, a decodificação do IT e a regra de que instruções de 16 bits não alteram flags dentro do bloco.]]></description>
-    </item>
-    <item>
-      <title>Manipulação de bits em Thumb: AND, ORR, EOR, BIC, BFI, BFC e shift register</title>
-      <link>https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</guid>
-      <pubDate>Wed, 02 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[No ARM Thumb, os bits de um registrador são manipulados com AND, ORR, EOR, BIC, MVN e TST, com shifts e rotações e com os campos de bits UBFX, BFI e BFC. O artigo mostra os encodings reais de 16 e 32 bits, o read-modify-write de um periférico e a execução passo a passo no arm-jitter, e corrige a ideia de que os campos de bits são exclusivos do Thumb-2.]]></description>
-    </item>
-    <item>
-      <title>Semihosting no arm-box: como firmware Cortex-M imprime e encerra sem sistema operacional</title>
-      <link>https://vitorsilverio.dev/artigos/semihosting</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/semihosting</guid>
-      <pubDate>Thu, 03 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Semihosting é o contrato que deixa firmware sem sistema operacional imprimir e encerrar pedindo serviços ao depurador ou emulador: R0 traz a operação, R1 o parâmetro e uma instrução de captura (BKPT #0xAB no Cortex-M) dispara a chamada. Este artigo mostra os números corretos das operações, roda um exemplo no arm-box e explica o que o emulador implementa e onde ele diverge da especificação.]]></description>
-    </item>
-    <item>
-      <title>Por que emular ARM (e por que isso ensina arquitetura)</title>
-      <link>https://vitorsilverio.dev/artigos/por-que-emular-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/por-que-emular-arm</guid>
-      <pubDate>Fri, 04 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Escrever um emulador é o melhor laboratório de arquitetura que existe: você é obrigado a implementar a semântica exata de cada instrução, flag e modo. Esta é a abertura de uma trilha que ensina o ARM a partir de código real — o arm-jitter e os emuladores construídos sobre ele.]]></description>
-    </item>
-    <item>
-      <title>Convenções de assembly da trilha</title>
-      <link>https://vitorsilverio.dev/artigos/convencoes-assembly-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/convencoes-assembly-arm</guid>
-      <pubDate>Sat, 05 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Antes de decodificar binário, um acordo de notação: a sintaxe unificada (UAL) do GNU assembler, a ordem correta de S e condição (addsne), as diretivas dos listings e como ler a saída do objdump.]]></description>
-    </item>
-    <item>
-      <title>Registradores e CPSR: banking, modos e SPSR</title>
-      <link>https://vitorsilverio.dev/artigos/registradores-e-cpsr-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/registradores-e-cpsr-arm</guid>
-      <pubDate>Sun, 06 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[O ARM de 32 bits tem 16 registradores visíveis — mas quantos existem de verdade depende do modo em que a CPU está. Este artigo destrincha R0–R15, o CPSR bit a bit, o register banking por modo e o SPSR, e mostra como o arm-jitter modela tudo isso em CpsrRegister, CpuMode e ArmCore.]]></description>
-    </item>
-    <item>
-      <title>Anatomia de uma instrução ARM</title>
-      <link>https://vitorsilverio.dev/artigos/anatomia-instrucao-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/anatomia-instrucao-arm</guid>
-      <pubDate>Mon, 07 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Toda instrução ARM de 32 bits segue o mesmo esqueleto: 4 bits de condição, um punhado de bits de opcode e um Operand2 de 12 bits que esconde o barrel shifter. Este artigo abre o formato campo a campo, com encodings reais do objdump, e mostra como o arm-jitter extrai exatamente esses campos em ArmDecoder.]]></description>
-    </item>
-    <item>
-      <title>Fetch–decode–execute e o ArmCore.step()</title>
-      <link>https://vitorsilverio.dev/artigos/fetch-decode-execute-armcore</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fetch-decode-execute-armcore</guid>
-      <pubDate>Tue, 08 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Um processador não "roda um programa": ele repete um ciclo de três passos — buscar, decodificar, executar. Este artigo mostra o ciclo, o pipeline que faz o PC parecer adiantado, e como tudo isso vira o método ArmCore.step() do arm-jitter — com um trace real que prova o offset de +8 do R15.]]></description>
-    </item>
-    <item>
-      <title>Do C ao binário ARM: gcc + objdump</title>
-      <link>https://vitorsilverio.dev/artigos/do-c-ao-binario-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/do-c-ao-binario-arm</guid>
-      <pubDate>Wed, 09 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 12 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.]]></description>
-    </item>
-    <item>
-      <title>Decodificando Thumb à mão</title>
-      <link>https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao</guid>
-      <pubDate>Thu, 10 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.]]></description>
-    </item>
-    <item>
-      <title>Como o decoder do arm-jitter funciona</title>
-      <link>https://vitorsilverio.dev/artigos/decoder-do-arm-jitter</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decoder-do-arm-jitter</guid>
-      <pubDate>Fri, 11 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Decodificar à mão é o começo. O arm-jitter faz o mesmo em Java, mas não para na DecodedInstruction: ele eleva blocos inteiros para uma representação intermediária imutável e roda um otimizador em cima. Este artigo segue os bytes de 0xe0810002 até virarem IrOp — e mostra o otimizador apagando código morto.]]></description>
-    </item>
-    <item>
-      <title>Primeiro programa em assembly ARM</title>
-      <link>https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm</guid>
-      <pubDate>Sat, 19 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo exit code. O max sai em três instruções, sem um único desvio.]]></description>
-    </item>
-    <item>
-      <title>Montando e ligando um executável ARM</title>
-      <link>https://vitorsilverio.dev/artigos/montar-e-ligar-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/montar-e-ligar-arm</guid>
-      <pubDate>Sun, 20 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um linker script de verdade e o objcopy que extrai os bytes crus.]]></description>
+      <title>Ghidra + LLM: quanto você pode confiar quando o modelo explica um binário ARM?</title>
+      <link>https://vitorsilverio.dev/artigos/ghidra-llm-binario-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/ghidra-llm-binario-arm/</guid>
+      <pubDate>Wed, 21 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Importe um ELF ARM/Thumb no Ghidra, aprenda a ler o decompilador, ligue o Ghidra a um modelo de linguagem pelo protocolo MCP e confira, com o código-fonte na mão, o que o modelo acertou, onde exagerou e onde só o decompilador enganou todo mundo.</description>
+      <category>ARM</category>
+      <category>Thumb</category>
+      <category>Engenharia reversa</category>
+      <category>Ghidra</category>
+      <category>MCP</category>
+      <category>IA</category>
+      <category>Tutorial</category>
     </item>
     <item>
       <title>Usando o arm-jitter direto pela API Java</title>
-      <link>https://vitorsilverio.dev/artigos/arm-jitter-api-java</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/arm-jitter-api-java</guid>
-      <pubDate>Tue, 20 Oct 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[O arm-box é um runner pronto. Mas o arm-jitter é uma biblioteca — dá para embutir num programa Java de 40 linhas, carregar um binário num AddressSpace, e andar instrução a instrução lendo os registradores. Este artigo faz isso e mostra o trace real de um laço de soma.]]></description>
+      <link>https://vitorsilverio.dev/artigos/arm-jitter-api-java/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/arm-jitter-api-java/</guid>
+      <pubDate>Tue, 20 Oct 2026 11:00:00 GMT</pubDate>
+      <description>O arm-box é um runner pronto. Mas o arm-jitter é uma biblioteca — dá para embutir num programa Java de 40 linhas, carregar um binário num AddressSpace, e andar instrução a instrução lendo os registradores. Este artigo faz isso e mostra o trace real de um laço de soma.</description>
+      <category>ARM</category>
+      <category>arm-jitter</category>
+      <category>Java</category>
+      <category>Emulação</category>
+      <category>API</category>
+      <category>Tutorial</category>
     </item>
     <item>
-      <title>Ghidra + LLM: quanto você pode confiar quando o modelo explica um binário ARM?</title>
-      <link>https://vitorsilverio.dev/artigos/ghidra-llm-binario-arm</link>
-      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/ghidra-llm-binario-arm</guid>
-      <pubDate>Wed, 21 Oct 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Importe um ELF ARM/Thumb no Ghidra, aprenda a ler o decompilador, ligue o Ghidra a um modelo de linguagem pelo protocolo MCP e confira, com o código-fonte na mão, o que o modelo acertou, onde exagerou e onde só o decompilador enganou todo mundo.]]></description>
+      <title>Montando e ligando um executável ARM</title>
+      <link>https://vitorsilverio.dev/artigos/montar-e-ligar-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/montar-e-ligar-arm/</guid>
+      <pubDate>Sun, 20 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um linker script de verdade e o objcopy que extrai os bytes crus.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Linker</category>
+      <category>ELF</category>
+      <category>Toolchain</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Primeiro programa em assembly ARM</title>
+      <link>https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm/</guid>
+      <pubDate>Sat, 19 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo exit code. O max sai em três instruções, sem um único desvio.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>arm-box</category>
+      <category>Predicação</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Como o decoder do arm-jitter funciona</title>
+      <link>https://vitorsilverio.dev/artigos/decoder-do-arm-jitter/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decoder-do-arm-jitter/</guid>
+      <pubDate>Fri, 11 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Decodificar à mão é o começo. O arm-jitter faz o mesmo em Java, mas não para na DecodedInstruction: ele eleva blocos inteiros para uma representação intermediária imutável e roda um otimizador em cima. Este artigo segue os bytes de 0xe0810002 até virarem IrOp — e mostra o otimizador apagando código morto.</description>
+      <category>ARM</category>
+      <category>Emulação</category>
+      <category>arm-jitter</category>
+      <category>IR</category>
+      <category>Decodificação</category>
+      <category>Compilador</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Decodificando Thumb à mão</title>
+      <link>https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-thumb-a-mao/</guid>
+      <pubDate>Thu, 10 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Em Thumb cada instrução tem 16 bits — metade do ARM. Não há campo de condição, os registradores livres são só r0–r7, e o formato muda conforme os bits do topo. Este artigo decodifica sete halfwords reais à mão e mostra o mapa de formatos que o ThumbDecoder do arm-jitter usa.</description>
+      <category>ARM</category>
+      <category>Thumb</category>
+      <category>Decodificação</category>
+      <category>Binário</category>
+      <category>arm-jitter</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Do C ao binário ARM: gcc + objdump</title>
+      <link>https://vitorsilverio.dev/artigos/do-c-ao-binario-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/do-c-ao-binario-arm/</guid>
+      <pubDate>Wed, 09 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 12 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.</description>
+      <category>ARM</category>
+      <category>C</category>
+      <category>gcc</category>
+      <category>objdump</category>
+      <category>Compilador</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Fetch–decode–execute e o ArmCore.step()</title>
+      <link>https://vitorsilverio.dev/artigos/fetch-decode-execute-armcore/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fetch-decode-execute-armcore/</guid>
+      <pubDate>Tue, 08 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Um processador não &quot;roda um programa&quot;: ele repete um ciclo de três passos — buscar, decodificar, executar. Este artigo mostra o ciclo, o pipeline que faz o PC parecer adiantado, e como tudo isso vira o método ArmCore.step() do arm-jitter — com um trace real que prova o offset de +8 do R15.</description>
+      <category>ARM</category>
+      <category>Pipeline</category>
+      <category>Emulação</category>
+      <category>arm-jitter</category>
+      <category>ArmCore</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Anatomia de uma instrução ARM</title>
+      <link>https://vitorsilverio.dev/artigos/anatomia-instrucao-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/anatomia-instrucao-arm/</guid>
+      <pubDate>Mon, 07 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Toda instrução ARM de 32 bits segue o mesmo esqueleto: 4 bits de condição, um punhado de bits de opcode e um Operand2 de 12 bits que esconde o barrel shifter. Este artigo abre o formato campo a campo, com encodings reais do objdump, e mostra como o arm-jitter extrai exatamente esses campos em ArmDecoder.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Decodificação</category>
+      <category>Barrel shifter</category>
+      <category>arm-jitter</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Registradores e CPSR: banking, modos e SPSR</title>
+      <link>https://vitorsilverio.dev/artigos/registradores-e-cpsr-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/registradores-e-cpsr-arm/</guid>
+      <pubDate>Sun, 06 Sep 2026 11:00:00 GMT</pubDate>
+      <description>O ARM de 32 bits tem 16 registradores visíveis — mas quantos existem de verdade depende do modo em que a CPU está. Este artigo destrincha R0–R15, o CPSR bit a bit, o register banking por modo e o SPSR, e mostra como o arm-jitter modela tudo isso em CpsrRegister, CpuMode e ArmCore.</description>
+      <category>ARM</category>
+      <category>Registradores</category>
+      <category>CPSR</category>
+      <category>Modos</category>
+      <category>arm-jitter</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Convenções de assembly da trilha</title>
+      <link>https://vitorsilverio.dev/artigos/convencoes-assembly-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/convencoes-assembly-arm/</guid>
+      <pubDate>Sat, 05 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Antes de decodificar binário, um acordo de notação: a sintaxe unificada (UAL) do GNU assembler, a ordem correta de S e condição (addsne), as diretivas dos listings e como ler a saída do objdump.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Toolchain</category>
+      <category>objdump</category>
+      <category>Trilha</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Por que emular ARM (e por que isso ensina arquitetura)</title>
+      <link>https://vitorsilverio.dev/artigos/por-que-emular-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/por-que-emular-arm/</guid>
+      <pubDate>Fri, 04 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Escrever um emulador é o melhor laboratório de arquitetura que existe: você é obrigado a implementar a semântica exata de cada instrução, flag e modo. Esta é a abertura de uma trilha que ensina o ARM a partir de código real — o arm-jitter e os emuladores construídos sobre ele.</description>
+      <category>ARM</category>
+      <category>Emulação</category>
+      <category>arm-jitter</category>
+      <category>Arquitetura</category>
+      <category>Trilha</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Semihosting no arm-box: como firmware Cortex-M imprime e encerra sem sistema operacional</title>
+      <link>https://vitorsilverio.dev/artigos/semihosting/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/semihosting/</guid>
+      <pubDate>Thu, 03 Sep 2026 11:00:00 GMT</pubDate>
+      <description>Semihosting é o contrato que deixa firmware sem sistema operacional imprimir e encerrar pedindo serviços ao depurador ou emulador: R0 traz a operação, R1 o parâmetro e uma instrução de captura (BKPT #0xAB no Cortex-M) dispara a chamada. Este artigo mostra os números corretos das operações, roda um exemplo no arm-box e explica o que o emulador implementa e onde ele diverge da especificação.</description>
+      <category>ARM</category>
+      <category>Semihosting</category>
+      <category>arm-box</category>
+      <category>Debug</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Manipulação de bits em Thumb: AND, ORR, EOR, BIC, BFI, BFC e shift register</title>
+      <link>https://vitorsilverio.dev/artigos/manipulacao-bits-thumb/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/manipulacao-bits-thumb/</guid>
+      <pubDate>Wed, 02 Sep 2026 11:00:00 GMT</pubDate>
+      <description>No ARM Thumb, os bits de um registrador são manipulados com AND, ORR, EOR, BIC, MVN e TST, com shifts e rotações e com os campos de bits UBFX, BFI e BFC. O artigo mostra os encodings reais de 16 e 32 bits, o read-modify-write de um periférico e a execução passo a passo no arm-jitter, e corrige a ideia de que os campos de bits são exclusivos do Thumb-2.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Thumb</category>
+      <category>Thumb-2</category>
+      <category>Bits</category>
+      <category>AND</category>
+      <category>ORR</category>
+      <category>EOR</category>
+      <category>BIC</category>
+      <category>BFI</category>
+      <category>BFC</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Instruções condicionais em Thumb: IT blocks e execução condicional</title>
+      <link>https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/instrucoes-condicionais-thumb/</guid>
+      <pubDate>Tue, 01 Sep 2026 11:00:00 GMT</pubDate>
+      <description>No Thumb original só o desvio é condicional; o Thumb-2 devolve a execução condicional com os blocos IT. Veja o mesmo if/else com e sem desvio, a decodificação do IT e a regra de que instruções de 16 bits não alteram flags dentro do bloco.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Thumb</category>
+      <category>Thumb-2</category>
+      <category>IT</category>
+      <category>condicionais</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Thumb e Thumb-2: instruções de 16/32 bits</title>
+      <link>https://vitorsilverio.dev/artigos/thumb-e-thumb-2/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/thumb-e-thumb-2/</guid>
+      <pubDate>Mon, 31 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Thumb comprime instruções para 16 bits (e Thumb-2 mistura com 32 bits), reduzindo o tamanho do binário. Veja os bytes reais e como o arm-box os executa.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>Thumb</category>
+      <category>Thumb-2</category>
+      <category>armbox</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Flags e desvios condicionais: N/Z/C/V, bge/blt/bne</title>
+      <link>https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/flags-e-desvios-condicionais/</guid>
+      <pubDate>Sun, 30 Aug 2026 11:00:00 GMT</pubDate>
+      <description>O CPSR guarda as flags N, Z, C, V que os desvios condicionais consultam. Entenda como cada flag é formada e por que o bge do nosso laço funciona.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>flags</category>
+      <category>CPSR</category>
+      <category>condicionais</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Sub-rotinas em ARM: BL/BX, pilha e convenção de chamada</title>
+      <link>https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/sub-rotinas-arm-bl-bx-pilha/</guid>
+      <pubDate>Sat, 29 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Como chamar funções no ARM: BL salva o retorno em LR, BX volta, a pilha (PUSH/POP) preserva registradores, e a AAPCS define quem carrega o quê. Com decodificação bit a bit do objdump.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>arm-jitter</category>
+      <category>armbox</category>
+      <category>Tutorial</category>
+      <category>Sub-rotinas</category>
+      <category>Chamada</category>
+    </item>
+    <item>
+      <title>Decodificando instruções ARM à mão com o objdump (bit a bit)</title>
+      <link>https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/decodificando-instrucoes-arm-objdump/</guid>
+      <pubDate>Fri, 28 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Pegue o ELF do laço de soma, rode o objdump e decodifique instruções ARM à mão: cond, opcode, registradores e offset — exatamente a leitura que o decodificador do arm-jitter faz.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>arm-jitter</category>
+      <category>armbox</category>
+      <category>Tutorial</category>
+      <category>Objdump</category>
+      <category>Decodificação</category>
+    </item>
+    <item>
+      <title>Depurando ARM com GDB no arm-box: código instrução a instrução</title>
+      <link>https://vitorsilverio.dev/artigos/gdb-no-armbox/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/gdb-no-armbox/</guid>
+      <pubDate>Thu, 27 Aug 2026 11:00:00 GMT</pubDate>
+      <description>O arm-box agora expõe o core como um stub GDB remoto: breakpoints, watchpoints, step e continue. Veja como usar para depurar e entender código ARM rodando de verdade.</description>
+      <category>ARM</category>
+      <category>GDB</category>
+      <category>armbox</category>
+      <category>Debug</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Carga e armazenamento no ARM: LDR, STR e seu primeiro laço</title>
+      <link>https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/carga-e-armazenamento-arm/</guid>
+      <pubDate>Wed, 26 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Depois da teoria, mãos à obra: use LDR e STR para ler e escrever memória, monte seu primeiro laço com CMP/BNE e rode um programa que soma um vetor no arm-box.</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>arm-jitter</category>
+      <category>armbox</category>
+      <category>Tutorial</category>
+      <category>Load/Store</category>
+    </item>
+    <item>
+      <title>Fundamentos da arquitetura ARM</title>
+      <link>https://vitorsilverio.dev/artigos/fundamentos-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fundamentos-arm/</guid>
+      <pubDate>Tue, 25 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e o armbox. Compile, monte e rode um binário ARM real, e confira a saída.</description>
+      <category>ARM</category>
+      <category>Tutorial</category>
+      <category>Arquitetura</category>
+      <category>Registradores</category>
+      <category>Instruction Set</category>
+    </item>
+    <item>
+      <title>Setup do ambiente ARM</title>
+      <link>https://vitorsilverio.dev/artigos/ambiente-arm/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/ambiente-arm/</guid>
+      <pubDate>Mon, 24 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e os repositórios arm-jitter/arm-box para compilar e rodar binários ARM reais.</description>
+      <category>ARM</category>
+      <category>Tutorial</category>
+      <category>arm-jitter</category>
+      <category>armbox</category>
+      <category>Toolchain</category>
+    </item>
+    <item>
+      <title>Criando um executável ARM e rodando no arm-box</title>
+      <link>https://vitorsilverio.dev/artigos/hello-armbox/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/hello-armbox/</guid>
+      <pubDate>Sun, 23 Aug 2026 11:00:00 GMT</pubDate>
+      <description>Mão na massa: escreva um hello world em assembly ARM, monte um ELF real e rode no arm-box (o runner sobre o arm-jitter).</description>
+      <category>ARM</category>
+      <category>Assembly</category>
+      <category>arm-jitter</category>
+      <category>armbox</category>
+      <category>Tutorial</category>
+    </item>
+    <item>
+      <title>Angular Signals na prática</title>
+      <link>https://vitorsilverio.dev/artigos/angular-signals-na-pratica/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/angular-signals-na-pratica/</guid>
+      <pubDate>Mon, 02 Feb 2026 11:00:00 GMT</pubDate>
+      <description>Uma introdução prática ao sistema de reatividade baseado em signals e como ele muda a forma de escrever componentes.</description>
+      <category>Angular</category>
+      <category>Signals</category>
+      <category>Frontend</category>
+    </item>
+    <item>
+      <title>Boas-vindas ao meu canto na internet</title>
+      <link>https://vitorsilverio.dev/artigos/boas-vindas/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/boas-vindas/</guid>
+      <pubDate>Thu, 15 Jan 2026 11:00:00 GMT</pubDate>
+      <description>Por que criei este site e como pretendo usá-lo para documentar meus estudos e projetos.</description>
+      <category>Pessoal</category>
+      <category>Carreira</category>
     </item>
   </channel>
 </rss>

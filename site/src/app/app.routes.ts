@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { Routes, UrlSegment, type UrlMatchResult } from '@angular/router';
+import { tagPorSlug } from './data/tags';
 
 const postLoaders = {
   'boas-vindas': () =>
@@ -61,6 +62,13 @@ const postLoaders = {
     import('./pages/article-detail/posts/ghidra-llm-binario-arm').then((m) => m.ArticleGhidraLlmBinarioArm),
 } as const;
 
+/** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */
+export function tagMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length !== 2 || segments[0].path !== 'tags') return null;
+  const slug = segments[1].path;
+  return tagPorSlug(slug) ? { consumed: segments, posParams: { slug: new UrlSegment(slug, {}) } } : null;
+}
+
 export const routes: Routes = [
   {
     path: '',
@@ -107,6 +115,15 @@ export const routes: Routes = [
         data: { slug },
       })),
     ],
+  },
+  {
+    path: 'tags',
+    loadComponent: () => import('./pages/tag/tag-index').then((m) => m.TagIndex),
+    title: 'Tags · Vítor Silvério',
+  },
+  {
+    matcher: tagMatcher,
+    loadComponent: () => import('./pages/tag/tag').then((m) => m.TagPage),
   },
   {
     path: '**',

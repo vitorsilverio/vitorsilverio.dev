@@ -1,7 +1,13 @@
 export interface ArticleMeta {
   readonly slug: string;
   readonly title: string;
+  /** Publicação, `YYYY-MM-DD`. */
   readonly date: string;
+  /**
+   * Última atualização relevante, `YYYY-MM-DD` (opcional). Só preencha quando o conteúdo
+   * mudar de verdade: vira `dateModified`, `lastmod` do sitemap e "Atualizado em" no artigo.
+   */
+  readonly updated?: string;
   readonly readingTime: string;
   readonly excerpt: string;
   readonly tags: readonly string[];

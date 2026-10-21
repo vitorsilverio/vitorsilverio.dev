@@ -1,21 +1,14 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
+import { comHora, lerArticles, maisRecentesPrimeiro } from './lib/articles-data.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ARTICLES_TS = resolve(SITE_ROOT, 'src/app/data/articles.ts');
 const OUT = resolve(SITE_ROOT, 'public/feed.xml');
 const BASE = 'https://vitorsilverio.dev';
 
-const src = readFileSync(ARTICLES_TS, 'utf8');
-const re =
-  /slug:\s*'([^']+)'[\s\S]*?title:\s*'([^']*)'[\s\S]*?date:\s*'([^']+)'[\s\S]*?excerpt:\s*'([^']*)'/g;
-
-const items = [];
-let m;
-while ((m = re.exec(src))) {
-  items.push({ slug: m[1], title: m[2], date: m[3], excerpt: m[4] });
-}
+const items = maisRecentesPrimeiro(lerArticles(ARTICLES_TS));
 
 const esc = (s) =>
   s
@@ -25,28 +18,37 @@ const esc = (s) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
-const rfc822 = (iso) => new Date(iso + 'T00:00:00').toUTCString();
+// Hora fixa (08:00 -03:00, a mesma do JSON-LD): saída idêntica em qualquer fuso da máquina.
+const rfc822 = (data) => new Date(comHora(data)).toUTCString();
+
+// Quando um artigo foi atualizado, o feed marca a mudança em lastBuildDate.
+const ultimaMudanca = items.map((a) => a.updated ?? a.date).sort().at(-1);
+
+// Links com a barra final, iguais ao canonical (GitHub Pages redireciona sem barra).
+const linkDe = (slug) => `${BASE}/artigos/${slug}/`;
 
 const itemXml = items
   .map(
     (it) => `    <item>
       <title>${esc(it.title)}</title>
-      <link>${BASE}/artigos/${it.slug}</link>
-      <guid isPermaLink="true">${BASE}/artigos/${it.slug}</guid>
+      <link>${linkDe(it.slug)}</link>
+      <guid isPermaLink="true">${linkDe(it.slug)}</guid>
       <pubDate>${rfc822(it.date)}</pubDate>
-      <description><![CDATA[${it.excerpt}]]></description>
+      <description>${esc(it.excerpt)}</description>
+${it.tags.map((t) => `      <category>${esc(t)}</category>`).join('\n')}
     </item>`,
   )
   .join('\n');
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vítor Silvério — Artigos</title>
-    <link>${BASE}/artigos</link>
+    <link>${BASE}/artigos/</link>
+    <atom:link href="${BASE}/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>${rfc822(items[0]?.date ?? new Date().toISOString().slice(0, 10))}</lastBuildDate>
+    <lastBuildDate>${rfc822(ultimaMudanca)}</lastBuildDate>
 ${itemXml}
   </channel>
 </rss>

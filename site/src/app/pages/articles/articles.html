@@ -50,6 +50,10 @@
         </button>
       }
     </div>
+    <p class="tags-hint muted">
+      As tags nos cards levam à página de cada assunto, com endereço próprio.
+      <a routerLink="/tags">Ver o índice de tags</a>.
+    </p>
 
     <p class="result-count muted" role="status">
       {{ resumo() }}
@@ -62,42 +66,7 @@
       <ul class="article-list">
         @for (article of filteredArticles(); track article.slug) {
           <li class="article-item">
-            <article class="article-card">
-              <img
-                class="article-cover"
-                [src]="'/assets/covers/' + article.slug + '.svg'"
-                alt=""
-                width="1200"
-                height="630"
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="article-main">
-                <h2>
-                  <a class="article-link" [routerLink]="['/artigos', article.slug]">{{
-                    article.title
-                  }}</a>
-                </h2>
-                <p class="article-excerpt muted">{{ resumoDe(article) }}</p>
-                <p class="article-info muted">
-                  <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
-                  &ngsp;·&ngsp; {{ article.readingTime }} de leitura
-                </p>
-                <div class="tags">
-                  @for (tag of article.tags; track tag) {
-                    <button
-                      type="button"
-                      class="tag"
-                      [class.active]="selectedTag() === tag"
-                      [attr.aria-pressed]="selectedTag() === tag"
-                      (click)="toggleTag(tag)"
-                    >
-                      {{ tag }}
-                    </button>
-                  }
-                </div>
-              </div>
-            </article>
+            <app-article-card [article]="article" />
           </li>
         }
       </ul>

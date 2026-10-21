@@ -1,8 +1,7 @@
 import { Component, computed, effect, inject, input, linkedSignal, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { articles, type ArticleMeta } from '../../data/articles';
-import { formatPtDate } from '../../shared/date.util';
-import { textoPuro } from '../../shared/prose/prose.util';
+import { ArticleCard } from '../../shared/article-card/article-card';
 import { SeoService } from '../../shared/seo.service';
 
 /** Quantas tags aparecem antes de "Mais tags". */
@@ -14,7 +13,7 @@ export function normalizar(s: string): string {
 }
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, ArticleCard],
   selector: 'app-articles',
   templateUrl: './articles.html',
   styleUrl: './articles.css',
@@ -121,9 +120,4 @@ export class Articles {
   protected mostrarTodasTags(): void {
     this.todasTags.set(true);
   }
-
-  protected formattedDate = (iso: string): string => formatPtDate(iso);
-
-  /** O card nunca mostra markdown cru, mesmo que o excerpt traga. */
-  protected resumoDe = (a: ArticleMeta): string => textoPuro(a.excerpt);
 }

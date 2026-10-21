@@ -13,3 +13,15 @@ export function formatPtDate(
     year: 'numeric',
   }).format(date);
 }
+
+/**
+ * Hora padrão de publicação usada nos dados estruturados (`datePublished`/`dateModified`) e no
+ * RSS: 08:00 em Brasília (UTC-03:00; o Brasil não tem horário de verão desde 2019). O site só
+ * guarda a data (`YYYY-MM-DD`); a hora é uma convenção, igual em `scripts/lib/articles-data.mjs`.
+ */
+export const HORA_PADRAO = '08:00:00-03:00';
+
+/** `2026-10-21` -> `2026-10-21T08:00:00-03:00`. */
+export function isoComHora(date: string): string {
+  return `${date}T${HORA_PADRAO}`;
+}

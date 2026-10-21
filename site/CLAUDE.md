@@ -77,11 +77,14 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
    (tokens do Prism já gravados no template pelo gerador / `scripts/highlight-posts.mjs`);
    não há diretiva de highlight em runtime.
 2. Registrar o post em `src/app/data/articles.ts` (array `articles`): `slug`, `title`, `date`
-   (`YYYY-MM-DD`), `readingTime`, `excerpt`, `tags`.
+   (`YYYY-MM-DD`), `readingTime`, `excerpt`, `tags`. Campo opcional `updated` (`YYYY-MM-DD`):
+   só em revisão real de um artigo publicado; vira `dateModified`, `lastmod` do sitemap e "Atualizado em"
+   visível no artigo (não preencha por retoque cosmético).
 3. Adicionar o loader lazy em `postLoaders` (`src/app/app.routes.ts`):
    `'<slug>': () => import('./pages/article-detail/posts/<slug>').then((m) => m.Article<Slug>)`.
-4. Adicionar a rota em `src/prerender-routes.txt` (`/artigos/<slug>`), senão o pré-render
-   não gera o HTML estático do artigo.
+4. A rota em `src/prerender-routes.txt` (`/artigos/<slug>` e `/tags/<slug-da-tag>`) é gerada por
+   `scripts/gen-prerender.mjs` a partir de `articles.ts` (parte do `gen:assets`); tag nova entra sozinha.
+   Páginas de tag (`/tags/<slug>/`) com 1 artigo saem `noindex` e fora do sitemap.
 5. `npm run gen:assets` (roda no fim do gerador e no `prebuild`): regenera capas,
    `public/sitemap.xml`, `public/feed.xml`, `public/llms.txt` e
    `public/curso-arm/exemplos/` (espelho de `DOCS/curso-arm/exemplos/`).

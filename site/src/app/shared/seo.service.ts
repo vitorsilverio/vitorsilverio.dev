@@ -10,10 +10,14 @@ export interface SeoData {
   url?: string;
   /** URL completa de imagem (ex.: /og-default.png). Opcional. */
   image?: string;
+  /** Mantém a página fora do índice (ex.: tag com 1 artigo). Os links continuam seguidos. */
+  noindex?: boolean;
 }
 
 const SITE_NAME = 'Vítor Silvério';
 const BASE_URL = 'https://vitorsilverio.dev';
+/** Permite miniaturas grandes no Discover/resultados (a regra vale para o site todo). */
+const IMAGE_PREVIEW = 'max-image-preview:large';
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
@@ -38,7 +42,12 @@ export class SeoService {
 
     this.meta.updateTag({ property: 'og:type', content: data.type ?? 'website' });
     this.meta.updateTag({ property: 'og:site_name', content: SITE_NAME });
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+    // Toda página tem imagem 1200x630 (capa do artigo ou og-default do index.html).
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({
+      name: 'robots',
+      content: data.noindex ? `noindex, follow, ${IMAGE_PREVIEW}` : IMAGE_PREVIEW,
+    });
 
     if (data.image) {
       const img = data.image.startsWith('http')

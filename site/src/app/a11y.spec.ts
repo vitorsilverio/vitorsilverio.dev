@@ -17,6 +17,12 @@ describe('Acessibilidade (axe-core)', () => {
     '/privacidade',
     '/artigos',
     '/artigos?tag=ARM',
+    // Índice de tags, uma tag grande, uma média e uma de 1 artigo (noindex). Poucas de propósito:
+    // cada rota custa até 30 s, e as páginas de tag compartilham o mesmo componente.
+    '/tags',
+    '/tags/arm',
+    '/tags/thumb-2',
+    '/tags/engenharia-reversa',
     '/pagina-que-nao-existe',
     ...articles.map((a) => `/artigos/${a.slug}`),
   ];

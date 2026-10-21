@@ -87,6 +87,7 @@ Depois de publicado, **o componente `src/app/pages/article-detail/posts/<slug>.t
 - `routerLink` exige `imports: [RouterLink]` no componente; sem ele o link sai sem `href` no HTML pré-renderizado (link morto);
 - blocos de código novos entram como `<pre><code class="language-XX">` em texto puro e recebem o realce com `node scripts/highlight-posts.mjs` (idempotente; percorre todos os posts, então rode uma vez só, sem outro agente editando posts ao mesmo tempo);
 - `readingTime`/`excerpt` mudam em `src/app/data/articles.ts`, à mão;
+- revisão de conteúdo de verdade (fato corrigido, seção nova): preencha `updated: 'YYYY-MM-DD'` na entrada em `articles.ts`. O site mostra "Atualizado em ..." e usa a data em `dateModified` (JSON-LD) e no `lastmod` do sitemap. Não use em correção de typo;
 - valide com `npm run build` e `npm run test -- --watch=false`.
 
 O `.md` em `proximos-artigos/` só vale até a publicação; se for atualizado depois, é apenas registro.

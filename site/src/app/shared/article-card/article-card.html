@@ -1,0 +1,26 @@
+<article class="article-card">
+  <img
+    class="article-cover"
+    [src]="'/assets/covers/' + article().slug + '.svg'"
+    alt=""
+    width="1200"
+    height="630"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="article-main">
+    <h2>
+      <a class="article-link" [routerLink]="['/artigos', article().slug]">{{ article().title }}</a>
+    </h2>
+    <p class="article-excerpt muted">{{ resumo() }}</p>
+    <p class="article-info muted">
+      <time [attr.datetime]="article().date">{{ data() }}</time>
+      &ngsp;·&ngsp; {{ article().readingTime }} de leitura
+    </p>
+    <div class="tags" role="group" aria-label="Tags do artigo">
+      @for (tag of tags(); track tag.slug) {
+        <a class="tag tag-link" [routerLink]="['/tags', tag.slug]">{{ tag.nome }}</a>
+      }
+    </div>
+  </div>
+</article>

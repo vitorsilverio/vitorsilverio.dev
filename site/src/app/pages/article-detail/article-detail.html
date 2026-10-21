@@ -17,9 +17,9 @@
         />
 
         <header class="article-header">
-          <div class="tags">
+          <div class="tags" role="group" aria-label="Tags do artigo">
             @for (tag of article.tags; track tag) {
-              <a class="tag tag-link" routerLink="/artigos" [queryParams]="{ tag }">{{ tag }}</a>
+              <a class="tag tag-link" [routerLink]="['/tags', slugDaTag(tag)]">{{ tag }}</a>
             }
           </div>
           <app-lesson-badge [slug]="article.slug" />
@@ -27,6 +27,10 @@
           <p class="article-meta muted">
             <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
             · {{ article.readingTime }} de leitura
+            @if (article.updated; as atualizado) {
+              · Atualizado em
+              <time [attr.datetime]="atualizado">{{ formattedDate(atualizado) }}</time>
+            }
           </p>
         </header>
 

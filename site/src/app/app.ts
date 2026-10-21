@@ -14,6 +14,7 @@ import { ThemeService } from './theme.service';
 import { ConsentBanner } from './shared/consent/consent-banner';
 import { ConsentService } from './shared/consent/consent.service';
 import { SeoService } from './shared/seo.service';
+import { PERSON_ID } from './shared/seo-jsonld';
 import { PLATFORM_ID } from '@angular/core';
 
 interface NavLink {
@@ -106,6 +107,7 @@ export class App {
         {
           '@context': 'https://schema.org',
           '@type': 'Person',
+          '@id': PERSON_ID,
           name: 'Vítor Silvério',
           url: 'https://vitorsilverio.dev/',
           sameAs: [
