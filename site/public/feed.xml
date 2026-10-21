@@ -39,7 +39,7 @@
       <link>https://vitorsilverio.dev/artigos/fundamentos-arm</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fundamentos-arm</guid>
       <pubDate>Tue, 25 Aug 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Visão geral da arquitetura ARM: banco de registradores, modos de execução, conjunto de instruções e modos de endereçamento — a base para programar e emular ARM de verdade.]]></description>
+      <description><![CDATA[Monte a bancada: JDK 25, Maven, toolchain ARM bare-metal e o armbox. Compile, monte e rode um binário ARM real, e confira a saída.]]></description>
     </item>
     <item>
       <title>Carga e armazenamento no ARM: LDR, STR e seu primeiro laço</title>
@@ -95,14 +95,14 @@
       <link>https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/manipulacao-bits-thumb</guid>
       <pubDate>Wed, 02 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[No ARM Thumb, os bits de um registrador são manipuláveis individualmente com instruções lógicas e de deslocamento. ANDS, ORRS, EORS, BICS, BFI, BFC e LSL/LSR/ASR são o kit de ferramentas do embedded — cada bit tem um propósito no controle de periféricos.]]></description>
+      <description><![CDATA[No ARM Thumb, os bits de um registrador são manipulados com AND, ORR, EOR, BIC, MVN e TST, com shifts e rotações e com os campos de bits UBFX, BFI e BFC. O artigo mostra os encodings reais de 16 e 32 bits, o read-modify-write de um periférico e a execução passo a passo no arm-jitter, e corrige a ideia de que os campos de bits são exclusivos do Thumb-2.]]></description>
     </item>
     <item>
       <title>Semihosting e syscalls: como o arm-box traduz chamadas de sistema EABI para o host</title>
       <link>https://vitorsilverio.dev/artigos/semihosting</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/semihosting</guid>
       <pubDate>Thu, 03 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Semihosting é o mecanismo que permite que código rodando em um alvo ARM (ou emulador como o arm-box) faça chamadas ao sistema operacional do host — leitura de console, escrita de arquivos, saída do programa. O arm-box intercepta e traduz essas chamadas EABI.]]></description>
+      <description><![CDATA[Semihosting é o contrato que deixa firmware sem sistema operacional imprimir e encerrar pedindo serviços ao depurador ou emulador: R0 traz a operação, R1 o parâmetro e uma instrução de captura (BKPT #0xAB no Cortex-M) dispara a chamada. Este artigo mostra os números corretos das operações, roda um exemplo no arm-box e explica o que o emulador implementa e onde ele diverge da especificação.]]></description>
     </item>
     <item>
       <title>Por que emular ARM (e por que isso ensina arquitetura)</title>
@@ -116,7 +116,7 @@
       <link>https://vitorsilverio.dev/artigos/convencoes-assembly-arm</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/convencoes-assembly-arm</guid>
       <pubDate>Sat, 05 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Antes de decodificar binário, um acordo de notação: qual sintaxe de assembly a trilha usa (UAL), quais diretivas do GNU assembler aparecem nos listings, e como ler a saída do objdump — endereço, bytes de codificação e mnemônico.]]></description>
+      <description><![CDATA[Antes de decodificar binário, um acordo de notação: a sintaxe unificada (UAL) do GNU assembler, a ordem correta de S e condição (addsne), as diretivas dos listings e como ler a saída do objdump.]]></description>
     </item>
     <item>
       <title>Registradores e CPSR: banking, modos e SPSR</title>
@@ -144,7 +144,7 @@
       <link>https://vitorsilverio.dev/artigos/do-c-ao-binario-arm</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/do-c-ao-binario-arm</guid>
       <pubDate>Wed, 09 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 13 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.]]></description>
+      <description><![CDATA[Uma função em C de cinco linhas vira 25 instruções ARM com -O0 e 12 com -O2. Este artigo compila a mesma função nos dois níveis, lê a desmontagem lado a lado e mostra o que são .text, .data, .bss e os símbolos num objeto ELF.]]></description>
     </item>
     <item>
       <title>Decodificando Thumb à mão</title>
