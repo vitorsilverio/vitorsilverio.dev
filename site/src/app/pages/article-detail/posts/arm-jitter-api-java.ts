@@ -124,6 +124,7 @@ pc=00010018  BRANCH   r0=24 r2=0 cpsr=600000D3
 
 <span class="token comment">// os dois em paralelo, aborta na primeira divergência:</span>
 <span class="token class-name">JitRuntime</span> check <span class="token operator">=</span> <span class="token class-name">JitRuntimeFactory</span><span class="token punctuation">.</span><span class="token function">divergenceCheckingArmThumb</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token class-name">ArmArchitecture</span><span class="token punctuation">.</span><span class="token constant">ARMV5TE</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>O backend de bytecode gera classes com a biblioteca <strong>ASM</strong> (<code>org.ow2.asm:asm</code> 9.7.1), uma dependência do <code>arm-jitter</code>. Num projeto Maven ou Gradle ela vem sozinha; compilando com <code>javac</code>/<code>java</code> direto, como neste artigo, acrescente <code>asm-9.7.1.jar</code> ao classpath (<code>mvn dependency:get -Dartifact=org.ow2.asm:asm:9.7.1</code> o baixa). O <code>TraceSoma</code> não precisa dela, porque usa só o interpretador.</p>
 <p>Os três consomem o mesmo bloco de IR (<code>IrBlock</code>) produzido pelo decodificador; só muda quem o executa — por isso se chamam <em>backends</em>. O de divergência roda cada bloco pelos dois caminhos e para na primeira diferença, o que é útil para caçar bugs no compilador.</p>
 <p>Uma consequência prática: sob <code>runBlocks</code>, o <code>afterInstruction</code> do trace <strong>não dispara</strong>, porque um bloco compilado executa de uma vez, sem pontos de parada entre as instruções. Para observar a execução nesse modo existem <code>beforeBlock</code>/<code>afterBlock</code>, chamados a cada bloco.</p>
 <h2>Começando num estado arbitrário</h2>
@@ -167,6 +168,7 @@ core<span class="token punctuation">.</span><span class="token function">configu
       <tr><th scope="row">IR / <code>IrBlock</code></th><td>representação intermediária de um bloco, comum a todos os backends</td></tr>
       <tr><th scope="row">Backend</th><td>quem executa a IR: bytecode JVM, interpretador de IR, ou ambos com checagem</td></tr>
       <tr><th scope="row"><code>JitRuntime</code></th><td>o runtime de execução por blocos, criado por <code>JitRuntimeFactory</code></td></tr>
+      <tr><th scope="row">ASM</th><td>biblioteca Java (<code>org.ow2.asm</code>) para gerar bytecode; usada pelo backend JIT</td></tr>
       <tr><th scope="row">BIOS</th><td>código de boot gravado no aparelho, que prepara o processador antes do programa</td></tr>
       <tr><th scope="row"><code>configureExecutionState</code></th><td>define PC, modo, conjunto de instruções (ARM/Thumb) e máscaras IRQ/FIQ de uma vez</td></tr>
     </tbody>
@@ -183,6 +185,8 @@ core<span class="token punctuation">.</span><span class="token function">configu
       <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar TraceSoma.java</code></th><td>compila o hospedeiro usando a biblioteca no classpath</td></tr>
       <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar;.&quot; TraceSoma soma5.bin</code></th><td>roda o hospedeiro no Windows (classpath separado por <code>;</code>)</td></tr>
       <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar:.&quot; TraceSoma soma5.bin</code></th><td>o mesmo no Linux/macOS (separador <code>:</code>)</td></tr>
+      <tr><th scope="row"><code>mvn dependency:get -Dartifact=org.ow2.asm:asm:9.7.1</code></th><td>baixa a biblioteca ASM, usada pelo backend JIT de bytecode</td></tr>
+      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar;asm-9.7.1.jar;.&quot; X</code></th><td>roda um hospedeiro que usa <code>JitRuntimeFactory.armThumb</code> (<code>:</code> no Linux/macOS)</td></tr>
     </tbody>
   </table>
 </div>
@@ -202,6 +206,7 @@ core<span class="token punctuation">.</span><span class="token function">configu
 <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils). Descreve a pseudo-instrução <code>ADR</code> e sua tradução para um <code>ADD</code>/<code>SUB</code> relativo ao PC.</li>
 <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub, licença BSD-3-Clause). <code>AddressSpace</code>, <code>ArmCore</code>, <code>ArmTraceListener</code> e <code>JitRuntimeFactory</code>; o README traz o exemplo mínimo de uso.</li>
 <li><a href="https://central.sonatype.com/artifact/dev.vitorsilverio/arm-jitter/1.3.0" target="_blank" rel="noopener"><code>dev.vitorsilverio:arm-jitter:1.3.0</code> no Maven Central</a>. Coordenadas e versões publicadas da biblioteca.</li>
+<li>OW2 — <a href="https://asm.ow2.io/" target="_blank" rel="noopener">ASM, <em>an all purpose Java bytecode manipulation and analysis framework</em></a>. A biblioteca de geração de bytecode usada pelo backend JIT (versão 9.7.1, fixada no <code>arm-jitter-parent</code> 1.3.0).</li>
 <li>Oracle — <a href="https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html" target="_blank" rel="noopener"><em>The java Command</em>, Java SE 25 &amp; JDK 25</a>. Opção <code>-cp</code>/<code>--class-path</code> e o separador <code>;</code> (Windows) ou <code>:</code> (demais sistemas).</li>
 <li>Martin Korth — <a href="https://problemkaputt.de/gbatek.htm#gbainterruptcontrol" target="_blank" rel="noopener"><em>GBATEK</em>, seção &quot;GBA Interrupt Control&quot;</a>. Valores iniciais de <code>SP_svc</code> (<code>03007FE0h</code>) e <code>SP_irq</code> (<code>03007FA0h</code>) deixados pela BIOS do GBA; a seção &quot;GBA Memory Map&quot; do mesmo documento dá o início da ROM do cartucho em <code>08000000h</code>.</li>
 </ul>
