@@ -2,13 +2,23 @@
   display: block;
 }
 
+/* Largura de leitura do texto (~75 caracteres por linha). Código, tabelas,
+   bit-field e objdump herdam a largura da coluna: tudo alinhado ao texto. */
 .article-wrap {
+  --leitura: 45rem;
+  --lateral: 16rem;
+  --vao: 2.5rem;
   max-width: var(--maxw);
 }
 
 .back {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
+}
+
+/* Estreito: uma coluna de leitura, sumário recolhível entre o cabeçalho e o texto. */
+.article-layout {
+  max-width: var(--leitura);
 }
 
 .article-header {
@@ -27,7 +37,7 @@
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .article-meta {
@@ -44,23 +54,46 @@
   border-top: 1px solid var(--border);
 }
 
-/* A capa repete título, tags e data que já estão logo abaixo: no celular some
-   (e, por ser lazy, nem é baixada); em telas largas fica pequena. */
+/* Capa: ocupa a largura da coluna do artigo, também no celular (ali o
+   tamanho reduzido deixava o cabeçalho sem personalidade). Lazy + dimensões
+   fixas: sem salto de layout. */
 .article-cover {
-  display: none;
+  display: block;
   width: 100%;
-  max-width: 30rem;
   height: auto;
   aspect-ratio: 1200 / 630;
   object-fit: cover;
   border-radius: 16px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   box-shadow: var(--shadow);
 }
 
-@media (min-width: 720px) {
-  .article-cover {
-    display: block;
+/* Largo: coluna do artigo + coluna lateral com o sumário fixo na rolagem.
+   O mesmo breakpoint está em CONSULTA_SUMARIO_LATERAL (prose-toc.ts). */
+@media (min-width: 1100px) {
+  .article-wrap {
+    max-width: calc(var(--leitura) + var(--vao) + var(--lateral) + 2.5rem);
+  }
+
+  .article-layout {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, var(--leitura)) var(--lateral);
+    column-gap: var(--vao);
+    justify-content: center;
+  }
+
+  .article-layout > :not(app-prose-toc) {
+    grid-column: 1;
+  }
+
+  app-prose-toc {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    align-self: start;
+    position: sticky;
+    top: 5.5rem;
+    margin: 0;
   }
 }
 
@@ -85,7 +118,9 @@
   text-decoration: none;
   color: var(--text);
   background: var(--surface);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .nav-card:hover {
@@ -142,7 +177,9 @@
   object-fit: cover;
   border-radius: 12px;
   border: 1px solid var(--border);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .related-card:hover .related-cover {
@@ -170,4 +207,3 @@
 .giscus {
   min-height: 160px;
 }
-

@@ -317,17 +317,8 @@ button.tag:hover {
   display: block;
 }
 
-/* Coluna de leitura: o texto corrido fica em ~70 caracteres; blocos largos
-   (código, tabelas, fita de bits, objdump, fluxo) usam toda a largura da página. */
-.prose :is(p, ul, ol, dl, blockquote, h2, h3, h4) {
-  max-width: 70ch;
-}
-
-/* Componentes de conteúdo ocupam a largura toda, inclusive a legenda interna. */
-.prose :is(app-bit-field, app-fluxo, app-objdump) :is(p, ul, ol) {
-  max-width: none;
-}
-
+/* A largura de leitura vem da coluna do artigo (article-detail.css): texto,
+   código, tabelas, bit-field, objdump e fluxo têm a mesma largura. */
 .prose h2 {
   margin-top: 2rem;
   font-size: 1.6rem;
