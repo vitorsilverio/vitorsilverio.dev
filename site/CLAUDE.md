@@ -123,6 +123,17 @@ espaços também funcionam.
 
 Ambos são pré-renderizados (sem JS no primeiro paint) e passam no axe.
 
+**Diagrama de fluxo** (`app-fluxo`, `src/app/shared/fluxo/`): troca diagramas ASCII com
+setas (`a --> b`). Não há cerca no markdown; vai direto no `.ts` do post, com `Fluxo` em
+`imports`. Uma linha por item, `nome | papel` (caixa) ou `> comando | verbo` (etapa).
+Até 5 itens fica horizontal em telas largas; mais que isso fica sempre vertical.
+
+```html
+<app-fluxo titulo="Do código-fonte ao executável" itens="soma5.s | código-fonte
+  > arm-none-eabi-as | monta
+  soma5.o | objeto" />
+```
+
 **Detecção automática.** Listagem de objdump tem forma reconhecível (endereço,
 bytes em hex, mnemônico), então o gerador converte sozinho — a cerca pode ser
 ` ```text ` ou ` ```armasm ` e vira `<app-objdump>` do mesmo jeito. A regra exige
