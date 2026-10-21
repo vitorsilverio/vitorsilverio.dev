@@ -18,7 +18,7 @@ function rodar(args: string[], env: Record<string, string> = {}) {
 }
 
 describe('ga-metricas (CLI)', () => {
-  it('--exemplo --json gera JSON v1 a partir da fixture', () => {
+  it('--exemplo --json gera JSON v2 a partir da fixture', () => {
     const r = rodar(['--exemplo', '--json', '--limite', '3']);
     expect(r.codigo).toBe(0);
     const json = JSON.parse(r.saida) as {
@@ -26,7 +26,7 @@ describe('ga-metricas (CLI)', () => {
       fonte: string;
       artigos: unknown[];
     };
-    expect(json.versaoEsquema).toBe(1);
+    expect(json.versaoEsquema).toBe(2);
     expect(json.fonte).toBe('exemplo');
     expect(json.artigos).toHaveLength(3);
   });

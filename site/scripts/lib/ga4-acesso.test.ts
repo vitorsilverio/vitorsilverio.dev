@@ -208,6 +208,21 @@ describe('obterToken', () => {
     expect(corpo.get('assertion')?.split('.')).toHaveLength(3);
   });
 
+  it('aceita escopos extras (Analytics + Search Console) no JWT', async () => {
+    let corpoJwt = '';
+    const f: Fetch = async (_url, init) => {
+      corpoJwt = String(new URLSearchParams(String(init.body)).get('assertion'));
+      return respostaFalsa(200, { access_token: 'ya29.x' });
+    };
+    const escopos =
+      'https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/webmasters.readonly';
+    await obterToken(CONTA, f, 1_700_000_000, undefined, escopos);
+    const claims = JSON.parse(Buffer.from(corpoJwt.split('.')[1], 'base64url').toString()) as {
+      scope: string;
+    };
+    expect(claims.scope).toBe(escopos);
+  });
+
   it('falha com a descrição do Google, sem expor o JWT', async () => {
     const f: Fetch = async () =>
       respostaFalsa(400, { error: 'invalid_grant', error_description: 'Invalid JWT Signature.' });

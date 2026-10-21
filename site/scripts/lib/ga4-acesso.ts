@@ -207,7 +207,7 @@ export const TEMPO_LIMITE_MS = 30_000;
 
 export type Fetch = (url: string, init: RequestInit) => Promise<Response>;
 
-async function lerJson(res: Response): Promise<unknown> {
+export async function lerJson(res: Response): Promise<unknown> {
   const texto = await res.text();
   try {
     return JSON.parse(texto) as unknown;
@@ -217,7 +217,7 @@ async function lerJson(res: Response): Promise<unknown> {
 }
 
 /** Chama o fetch com timeout e traduz falhas de rede/timeout em ErroApi clara. */
-async function comTimeout(
+export async function comTimeout(
   fetchFn: Fetch,
   url: string,
   init: RequestInit,
@@ -242,10 +242,11 @@ export async function obterToken(
   fetchFn: Fetch,
   agoraSeg: number,
   tempoMs: number = TEMPO_LIMITE_MS,
+  escopo: string = ESCOPO,
 ): Promise<string> {
   const corpo = new URLSearchParams({
     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-    assertion: assinarJwt(conta, agoraSeg),
+    assertion: assinarJwt(conta, agoraSeg, escopo),
   });
   const res = await comTimeout(
     fetchFn,

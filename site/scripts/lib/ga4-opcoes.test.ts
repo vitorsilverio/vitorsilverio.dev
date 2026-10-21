@@ -97,3 +97,55 @@ describe('lerOpcoes: --exemplo', () => {
     ).not.toThrow();
   });
 });
+
+describe('lerOpcoes: análises novas', () => {
+  it('padrões: sem agrupamento, janela nem série; leitura e Search Console ligados', () => {
+    const op = lerOpcoes([], HOJE);
+    expect(op).toMatchObject({
+      agrupar: null,
+      aposPublicacao: null,
+      diario: false,
+      leitura: true,
+      searchConsole: true,
+    });
+  });
+
+  it('lê --agrupar, --apos-publicacao, --diario e os --sem-*', () => {
+    const op = lerOpcoes(
+      [
+        '--agrupar',
+        'modulo',
+        '--apos-publicacao',
+        '28',
+        '--diario',
+        '--sem-leitura',
+        '--sem-search-console',
+      ],
+      HOJE,
+    );
+    expect(op).toMatchObject({
+      agrupar: 'modulo',
+      aposPublicacao: 28,
+      diario: true,
+      leitura: false,
+      searchConsole: false,
+    });
+    expect(lerOpcoes(['--agrupar', 'tag'], HOJE).agrupar).toBe('tag');
+  });
+
+  it.each([
+    [['--agrupar', 'autor'], /--agrupar deve ser "tag" ou "modulo"/],
+    [['--agrupar'], /--agrupar precisa de um valor/],
+    [['--apos-publicacao', '0'], /entre 1 e 365/],
+    [['--apos-publicacao', '400'], /entre 1 e 365/],
+    [['--apos-publicacao', 'x'], /número inteiro/],
+    [['--apos-publicacao', '-3'], /número inteiro/],
+    [['--diario=sim'], /não aceita valor/],
+  ])('recusa %j', (argv, esperado) => {
+    expect(() => lerOpcoes(argv, HOJE)).toThrow(esperado);
+  });
+
+  it('--exemplo aceita as análises que funcionam offline', () => {
+    expect(() => lerOpcoes(['--exemplo', '--agrupar', 'tag', '--diario'], HOJE)).not.toThrow();
+  });
+});

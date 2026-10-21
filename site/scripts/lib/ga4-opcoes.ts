@@ -2,6 +2,7 @@
 
 import { parseArgs } from 'node:util';
 
+import type { PorAgrupar } from './ga4-analise.ts';
 import { calcularPeriodo, dataValida, type Periodo } from './ga4-periodo.ts';
 
 export const DIAS_PADRAO = 28;
@@ -9,6 +10,7 @@ export const LIMITE_PADRAO = 25;
 export const HOST_PADRAO = 'vitorsilverio.dev';
 /** A Data API guarda até 14 meses na retenção padrão; 2 anos é um teto folgado. */
 export const DIAS_MAX = 730;
+export const APOS_PUBLICACAO_MAX = 365;
 
 export interface Opcoes {
   readonly formato: 'texto' | 'json';
@@ -16,6 +18,16 @@ export interface Opcoes {
   readonly limite: number;
   readonly host: string | null;
   readonly exemplo: boolean;
+  /** Agrupar o ranking por tag ou por módulo da trilha. */
+  readonly agrupar: PorAgrupar | null;
+  /** Dias de janela relativa à publicação (visualizações nos N primeiros dias). */
+  readonly aposPublicacao: number | null;
+  /** Série diária com as datas de publicação. */
+  readonly diario: boolean;
+  /** Relatório de leitura (eventos leitura_*). */
+  readonly leitura: boolean;
+  /** Seção do Google Search Console. */
+  readonly searchConsole: boolean;
   readonly ajuda: boolean;
 }
 
@@ -31,7 +43,15 @@ function inteiro(v: string, nome: string, min: number, max: number): number {
   return n;
 }
 
-const OPCOES_COM_VALOR = new Set(['--dias', '--inicio', '--fim', '--limite', '--host']);
+const OPCOES_COM_VALOR = new Set([
+  '--dias',
+  '--inicio',
+  '--fim',
+  '--limite',
+  '--host',
+  '--agrupar',
+  '--apos-publicacao',
+]);
 
 /**
  * O parseArgs trata "-3" como opção. Cola "--dias -3" em "--dias=-3" para que o
@@ -61,7 +81,10 @@ export function traduzirErroParseArgs(e: unknown): string {
     case 'ERR_PARSE_ARGS_UNKNOWN_OPTION':
       return `Opção desconhecida${opcao ? `: ${opcao}` : ''}.`;
     case 'ERR_PARSE_ARGS_INVALID_OPTION_VALUE':
-      return opcao && !/--(json|exemplo|help|todos-hosts|sem-comparacao)/.test(opcao)
+      return opcao &&
+        !/--(json|exemplo|help|todos-hosts|sem-comparacao|diario|sem-leitura|sem-search-console)/.test(
+          opcao,
+        )
         ? `A opção ${opcao} precisa de um valor (ex.: ${opcao} 7) e não pode ser seguida de outra opção.`
         : `Valor inválido para a opção${opcao ? ` ${opcao}` : ''} (essa opção não aceita valor).`;
     case 'ERR_PARSE_ARGS_UNEXPECTED_POSITIONAL':
@@ -88,6 +111,11 @@ export function lerOpcoes(argv: readonly string[], hoje: string): Opcoes {
         'todos-hosts': { type: 'boolean', default: false },
         'sem-comparacao': { type: 'boolean', default: false },
         exemplo: { type: 'boolean', default: false },
+        agrupar: { type: 'string' },
+        'apos-publicacao': { type: 'string' },
+        diario: { type: 'boolean', default: false },
+        'sem-leitura': { type: 'boolean', default: false },
+        'sem-search-console': { type: 'boolean', default: false },
         help: { type: 'boolean', short: 'h', default: false },
       },
     }));
@@ -141,6 +169,15 @@ export function lerOpcoes(argv: readonly string[], hoje: string): Opcoes {
   }
   const host = valores['todos-hosts'] ? null : valores.host?.trim() || HOST_PADRAO;
 
+  const agrupar = valores.agrupar ?? null;
+  if (agrupar !== null && agrupar !== 'tag' && agrupar !== 'modulo') {
+    throw new ErroUso(`--agrupar deve ser "tag" ou "modulo" (recebido "${agrupar}").`);
+  }
+  const aposPublicacao =
+    valores['apos-publicacao'] === undefined
+      ? null
+      : inteiro(valores['apos-publicacao'], 'apos-publicacao', 1, APOS_PUBLICACAO_MAX);
+
   return {
     formato: valores.json ? 'json' : 'texto',
     periodo,
@@ -148,6 +185,11 @@ export function lerOpcoes(argv: readonly string[], hoje: string): Opcoes {
       valores.limite === undefined ? LIMITE_PADRAO : inteiro(valores.limite, 'limite', 0, 10_000),
     host,
     exemplo: valores.exemplo,
+    agrupar,
+    aposPublicacao,
+    diario: valores.diario,
+    leitura: !valores['sem-leitura'],
+    searchConsole: !valores['sem-search-console'],
     ajuda: valores.help,
   };
 }

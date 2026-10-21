@@ -368,7 +368,7 @@ describe('montarRelatorio', () => {
 });
 
 describe('formatação', () => {
-  it('JSON tem as chaves de topo do esquema v1, nessa ordem', () => {
+  it('JSON tem as chaves de topo do esquema v2, nessa ordem', () => {
     const json: unknown = JSON.parse(formatarJson(montarRelatorio(entrada())));
     expect(Object.keys(json as object)).toEqual([
       'versaoEsquema',
@@ -379,14 +379,20 @@ describe('formatação', () => {
       'periodo',
       'totais',
       'resumo',
+      'amostra',
       'artigos',
+      'agrupamento',
+      'aposPublicacao',
+      'diario',
+      'leitura',
+      'searchConsole',
       'artigosSemDados',
       'caminhosDesconhecidos',
       'outrasPaginas',
       'origem',
       'avisos',
     ]);
-    expect((json as { versaoEsquema: number }).versaoEsquema).toBe(1);
+    expect((json as { versaoEsquema: number }).versaoEsquema).toBe(2);
   });
 
   it('texto mostra período, ranking com variação e escapa | nos títulos', () => {

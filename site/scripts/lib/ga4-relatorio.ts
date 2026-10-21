@@ -4,15 +4,37 @@
 // O JSON segue o esquema `VERSAO_ESQUEMA` (documentado em scripts/ga-metricas.ts).
 // Mudança incompatível no formato => incrementar a versão.
 
+import {
+  LIMIAR_AMOSTRA_ARTIGO,
+  LIMIAR_AMOSTRA_SITE,
+  agruparArtigos,
+  amostraPequenaArtigo,
+  amostraPequenaSite,
+  analisarJanela,
+  analisarLeitura,
+  dataGa4,
+  montarSerieDiaria,
+  type AnaliseJanela,
+  type AnaliseLeitura,
+  type ContagemEvento,
+  type DiaSerie,
+  type Grupo,
+  type PorAgrupar,
+} from './ga4-analise.ts';
 import { PREFIXO_ARTIGOS, type Relatorio, type RelatoriosBatch } from './ga4-dados.ts';
-import type { Periodo } from './ga4-periodo.ts';
+import type { RelatoriosExtras } from './ga4-extras.ts';
+import { somarDias, type Periodo } from './ga4-periodo.ts';
+import type { SecaoSearchConsole } from './gsc.ts';
 
-export const VERSAO_ESQUEMA = 1;
+/** 2: acrescenta amostra, fontes por artigo, agrupamento, aposPublicacao, diario, leitura e searchConsole. */
+export const VERSAO_ESQUEMA = 2;
 
 /** Variação mínima (em %) e absoluta (em visualizações) para chamar de subida/queda. */
 export const LIMIAR_TENDENCIA_PCT = 10;
 export const LIMIAR_TENDENCIA_ABS = 3;
 export const MAX_FONTES = 10;
+/** Fontes / campanhas por artigo mostradas no relatório. */
+export const MAX_FONTES_ARTIGO = 5;
 
 // ---------- Entradas ----------
 
@@ -42,6 +64,17 @@ export interface EntradaRelatorio {
   readonly geradoEm: string;
   readonly fonte: 'ga4' | 'exemplo';
   readonly hoje: string;
+  /** Agrupar o ranking por tag ou módulo. */
+  readonly agrupar?: PorAgrupar | null;
+  /** Janela pós-publicação pedida (N dias); precisa de `extras.posPublicacao`. */
+  readonly aposPublicacao?: number | null;
+  /** Série diária pedida; precisa de `extras.diario`. */
+  readonly diario?: boolean;
+  /** Relatórios do segundo batch (leitura, diário, pós-publicação), quando consultados. */
+  readonly extras?: RelatoriosExtras | null;
+  /** Avisos de partes que não puderam ser consultadas. */
+  readonly avisosExtras?: readonly string[];
+  readonly searchConsole?: SecaoSearchConsole;
 }
 
 // ---------- Saída (esquema JSON v1) ----------
@@ -69,6 +102,15 @@ export interface CanalArtigo {
   readonly participacao: number;
 }
 
+export interface FonteArtigo {
+  /** "fonte / meio" do GA4 (ex.: "linkedin / social"; utm_source / utm_medium). */
+  readonly fonteMeio: string;
+  /** utm_campaign; null quando não há campanha. */
+  readonly campanha: string | null;
+  readonly visualizacoes: number;
+  readonly participacao: number;
+}
+
 export interface ArtigoRanking {
   readonly posicao: number;
   readonly slug: string;
@@ -87,6 +129,10 @@ export interface ArtigoRanking {
   } | null;
   readonly tendencia: Tendencia | null;
   readonly canais: readonly CanalArtigo[];
+  /** Fonte / meio / campanha (UTM) das visualizações no período atual, maiores primeiro. */
+  readonly fontes: readonly FonteArtigo[];
+  /** Menos de LIMIAR_AMOSTRA_ARTIGO usuários: não tire conclusão deste artigo. */
+  readonly amostraPequena: boolean;
   /** Caminhos brutos do GA4 somados aqui (ex.: com e sem barra final). */
   readonly caminhosOriginais: readonly string[];
 }
@@ -142,7 +188,24 @@ export interface RelatorioMetricas {
     /** Fração (0–1) das visualizações do site que foram em artigos. */
     readonly participacaoArtigosNasVisualizacoes: number;
   };
+  readonly amostra: {
+    readonly usuariosSite: number;
+    readonly limiarSite: number;
+    readonly limiarArtigo: number;
+    /** Poucos usuários no período: comparações entre períodos e fontes são ruído. */
+    readonly siteAmostraPequena: boolean;
+    readonly artigosAmostraPequena: number;
+  };
   readonly artigos: readonly ArtigoRanking[];
+  /** Com --agrupar; usa todos os artigos com dados, não só os do ranking cortado por --limite. */
+  readonly agrupamento: { readonly por: PorAgrupar; readonly grupos: readonly Grupo[] } | null;
+  /** Com --apos-publicacao N. */
+  readonly aposPublicacao: AnaliseJanela | null;
+  /** Com --diario. */
+  readonly diario: readonly DiaSerie[] | null;
+  /** Eventos leitura_* (rolagem e tempo ativo); null se não foi consultado. */
+  readonly leitura: AnaliseLeitura | null;
+  readonly searchConsole: SecaoSearchConsole;
   readonly artigosSemDados: readonly {
     readonly slug: string;
     readonly titulo: string;
@@ -160,6 +223,12 @@ export interface RelatorioMetricas {
 }
 
 // ---------- Utilitários ----------
+
+/** utm_campaign do GA4; "(not set)", "(direct)" etc. viram null. */
+export function campanhaUtm(bruto: string | undefined): string | null {
+  const v = bruto?.trim() ?? '';
+  return v === '' || /^\(.*\)$/.test(v) ? null : v;
+}
 
 const r1 = (n: number) => Math.round(n * 10) / 10;
 const r4 = (n: number) => Math.round(n * 10_000) / 10_000;
@@ -283,13 +352,29 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
 
   // canais por artigo (período atual)
   const canaisPorSlug = new Map<string, Map<string, number>>();
+  const fontesPorSlug = new Map<
+    string,
+    Map<string, { fonteMeio: string; campanha: string | null; v: number }>
+  >();
   for (const l of rel.canaisPorArtigo.linhas) {
     const c = classificar(normalizarCaminho(l.dims['pagePath'] ?? ''), slugs);
     if (c.tipo !== 'artigo') continue;
+    const views = l.metricas['screenPageViews'] ?? 0;
     const canal = l.dims['sessionDefaultChannelGroup'] ?? '(não definido)';
     const m = canaisPorSlug.get(c.slug) ?? new Map<string, number>();
-    m.set(canal, (m.get(canal) ?? 0) + (l.metricas['screenPageViews'] ?? 0));
+    m.set(canal, (m.get(canal) ?? 0) + views);
     canaisPorSlug.set(c.slug, m);
+    // Fonte / meio / campanha (UTM). A fixture antiga não tem essas colunas.
+    const fonteMeio = l.dims['sessionSourceMedium'];
+    if (fonteMeio !== undefined) {
+      const campanha = campanhaUtm(l.dims['sessionCampaignName']);
+      const chave = `${fonteMeio}\u0000${campanha ?? ''}`;
+      const fm = fontesPorSlug.get(c.slug) ?? new Map();
+      const f = fm.get(chave) ?? { fonteMeio, campanha, v: 0 };
+      f.v += views;
+      fm.set(chave, f);
+      fontesPorSlug.set(c.slug, fm);
+    }
   }
 
   const artigos: Omit<ArtigoRanking, 'posicao'>[] = [];
@@ -337,6 +422,21 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
           : null,
         tendencia: anterior ? tendencia(atual.visualizacoes, anterior.visualizacoes) : null,
         canais,
+        fontes: [...(fontesPorSlug.get(c.slug)?.values() ?? [])]
+          .sort(
+            (a, b) =>
+              b.v - a.v ||
+              a.fonteMeio.localeCompare(b.fonteMeio) ||
+              (a.campanha ?? '').localeCompare(b.campanha ?? ''),
+          )
+          .slice(0, MAX_FONTES_ARTIGO)
+          .map((f): FonteArtigo => ({
+            fonteMeio: f.fonteMeio,
+            campanha: f.campanha,
+            visualizacoes: f.v,
+            participacao: fracao(f.v, atual.visualizacoes),
+          })),
+        amostraPequena: amostraPequenaArtigo(atual.usuarios),
         caminhosOriginais: [...g.originais].sort(),
       });
     } else {
@@ -418,6 +518,100 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
       >)
     : null;
 
+  // Análises extras (agrupamento, janela pós-publicação, série diária, leitura)
+  const publicados = e.artigos.filter((a) => a.date <= periodo.atual.fim);
+  const agrupamento = e.agrupar
+    ? {
+        por: e.agrupar,
+        grupos: agruparArtigos(
+          e.agrupar,
+          comDados.map((a) => ({
+            slug: a.slug,
+            tags: a.tags,
+            modulo: a.trilha?.modulo ?? null,
+            visualizacoes: a.atual.visualizacoes,
+            visualizacoesAnterior: a.anterior?.visualizacoes ?? null,
+            usuarios: a.atual.usuarios,
+            engajamentoTotalSeg: a.atual.engajamentoTotalSeg,
+          })),
+          publicados.map((a) => ({
+            slug: a.slug,
+            tags: a.tags,
+            modulo: trilha.get(a.slug)?.modulo ?? null,
+          })),
+          comparar,
+        ),
+      }
+    : null;
+
+  const extras = e.extras ?? null;
+  const ontem = somarDias(e.hoje, -1);
+  const porSlug = (r: Relatorio, cada: (slug: string, l: Relatorio['linhas'][number]) => void) => {
+    for (const l of r.linhas) {
+      const c = classificar(normalizarCaminho(l.dims['pagePath'] ?? ''), slugs);
+      if (c.tipo === 'artigo') cada(c.slug, l);
+    }
+  };
+
+  let aposPublicacao: AnaliseJanela | null = null;
+  if (e.aposPublicacao && extras?.posPublicacao) {
+    const views = new Map<string, Map<string, number>>();
+    porSlug(extras.posPublicacao, (slug, l) => {
+      const m = views.get(slug) ?? new Map<string, number>();
+      const data = dataGa4(l.dims['date'] ?? '');
+      m.set(data, (m.get(data) ?? 0) + (l.metricas['screenPageViews'] ?? 0));
+      views.set(slug, m);
+    });
+    aposPublicacao = analisarJanela(
+      e.aposPublicacao,
+      ontem,
+      e.artigos.map((a) => ({ slug: a.slug, titulo: a.title, publicadoEm: a.date })),
+      views,
+    );
+  }
+
+  let diario: DiaSerie[] | null = null;
+  if (e.diario && extras?.diario) {
+    const porData = new Map<string, { visualizacoes: number; usuarios: number }>();
+    for (const l of extras.diario.linhas) {
+      porData.set(dataGa4(l.dims['date'] ?? ''), {
+        visualizacoes: l.metricas['screenPageViews'] ?? 0,
+        usuarios: l.metricas['activeUsers'] ?? 0,
+      });
+    }
+    diario = montarSerieDiaria(
+      periodo.atual,
+      porData,
+      e.artigos.map((a) => ({ slug: a.slug, titulo: a.title, publicadoEm: a.date })),
+    );
+  }
+
+  let leitura: AnaliseLeitura | null = null;
+  if (extras?.leitura) {
+    const eventos = new Map<string, Map<string, ContagemEvento>>();
+    porSlug(extras.leitura, (slug, l) => {
+      const m = eventos.get(slug) ?? new Map<string, ContagemEvento>();
+      const nome = l.dims['eventName'] ?? '';
+      const antes = m.get(nome);
+      m.set(nome, {
+        eventos: (antes?.eventos ?? 0) + (l.metricas['eventCount'] ?? 0),
+        valor: (antes?.valor ?? 0) + (l.metricas['eventValue'] ?? 0),
+      });
+      eventos.set(slug, m);
+    });
+    leitura = analisarLeitura(
+      eventos,
+      comDados.map((a) => ({
+        slug: a.slug,
+        titulo: a.titulo,
+        visualizacoes: a.atual.visualizacoes,
+        usuarios: a.atual.usuarios,
+      })),
+    );
+  }
+  const artigosPequenos = comDados.filter((a) => a.amostraPequena).length;
+  const siteAmostraPequena = amostraPequenaSite(totAtual.usuarios);
+
   // Avisos
   if (periodo.atual.fim >= e.hoje) {
     avisos.push('O período inclui hoje: os dados do dia ainda estão incompletos no GA4.');
@@ -437,7 +631,7 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
   if (futuros > 0) {
     avisos.push(`${futuros} artigo(s) publicados depois do fim do período foram ignorados.`);
   }
-  const todos = Object.entries(rel);
+  const todos = Object.entries({ ...rel, ...(extras ?? {}) }) as [string, Relatorio][];
   if (todos.some(([, r]) => r.amostrado))
     avisos.push('O GA4 aplicou amostragem em algum relatório.');
   if (todos.some(([, r]) => r.limiarAplicado)) {
@@ -456,6 +650,19 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
     }
   }
 
+  avisos.push(...(e.avisosExtras ?? []));
+  if (siteAmostraPequena) {
+    avisos.push(
+      `Amostra pequena: ${totAtual.usuarios} usuários ativos no período (limiar ${LIMIAR_AMOSTRA_SITE}). ` +
+        'Variações, tendências e comparações entre canais ou grupos são indícios, não conclusões.',
+    );
+  }
+  if (artigosPequenos > 0) {
+    avisos.push(
+      `${artigosPequenos} artigo(s) com menos de ${LIMIAR_AMOSTRA_ARTIGO} usuários (marcados com † no ranking): ` +
+        'não compare esses artigos entre si.',
+    );
+  }
   const fuso = todos.map(([, r]) => r.fusoHorario).find((f) => f !== null) ?? null;
 
   return {
@@ -472,7 +679,23 @@ export function montarRelatorio(e: EntradaRelatorio): RelatorioMetricas {
       artigosSemDados: semDados.length,
       participacaoArtigosNasVisualizacoes: fracao(viewsArtigos, totAtual.visualizacoes),
     },
+    amostra: {
+      usuariosSite: totAtual.usuarios,
+      limiarSite: LIMIAR_AMOSTRA_SITE,
+      limiarArtigo: LIMIAR_AMOSTRA_ARTIGO,
+      siteAmostraPequena,
+      artigosAmostraPequena: artigosPequenos,
+    },
     artigos: cortar(comDados, e.limite).map((a, i) => ({ posicao: i + 1, ...a })),
+    agrupamento,
+    aposPublicacao,
+    diario,
+    leitura,
+    searchConsole: e.searchConsole ?? {
+      status: 'nao-configurado',
+      motivo: 'Não consultado.',
+      dica: 'A seção do Search Console não foi pedida.',
+    },
     artigosSemDados: semDados,
     caminhosDesconhecidos: cortar(desconhecidos.sort(porViews), e.limite),
     outrasPaginas: cortar(outras.sort(porViews), e.limite),
@@ -522,6 +745,186 @@ function tabela(cab: readonly string[], linhas: readonly (readonly string[])[]):
   ];
 }
 
+const BARRA = 24;
+const barra = (v: number, max: number) =>
+  max > 0 && v > 0 ? '█'.repeat(Math.max(1, Math.round((v / max) * BARRA))) : '';
+
+function secaoSearchConsole(o: string[], sc: SecaoSearchConsole): void {
+  o.push('## Google Search Console', '');
+  if (sc.status !== 'ok') {
+    o.push(
+      sc.status === 'erro'
+        ? `Não foi possível consultar o Search Console: ${sc.motivo}`
+        : `Não configurado: ${sc.motivo}`,
+      '',
+      `Dica: ${sc.dica}`,
+      '',
+    );
+    return;
+  }
+  o.push(
+    `- Propriedade: \`${sc.site}\` · período ${sc.periodo.inicio} a ${sc.periodo.fim} ` +
+      '(dados com atraso de 2 a 3 dias; consultas raras são anonimizadas)',
+    `- Total: ${num(sc.totais.impressoes)} impressões · ${num(sc.totais.cliques)} cliques · ` +
+      `CTR ${pct(sc.totais.ctr)} · posição média ${nf.format(sc.totais.posicaoMedia)}`,
+    '',
+  );
+  if (sc.artigos.length === 0) {
+    o.push('Nenhum artigo com impressões na busca neste período.', '');
+  } else {
+    o.push(
+      ...tabela(
+        [
+          'Artigo',
+          'Impressões',
+          'Cliques',
+          'CTR',
+          'Posição',
+          'Principais consultas (impr./cliques)',
+        ],
+        sc.artigos.map((a) => [
+          `${cel(a.titulo)}<br>\`${a.slug}\``,
+          num(a.impressoes),
+          num(a.cliques),
+          pct(a.ctr),
+          nf.format(a.posicaoMedia),
+          a.consultas
+            .map((c) => `${cel(c.consulta)} (${num(c.impressoes)}/${num(c.cliques)})`)
+            .join('; ') || '—',
+        ]),
+      ),
+      '',
+    );
+  }
+  if (sc.consultasDoSite.length > 0) {
+    o.push('### Principais consultas do site', '');
+    o.push(
+      ...tabela(
+        ['Consulta', 'Impressões', 'Cliques', 'CTR', 'Posição'],
+        sc.consultasDoSite.map((c) => [
+          cel(c.consulta),
+          num(c.impressoes),
+          num(c.cliques),
+          pct(c.ctr),
+          nf.format(c.posicaoMedia),
+        ]),
+      ),
+      '',
+    );
+  }
+}
+
+/** Agrupamento, janela pós-publicação, série diária, leitura e Search Console. */
+function secoesAnalise(o: string[], r: RelatorioMetricas, comp: boolean): void {
+  if (r.agrupamento) {
+    const rotulo = r.agrupamento.por === 'tag' ? 'tag' : 'módulo da trilha';
+    o.push(`## Agrupado por ${rotulo}`, '');
+    o.push(
+      ...tabela(
+        [
+          r.agrupamento.por === 'tag' ? 'Tag' : 'Módulo',
+          'Artigos (com visitas/publicados)',
+          'Views',
+          ...(comp ? ['Anterior', 'Δ'] : []),
+          'Views por artigo',
+          'Engaj. médio',
+        ],
+        r.agrupamento.grupos.map((g) => [
+          cel(g.chave) + (g.amostraPequena ? ' †' : ''),
+          `${g.artigosComDados}/${g.artigosPublicados}`,
+          num(g.visualizacoes),
+          ...(comp
+            ? [
+                num(g.visualizacoesAnterior ?? 0),
+                delta(variacao(g.visualizacoes, g.visualizacoesAnterior ?? 0)),
+              ]
+            : []),
+          nf.format(g.visualizacoesPorArtigo),
+          seg(g.engajamentoMedioSeg),
+        ]),
+      ),
+      '',
+      'Um artigo com várias tags conta em cada uma. † menos de ' +
+        `${r.amostra.limiarSite} usuários somados no grupo: amostra pequena.`,
+      '',
+    );
+  }
+
+  if (r.aposPublicacao) {
+    const j = r.aposPublicacao;
+    o.push(`## Visualizações nos ${j.dias} primeiros dias após a publicação`, '');
+    o.push(
+      `Dados até ${j.ate}. O dia da publicação é o dia 1. ` +
+        (j.mediaJanelaCompleta !== null
+          ? `Média dos ${j.artigosJanelaCompleta} artigos com janela completa: ${nf.format(j.mediaJanelaCompleta)} views.`
+          : 'Nenhum artigo completou a janela ainda.'),
+      '',
+      ...tabela(
+        ['Artigo', 'Publicado', 'Dias observados', 'Views'],
+        j.artigos.map((a) => [
+          `${cel(a.titulo)}<br>\`${a.slug}\``,
+          a.publicadoEm,
+          `${a.diasObservados}/${j.dias}${a.janelaCompleta ? '' : ' (incompleta)'}`,
+          num(a.visualizacoes),
+        ]),
+      ),
+      '',
+      'Compare só artigos com janela completa. A janela inclui o tráfego do próprio autor se o filtro de tráfego interno do GA4 não estiver ativo.',
+      '',
+    );
+  }
+
+  if (r.diario) {
+    const max = Math.max(...r.diario.map((d) => d.visualizacoes));
+    o.push('## Série diária (▲ = artigo publicado no dia)', '');
+    o.push(
+      ...tabela(
+        ['Data', 'Views', 'Usuários', 'Volume', 'Publicações'],
+        r.diario.map((d) => [
+          d.data,
+          num(d.visualizacoes),
+          num(d.usuarios),
+          barra(d.visualizacoes, max),
+          d.publicados.map((p) => `▲ ${cel(p.titulo)}`).join('; '),
+        ]),
+      ),
+      '',
+    );
+  }
+
+  o.push('## Leitura dos artigos (rolagem e tempo ativo)', '');
+  if (r.leitura === null) {
+    o.push('Não consultado (`--sem-leitura`, `--exemplo` ou falha: veja os avisos).', '');
+  } else if (!r.leitura.disponivel) {
+    o.push(
+      'Ainda sem eventos `leitura_*` no período. O site só começa a enviá-los depois do deploy ' +
+        'desta medição, e só para quem aceitou os cookies.',
+      '',
+    );
+  } else {
+    o.push(
+      ...tabela(
+        ['Artigo', 'Views', '25%', '50%', '75%', '90%', 'Tempo ativo médio'],
+        r.leitura.artigos.map((a) => [
+          `\`${a.slug}\`${a.amostraPequena ? ' †' : ''}`,
+          num(a.visualizacoes),
+          pct(a.alcance['25']),
+          pct(a.alcance['50']),
+          pct(a.alcance['75']),
+          pct(a.alcance['90']),
+          seg(a.tempoAtivoMedioSeg),
+        ]),
+      ),
+      '',
+      'Taxas = visualizações que chegaram ao marco / visualizações do artigo. Tempo ativo = aba ' +
+        'visível e com interação nos últimos 30s, somado e dividido pelas visualizações.',
+      '',
+    );
+  }
+
+  secaoSearchConsole(o, r.searchConsole);
+}
+
 export function formatarTexto(r: RelatorioMetricas): string {
   const o: string[] = [];
   const { atual, anterior } = r.periodo;
@@ -538,6 +941,13 @@ export function formatarTexto(r: RelatorioMetricas): string {
     '',
   );
 
+  if (r.amostra.siteAmostraPequena) {
+    o.push(
+      `> **Amostra pequena:** ${r.amostra.usuariosSite} usuários ativos (limiar ${r.amostra.limiarSite}). ` +
+        'Trate variações e comparações como indícios, não conclusões.',
+      '',
+    );
+  }
   o.push('## Totais do site', '');
   const t = r.totais;
   const linhaTot = (nome: string, k: keyof Totais, fmt: (n: number) => string) => [
@@ -582,7 +992,7 @@ export function formatarTexto(r: RelatorioMetricas): string {
           a.publicadoEm + (a.publicadoDuranteOPeriodo ? ' *' : ''),
           num(a.atual.visualizacoes),
           ...(comp ? [delta(a.variacao?.visualizacoes)] : []),
-          num(a.atual.usuarios),
+          num(a.atual.usuarios) + (a.amostraPequena ? ' †' : ''),
           seg(a.atual.engajamentoMedioSeg),
           ...(comp ? [a.tendencia ? ROTULO_TENDENCIA[a.tendencia] : '—'] : []),
           a.canais[0] ? `${cel(a.canais[0].canal)} (${pct(a.canais[0].participacao)})` : '—',
@@ -592,6 +1002,12 @@ export function formatarTexto(r: RelatorioMetricas): string {
     );
     if (r.artigos.some((a) => a.publicadoDuranteOPeriodo)) {
       o.push('\\* publicado durante o período (teve menos dias no ar).', '');
+    }
+    if (r.amostra.artigosAmostraPequena > 0) {
+      o.push(
+        `† menos de ${r.amostra.limiarArtigo} usuários: amostra pequena demais para comparar.`,
+        '',
+      );
     }
   }
 
@@ -639,6 +1055,29 @@ export function formatarTexto(r: RelatorioMetricas): string {
       '',
     );
   }
+
+  const fontesArtigo = r.artigos.filter((a) => a.fontes.length > 0);
+  if (fontesArtigo.length > 0) {
+    o.push('### Fonte / meio / campanha por artigo (UTM, até 3, período atual)', '');
+    o.push(
+      ...tabela(
+        ['Artigo', 'Fonte / meio · campanha'],
+        fontesArtigo.map((a) => [
+          `\`${a.slug}\``,
+          a.fontes
+            .slice(0, 3)
+            .map(
+              (f) =>
+                `${cel(f.fonteMeio)}${f.campanha ? ` · ${cel(f.campanha)}` : ''} ${num(f.visualizacoes)} (${pct(f.participacao)})`,
+            )
+            .join(' · '),
+        ]),
+      ),
+      '',
+    );
+  }
+
+  secoesAnalise(o, r, comp);
 
   const avulsas = (titulo: string, lista: readonly PaginaAvulsa[]) => {
     if (lista.length === 0) return;

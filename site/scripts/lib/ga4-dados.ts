@@ -55,11 +55,11 @@ export type NomeRelatorio = (typeof RELATORIOS)[number];
 
 export const PREFIXO_ARTIGOS = '/artigos/';
 
-function intervalo(i: Intervalo, name: string): DateRange {
+export function intervalo(i: Intervalo, name: string): DateRange {
   return { startDate: i.inicio, endDate: i.fim, name };
 }
 
-function filtroTexto(
+export function filtroTexto(
   fieldName: string,
   matchType: 'EXACT' | 'BEGINS_WITH',
   value: string,
@@ -67,7 +67,7 @@ function filtroTexto(
   return { filter: { fieldName, stringFilter: { matchType, value, caseSensitive: false } } };
 }
 
-function combinar(filtros: readonly FilterExpression[]): FilterExpression | undefined {
+export function combinar(filtros: readonly FilterExpression[]): FilterExpression | undefined {
   if (filtros.length === 0) return undefined;
   if (filtros.length === 1) return filtros[0];
   return { andGroup: { expressions: filtros } };
@@ -132,10 +132,15 @@ export function montarBatch(op: OpcoesRequisicao): { requests: RunReportRequest[
       limit: '50',
       ...comFiltro([]),
     },
-    // canal por artigo (só período atual)
+    // canal, fonte/meio e campanha (utm_campaign) por artigo (só período atual)
     {
       dateRanges: [atual],
-      dimensions: m('pagePath', 'sessionDefaultChannelGroup'),
+      dimensions: m(
+        'pagePath',
+        'sessionDefaultChannelGroup',
+        'sessionSourceMedium',
+        'sessionCampaignName',
+      ),
       metrics: m('screenPageViews'),
       limit: '10000',
       ...comFiltro([filtroTexto('pagePath', 'BEGINS_WITH', PREFIXO_ARTIGOS)]),

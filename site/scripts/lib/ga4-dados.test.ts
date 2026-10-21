@@ -48,6 +48,16 @@ describe('montarBatch', () => {
     expect(requests[4].dateRanges).toHaveLength(1);
   });
 
+  it('o relatório de canal por artigo pede fonte / meio e campanha (UTM)', () => {
+    const { requests } = montarBatch({ periodo: PERIODO, host: null });
+    expect(requests[4].dimensions.map((d) => d.name)).toEqual([
+      'pagePath',
+      'sessionDefaultChannelGroup',
+      'sessionSourceMedium',
+      'sessionCampaignName',
+    ]);
+  });
+
   it('não manda filtro de host nem intervalo anterior quando desligados', () => {
     const { requests } = montarBatch({ periodo: { ...PERIODO, anterior: null }, host: null });
     expect(requests[1].dimensionFilter).toBeUndefined();
