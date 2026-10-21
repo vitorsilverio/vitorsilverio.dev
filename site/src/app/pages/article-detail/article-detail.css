@@ -48,12 +48,6 @@
   font-size: 1.08rem;
 }
 
-.giscus {
-  margin-top: 2.75rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-
 /* Capa: ocupa a largura da coluna do artigo, também no celular (ali o
    tamanho reduzido deixava o cabeçalho sem personalidade). Lazy + dimensões
    fixas: sem salto de layout. */
@@ -200,10 +194,4 @@
   .article-nav {
     grid-template-columns: 1fr;
   }
-}
-
-/* Reserva espaço para os comentários (Giscus é injetado via JS após o
-   primeiro paint): evita crescimento tardio da página (CLS). */
-.giscus {
-  min-height: 160px;
 }

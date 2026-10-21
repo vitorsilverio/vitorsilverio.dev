@@ -67,12 +67,20 @@
         <h2 id="p-giscus">Comentários dos artigos (Giscus e GitHub)</h2>
         <p>
           Os comentários usam o Giscus, que guarda cada conversa nas Discussions do GitHub do
-          projeto. Para que a caixa de comentários apareça, a página de cada artigo carrega um
-          script de giscus.app e exibe conteúdo vindo do GitHub, o que expõe o seu endereço IP a
-          esses serviços. Isso acontece ao abrir um artigo e
-          <strong>não depende da escolha feita no aviso de cookies</strong>. Para comentar ou reagir
-          é preciso entrar com a sua conta do GitHub; o que você escrever fica público, sob a
-          política do GitHub.
+          projeto.
+          <strong>Nada de giscus.app ou do GitHub é carregado ao abrir um artigo.</strong> Só depois
+          que você clicar em <strong>Carregar comentários</strong>, o seu navegador baixa um script
+          de giscus.app e exibe conteúdo vindo do GitHub, o que expõe o seu endereço IP a esses
+          serviços. Isso independe da escolha feita no aviso de cookies. Para comentar ou reagir é
+          preciso entrar com a sua conta do GitHub; o que você escrever fica público, sob a política
+          do GitHub.
+        </p>
+        <p>
+          Se marcar <em>Lembrar minha escolha neste navegador</em>, o site grava no seu navegador
+          (localStorage, chave <code>giscus-autoload</code>) um indicador para carregar os
+          comentários automaticamente nas próximas visitas. Você desfaz isso a qualquer momento no
+          link <em>Não carregar automaticamente</em>, que aparece junto dos comentários, ou limpando
+          os dados do site no navegador.
         </p>
       </section>
 
@@ -101,7 +109,8 @@
             >.
           </li>
           <li>
-            <strong>Giscus e GitHub</strong>, para os comentários, como descrito acima:
+            <strong>Giscus e GitHub</strong>, para os comentários, só depois do seu clique, como
+            descrito acima:
             <a href="https://giscus.app/pt" target="_blank" rel="noopener"
               >giscus.app<span class="visually-hidden"> (abre em nova aba)</span></a
             >.

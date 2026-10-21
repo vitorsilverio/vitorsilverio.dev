@@ -1,0 +1,95 @@
+:host {
+  display: block;
+  margin-top: 2.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.giscus-block {
+  min-height: 9rem;
+}
+
+.giscus-block:focus {
+  outline: none;
+}
+
+.giscus-block:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.gate {
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.gate p {
+  margin: 0 0 0.9rem;
+  max-width: 65ch;
+}
+
+.gate-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.remember input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--accent);
+}
+
+.remember input:focus-visible,
+.link-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.giscus {
+  min-height: 10rem;
+}
+
+.prefs {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0.5rem 0.25rem;
+  min-height: 24px;
+  color: var(--accent-strong);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.status {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+}
+
+.status:empty {
+  display: none;
+}
+
+.status.error {
+  color: var(--text);
+  font-weight: 600;
+}

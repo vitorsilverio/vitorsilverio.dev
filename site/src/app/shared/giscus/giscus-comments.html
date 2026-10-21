@@ -1,0 +1,28 @@
+<section class="giscus-block" aria-label="Comentários" tabindex="-1" #region>
+  @if (!active()) {
+    <div class="gate">
+      <p class="gate-title">Comentários</p>
+      <p>
+        Os comentários usam o Giscus, que guarda as discussões no GitHub. Ao carregar, seu navegador
+        se conecta ao giscus.app e ao GitHub, que recebem o seu endereço IP.
+        <a routerLink="/privacidade">Saiba mais na política de privacidade</a>.
+      </p>
+      <button type="button" class="btn btn-primary" (click)="load()">Carregar comentários</button>
+      <label class="remember">
+        <input type="checkbox" [checked]="remember()" (change)="setRemember($event)" />
+        Lembrar minha escolha neste navegador
+      </label>
+    </div>
+  } @else {
+    <div class="giscus" #host></div>
+    @if (autoLoad()) {
+      <p class="prefs">
+        Os comentários carregam automaticamente neste navegador.
+        <button type="button" class="link-btn" (click)="forget()">
+          Não carregar automaticamente
+        </button>
+      </p>
+    }
+  }
+  <p class="status" role="status" [class.error]="failed()">{{ status() }}</p>
+</section>
