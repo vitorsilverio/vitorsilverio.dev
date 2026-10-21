@@ -1,41 +1,75 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Objdump } from '../../../shared/objdump/objdump';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Objdump],
   selector: 'app-article-fundamentos-arm',
   template: `
     <p>
-      No artigo de
-      <a routerLink="/artigos/ambiente-arm">setup do ambiente</a> eu prometi: o
-      próximo passo era descer de fato na arquitetura e entender o
-      <strong>banco de registradores (R0–R15)</strong> e o
-      <strong>CPSR</strong> com suas flags. É exatamente aqui que a gente para de
-      tratar o ARM como "caixa-preta" e começa a ler qualquer
-      <code>objdump</code> ou dump de registradores sem medo.
+      Abra qualquer <code>objdump</code> de um binário ARM ou o dump de
+      registradores de um depurador e você vai ver nomes como <code>r0</code>,
+      <code>lr</code>, <code>cpsr</code>, <code>addeq</code> e
+      <code>ldr r0, [r1, #4]!</code>. Sem um mapa mental da arquitetura, isso
+      parece ruído. Com ele, vira leitura corrente. Este artigo monta esse mapa:
+      o <strong>banco de registradores (R0–R15)</strong>, o
+      <strong>CPSR</strong> e suas flags, os <strong>modos de execução</strong>,
+      os três conjuntos de instruções (ARM, Thumb e Thumb-2), a execução
+      condicional e os modos de endereçamento.
     </p>
     <p>
-      O <a
+      Dois projetos aparecem nos exemplos. O
+      <a
         href="https://github.com/vitorsilverio/arm-jitter"
         target="_blank"
         rel="noopener"
         >arm-jitter</a
       >
-      emula de tudo: de <strong>ARMv4 até ARMv9 (64 bits, AArch64)</strong> e
-      todas as extensões. Mas o <strong>arm-box</strong> — o runner que usamos no
-      curso — hoje suporta de <strong>ARMv5 a ARMv7</strong>. Por isso este
-      artigo foca na <strong>ARMv7-A</strong> (32 bits): é o que você consegue
-      rodar e inspecionar de verdade por aqui. Os conceitos base (registradores,
-      flags, load/store) são compartilhados por toda a família.
+      é uma biblioteca Java que decodifica e executa instruções ARM (um
+      emulador). O
+      <a
+        href="https://github.com/vitorsilverio/armbox"
+        target="_blank"
+        rel="noopener"
+        >arm-box</a
+      >
+      é um executor de linha de comando construído sobre ele: carrega um
+      programa ARM de 32 bits para Linux (um arquivo <em>ELF</em>, o formato
+      executável do Linux) e o executa, de forma parecida com o
+      <code>qemu-arm</code>. O objetivo declarado do arm-jitter é cobrir de ARMv4
+      até AArch64/ARMv9; hoje o README dele marca como prontos o ARMv4T, o
+      ARMv5TE, o ARMv6K, o Thumb-2, o ARMv7-A e o perfil Cortex-M, com AArch64 em
+      andamento. Este artigo foca na <strong>ARMv7-A</strong> (32 bits), a
+      variante que você roda e inspeciona com o arm-box
+      (<code>--arch=armv7a</code>). Os conceitos base (registradores, flags,
+      load/store) valem para toda a família.
+    </p>
+    <p>Ao final você será capaz de:</p>
+    <ol>
+      <li>dizer o papel de cada registrador de R0 a R15 e o que o CPSR guarda;</li>
+      <li>explicar por que uma interrupção "troca" SP e LR (registradores em banco);</li>
+      <li>diferenciar ARM, Thumb e Thumb-2 e ler uma execução condicional;</li>
+      <li>reconhecer os modos de endereçamento de <code>LDR</code>/<code>STR</code>;</li>
+      <li>montar um programa mínimo, rodá-lo no arm-box com o GDB e ver as flags
+        N, Z e C mudarem instrução a instrução.</li>
+    </ol>
+    <p>
+      <strong>O que você precisa:</strong> para reproduzir o exemplo, o toolchain
+      <code>arm-none-eabi</code> (montador <code>as</code>, ligador
+      <code>ld</code> e <code>gdb</code>; o devkitARM serve), um JDK 25 ou mais
+      novo e o <code>armbox.jar</code> (gerado com <code>mvn package</code> no
+      repositório do arm-box). Os arquivos de exemplo estão linkados na seção do
+      exemplo. Não é preciso saber assembly: tudo o que aparece é explicado
+      aqui. Para só ler o artigo, nada disso é necessário.
     </p>
 
     <h2>Por que decorar a arquitetura?</h2>
     <p>
-      Diferente de uma máquina de pilha (tipo JVM ou x86 antigo), o ARM é um
+      Diferente de uma máquina de pilha (como a JVM) e de arquiteturas que aceitam operandos direto na memória (como o x86), o ARM é um
       <strong>RISC load/store</strong>: a aritmética só acontece em registradores
       e a memória é acessada por instruções dedicadas. Quem entende o banco de
-      registradores e as flags entende 80% do que um binário está fazendo — o
-      resto é só combinar instruções.
+      registradores e as flags já acompanha o essencial do que um binário está
+      fazendo — o resto é combinar instruções.
     </p>
 
     <h2>O banco de registradores (R0–R15)</h2>
@@ -50,7 +84,12 @@ import { RouterLink } from '@angular/router';
         <strong>passar argumentos</strong> e retornar resultados em chamadas.
       </dd>
       <dt>R4–R11</dt>
-      <dd>registradores de propósito geral para variáveis locais.</dd>
+      <dd>
+        registradores de propósito geral para variáveis locais; por convenção,
+        a função chamada deve preservá-los (<em>callee-saved</em>). Em algumas
+        variantes da convenção, o R9 tem papel especial (base estática ou
+        registrador de thread).
+      </dd>
       <dt>R12 (IP)</dt>
       <dd>
         <em>intra-procedure</em> — usado como scratch por alguns
@@ -65,7 +104,9 @@ import { RouterLink } from '@angular/router';
       </dd>
       <dt>R15 (PC)</dt>
       <dd>
-        o <strong>program counter</strong>; aponta para a instrução em execução.
+        o <strong>program counter</strong>; endereço de onde a CPU busca instruções.
+        Ao <em>ler</em> R15 num programa ARM você obtém o endereço da instrução
+        atual <strong>+ 8</strong> (por causa do pipeline do processador).
       </dd>
     </dl>
     <p>
@@ -111,9 +152,11 @@ import { RouterLink } from '@angular/router';
 
     <h2>Modos de execução</h2>
     <p>
-      O ARMv7-A tem sete modos principais. O <strong>User</strong> é o único sem
-      privilégios; todos os outros são privilegiados e existem para tratar
-      <em>exceptions</em> (interrupções, erros, chamadas de sistema):
+      O ARMv7-A tem sete modos clássicos (mais o <em>Monitor</em>, das Security
+      Extensions/TrustZone, e o <em>Hyp</em>, da extensão de virtualização). O
+      <strong>User</strong> é o único sem privilégios; todos os outros são
+      privilegiados e existem para tratar <em>exceptions</em> (interrupções,
+      erros, chamadas de sistema):
     </p>
     <ul>
       <li><strong>User (usr)</strong> — código de aplicação, sem privilégio.</li>
@@ -124,10 +167,11 @@ import { RouterLink } from '@angular/router';
       <li><strong>System (sys)</strong> — igual ao User em registradores, mas privilegiado.</li>
     </ul>
     <p>
-      Na prática do nosso curso quase tudo roda em <strong>User</strong>: o
-      arm-box não finge um kernel, ele só executa seu binário. Mas vale saber
-      que, num sistema real, cada interrupção troca o banco de SP/LR e o modo no
-      CPSR.
+      Na prática do nosso curso o programa roda em <strong>System</strong>: o
+      arm-box não finge um kernel, ele só executa seu binário, entregando-o em
+      modo System com IRQ e FIQ mascarados (você verá <code>cpsr = 0xdf</code>
+      no exemplo abaixo). Num sistema real, cada interrupção troca o banco de
+      SP/LR e o modo no CPSR.
     </p>
 
     <h2>O conjunto de instruções (ISA)</h2>
@@ -144,7 +188,7 @@ import { RouterLink } from '@angular/router';
       </li>
       <li>
         <strong>THUMB-2</strong> — mistura 16/32 bits, tentando unir densidade e
-        performance; é o que a maioria dos binários modernos usa.
+        performance. Os núcleos Cortex-M executam apenas Thumb/Thumb-2.
       </li>
     </ul>
     <p>
@@ -167,7 +211,7 @@ import { RouterLink } from '@angular/router';
     <pre><code class="language-armasm">add  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">5</span>            @ imediato: <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token number">5</span>
 add  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span>            @ registrador: <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token register symbol">r2</span>
 ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> LSL <span class="token operator">#</span><span class="token number">2</span><span class="token punctuation">]</span>  @ registrador deslocado: <span class="token register symbol">r0</span> <span class="token operator">=</span> mem<span class="token punctuation">[</span><span class="token register symbol">r1</span> <span class="token operator">+</span> <span class="token register symbol">r2</span><span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">]</span>
-ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span>tabela           @ PC<span class="token operator">-</span>relative: carrega endereço de 'tabela'
+ldr  r0, =tabela           @ pseudo-instrução: o montador guarda o endereço de 'tabela' num pool de constantes e emite um ldr relativo ao PC
 ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token operator">!</span>         @ pré<span class="token operator">-</span>indexado com writeback <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">)</span>: <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token register symbol">r1</span><span class="token operator">+</span><span class="token number">4</span>
 ldr  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>          @ pós<span class="token operator">-</span>indexado: usa <span class="token register symbol">r1</span> e depois <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token register symbol">r1</span><span class="token operator">+</span><span class="token number">4</span></code></pre>
     <p>
@@ -182,109 +226,189 @@ ldr  <span class="token register symbol">r0</span><span class="token punctuation
       nunca leem ou escrevem memória. Para operar sobre dados na RAM você faz
       <code>LDR</code> para um registrador, calcula, e <code>STR</code> de volta.
       É por isso que ver <code>LDR r0, [r1]</code> seguido de
-      <code>ADDS r0, r0, #1</code> é o padrão "incremente o valor na memória".
+      <code>ADD r0, r0, #1</code> e <code>STR r0, [r1]</code> é o padrão "incremente o valor na memória".
     </p>
 
     <h2>Exemplo prático: flags na prática</h2>
     <p>
-      Um programinha mínimo que mexe nas flags. Depois de montar e rodar no
-      arm-box, inspecione o CPSR:
+      Um programinha mínimo que mexe nas flags —
+      <a href="/curso-arm/exemplos/fundamentos-arm-flags.s"><code>fundamentos-arm-flags.s</code></a>
+      (<a href="/curso-arm/exemplos/fundamentos-arm-flags.elf"><code>.elf</code></a>
+      pré-montado):
     </p>
-    <pre><code class="language-armasm">        .syntax unified
-        .arch armv7<span class="token operator">-</span>a
-        .text
-        .global _start
-
+    <pre><code class="language-armasm">    .syntax unified
+    .arch armv7<span class="token operator">-</span>a
+    .arm
+    .text
+    .global _start
 _start:
-        mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">10</span>         @ <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token number">10</span>
-        mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>          @ <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token number">3</span>
-        adds  <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>      @ <span class="token register symbol">r2</span> <span class="token operator">=</span> <span class="token number">13</span>  <span class="token operator">-</span><span class="token operator">></span> CPSR reflete <span class="token punctuation">(</span>Z<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> N<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
-        subs  <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>      @ <span class="token register symbol">r3</span> <span class="token operator">=</span> <span class="token number">0</span>   <span class="token operator">-</span><span class="token operator">></span> flag Z <span class="token operator">=</span> <span class="token number">1</span>
-        subs  <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">20</span>     @ <span class="token register symbol">r4</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">10</span> <span class="token operator">-</span><span class="token operator">></span> flag N <span class="token operator">=</span> <span class="token number">1</span>
-        mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>          @ código de saída
-        bx    <span class="token register symbol">lr</span></code></pre>
+    mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">10</span>          @ <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token number">10</span>
+    mov   <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>           @ <span class="token register symbol">r1</span> <span class="token operator">=</span> <span class="token number">3</span>
+    adds  <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>       @ <span class="token register symbol">r2</span> <span class="token operator">=</span> <span class="token number">13</span>: N<span class="token operator">=</span><span class="token number">0</span> Z<span class="token operator">=</span><span class="token number">0</span> C<span class="token operator">=</span><span class="token number">0</span> V<span class="token operator">=</span><span class="token number">0</span>
+    subs  <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>       @ <span class="token register symbol">r3</span> <span class="token operator">=</span> <span class="token number">0</span>:  Z<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> C<span class="token operator">=</span><span class="token number">1</span> <span class="token punctuation">(</span>sem borrow<span class="token punctuation">)</span>
+    subs  <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">20</span>      @ <span class="token register symbol">r4</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">10</span>: N<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> C<span class="token operator">=</span><span class="token number">0</span> <span class="token punctuation">(</span>houve borrow<span class="token punctuation">)</span>
+    mov   <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>           @ código de saída
+    mov   <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>           @ NR_exit <span class="token punctuation">(</span>syscall exit do Linux<span class="token punctuation">)</span>
+    svc   <span class="token operator">#</span><span class="token number">0</span></code></pre>
+    <p>Montado, ligado e desmontado com o toolchain <code>arm-none-eabi</code>:</p>
+    <pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv7-a <span class="token parameter variable">-o</span> fundamentos-arm-flags.o fundamentos-arm-flags.s
+arm-none-eabi-ld <span class="token parameter variable">-Ttext</span><span class="token operator">=</span>0x10000 <span class="token parameter variable">-o</span> fundamentos-arm-flags.elf fundamentos-arm-flags.o
+arm-none-eabi-objdump <span class="token parameter variable">-d</span> fundamentos-arm-flags.elf</code></pre>
+    <app-objdump
+      listagem="00010000 &lt;_start&gt;:
+   10000:	e3a0000a 	mov	r0, #10
+   10004:	e3a01003 	mov	r1, #3
+   10008:	e0902001 	adds	r2, r0, r1
+   1000c:	e0513001 	subs	r3, r1, r1
+   10010:	e2504014 	subs	r4, r0, #20
+   10014:	e3a00000 	mov	r0, #0
+   10018:	e3a07001 	mov	r7, #1
+   1001c:	ef000000 	svc	0x00000000"
+    />
     <p>
-      Repare no <code>S</code> obrigatório: sem ele, nenhuma flag mudaria e a
-      execução condicional deixaria de fazer sentido.
+      Repare no <code>S</code> em <code>adds</code>/<code>subs</code>: sem ele,
+      nenhuma flag mudaria e a execução condicional deixaria de fazer sentido. Na
+      subtração, o <strong>C</strong> funciona ao contrário do que muita gente
+      espera: ele vale 1 quando <em>não</em> houve empréstimo (<em>borrow</em>).
+      Por isso <code>3 − 3</code> deixa C=1 e <code>10 − 20</code> deixa C=0.
     </p>
 
     <h2>Como observar o resultado passo a passo (GDB)</h2>
     <p>
-      O arm-box já imprime o <strong>dump final</strong> dos registradores ao
-      encerrar — é o atalho rápido: procure o CPSR e confira
-      <code>Z=1</code> (do <code>subs</code>) e <code>N=1</code> (do
-      <code>subs r4, r0, #20</code>). Mas para ver as
-      <strong>flags mudando instrução a instrução</strong>, a ferramenta certa é
-      o GDB. Como o binário é ARM rodando num host x86_64, usamos o
-      <code>qemu-arm</code> (user-mode) como "motor" e o
-      <code>gdb-multiarch</code> (instalado no setup) como front-end. Se o
-      qemu-arm não estiver presente, instale com
-      <code>sudo apt install qemu-user</code> (Linux) ou
-      <code>brew install qemu</code> (macOS).
+      Rodar o programa direto não mostra nada: o arm-box só imprime um dump de
+      registradores quando o programa guest falha (segfault, com saída 139);
+      num programa correto ele termina em silêncio e devolve como código de saída
+      o valor de <code>r0</code> (aqui, 0). Para ver as <strong>flags mudando
+      instrução a instrução</strong>, a ferramenta certa é o GDB, e o arm-box tem
+      um servidor GDB embutido. Em dois terminais:
     </p>
-    <p>Terminal 1 — sobe o binário sob o gdbserver do qemu na porta 1234:</p>
-    <pre><code class="language-bash">qemu-arm <span class="token parameter variable">-g</span> <span class="token number">1234</span> flags.elf</code></pre>
-    <p>Terminal 2 — abre o GDB, aponta para a arquitetura e conecta:</p>
-    <pre><code class="language-bash">gdb-multiarch flags.elf
-<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">set</span> architecture arm
-<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> target remote localhost:1234
-<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">break</span> _start
-<span class="token punctuation">(</span>gdb<span class="token punctuation">)</span> <span class="token builtin class-name">continue</span></code></pre>
+    <pre><code class="language-bash"><span class="token comment"># terminal 1: sobe o emulador e espera o GDB</span>
+<span class="token function">java</span> <span class="token parameter variable">-jar</span> armbox.jar <span class="token parameter variable">--arch</span><span class="token operator">=</span>armv7a <span class="token parameter variable">--gdb</span><span class="token operator">=</span><span class="token number">3333</span> fundamentos-arm-flags.elf
+
+<span class="token comment"># terminal 2: conecta (o PC já está em _start)</span>
+arm-none-eabi-gdb <span class="token parameter variable">-q</span> fundamentos-arm-flags.elf <span class="token parameter variable">-ex</span> <span class="token string">"target remote :3333"</span></code></pre>
     <p>
-      Agora vá passo a passo com <code>stepi</code> (ou <code>si</code>) e
-      inspecione o estado a cada instrução. Comece pelo
-      <strong>resultado que você já calculou no papel</strong> e confirme cada
-      passo:
+      Ao conectar, o programa está parado na primeira instrução. Use
+      <code>stepi</code> (nunca <code>continue</code>: ele roda o programa até o
+      <code>svc</code> final e derruba o servidor). Saída real:
     </p>
-    <pre><code class="language-plaintext">(gdb) stepi
-(gdb) info registers r0 r1 r2 r3 r4
-(gdb) p/t $cpsr        # bits do CPSR: N Z C V ... I F T e o modo
+    <pre><code class="language-text">(gdb) stepi 3
+0x0001000c in _start ()
+(gdb) info registers r0 r1 r2 cpsr
+r0             0xa                 10
+r1             0x3                 3
+r2             0xd                 13
+cpsr           0xdf                223
 (gdb) stepi
-(gdb) info registers r2
-(gdb) p $cpsr</code></pre>
-    <p>O que você deve ver, passo a passo:</p>
+0x00010010 in _start ()
+(gdb) info registers r3 cpsr
+r3             0x0                 0
+cpsr           0x600000df          1610612959
+(gdb) stepi
+0x00010014 in _start ()
+(gdb) info registers r4 cpsr
+r4             0xfffffff6          4294967286
+cpsr           0x800000df          2147483871</code></pre>
+    <p>O que isso mostra:</p>
     <ul>
-      <li>antes do <code>adds</code>: <code>r0=10</code>, <code>r1=3</code>;</li>
       <li>
-        após <code>adds r2, r0, r1</code>: <code>r2=13</code>, CPSR com
-        <code>Z=0</code> e <code>N=0</code>;
+        após o <code>adds</code> (três <code>stepi</code>): <code>r2=13</code> e
+        o CPSR continua <code>0xdf</code>: N, Z, C e V zerados. Os oito bits
+        baixos <code>0xdf</code> (<code>1101 1111</code>) são
+        <code>I=1</code>, <code>F=1</code> e <code>M=11111</code>: o arm-box
+        entrega o programa em <strong>modo System</strong>, com IRQ e FIQ
+        mascarados;
       </li>
       <li>
-        após <code>subs r3, r1, r1</code>: <code>r3=0</code> e a flag
-        <code>Z=1</code> acende;
+        após <code>subs r3, r1, r1</code>: <code>r3=0</code> e o CPSR vira
+        <code>0x600000df</code>, ou seja, <strong>Z</strong>
+        (<code>0x40000000</code>) e <strong>C</strong> (<code>0x20000000</code>)
+        ligados;
       </li>
       <li>
-        após <code>subs r4, r0, #20</code>: <code>r4=-10</code>
-        (0xFFFFFFF6) e a flag <code>N=1</code> acende.
+        após <code>subs r4, r0, #20</code>: <code>r4=0xfffffff6</code> (−10) e o
+        CPSR vira <code>0x800000df</code>: só <strong>N</strong> ligado; Z
+        apaga e C zera, porque houve empréstimo.
       </li>
     </ul>
     <p>
-      É assim que se liga a teoria ao silício (virtual): cada
+      É assim que se liga a teoria ao processador (virtual): cada
       <code>stepi</code> é uma instrução real e cada
-      <code>info registers</code> é o raio-X do processador naquele exato
-      instante. Quando o arm-box ganhar um modo de depuração, você o usaria da
-      mesma forma — <code>target remote</code> e <code>stepi</code>.
-    </p>
-    <p class="muted">
-      Obs.: o exemplo retorna com <code>bx lr</code> (convenção do arm-box). Se
-      for executá-lo até o fim sob qemu-user, troque o <code>bx lr</code> por
-      <code>mov r7, #1</code> seguido de <code>svc #0</code> (exit do Linux) — o
-      acompanhamento das flags é idêntico. Para repetir o teste de fumaça do
-      <a routerLink="/artigos/ambiente-arm">setup</a>, monte com
-      <code>arm-none-eabi-as</code> + <code>arm-none-eabi-ld</code> e rode com
-      <code>java -jar target/armbox-1.0-SNAPSHOT.jar flags.elf</code>.
+      <code>info registers</code> é o raio-X do estado naquele instante.
     </p>
 
-    <h2>Próximos passos</h2>
+    <h2>Glossário</h2>
+    <div class="scroll-x">
+      <table>
+        <thead>
+          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">ARM</th><td>família de arquiteturas de processador RISC; também o nome do conjunto de instruções de 32 bits dela.</td></tr>
+          <tr><th scope="row">RISC load/store</th><td>arquitetura em que a aritmética só opera em registradores e só instruções específicas (<code>LDR</code>/<code>STR</code>) acessam a memória.</td></tr>
+          <tr><th scope="row">Registrador</th><td>posição de armazenamento dentro da CPU; no ARM de 32 bits, 16 visíveis (R0–R15), cada um com 32 bits.</td></tr>
+          <tr><th scope="row">SP, LR, PC</th><td>R13 (ponteiro de pilha), R14 (<em>link register</em>, endereço de retorno) e R15 (contador de programa).</td></tr>
+          <tr><th scope="row">CPSR</th><td><em>Current Program Status Register</em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
+          <tr><th scope="row">Flags N, Z, C, V</th><td>negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal).</td></tr>
+          <tr><th scope="row">Modo de execução</th><td>estado de privilégio e contexto da CPU (User, Supervisor, IRQ, FIQ, Abort, Undefined, System).</td></tr>
+          <tr><th scope="row">Registrador em banco (<em>banked</em>)</th><td>registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
+          <tr><th scope="row">Thumb / Thumb-2</th><td>conjuntos de instruções compactos: 16 bits (Thumb) e mistura de 16 e 32 bits (Thumb-2).</td></tr>
+          <tr><th scope="row">Execução condicional</th><td>sufixo de condição (<code>eq</code>, <code>ne</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição.</td></tr>
+          <tr><th scope="row">Pré/pós-indexado</th><td>modos de endereçamento em que o registrador base é atualizado antes (<code>!</code>) ou depois do acesso à memória.</td></tr>
+          <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux, que o arm-box carrega.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Comandos</h2>
+    <div class="scroll-x">
+      <table>
+        <thead>
+          <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>monta o assembly para ARMv7-A.</td></tr>
+          <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>liga o objeto, colocando o código em <code>0x10000</code>.</td></tr>
+          <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta o executável (endereço, bytes, mnemônico).</td></tr>
+          <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a x.elf</code></th><td>executa o programa no arm-box; o código de saída é o <code>r0</code> final.</td></tr>
+          <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 x.elf</code></th><td>sobe o servidor GDB na porta 3333 e espera o depurador.</td></tr>
+          <tr><th scope="row"><code>arm-none-eabi-gdb -q x.elf -ex "target remote :3333"</code></th><td>abre o GDB e conecta no arm-box.</td></tr>
+          <tr><th scope="row"><code>stepi</code> (ou <code>si</code>)</th><td>(GDB) executa uma instrução de máquina; <code>stepi 3</code> executa três.</td></tr>
+          <tr><th scope="row"><code>info registers r2 cpsr</code></th><td>(GDB) mostra os registradores indicados.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Conclusão</h2>
     <p>
-      Agora você entende o "hardware" invisível por trás de qualquer dump. No
-      próximo artigo mergulhamos na
-      <strong>anatomia de um binário ELF</strong>: seções, o símbolo
-      <code>_start</code> e como o linker monta o executável que o arm-box
-      carrega — completando o ciclo entre o código que você escreve e o que a CPU
-      (virtual) executa. Veja a
-      <a routerLink="/artigos">lista de artigos</a> para acompanhar.
+      O ARM de 32 bits é um RISC load/store com 16 registradores visíveis, um
+      registrador de estado (CPSR) com as flags N/Z/C/V e o modo atual,
+      registradores em banco para tornar a troca de contexto barata, três
+      conjuntos de instruções e predicação em quase toda instrução. Com isso
+      você já lê o essencial de um <code>objdump</code> e de um dump de
+      registradores, e viu no arm-box que as flags mudam só quando a instrução
+      tem o sufixo <code>S</code>. Esse vocabulário é a base para o resto: quem
+      escreve assembly, depura firmware ou implementa um emulador usa exatamente
+      estes conceitos.
     </p>
+    <h3>Para ir além</h3>
+    <ul>
+      <li><a routerLink="/artigos/registradores-e-cpsr-arm">Registradores e CPSR: banking, modos e SPSR</a>, o mesmo assunto bit a bit;</li>
+      <li><a routerLink="/artigos/thumb-e-thumb-2">Thumb e Thumb-2</a>, para ver os bytes de 16 e 32 bits;</li>
+      <li><a routerLink="/artigos/anatomia-instrucao-arm">Anatomia de uma instrução ARM</a>, o formato de 32 bits campo a campo;</li>
+      <li><a routerLink="/artigos/flags-e-desvios-condicionais">Flags e desvios condicionais</a> e <a routerLink="/artigos/carga-e-armazenamento-arm">Carga e armazenamento</a>, que aprofundam as flags e o <code>LDR</code>/<code>STR</code>;</li>
+      <li><a routerLink="/artigos/ambiente-arm">Setup do ambiente ARM</a>, para instalar o toolchain.</li>
+    </ul>
+
+    <h2>Referências</h2>
+    <ul>
+      <li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo A2 (<em>Application Level Programmers' Model</em>: registradores, flags, execução condicional) e capítulo B1 (<em>System Level Programmers' Model</em>: modos de processador e registradores em banco). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+      <li>Arm — <em>Procedure Call Standard for the Arm Architecture</em> (AAPCS32), seção 6.1.1 <em>Core registers</em>: papel de R0–R15 (R9 e R11 têm papéis dependentes de plataforma/variante). <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">github.com/ARM-software/abi-aa</a></li>
+      <li>GNU Binutils — <em>Using as</em>, ARM Directives (<code>.arm</code>, <code>.thumb</code>, <code>.syntax</code>, <code>.arch</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
+      <li>GDB — <em>Continuing and Stepping</em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
+      <li>Código-fonte e README do <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">arm-jitter</a> (tabela de arquiteturas suportadas) e do <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">arm-box</a> (opções <code>--arch</code> e <code>--gdb</code>; <code>Main.java</code> e <code>Armbox.java</code>).</li>
+    </ul>
+    <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1 (M1.0).</em></p>
   `,
 })
 export class ArticleFundamentosArm {}
