@@ -52,6 +52,10 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
   - Saídas mostradas no artigo = saída real da execução. O código mostrado no artigo e o arquivo para download devem produzir a mesma saída (inclusive formatação).
 - [ ] Linguagem de bloco de código nova no site (primeira vez com `xml`, `yaml`...)? Abra no navegador nos **dois temas** e confira se nenhum CSS global colide com as classes de token do Prism (ex.: `.tag` × `token tag`).
 
+## Confidencialidade antes de publicar
+
+O repositório é **público**. Até o dia da publicação, nada do artigo pode entrar no git: rascunho, exemplos, binários e capturas. O rascunho fica em `site/proximos-artigos/<slug>.md`, e os exemplos de um artigo novo ficam em `site/proximos-artigos/<slug>-exemplos/`; as duas pastas são ignoradas pelo git. Na publicação, os exemplos vão para `DOCS/curso-arm/exemplos/` (ou outra pasta definitiva), e o espelho em `site/public/` é feito pelo `gen:assets`.
+
 ## Publicação
 
 O fluxo detalhado (e os 4 pontos de wiring) está em `site/CLAUDE.md`. Resumo:

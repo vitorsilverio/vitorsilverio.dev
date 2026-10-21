@@ -45,6 +45,10 @@ Dê nota de 0 a 3 para cada critério e some:
 - Separe fato (o que as fontes mostram) de julgamento (a nota que você deu).
 - Não proponha tema que já foi publicado, a não ser como atualização, e diga qual artigo atualizar.
 
+## Confidencialidade
+
+O repositório é **público**. A pauta é salva em `DOCS/pauta/PAUTA-AAAA-MM-DD.md`, que está no `.gitignore`. Nunca versione pauta, ranking ou ficha de artigo futuro, nem os cite em mensagem de commit. Rotina do autor: pauta todo dia; a série ARM fica para o fim de semana.
+
 ## Formato da entrega
 
 1. Data e fontes consultadas (e as que não estavam disponíveis).
