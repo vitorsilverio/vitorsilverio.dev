@@ -4,11 +4,24 @@
       <span class="eyebrow">Escritos &amp; estudos</span>
       <h1 tabindex="-1">Artigos</h1>
       <p>
-        Anotações e aprendizados sobre tecnologia — muitos redigidos com apoio de
-        IA enquanto estudo. Novos textos entram aqui —
+        Anotações e aprendizados sobre tecnologia — muitos redigidos com apoio de IA enquanto
+        estudo. Novos textos entram aqui —
         <a href="/feed.xml">assine o RSS</a> para acompanhar.
       </p>
     </header>
+
+    <div class="search">
+      <label class="search-label" for="busca-artigos">Buscar por título ou tag</label>
+      <input
+        id="busca-artigos"
+        class="search-input"
+        type="search"
+        autocomplete="off"
+        placeholder="Ex.: Thumb, objdump, Angular"
+        [value]="busca()"
+        (input)="onBusca($event)"
+      />
+    </div>
 
     <div class="tag-filter" role="group" aria-label="Filtrar artigos por tag">
       <button
@@ -20,64 +33,74 @@
       >
         Todos
       </button>
-      @for (tag of allTags(); track tag) {
+      @for (t of tagsVisiveis(); track t.nome) {
         <button
           type="button"
           class="tag"
-          [class.active]="selectedTag() === tag"
-          aria-pressed="{{ selectedTag() === tag }}"
-          (click)="toggleTag(tag)"
+          [class.active]="selectedTag() === t.nome"
+          [attr.aria-pressed]="selectedTag() === t.nome"
+          (click)="toggleTag(t.nome)"
         >
-          {{ tag }}
+          {{ t.nome }} <span class="tag-qtd">{{ t.qtd }}</span>
+        </button>
+      }
+      @if (tagsEscondidas() > 0) {
+        <button type="button" class="tag tag-mais" (click)="mostrarTodasTags()">
+          Mais {{ tagsEscondidas() }} tags
         </button>
       }
     </div>
 
+    <p class="result-count muted" role="status">
+      {{ resumo() }}
+      @if (filtrando()) {
+        <button type="button" class="link-btn" (click)="clearFilter()">Limpar filtros</button>
+      }
+    </p>
+
     @if (filteredArticles().length > 0) {
       <ul class="article-list">
         @for (article of filteredArticles(); track article.slug) {
-            <li class="article-item">
-              <a
-                class="article-card"
-                [routerLink]="['/artigos', article.slug]"
-                [attr.aria-label]="'Ler artigo: ' + article.title"
-              >
-                <img
-                  class="article-cover"
-                  [src]="'/assets/covers/' + article.slug + '.svg'"
-                  alt=""
-                  width="1200"
-                  height="630"
-                />
-                <div class="article-body">
-                  <div class="article-text">
-                    <h2>{{ article.title }}</h2>
-                    <p class="muted">{{ article.excerpt }}</p>
-                  </div>
-                  <div class="article-info muted">
-                    <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
-                    <span>· {{ article.readingTime }} de leitura</span>
-                  </div>
+          <li class="article-item">
+            <article class="article-card">
+              <img
+                class="article-cover"
+                [src]="'/assets/covers/' + article.slug + '.svg'"
+                alt=""
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="article-main">
+                <h2>
+                  <a class="article-link" [routerLink]="['/artigos', article.slug]">{{
+                    article.title
+                  }}</a>
+                </h2>
+                <p class="article-excerpt muted">{{ resumoDe(article) }}</p>
+                <p class="article-info muted">
+                  <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
+                  &ngsp;·&ngsp; {{ article.readingTime }} de leitura
+                </p>
+                <div class="tags">
+                  @for (tag of article.tags; track tag) {
+                    <button
+                      type="button"
+                      class="tag"
+                      [class.active]="selectedTag() === tag"
+                      [attr.aria-pressed]="selectedTag() === tag"
+                      (click)="toggleTag(tag)"
+                    >
+                      {{ tag }}
+                    </button>
+                  }
                 </div>
-              </a>
-              <div class="tags">
-              @for (tag of article.tags; track tag) {
-                <button
-                  type="button"
-                  class="tag"
-                  [class.active]="selectedTag() === tag"
-                  aria-pressed="{{ selectedTag() === tag }}"
-                  (click)="toggleTag(tag)"
-                >
-                  {{ tag }}
-                </button>
-              }
-            </div>
+              </div>
+            </article>
           </li>
         }
       </ul>
-    } @else {
-      <p class="muted">Nenhum artigo com a tag "{{ selectedTag() }}".</p>
     }
   </div>
 </section>

@@ -15,6 +15,8 @@ describe('Acessibilidade (axe-core)', () => {
     '/curriculo',
     '/curso-arm',
     '/artigos',
+    '/artigos?tag=ARM',
+    '/pagina-que-nao-existe',
     ...articles.map((a) => `/artigos/${a.slug}`),
   ];
 
@@ -68,5 +70,5 @@ describe('Acessibilidade (axe-core)', () => {
     } finally {
       fixture.destroy();
     }
-  });
+  }, 30_000);
 });

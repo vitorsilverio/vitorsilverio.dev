@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { articles } from '../../data/articles';
 import { formatPtDate } from '../../shared/date.util';
 import { SeoService } from '../../shared/seo.service';
+import { resumoDaTrilha } from '../../shared/course/trilha';
+import { textoPuro } from '../../shared/prose/prose.util';
 
 @Component({
   imports: [RouterLink],
@@ -15,13 +17,15 @@ export class Home {
   private readonly allArticles = articles;
 
   protected readonly recentArticles = computed(() =>
-    [...this.allArticles]
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .slice(0, 3),
+    [...this.allArticles].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3),
   );
 
-  protected readonly formattedDate = (iso: string): string =>
-    formatPtDate(iso, 'short');
+  protected readonly formattedDate = (iso: string): string => formatPtDate(iso, 'short');
+
+  protected readonly trilha = resumoDaTrilha();
+
+  /** O card nunca mostra markdown cru, mesmo que o excerpt traga. */
+  protected readonly resumoDe = (a: { excerpt: string }): string => textoPuro(a.excerpt);
 
   constructor() {
     this.seo.set({

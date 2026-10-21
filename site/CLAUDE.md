@@ -148,3 +148,22 @@ Para os artigos já publicados: `npm run migra-blocos -- --dry-run` relata,
 `npm run migra-blocos` aplica. A regra de reconhecimento é a mesma
 (`scripts/lib/blocos.mjs`), então gerador e migração nunca divergem.
 
+
+## Enriquecimento automático do texto dos artigos (`appProse`)
+
+O contêiner `.prose` de `article-detail` usa a diretiva `ProseEnhance`
+(`src/app/shared/prose/prose.ts`). Ela age sobre o HTML de **qualquer** artigo, publicado ou
+novo, sem regenerar nada:
+
+- `pre` e `.scroll-x` (tabelas, fita de bits, objdump) ganham `tabindex="0"`, `role="group"` e
+  `aria-label` (axe `scrollable-region-focusable`); no navegador só ficam focáveis os que de fato
+  rolam. Isso também sai no HTML pré-renderizado.
+- `h2`/`h3` ganham `id` (para o sumário `app-prose-toc` e links diretos) e, no navegador, um link `#`.
+- Todo `pre` fora de `app-objdump`/`app-bit-field`/`app-fluxo` ganha cabeçalho com a linguagem
+  e o botão "Copiar" (feedback por `role="status"`).
+
+Por isso o gerador **não** precisa emitir esses atributos no `<pre>`; ele só os emite no
+wrapper das tabelas. Não renomeie `.prose` nem mude sua estrutura: a medição de leitura
+(`ReadingTracker`) e a barra de progresso (`app-reading-progress`) usam esse elemento.
+Artigos da trilha ainda mostram "Lição X de N" (`app-lesson-badge`) e "Próximo na trilha"
+(`app-lesson-next`), a partir de `src/app/data/course.ts`.

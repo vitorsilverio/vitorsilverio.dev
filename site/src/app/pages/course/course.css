@@ -101,7 +101,7 @@ a.lesson-link:hover {
 
 .lesson-code {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.8125rem;
   color: var(--muted);
   align-self: start;
   padding-top: 0.1rem;
@@ -125,7 +125,7 @@ a.lesson-link:hover {
 }
 
 .lesson-badge {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -188,7 +188,7 @@ a.lesson-link:hover {
 
 .example-lesson {
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--accent-strong);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   border-radius: 999px;

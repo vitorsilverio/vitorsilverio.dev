@@ -3,9 +3,8 @@
     <p class="eyebrow">Desenvolvedor &amp; estudante contínuo</p>
     <h1 tabindex="-1">Olá, eu sou o <span class="accent">Vítor Silvério</span>.</h1>
     <p class="lead">
-      Aqui compartilho meus projetos, meu currículo e — principalmente — artigos
-      sobre as coisas que estudo e gosto de explorar, muitos escritos com ajuda
-      de IA.
+      Aqui compartilho meus projetos, meu currículo e — principalmente — artigos sobre as coisas que
+      estudo e gosto de explorar, muitos escritos com ajuda de IA.
     </p>
     <div class="actions">
       <a class="btn btn-primary" routerLink="/artigos">Ler artigos</a>
@@ -14,10 +13,38 @@
   </div>
 </section>
 
+<section class="container trilha" aria-labelledby="trilha-titulo">
+  <div class="card trilha-card">
+    <div class="trilha-texto">
+      <p class="eyebrow">Trilha em andamento</p>
+      <h2 id="trilha-titulo">Arquitetura ARM na prática</h2>
+      <p class="muted">
+        Do ARMv4T do Game Boy Advance ao AArch64, com assembly que você compila e roda. Uma lição
+        nova por dia.
+      </p>
+      <p class="trilha-prog">
+        <progress
+          class="trilha-barra"
+          [value]="trilha.publicadas"
+          [max]="trilha.total"
+          aria-label="Lições publicadas da trilha"
+        ></progress>
+        <span>{{ trilha.publicadas }} de {{ trilha.total }} lições publicadas</span>
+      </p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" routerLink="/curso-arm">Ver o curso</a>
+      @if (trilha.primeira; as p) {
+        <a class="btn btn-ghost" [routerLink]="['/artigos', p.slug]">Começar pela lição 1</a>
+      }
+    </div>
+  </div>
+</section>
+
 <section class="container latest">
   <div class="section-head">
     <h2>Últimos artigos</h2>
-    <a routerLink="/artigos" class="muted">Ver todos →</a>
+    <a routerLink="/artigos" class="touch-link">Ver todos os artigos →</a>
   </div>
 
   <div class="grid">
@@ -25,10 +52,10 @@
       <a class="card article-card" [routerLink]="['/artigos', article.slug]">
         <div class="article-meta">
           <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
-          <span>· {{ article.readingTime }}</span>
+          &ngsp;<span>· {{ article.readingTime }}</span>
         </div>
         <h3>{{ article.title }}</h3>
-        <p class="muted">{{ article.excerpt }}</p>
+        <p class="muted">{{ resumoDe(article) }}</p>
         <div class="tags">
           @for (tag of article.tags; track tag) {
             <span class="tag">{{ tag }}</span>
@@ -43,8 +70,8 @@
   <div class="card">
     <h2 id="connect-title">Vamos conversar</h2>
     <p class="muted">
-      Aberto a trocar ideia sobre ARM, emulação, Angular e oportunidades.
-      Me acha no LinkedIn ou dá uma olhada no meu currículo.
+      Aberto a trocar ideia sobre ARM, emulação, Angular e oportunidades. Me acha no LinkedIn ou dá
+      uma olhada no meu currículo.
     </p>
     <div class="actions">
       <a

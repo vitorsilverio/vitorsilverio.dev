@@ -9,7 +9,7 @@
 
 .od-cap {
   font-family: var(--mono);
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.03em;
   color: var(--muted);
   margin-bottom: 0.5rem;
@@ -17,7 +17,7 @@
 
 /* Mesma "cara" do <pre> da prosa, para o artigo não parecer remendado. */
 .od-box {
-  background: var(--code-bg);
+  background: var(--shade-code);
   border: 1px solid var(--code-border);
   border-radius: 10px;
 }

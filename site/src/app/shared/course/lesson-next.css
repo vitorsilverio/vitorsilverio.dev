@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  margin: 2.75rem 0 0;
+}
+
+.ln {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.ln-titulo {
+  margin: 0 0 0.15rem;
+  font-size: 1.2rem;
+}
+
+.ln-pos {
+  margin: 0 0 0.9rem;
+  font-size: 0.95rem;
+}
+
+.ln-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+a.ln-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.ln-breve {
+  border-style: dashed;
+  background: transparent;
+}
+
+.ln-cod {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.ln-nome {
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.ln-mod {
+  font-size: 0.9rem;
+}
+
+.ln-todas {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.35rem;
+  font-weight: 600;
+}

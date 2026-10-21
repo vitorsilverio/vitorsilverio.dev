@@ -70,12 +70,16 @@ if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
 
 const title = opts.title ?? mdMeta?.title ?? slug;
 // O excerpt é renderizado como texto puro (card do índice, RSS, og:description,
-// llms.txt), então crase de markdown apareceria literal.
+// llms.txt), então crase e ênfase de markdown (`código`, *itálico*, **negrito**)
+// apareceriam literais.
 const excerpt = (
   opts.excerpt ??
   mdMeta?.excerpt ??
   'TODO: escreva o resumo (excerpt) do artigo.'
-).replace(/`/g, '');
+)
+  .replace(/`/g, '')
+  .replace(/(\*\*|__)(.+?)\1/g, '$2')
+  .replace(/\*([^*\n]+)\*/g, '$1');
 const readingTime = opts['reading-time'] ?? mdMeta?.readingTime ?? '9 min';
 const tags = (opts.tags ? opts.tags.split(',') : (mdMeta?.tags ?? ['Artigo']))
   .map((t) => t.trim())
@@ -332,7 +336,8 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
       })
       .join('\n');
     return (
-      `<div class="scroll-x">\n  <table>\n    ${caption}` +
+      // Tabela larga rola dentro do contêiner: precisa de foco por teclado (WCAG 2.1.1).
+      `<div class="scroll-x" tabindex="0" role="group" aria-label="${escAttr(cap ?? 'Tabela')} (rolável)">\n  <table>\n    ${caption}` +
       `<thead>\n      <tr>${head}</tr>\n    </thead>\n` +
       `    <tbody>\n${rows}\n    </tbody>\n  </table>\n</div>\n`
     );

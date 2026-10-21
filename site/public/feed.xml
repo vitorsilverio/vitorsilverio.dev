@@ -165,14 +165,14 @@
       <link>https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/primeiro-programa-assembly-arm</guid>
       <pubDate>Sat, 19 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo *exit code*. O max sai em três instruções, sem um único desvio.]]></description>
+      <description><![CDATA[Duas funções escritas do zero em assembly ARM — fibonacci iterativo e o máximo de dois números — montadas, ligadas e rodadas no arm-box, com o resultado provado pelo exit code. O max sai em três instruções, sem um único desvio.]]></description>
     </item>
     <item>
       <title>Montando e ligando um executável ARM</title>
       <link>https://vitorsilverio.dev/artigos/montar-e-ligar-arm</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/montar-e-ligar-arm</guid>
       <pubDate>Sun, 20 Sep 2026 03:00:00 GMT</pubDate>
-      <description><![CDATA[Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um *linker script* de verdade e o objcopy que extrai os bytes crus.]]></description>
+      <description><![CDATA[Entre o .s e o programa que roda há dois passos: montar (as) transforma texto em código-objeto com endereços relativos; ligar (ld) atribui os endereços finais, junta as seções e escolhe o ponto de entrada. Este artigo abre os dois, com um linker script de verdade e o objcopy que extrai os bytes crus.]]></description>
     </item>
     <item>
       <title>Usando o arm-jitter direto pela API Java</title>

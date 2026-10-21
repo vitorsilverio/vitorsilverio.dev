@@ -28,6 +28,26 @@
   --code-reg: #cdd6f4;
   --code-imm: #a6e3a1;
   --code-lbl: #f9e2af;
+
+  /* Indicação de rolagem horizontal (background-attachment: local). A sombra só
+     aparece na borda em que ainda há conteúdo escondido. Cada token traz a cor
+     de fundo do contêiner na última camada. */
+  --shade-edge: rgba(16, 16, 31, 0.28);
+  --shade-page: linear-gradient(to right, var(--bg) 30%, transparent) left center / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right center / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--shade-edge), transparent) left center / 0.7rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--shade-edge), transparent) right center / 0.7rem 100% no-repeat scroll,
+    var(--bg);
+  --shade-surface: linear-gradient(to right, var(--surface) 30%, transparent) left center / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--surface) 30%, transparent) right center / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--shade-edge), transparent) left center / 0.7rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--shade-edge), transparent) right center / 0.7rem 100% no-repeat scroll,
+    var(--surface);
+  --shade-code: linear-gradient(to right, var(--code-bg) 30%, transparent) left center / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--code-bg) 30%, transparent) right center / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(255, 255, 255, 0.22), transparent) left center / 0.7rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(255, 255, 255, 0.22), transparent) right center / 0.7rem 100% no-repeat scroll,
+    var(--code-bg);
 }
 
 :root[data-theme="dark"] {
@@ -42,6 +62,7 @@
   --accent-contrast: #0e0e16;
   --ring: #a5b4fc;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shade-edge: rgba(0, 0, 0, 0.6);
 }
 
 * {
@@ -86,6 +107,17 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Link no meio de um parágrafo precisa se distinguir sem depender de cor
+   (WCAG 1.4.1). Botões em forma de link ficam de fora. */
+p a:not(.btn) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+p a:not(.btn):hover {
+  text-decoration-thickness: 2px;
+}
+
 :focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 2px;
@@ -118,6 +150,13 @@ a:hover {
 
 .page {
   padding-block: 3rem 1rem;
+}
+
+/* Alvo de toque mínimo (44 px) para links de navegação soltos. */
+.touch-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 .page-header {
@@ -164,7 +203,7 @@ a:hover {
 .tag:not(.token) {
   display: inline-flex;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
@@ -172,6 +211,21 @@ a:hover {
   color: var(--muted);
   border: 1px solid var(--border);
   min-height: 24px;
+}
+
+/* Chips que são controles (filtro, link de tag): alvo maior. */
+button.tag,
+a.tag-link {
+  min-height: 2rem;
+  padding-inline: 0.8rem;
+}
+
+@media (pointer: coarse) {
+  button.tag,
+  a.tag-link {
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+  }
 }
 
 button.tag {
@@ -210,6 +264,7 @@ button.tag:hover {
 }
 
 .btn {
+  min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -262,14 +317,44 @@ button.tag:hover {
   display: block;
 }
 
+/* Coluna de leitura: o texto corrido fica em ~70 caracteres; blocos largos
+   (código, tabelas, fita de bits, objdump, fluxo) usam toda a largura da página. */
+.prose :is(p, ul, ol, dl, blockquote, h2, h3, h4) {
+  max-width: 70ch;
+}
+
+/* Componentes de conteúdo ocupam a largura toda, inclusive a legenda interna. */
+.prose :is(app-bit-field, app-fluxo, app-objdump) :is(p, ul, ol) {
+  max-width: none;
+}
+
 .prose h2 {
   margin-top: 2rem;
   font-size: 1.6rem;
+  scroll-margin-top: 5rem;
 }
 
 .prose h3 {
   margin-top: 1.5rem;
   font-size: 1.3rem;
+  scroll-margin-top: 5rem;
+}
+
+/* Link direto para a seção, criado em runtime por ProseEnhance. */
+.heading-anchor {
+  display: inline-block;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  margin-left: 0.35rem;
+  text-align: center;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+:is(h2, h3):hover > .heading-anchor,
+.heading-anchor:focus-visible {
+  color: var(--accent-strong);
 }
 
 .prose p {
@@ -295,12 +380,67 @@ button.tag:hover {
 }
 
 .prose pre {
-  background: var(--code-bg);
+  background: var(--shade-code);
   border: 1px solid var(--code-border);
   border-radius: 10px;
   padding: 1rem;
+  margin: 0 0 1.3rem;
   overflow-x: auto;
   color: var(--code-fg);
+}
+
+/* Bloco de código com cabeçalho (linguagem + Copiar), criado em runtime. */
+.code-block {
+  margin: 0 0 1.3rem;
+}
+
+.code-block > pre {
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.25rem 0.5rem 0.25rem 1rem;
+  background: #2a2a3d;
+  border: 1px solid var(--code-border);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  color: #d4d6e8;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+}
+
+.code-copy {
+  min-height: 2rem;
+  padding: 0.25rem 0.85rem;
+  border: 1px solid #8a8fb0;
+  border-radius: 8px;
+  background: transparent;
+  color: #f1f1f8;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.code-copy:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.code-copy:focus-visible {
+  outline: 3px solid #c7d2fe;
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .code-copy {
+    min-height: 2.75rem;
+    min-width: 5rem;
+  }
 }
 
 .prose pre code {
@@ -330,8 +470,10 @@ button.tag:hover {
    linhas longas). O scroll fica NA área afetada, não na página inteira.
    Uso no template do artigo: <div class="scroll-x"><table>…</table></div> */
 .scroll-x {
+  position: relative;
   overflow-x: auto;
   max-width: 100%;
+  background: var(--shade-page);
   /* momentum scroll no iOS + espaço para a barra não cobrir a última linha */
   -webkit-overflow-scrolling: touch;
 }
@@ -341,8 +483,15 @@ button.tag:hover {
   margin-block: 0;
 }
 
+.scroll-x:focus-visible,
+.prose pre:focus-visible {
+  outline-offset: -3px;
+}
+
 .prose table {
   width: 100%;
+  /* Abaixo disto as colunas ficam espremidas demais: melhor rolar. */
+  min-width: 32rem;
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.95rem;

@@ -1,7 +1,9 @@
 @if (article(); as article) {
   <article class="page article">
     <div class="container article-wrap">
-      <a class="back" routerLink="/artigos">← Voltar aos artigos</a>
+      <app-reading-progress [alvo]="pe.element" />
+
+      <a class="back touch-link" routerLink="/artigos">← Voltar aos artigos</a>
 
       <img
         class="article-cover"
@@ -9,6 +11,8 @@
         alt=""
         width="1200"
         height="630"
+        loading="lazy"
+        decoding="async"
       />
 
       <header class="article-header">
@@ -17,6 +21,7 @@
             <a class="tag tag-link" routerLink="/artigos" [queryParams]="{ tag }">{{ tag }}</a>
           }
         </div>
+        <app-lesson-badge [slug]="article.slug" />
         <h1 tabindex="-1">{{ article.title }}</h1>
         <p class="article-meta muted">
           <time [attr.datetime]="article.date">{{ formattedDate(article.date) }}</time>
@@ -24,9 +29,13 @@
         </p>
       </header>
 
-      <div #prose class="prose">
+      <app-prose-toc [prose]="pe" />
+
+      <div #prose appProse #pe="appProse" class="prose">
         <router-outlet />
       </div>
+
+      <app-lesson-next [slug]="article.slug" />
 
       <nav class="article-nav" aria-label="Navegação entre artigos">
         @if (prev(); as p) {

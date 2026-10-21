@@ -7,8 +7,7 @@
 }
 
 .back {
-  display: inline-block;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 600;
 }
 
@@ -45,15 +44,28 @@
   border-top: 1px solid var(--border);
 }
 
+/* A capa repete título, tags e data que já estão logo abaixo: no celular some
+   (e, por ser lazy, nem é baixada); em telas largas fica pequena. */
 .article-cover {
-  display: block;
+  display: none;
   width: 100%;
+  max-width: 30rem;
   height: auto;
   aspect-ratio: 1200 / 630;
   object-fit: cover;
   border-radius: 16px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   box-shadow: var(--shadow);
+}
+
+@media (min-width: 720px) {
+  .article-cover {
+    display: block;
+  }
+}
+
+.article-header app-lesson-badge {
+  margin-top: 0.75rem;
 }
 
 .article-nav {

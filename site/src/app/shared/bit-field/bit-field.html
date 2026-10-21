@@ -3,7 +3,7 @@
     <figcaption class="bf-cap">{{ titulo() }}</figcaption>
   }
 
-  <div class="scroll-x">
+  <div class="scroll-x bf-scroll">
     <div class="bf-row" role="group" [attr.aria-label]="'Campos de ' + total() + ' bits'">
       @for (c of lista(); track $index) {
         <button

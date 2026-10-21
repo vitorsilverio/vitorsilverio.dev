@@ -1,4 +1,12 @@
-import { afterNextRender, Component, effect, ElementRef, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
@@ -18,6 +26,9 @@ interface NavLink {
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
+  host: {
+    '(document:keydown.escape)': 'onEscape()',
+  },
 })
 export class App {
   protected readonly theme = inject(ThemeService);
@@ -25,6 +36,7 @@ export class App {
   protected readonly seo = inject(SeoService);
   private readonly host = inject(ElementRef);
   protected readonly menuOpen = signal(false);
+  private readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -139,5 +151,21 @@ export class App {
 
   protected closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  /** Esc fecha o menu aberto e devolve o foco ao botão que o abriu (APG: disclosure). */
+  protected onEscape(): void {
+    if (!this.menuOpen()) return;
+    this.menuOpen.set(false);
+    this.menuButton()?.nativeElement.focus();
+  }
+
+  /** Quando o foco sai do cabeçalho (Tab para fora), o menu não fica aberto por cima do conteúdo. */
+  protected onHeaderFocusOut(ev: FocusEvent): void {
+    if (!this.menuOpen()) return;
+    const next = ev.relatedTarget as Node | null;
+    if (next && (ev.currentTarget as HTMLElement).contains(next)) return;
+    // relatedTarget nulo = clicou fora da janela ou em área não focável; o scrim cuida do clique.
+    if (next) this.menuOpen.set(false);
   }
 }

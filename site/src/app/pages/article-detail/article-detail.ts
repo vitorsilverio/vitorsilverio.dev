@@ -18,9 +18,25 @@ import { SeoService } from '../../shared/seo.service';
 import { formatPtDate } from '../../shared/date.util';
 import { ConsentService } from '../../shared/consent/consent.service';
 import { ReadingTracker } from '../../shared/analytics/reading-tracker';
+import { ProseEnhance } from '../../shared/prose/prose';
+import { ProseToc } from '../../shared/prose/prose-toc';
+import { ReadingProgress } from '../../shared/prose/reading-progress';
+import { LessonBadge } from '../../shared/course/lesson-badge';
+import { LessonNext } from '../../shared/course/lesson-next';
 
 @Component({
-  imports: [RouterLink, RouterOutlet, GiscusComments, ShareButtons, ArticleCta],
+  imports: [
+    RouterLink,
+    RouterOutlet,
+    GiscusComments,
+    ShareButtons,
+    ArticleCta,
+    ProseEnhance,
+    ProseToc,
+    ReadingProgress,
+    LessonBadge,
+    LessonNext,
+  ],
   selector: 'app-article-detail',
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',

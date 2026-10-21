@@ -1,6 +1,6 @@
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<header class="site-header">
+<header class="site-header" (focusout)="onHeaderFocusOut($event)">
   <div class="container header-inner">
     <a class="brand" routerLink="/" (click)="closeMenu()" aria-label="Início — Vítor Silvério">
       <svg
@@ -33,6 +33,7 @@
     <button
       type="button"
       class="menu-toggle"
+      #menuButton
       [attr.aria-expanded]="menuOpen()"
       aria-controls="menu-principal"
       (click)="toggleMenu()"
@@ -67,7 +68,7 @@
           <a
           class="icon-link"
           [href]="s.href"
-          [attr.aria-label]="s.label"
+          [attr.aria-label]="s.label + ' (abre em nova aba)'"
           target="_blank"
           rel="noopener"
         >
@@ -105,6 +106,10 @@
   </div>
 </header>
 
+@if (menuOpen()) {
+  <div class="nav-scrim" aria-hidden="true" (click)="closeMenu()"></div>
+}
+
 <main id="conteudo" class="site-main" tabindex="-1">
   <router-outlet />
 </main>
@@ -112,14 +117,14 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <p>© 2026 Vítor Silvério. Feito com Angular.</p>
-    <nav aria-label="Redes sociais">
+    <nav aria-label="Redes sociais e preferências">
       @for (s of socialLinks; track s.label) {
-        <a [href]="s.href" [attr.aria-label]="s.label" target="_blank" rel="noopener">{{ s.label }}</a>
+        <a [href]="s.href" target="_blank" rel="noopener"
+          >{{ s.label }}<span class="visually-hidden"> (abre em nova aba)</span></a
+        >
       }
       <a href="/feed.xml">RSS</a>
-      <button type="button" class="privacy-link" (click)="consent.reset()">
-        Privacidade
-      </button>
+      <button type="button" class="privacy-link" (click)="consent.reset()">Privacidade</button>
     </nav>
   </div>
 </footer>
