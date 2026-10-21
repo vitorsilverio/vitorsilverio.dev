@@ -4,16 +4,18 @@ import { provideLocationMocks } from '@angular/common/testing';
 import { App } from './app';
 import { routes } from './app.routes';
 import axe from 'axe-core';
+import { articles } from './data/articles';
 
 describe('Acessibilidade (axe-core)', () => {
+  // Todas as páginas fixas e todo artigo publicado: um artigo novo entra no
+  // teste automaticamente ao ser registrado em articles.ts.
   const paths = [
     '/',
     '/projetos',
     '/curriculo',
     '/curso-arm',
     '/artigos',
-    '/artigos/hello-armbox',
-    '/artigos/decodificando-instrucoes-arm-objdump',
+    ...articles.map((a) => `/artigos/${a.slug}`),
   ];
 
   beforeEach(() => {
