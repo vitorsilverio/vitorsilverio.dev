@@ -1,0 +1,5 @@
+{
+  "//": "Scripts do site são ESM (TypeScript rodado direto pelo Node 24 e .mjs).",
+  "type": "module",
+  "private": true
+}

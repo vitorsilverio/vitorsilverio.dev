@@ -1,0 +1,955 @@
+{
+  "reports": [
+    {
+      "dimensionHeaders": [
+        {
+          "name": "pagePath"
+        },
+        {
+          "name": "dateRange"
+        }
+      ],
+      "metricHeaders": [
+        {
+          "name": "screenPageViews",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "activeUsers",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "userEngagementDuration",
+          "type": "TYPE_SECONDS"
+        }
+      ],
+      "rows": [
+        {
+          "dimensionValues": [
+            {
+              "value": "/"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "412"
+            },
+            {
+              "value": "301"
+            },
+            {
+              "value": "9120.5"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "380"
+            },
+            {
+              "value": "290"
+            },
+            {
+              "value": "8020"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "238"
+            },
+            {
+              "value": "190"
+            },
+            {
+              "value": "31540"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "150"
+            },
+            {
+              "value": "122"
+            },
+            {
+              "value": "18300"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox/"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "12"
+            },
+            {
+              "value": "11"
+            },
+            {
+              "value": "1500"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/ambiente-arm"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "120"
+            },
+            {
+              "value": "98"
+            },
+            {
+              "value": "15200"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/ambiente-arm"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "160"
+            },
+            {
+              "value": "130"
+            },
+            {
+              "value": "21000"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/fundamentos-arm"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "95"
+            },
+            {
+              "value": "80"
+            },
+            {
+              "value": "14100"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/fundamentos-arm"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "90"
+            },
+            {
+              "value": "77"
+            },
+            {
+              "value": "12800"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/decoder-do-arm-jitter"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "64"
+            },
+            {
+              "value": "50"
+            },
+            {
+              "value": "9900"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/angular-signals-na-pratica"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "2"
+            },
+            {
+              "value": "2"
+            },
+            {
+              "value": "40"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/angular-signals-na-pratica"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "30"
+            },
+            {
+              "value": "25"
+            },
+            {
+              "value": "2100"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/slug-antigo"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "7"
+            },
+            {
+              "value": "6"
+            },
+            {
+              "value": "300"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "140"
+            },
+            {
+              "value": "110"
+            },
+            {
+              "value": "2100"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "120"
+            },
+            {
+              "value": "100"
+            },
+            {
+              "value": "1800"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/curso-arm"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "88"
+            },
+            {
+              "value": "70"
+            },
+            {
+              "value": "4100"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/curso-arm"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "40"
+            },
+            {
+              "value": "35"
+            },
+            {
+              "value": "1500"
+            }
+          ]
+        }
+      ],
+      "rowCount": 17,
+      "metadata": {
+        "currencyCode": "BRL",
+        "timeZone": "America/Sao_Paulo"
+      },
+      "kind": "analyticsData#runReport"
+    },
+    {
+      "dimensionHeaders": [
+        {
+          "name": "dateRange"
+        }
+      ],
+      "metricHeaders": [
+        {
+          "name": "screenPageViews",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "activeUsers",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "sessions",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "engagementRate",
+          "type": "TYPE_FLOAT"
+        },
+        {
+          "name": "userEngagementDuration",
+          "type": "TYPE_SECONDS"
+        }
+      ],
+      "rows": [
+        {
+          "dimensionValues": [
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "1178"
+            },
+            {
+              "value": "702"
+            },
+            {
+              "value": "905"
+            },
+            {
+              "value": "0.6132"
+            },
+            {
+              "value": "88400.5"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "970"
+            },
+            {
+              "value": "610"
+            },
+            {
+              "value": "780"
+            },
+            {
+              "value": "0.5871"
+            },
+            {
+              "value": "66520"
+            }
+          ]
+        }
+      ],
+      "rowCount": 2,
+      "metadata": {
+        "currencyCode": "BRL",
+        "timeZone": "America/Sao_Paulo"
+      },
+      "kind": "analyticsData#runReport"
+    },
+    {
+      "dimensionHeaders": [
+        {
+          "name": "sessionDefaultChannelGroup"
+        },
+        {
+          "name": "dateRange"
+        }
+      ],
+      "metricHeaders": [
+        {
+          "name": "sessions",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "activeUsers",
+          "type": "TYPE_INTEGER"
+        }
+      ],
+      "rows": [
+        {
+          "dimensionValues": [
+            {
+              "value": "Organic Search"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "420"
+            },
+            {
+              "value": "330"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Organic Search"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "300"
+            },
+            {
+              "value": "240"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Direct"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "260"
+            },
+            {
+              "value": "210"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Direct"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "300"
+            },
+            {
+              "value": "250"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Organic Social"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "150"
+            },
+            {
+              "value": "120"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Organic Social"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "120"
+            },
+            {
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Referral"
+            },
+            {
+              "value": "atual"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "75"
+            },
+            {
+              "value": "60"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "Referral"
+            },
+            {
+              "value": "anterior"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "60"
+            },
+            {
+              "value": "50"
+            }
+          ]
+        }
+      ],
+      "rowCount": 8,
+      "metadata": {
+        "currencyCode": "BRL",
+        "timeZone": "America/Sao_Paulo"
+      },
+      "kind": "analyticsData#runReport"
+    },
+    {
+      "dimensionHeaders": [
+        {
+          "name": "sessionSourceMedium"
+        }
+      ],
+      "metricHeaders": [
+        {
+          "name": "sessions",
+          "type": "TYPE_INTEGER"
+        },
+        {
+          "name": "activeUsers",
+          "type": "TYPE_INTEGER"
+        }
+      ],
+      "rows": [
+        {
+          "dimensionValues": [
+            {
+              "value": "google / organic"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "400"
+            },
+            {
+              "value": "315"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "(direct) / (none)"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "260"
+            },
+            {
+              "value": "210"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "linkedin.com / referral"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "90"
+            },
+            {
+              "value": "72"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "t.co / referral"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "60"
+            },
+            {
+              "value": "48"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "bing / organic"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "20"
+            },
+            {
+              "value": "15"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "github.com / referral"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "75"
+            },
+            {
+              "value": "60"
+            }
+          ]
+        }
+      ],
+      "rowCount": 6,
+      "metadata": {
+        "currencyCode": "BRL",
+        "timeZone": "America/Sao_Paulo"
+      },
+      "kind": "analyticsData#runReport"
+    },
+    {
+      "dimensionHeaders": [
+        {
+          "name": "pagePath"
+        },
+        {
+          "name": "sessionDefaultChannelGroup"
+        }
+      ],
+      "metricHeaders": [
+        {
+          "name": "screenPageViews",
+          "type": "TYPE_INTEGER"
+        }
+      ],
+      "rows": [
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox"
+            },
+            {
+              "value": "Organic Search"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "150"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox"
+            },
+            {
+              "value": "Organic Social"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "60"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox/"
+            },
+            {
+              "value": "Direct"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "12"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/hello-armbox"
+            },
+            {
+              "value": "Direct"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "28"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/ambiente-arm"
+            },
+            {
+              "value": "Organic Search"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "90"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/ambiente-arm"
+            },
+            {
+              "value": "Direct"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "30"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/fundamentos-arm"
+            },
+            {
+              "value": "Organic Search"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "55"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/fundamentos-arm"
+            },
+            {
+              "value": "Referral"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "40"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/decoder-do-arm-jitter"
+            },
+            {
+              "value": "Organic Social"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "64"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/angular-signals-na-pratica"
+            },
+            {
+              "value": "Organic Search"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "dimensionValues": [
+            {
+              "value": "/artigos/slug-antigo"
+            },
+            {
+              "value": "Direct"
+            }
+          ],
+          "metricValues": [
+            {
+              "value": "7"
+            }
+          ]
+        }
+      ],
+      "rowCount": 11,
+      "metadata": {
+        "currencyCode": "BRL",
+        "timeZone": "America/Sao_Paulo"
+      },
+      "kind": "analyticsData#runReport"
+    }
+  ],
+  "kind": "analyticsData#batchRunReports"
+}
