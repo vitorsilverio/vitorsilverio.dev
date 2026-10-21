@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
+  imports: [RouterLink],
   selector: 'app-article-manipulacao-bits-thumb',
   template: `
     <p>
@@ -10,6 +12,28 @@ import { Component } from '@angular/core';
       selecionar um clock. O ARM Thumb oferece instruções dedicadas para
       ler, setar, limpar e alternar bits sem afetar os demais — essencial
       para controle de hardware.
+    </p>
+    <p>
+      <strong>Thumb-2</strong> é o conjunto de instruções, misto de 16 e 32 bits,
+      dos microcontroladores ARM Cortex-M; o <code>arm-jitter</code> é a
+      biblioteca Java desta trilha que decodifica e executa essas instruções, e
+      o <code>arm-box</code> é o programa de linha de comando que a usa para
+      rodar binários ARM. Neste artigo você vai:
+    </p>
+    <ol>
+      <li>usar <code>AND</code>, <code>ORR</code>, <code>EOR</code>, <code>BIC</code>, <code>MVN</code> e <code>TST</code> para testar, ligar, alternar e limpar bits;</li>
+      <li>ver como shifts e rotações são codificados (16 ou 32 bits);</li>
+      <li>extrair, inserir e limpar campos de bits com <code>UBFX</code>, <code>BFI</code> e <code>BFC</code>;</li>
+      <li>conferir tudo executando um programa real no <code>arm-jitter</code> e lendo os registradores a cada instrução.</li>
+    </ol>
+    <p>
+      <strong>O que você precisa:</strong> noção de binário e hexadecimal. Para
+      reproduzir os exemplos, um toolchain ARM (<code>arm-none-eabi-as</code>,
+      <code>objcopy</code>, <code>objdump</code>; os bytes foram conferidos com o
+      devkitARM) e um JDK 25 com o <code>arm-jitter-1.4.0.jar</code>. Os arquivos
+      são <a href="/curso-arm/exemplos/manipulacao-bits-thumb.s"><code>manipulacao-bits-thumb.s</code></a>
+      e <a href="/curso-arm/exemplos/java/ManipulacaoBitsThumb.java"><code>ManipulacaoBitsThumb.java</code></a>.
+      Não é preciso saber assembly: os formatos são explicados ao longo do texto.
     </p>
 
     <h2>Operações lógicas: o arsenal de 3 operandos</h2>
@@ -73,7 +97,7 @@ import { Component } from '@angular/core';
     <span class="token instruction keyword">EORS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>      <span class="token comment">; e2310001</span>
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
-    <span class="token instruction keyword">EORS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>    <span class="token comment">; f091 000f</span></code></pre>
+    <span class="token instruction keyword">EORS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>    <span class="token comment">; f091 0001</span></code></pre>
     <div class="scroll-x"><table>
       <caption>Bytes verificados (devkitARM)</caption>
       <thead>
@@ -133,8 +157,12 @@ import { Component } from '@angular/core';
     </table></div>
     <p>
       <strong>Detalhe:</strong> <code>MVN r0, #0</code> →
-      <code>0xFFFFFFFF</code>. O <code>imm12</code> codifica
-      <code>0x000</code> com rotação de 0 bits (sem rotação = valor literal).
+      <code>0xFFFFFFFF</code>. O imediato <code>#0</code> é guardado nos bits de
+      "imediato modificado" da instrução (no ARM, um byte de 8 bits com uma rotação;
+      no Thumb-2, os campos <code>i:imm3:imm8</code>), e a instrução inverte o
+      resultado. Repare também que os exemplos usam <code>MVN</code> sem
+      <code>S</code>: ele <strong>não</strong> mexe nas flags. Com o sufixo
+      (<code>MVNS</code>) o assembler gera <code>F07F 0000</code> em Thumb-2.
     </p>
 
     <h3><code>TST</code> — testar bits sem alterar registradores</h3>
@@ -159,10 +187,12 @@ import { Component } from '@angular/core';
       </tbody>
     </table></div>
     <p>
-      <strong>Nota:</strong> <code>TST</code> é um pseudo-código do
-      processador — o assembler traduz para <code>ANDS</code> sem destination
-      register. O encoding Thumb-2 <code>F010 0F04</code> é um
-      <code>ANDS</code> implícito com <code>Rd</code> descartado.
+      <strong>Nota:</strong> <code>TST</code> é uma instrução própria (não uma
+      pseudo-instrução do assembler): ela calcula o mesmo AND do <code>ANDS</code>,
+      mas descarta o resultado e só atualiza as flags. No encoding Thumb-2
+      <code>F010 0F04</code>, o campo <code>Rd</code> vale <code>1111</code>, valor
+      que o <code>ANDS</code> não usa e que a arquitetura reservou para o
+      <code>TST</code>.
     </p>
 
     <h2>Tabela: operações lógicas (bytes verificados)</h2>
@@ -180,11 +210,30 @@ import { Component } from '@angular/core';
         <tr><th scope="row"><code>TST</code></th><td><code>E3100004</code></td><td><code>F0100F04</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
       </tbody>
     </table></div>
+    <p>
+      <strong>Atenção ao tamanho:</strong> a coluna "32b wide" vale para a forma
+      com <strong>imediato</strong> (<code>#0x0F</code>). As formas só com
+      registradores, quando o destino é também o primeiro operando e os
+      registradores são <code>r0</code>–<code>r7</code>, têm encoding de
+      <strong>16 bits</strong>: <code>ANDS r0, r0, r1</code> → <code>4008</code>,
+      <code>ORRS r0, r0, r1</code> → <code>4308</code>,
+      <code>EORS r0, r0, r1</code> → <code>4048</code>,
+      <code>BICS r0, r0, r1</code> → <code>4388</code>,
+      <code>MVNS r0, r1</code> → <code>43C8</code> e
+      <code>TST r0, r1</code> → <code>4208</code> (conferidos com
+      <code>arm-none-eabi-as -mcpu=cortex-m3</code> e
+      <code>objdump</code>). Com três registradores diferentes
+      (<code>ANDS r0, r1, r2</code>) o assembler volta ao encoding largo,
+      <code>EA11 0002</code>. Essas versões de 16 bits <strong>sempre</strong>
+      atualizam as flags quando executadas fora de um bloco <code>IT</code>
+      (por isso o <code>S</code> aparece na forma sem <code>.W</code>).
+    </p>
 
     <h2>Shifts e rotações</h2>
     <p>
-      O ARM usa <strong>barrel shifter</strong> — o hardware desloca o
-      operando em 1 ciclo. As instruções principais:
+      O ARM usa um <strong>barrel shifter</strong> — um circuito que desloca
+      ou rotaciona vários bits de uma só vez, sem laço de deslocamentos de 1
+      bit. As instruções principais:
     </p>
     <div class="scroll-x"><table>
       <caption>Instruções de shift</caption>
@@ -192,10 +241,10 @@ import { Component } from '@angular/core';
         <tr><th scope="col">Instrução</th><th scope="col">Efeito</th><th scope="col">Exemplo</th></tr>
       </thead>
       <tbody>
-        <tr><th scope="row"><code>LSL Rd, Rm, #n</code></th><td>Deslocamento lógico esquerda (×2ⁿ)</td><td><code>LSL r0, r1, #3</code> → r0 = r1 × 4</td></tr>
+        <tr><th scope="row"><code>LSL Rd, Rm, #n</code></th><td>Deslocamento lógico esquerda (×2ⁿ)</td><td><code>LSL r0, r1, #3</code> → r0 = r1 × 8</td></tr>
         <tr><th scope="row"><code>LSR Rd, Rm, #n</code></th><td>Deslocamento lógico direita (÷2ⁿ)</td><td><code>LSR r0, r1, #2</code> → r0 = r1 / 4</td></tr>
-        <tr><th scope="row"><code>ASR Rd, Rm, #n</code></th><td>Deslocamento aritmético direita (sinal preservado)</td><td><code>ASR r0, r1, #1</code> → divisão signed</td></tr>
-        <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação à direita com carry</td><td><code>ROR r0, r1, #8</code></td></tr>
+        <tr><th scope="row"><code>ASR Rd, Rm, #n</code></th><td>Deslocamento aritmético direita (sinal preservado)</td><td><code>ASR r0, r1, #1</code> → divisão por 2 com sinal, arredondando para −∞ (−3 vira −2; a divisão do C daria −1)</td></tr>
+        <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação à direita (os bits que saem pela direita entram pela esquerda; o carry recebe o último bit que saiu). A rotação <em>com</em> carry é a <code>RRX</code></td><td><code>ROR r0, r1, #8</code></td></tr>
       </tbody>
     </table></div>
 
@@ -210,7 +259,7 @@ import { Component } from '@angular/core';
     <span class="token instruction keyword">LSLS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>         <span class="token comment">; 00c8  (16-bit!)</span>
     <span class="token instruction keyword">LSRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>         <span class="token comment">; 0888  (16-bit!)</span>
     <span class="token instruction keyword">ASRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>         <span class="token comment">; 1048  (16-bit!)</span>
-    <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ROR <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; ea5f 2031  (Thumb-2 não tem ROR standalone → via MOVS)</span></code></pre>
+    <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ROR <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; ea5f 2031  (é o que o assembler gera para RORS r0, r1, #8)</span></code></pre>
     <div class="scroll-x"><table>
       <caption>Shifts — bytes verificados (devkitARM)</caption>
       <thead>
@@ -228,8 +277,16 @@ import { Component } from '@angular/core';
       <code>ASRS</code> com imediato são instruções de <strong>16 bits</strong> em
       Thumb — ocupam metade do espaço que ocupariam em ARM (32 bits). Isso é um
       ganho de densidade de código crucial em microcontroladores com Flash
-      limitado. Já <code>ROR</code> não tem encoding standalone em Thumb-2 — o
-      assembler o traduz para <code>MOVS Rd, Rm, ROR #n</code>.
+      limitado. Já a rotação por <strong>imediato</strong> não tem encoding de
+      16 bits: <code>ROR r0, r1, #8</code> é um apelido (<em>alias</em>) de
+      <code>MOV r0, r1, ROR #8</code> — a mesma instrução <code>MOV</code> com o
+      segundo operando rotacionado —, e o assembler gera <code>EA4F 2031</code>
+      (ou <code>EA5F 2031</code> com o <code>S</code>, como na tabela). Existe,
+      porém, uma forma de 16 bits de <code>RORS</code> <strong>por
+      registrador</strong> (<code>RORS r0, r1</code> → <code>41C8</code>), em que
+      a quantidade de bits vem de <code>r1</code>. No modo ARM, aliás, os
+      shifts imediatos também são o <code>MOV</code> com operando deslocado
+      (<code>E1A0xxxx</code>), como mostra a tabela.
     </p>
 
     <h2>Instruções de campo de bits: BFI, BFC, UBFX</h2>
@@ -239,10 +296,17 @@ import { Component } from '@angular/core';
       usam campos de bits nos registradores.
     </p>
     <p>
-      <strong>Nota importante:</strong> <code>BFI</code>, <code>BFC</code> e
-      <code>UBFX</code> são instruções <strong>Thumb-2 only</strong>. Não
-      existem equivalentes em ARM mode (testado com
-      <code>-mcpu=arm1176jzf-s</code> — o assembler rejeitou).
+      <strong>Nota importante (corrigida):</strong> <code>BFI</code>,
+      <code>BFC</code> e <code>UBFX</code> chegaram com a arquitetura
+      <strong>ARMv6T2</strong> e existem tanto em Thumb-2 quanto em ARM mode a
+      partir de ARMv7-A. No modo ARM, o assembler com
+      <code>-march=armv7-a</code> gera <code>E7C60211</code> (<code>bfi r0, r1,
+      #4, #3</code>), <code>E7CF021F</code> (<code>bfc r0, #4, #12</code>) e
+      <code>E7E70451</code> (<code>ubfx r0, r1, #8, #8</code>). O que faltava era
+      o <em>processador</em>: com <code>-mcpu=arm1176jzf-s</code> (ARMv6K, sem T2)
+      o assembler rejeita as três em ARM mode, e com <code>-mcpu=cortex-m0</code>
+      (ARMv6-M) rejeita também em Thumb. Elas existem em
+      Cortex-M3/M4/M7 (ARMv7-M).
     </p>
 
     <h3><code>BFI</code> — Bit Field Insert</h3>
@@ -251,7 +315,7 @@ import { Component } from '@angular/core';
       bits de <code>Rn</code> (a partir do LSB) em <code>Rd</code>, a partir da
       posição <code>lsb</code>.
     </p>
-    <pre><code class="language-armasm">    bfii <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>    <span class="token comment">; insere r1[2:0] em r0[6:4]</span></code></pre>
+    <pre><code class="language-armasm">    bfi <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>    <span class="token comment">; insere r1[2:0] em r0[6:4]</span></code></pre>
     <pre><code class="language-armasm"><span class="token number">00000000</span> <span class="token operator">&lt;</span>thumb_bfi<span class="token operator">></span>:
   <span class="token number">36</span>:	f361 <span class="token number">1006</span> 	bfi	<span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span></code></pre>
     <p>Bytes: <code>F3 61 10 06</code></p>
@@ -272,7 +336,7 @@ import { Component } from '@angular/core';
       <code>Rn</code> a partir de <code>lsb</code> e zero-extende em
       <code>Rd</code>.
     </p>
-    <pre><code class="language-armasm">    ubfx <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; extrai byte 1 de R0</span></code></pre>
+    <pre><code class="language-armasm">    ubfx <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; extrai o byte 1 de r1 (bits 15:8)</span></code></pre>
     <pre><code class="language-armasm"><span class="token number">00000000</span> <span class="token operator">&lt;</span>thumb_ubfx<span class="token operator">></span>:
   <span class="token number">42</span>:	f3c1 <span class="token number">2007</span> 	ubfx	<span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span></code></pre>
     <p>Bytes: <code>F3 C1 20 07</code></p>
@@ -281,12 +345,12 @@ import { Component } from '@angular/core';
     <div class="scroll-x"><table>
       <caption>BFI, BFC, UBFX — bytes verificados</caption>
       <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">Bytes (hex)</th><th scope="col">Tamanho</th><th scope="col">Disponível em</th><th scope="col">Uso típico</th></tr>
+        <tr><th scope="col">Instrução</th><th scope="col">Bytes (hex)</th><th scope="col">Tamanho</th><th scope="col">Disponível em (ARMv7)</th><th scope="col">Uso típico</th></tr>
       </thead>
       <tbody>
-        <tr><th scope="row"><code>BFI</code></th><td><code>F3611006</code></td><td>32 bits</td><td>Thumb-2 only</td><td>Configurar campos de registrador</td></tr>
-        <tr><th scope="row"><code>BFC</code></th><td><code>F36F100F</code></td><td>32 bits</td><td>Thumb-2 only</td><td>Limpar registrador de periférico</td></tr>
-        <tr><th scope="row"><code>UBFX</code></th><td><code>F3C12007</code></td><td>32 bits</td><td>Thumb-2 only</td><td>Leer campos de periférico</td></tr>
+        <tr><th scope="row"><code>BFI</code></th><td><code>F3611006</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Configurar campos de registrador</td></tr>
+        <tr><th scope="row"><code>BFC</code></th><td><code>F36F100F</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Limpar registrador de periférico</td></tr>
+        <tr><th scope="row"><code>UBFX</code></th><td><code>F3C12007</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Ler campos de periférico</td></tr>
       </tbody>
     </table></div>
 
@@ -299,35 +363,57 @@ import { Component } from '@angular/core';
       <tbody>
         <tr><th scope="row">Instruções lógicas (ANDS, ORRS…)</th><td>32 bits</td><td>32 bits wide</td></tr>
         <tr><th scope="row">Shifts com imediato (LSLS, LSRS, ASRS)</th><td>32 bits</td><td><strong>16 bits</strong> (metade do espaço)</td></tr>
-        <tr><th scope="row"><code>ROR</code></th><td>Instrução standalone (<code>E1A00461</code>)</td><td>Via <code>MOVS Rd, Rm, ROR #n</code> (<code>EA5F2031</code>)</td></tr>
-        <tr><th scope="row"><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></th><td><strong>Não existe</strong></td><td>Disponível (32 bits)</td></tr>
-        <tr><th scope="row">Density de código</th><td>Menor</td><td>Maior (16-bit shifts)</td></tr>
+        <tr><th scope="row"><code>ROR</code></th><td><code>MOV Rd, Rm, ROR #n</code> (<code>E1A00461</code>)</td><td>Mesma forma, 32 bits (<code>EA4F2031</code>; <code>EA5F2031</code> com <code>S</code>)</td></tr>
+        <tr><th scope="row"><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></th><td>Disponível a partir de ARMv6T2 (<code>E7C60211</code> para o <code>BFI</code> acima)</td><td>Disponível (32 bits)</td></tr>
+        <tr><th scope="row">Densidade de código</th><td>Menor</td><td>Maior (16-bit shifts)</td></tr>
       </tbody>
     </table></div>
     <p>
-      <strong>Implicação prática:</strong> em Cortex-M (somente Thumb-2), o
-      código de manipulação de bits tende a ser <strong>mais compacto</strong>
-      que em ARM mode, especialmente em loops que usam shifts repetidos.
+      <strong>Implicação prática:</strong> o código Thumb-2 de manipulação de bits
+      tende a ser <strong>mais compacto</strong> que em ARM mode, porque os
+      shifts com imediato e as formas de dois registradores cabem em 16 bits.
+      Nos Cortex-M3/M4/M7 (ARMv7-M, que só executam Thumb) isso vale sempre; já o
+      Cortex-M0 (ARMv6-M) só tem um punhado de instruções de 32 bits e não tem
+      <code>BFI</code>/<code>BFC</code>/<code>UBFX</code>.
     </p>
 
     <h2>Exemplo prático: configurando bits de um registrador de periférico</h2>
-    <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> Supondo GPIOA base em <span class="token number">0x40020000</span> <span class="token operator">*</span><span class="token operator">/</span>
-    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x40020000</span>     <span class="token comment">; base do GPIOA</span>
+    <p>
+      Periféricos exigem <strong>ler–modificar–escrever</strong> (<em>read-modify-write</em>):
+      ler o registrador, mexer só nos bits desejados e gravar de volta, sem
+      perder os outros. O exemplo usa endereços de um GPIO hipotético
+      (base <code>0x40020000</code>, <code>MODER</code> no deslocamento
+      <code>0x00</code>, <code>ODR</code> em <code>0x14</code>, no estilo de
+      alguns microcontroladores STM32) — não é um chip real e o código não
+      foi executado, apenas montado com <code>arm-none-eabi-as
+      -mcpu=cortex-m3</code> sem erros:
+    </p>
+    <pre><code class="language-armasm">    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x40020000</span>     @ base do GPIO
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span>     @ le o MODER
+    <span class="token instruction keyword">BIC</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x3</span>        @ zera o campo de <span class="token number">2</span> bits do pino <span class="token number">0</span> <span class="token punctuation">(</span>bits <span class="token number">1</span>:<span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token instruction keyword">ORR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x1</span>        @ <span class="token number">01</span> <span class="token operator">=</span> saida
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span>     @ grava de volta
 
-    <span class="token operator">/</span><span class="token operator">*</span> Configura PA0 como output: setar bit <span class="token number">0</span> do MODER <span class="token operator">*</span><span class="token operator">/</span>
-    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x00000001</span>
-    <span class="token instruction keyword">ORRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>          <span class="token comment">; r0 = r0 OR 1 → ligar bit 0</span>
-    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span>     <span class="token comment">; escreve no MODER</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>     @ le o ODR
+    <span class="token instruction keyword">ORR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x1</span>        @ liga o bit <span class="token number">0</span> <span class="token punctuation">(</span>acende o LED<span class="token punctuation">)</span>
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>
 
-    <span class="token operator">/</span><span class="token operator">*</span> Liga LED no PA0: setar bit no ODR <span class="token operator">*</span><span class="token operator">/</span>
-    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x00000001</span>
-    <span class="token instruction keyword">ORRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>     <span class="token comment">; ODR offset 0x14</span>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>
+    <span class="token instruction keyword">BIC</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x1</span>        @ desliga o bit <span class="token number">0</span> <span class="token punctuation">(</span>apaga o LED<span class="token punctuation">)</span>
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span>
 
-    <span class="token operator">/</span><span class="token operator">*</span> Limpa bit <span class="token number">0</span> do ODR <span class="token punctuation">(</span>desliga LED<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
-    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0xFFFFFFFE</span>
-    <span class="token instruction keyword">BICS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span>
-    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x14</span><span class="token punctuation">]</span></code></pre>
+    <span class="token instruction keyword">LDR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span>     @ mesma configuracao do MODER<span class="token punctuation">,</span> com BFI:
+    <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>
+    <span class="token instruction keyword">BFI</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>      @ <span class="token register symbol">r1</span><span class="token punctuation">[</span><span class="token number">1</span>:<span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">01</span><span class="token punctuation">,</span> sem tocar nos outros bits
+    <span class="token instruction keyword">STR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span></code></pre>
+    <p>
+      A versão anterior deste artigo usava <code>r0</code> ao mesmo tempo como
+      endereço-base e como valor, e limpava o bit com
+      <code>BICS r0, r0, 0xFFFFFFFE</code>, que zera <em>todos</em> os bits menos
+      o 0. Aqui o endereço fica em <code>r0</code>, o valor lido em
+      <code>r1</code> e a máscara do <code>BIC</code> é exatamente o conjunto de
+      bits a limpar.
+    </p>
 
     <h2>Quando usar cada instrução</h2>
     <ul>
@@ -338,7 +424,7 @@ import { Component } from '@angular/core';
       <li><strong><code>MVN</code></strong>: complemento rápido para montar máscaras.</li>
       <li><strong><code>TST</code></strong>: testar bit sem efeito colateral (não altera registrador).</li>
       <li><strong><code>LSLS</code>/<code>LSRS</code>/<code>ASRS</code></strong>: multiplicar/dividir por potências de 2, ou manipular campos de bits.</li>
-      <li><strong><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></strong>: manipular campos de bits em registradores de periférico (Thumb-2 only).</li>
+      <li><strong><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></strong>: manipular campos de bits em registradores de periférico (ARMv6T2 em diante, Thumb-2 e ARM mode; ausentes no Cortex-M0).</li>
     </ul>
     <p>
       <strong>Previsibilidade e o barrel shifter:</strong> o barrel shifter do
@@ -348,9 +434,9 @@ import { Component } from '@angular/core';
       Thumb-2 mais eficiente que ARM mode para código de manipulação de bits.
     </p>
 
-    <h2>Glossário: instruções</h2>
+    <h2>Glossário</h2>
     <div class="scroll-x"><table>
-      <caption>Instruções de manipulação de bits</caption>
+      <caption>Termos e instruções de manipulação de bits</caption>
       <thead>
         <tr><th scope="col">Instrução</th><th scope="col">O que faz</th></tr>
       </thead>
@@ -363,47 +449,133 @@ import { Component } from '@angular/core';
         <tr><th scope="row"><code>TST Rn, Operand2</code></th><td>Testa bits (AND sem resultado)</td></tr>
         <tr><th scope="row"><code>LSLS/LSRS/ASRS</code></th><td>Shifts lógico/direita/aritmético (16-bit Thumb)</td></tr>
         <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação (ARM standalone / Thumb via MOVS)</td></tr>
-        <tr><th scope="row"><code>BFI Rd, Rn, #lsb, #width</code></th><td>Insere campo de bits (Thumb-2 only)</td></tr>
-        <tr><th scope="row"><code>BFC Rd, #lsb, #width</code></th><td>Limpa campo de bits (Thumb-2 only)</td></tr>
-        <tr><th scope="row"><code>UBFX Rd, Rn, #lsb, #width</code></th><td>Extrai campo unsigned (Thumb-2 only)</td></tr>
+        <tr><th scope="row"><code>BFI Rd, Rn, #lsb, #width</code></th><td>Insere campo de bits (ARMv6T2+)</td></tr>
+        <tr><th scope="row"><code>BFC Rd, #lsb, #width</code></th><td>Limpa campo de bits (ARMv6T2+)</td></tr>
+        <tr><th scope="row"><code>UBFX Rd, Rn, #lsb, #width</code></th><td>Extrai campo sem sinal (ARMv6T2+)</td></tr>
+        <tr><th scope="row"><code>RRX</code></th><td>Rotação à direita de 1 bit passando pelo carry (o carry entra no bit 31)</td></tr>
+        <tr><th scope="row">Barrel shifter</th><td>Circuito que desloca ou rotaciona vários bits de uma vez</td></tr>
+        <tr><th scope="row">Flags N Z C V</th><td>Bits do registrador de status: resultado negativo, zero, carry (vai-um) e overflow (estouro com sinal)</td></tr>
+        <tr><th scope="row">Bloco <code>IT</code></th><td>Prefixo Thumb-2 que torna até 4 instruções seguintes condicionais; dentro dele as instruções de 16 bits não atualizam as flags</td></tr>
+        <tr><th scope="row">Modified immediate</th><td>Imediato que cabe em poucos bits da instrução e se expande por regra fixa (rotação no ARM; <code>i:imm3:imm8</code> no Thumb-2)</td></tr>
+        <tr><th scope="row">Read-modify-write</th><td>Ler o registrador, alterar só os bits desejados e gravar de volta</td></tr>
+        <tr><th scope="row">UAL</th><td>Sintaxe unificada de assembly (<em>Unified Assembler Language</em>) comum a ARM e Thumb</td></tr>
+        <tr><th scope="row">ARMv6T2 / ARMv7-M</th><td>Versões da arquitetura: a primeira trouxe o Thumb-2 e as instruções de campo de bits; a segunda é a dos Cortex-M3/M4/M7 (só Thumb)</td></tr>
       </tbody>
     </table></div>
 
-    <h2>Glossário: comandos</h2>
+    <h2>Comandos</h2>
     <div class="scroll-x"><table>
-      <caption>Comandos de montagem e depuração</caption>
+      <caption>Comandos e opções usados</caption>
       <thead>
         <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
       </thead>
       <tbody>
-        <tr><th scope="row"><code>-mcpu=cortex-m3</code></th><td>Monta para Cortex-M3 (Thumb-2)</td></tr>
-        <tr><th scope="row"><code>-mcpu=arm1176jzf-s</code></th><td>Monta para ARM mode</td></tr>
-        <tr><th scope="row"><code>.syntax unified</code></th><td>Habilita Thumb-2 no assembler</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-as</code></th><td>Monta assembly</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d</code></th><td>Mostra bytes e instruções</td></tr>
+        <tr><th scope="row"><code>-mcpu=cortex-m3</code></th><td>Seleciona o Cortex-M3 (ARMv7-M, Thumb-2); gera Thumb com <code>.thumb</code></td></tr>
+        <tr><th scope="row"><code>-mcpu=arm1176jzf-s</code></th><td>Seleciona o processador ARM1176 (ARMv6K, só ARM/Thumb-1); sem <code>BFI</code>/<code>BFC</code>/<code>UBFX</code></td></tr>
+        <tr><th scope="row"><code>.syntax unified</code></th><td>Seleciona a sintaxe unificada (UAL), que serve tanto a ARM quanto a Thumb; o modo é escolhido por <code>.thumb</code> / <code>.arm</code></td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-as -mcpu=cortex-m3 -o x.o x.s</code></th><td>Monta o assembly em um objeto</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>Monta para ARMv7-A (com <code>.arm</code> no fonte, gera ARM mode)</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary x.o x.bin</code></th><td>Extrai os bytes crus do objeto, sem cabeçalho</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-objdump -d x.o</code></th><td>Mostra bytes e instruções</td></tr>
+        <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar ManipulacaoBitsThumb.java</code></th><td>Compila o programa hospedeiro</td></tr>
+        <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.4.0.jar;.&quot; ManipulacaoBitsThumb manipulacao-bits-thumb.bin</code></th><td>Roda o hospedeiro (no Linux/macOS o separador é <code>:</code>)</td></tr>
       </tbody>
     </table></div>
 
-    <h2>O que o arm-jitter faz com isso</h2>
+    <h2>Conferindo no arm-jitter</h2>
     <p>
-      Quando o <code>arm-jitter</code> executa uma instrução de manipulação de
-      bits, ele decodifica o opcode e executa a operação no registrador emulado.
-      Para <code>LSLS</code>/<code>LSRS</code>/<code>ASRS</code>, o barrel
-      shifter do emulador opera em 1 ciclo — o mesmo custo do hardware real do
-      Cortex-M. Para <code>BFI</code>/<code>BFC</code>/<code>UBFX</code>, o
-      emulador aplica a máscara e o deslocamento diretamente no valor do
-      registrador. O resultado é idêntico ao comportamento do hardware.
+      Para não depender só do manual, o programa
+      <a href="/curso-arm/exemplos/manipulacao-bits-thumb.s"><code>manipulacao-bits-thumb.s</code></a>
+      executa uma instrução de cada tipo, em linha reta, e o hospedeiro Java
+      <code>ManipulacaoBitsThumb</code> imprime <code>r0</code>, <code>r2</code>–<code>r7</code> e as flags depois de
+      cada passo. O valor de partida é <code>r1 = 0x12345678</code>:
+    </p>
+    <pre><code class="language-armasm">    ldr     <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">=</span><span class="token number">0x12345678</span>
+    ands    <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>       @ <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">&amp;</span> <span class="token number">0x0F</span>
+    orrs    <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>       @ <span class="token register symbol">r2</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">|</span> <span class="token number">0x0F</span>
+    eors    <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>       @ <span class="token register symbol">r3</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">^</span> <span class="token number">0x01</span>
+    bics    <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0xF0</span>       @ <span class="token register symbol">r4</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">&amp;</span> ~<span class="token number">0xF0</span>
+    mvn     <span class="token register symbol">r5</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>              @ <span class="token register symbol">r5</span> <span class="token operator">=</span> ~<span class="token number">0</span><span class="token punctuation">,</span> sem mexer nas flags
+    lsls    <span class="token register symbol">r6</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>          @ <span class="token register symbol">r6</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">3</span>
+    asrs    <span class="token register symbol">r7</span><span class="token punctuation">,</span> <span class="token register symbol">r6</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span>          @ <span class="token register symbol">r7</span> <span class="token operator">=</span> <span class="token register symbol">r6</span> <span class="token operator">>></span> <span class="token number">4</span> <span class="token punctuation">(</span>com sinal<span class="token punctuation">)</span>
+    movs    <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ror <span class="token operator">#</span><span class="token number">8</span>      @ <span class="token register symbol">r0</span> <span class="token operator">=</span> <span class="token register symbol">r1</span> rotacionado <span class="token number">8</span> bits a direita
+    ubfx    <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">8</span>      @ <span class="token register symbol">r2</span> <span class="token operator">=</span> <span class="token register symbol">r1</span><span class="token punctuation">[</span><span class="token number">15</span>:<span class="token number">8</span><span class="token punctuation">]</span>
+    movs    <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>
+    movs    <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">7</span>
+    bfi     <span class="token register symbol">r3</span><span class="token punctuation">,</span> <span class="token register symbol">r4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">3</span>      @ <span class="token register symbol">r3</span><span class="token punctuation">[</span><span class="token number">6</span>:<span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token register symbol">r4</span><span class="token punctuation">[</span><span class="token number">2</span>:<span class="token number">0</span><span class="token punctuation">]</span>
+    bfc     <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">12</span>         @ <span class="token register symbol">r1</span><span class="token punctuation">[</span><span class="token number">15</span>:<span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    tst     <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x08</span>           @ so flags: <span class="token register symbol">r1</span> <span class="token operator">&amp;</span> <span class="token number">8</span>
+    tst     <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x04</span>           @ so flags: <span class="token register symbol">r1</span> <span class="token operator">&amp;</span> <span class="token number">4</span></code></pre>
+    <p>A saída real (o <code>r1</code> não é impresso a cada passo porque só muda no <code>bfc</code>; o valor final aparece na última linha):</p>
+    <pre><code class="language-text">0000 LOAD_LITERAL r0=00000000 r2=00000000 r3=00000000 r4=00000000 r5=00000000 r6=00000000 r7=00000000  N0 Z0 C0 V0
+0002 AND   r0=00000008 r2=00000000 r3=00000000 r4=00000000 r5=00000000 r6=00000000 r7=00000000  N0 Z0 C0 V0
+0006 ORR   r0=00000008 r2=1234567F r3=00000000 r4=00000000 r5=00000000 r6=00000000 r7=00000000  N0 Z0 C0 V0
+000A EOR   r0=00000008 r2=1234567F r3=12345679 r4=00000000 r5=00000000 r6=00000000 r7=00000000  N0 Z0 C0 V0
+000E BIC   r0=00000008 r2=1234567F r3=12345679 r4=12345608 r5=00000000 r6=00000000 r7=00000000  N0 Z0 C0 V0
+0012 MVN   r0=00000008 r2=1234567F r3=12345679 r4=12345608 r5=FFFFFFFF r6=00000000 r7=00000000  N0 Z0 C0 V0
+0016 LSL   r0=00000008 r2=1234567F r3=12345679 r4=12345608 r5=FFFFFFFF r6=91A2B3C0 r7=00000000  N1 Z0 C0 V0
+0018 ASR   r0=00000008 r2=1234567F r3=12345679 r4=12345608 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N1 Z0 C0 V0
+001A MOV   r0=78123456 r2=1234567F r3=12345679 r4=12345608 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+001E BIT_FIELD_EXTRACT r0=78123456 r2=00000056 r3=12345679 r4=12345608 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+0022 MOV   r0=78123456 r2=00000056 r3=00000000 r4=12345608 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z1 C0 V0
+0024 MOV   r0=78123456 r2=00000056 r3=00000000 r4=00000007 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+0026 BIT_FIELD_INSERT r0=78123456 r2=00000056 r3=00000070 r4=00000007 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+002A BIT_FIELD_INSERT r0=78123456 r2=00000056 r3=00000070 r4=00000007 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+002E TST   r0=78123456 r2=00000056 r3=00000070 r4=00000007 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z0 C0 V0
+0032 TST   r0=78123456 r2=00000056 r3=00000070 r4=00000007 r5=FFFFFFFF r6=91A2B3C0 r7=F91A2B3C  N0 Z1 C0 V0
+r1 final = 12340008</code></pre>
+    <p>Lendo linha a linha:</p>
+    <ul>
+      <li><code>AND</code>: <code>0x…78 &amp; 0x0F = 8</code>. <code>ORR</code>: <code>0x1234567F</code>. <code>EOR</code>: <code>0x…78 ^ 1 = 0x…79</code>. <code>BIC</code>: <code>0x…78 &amp; ~0xF0 = 0x…08</code>, o nibble 1 zerado.</li>
+      <li><code>MVN</code>: <code>r5 = FFFFFFFF</code> e as flags <strong>não mudam</strong> (continuam <code>N0 Z0</code>), como esperado sem o <code>S</code>.</li>
+      <li><code>LSLS #3</code>: <code>0x12345678 × 8 = 0x91A2B3C0</code> (e não ×4, como a versão anterior do artigo dizia). O bit 31 virou 1, então <code>N1</code>. <code>ASRS #4</code> sobre esse valor negativo repete o bit de sinal: <code>0xF91A2B3C</code>.</li>
+      <li><code>MOVS …, ROR #8</code>: <code>0x78123456</code>, o byte baixo foi para o topo. <code>UBFX #8,#8</code>: <code>0x56</code>, o byte 1.</li>
+      <li><code>MOVS r3, #0</code> liga <code>Z1</code>; <code>BFI r3, r4, #4, #3</code> copia <code>111</code> para os bits 6:4: <code>0x70</code>. <code>BFC r1, #4, #12</code> zera os bits 15:4: <code>0x5678</code> vira <code>0x0008</code>, <code>r1 = 0x12340008</code>.</li>
+      <li><code>TST #0x08</code>: <code>0x…08 &amp; 8 ≠ 0</code>, <code>Z0</code>. <code>TST #0x04</code>: <code>… &amp; 4 = 0</code>, <code>Z1</code>. Nenhum registrador mudou.</li>
+    </ul>
+    <p>
+      A coluna do tipo (<code>AND</code>, <code>BIT_FIELD_INSERT</code>…) é o nome
+      que o decoder do <code>arm-jitter</code> dá à instrução, não o mnemônico:
+      repare que <code>BFC</code> aparece como <code>BIT_FIELD_INSERT</code>
+      (limpar um campo é inserir zeros). Este teste não usa blocos <code>IT</code>.
     </p>
 
-    <h2>Próximo passo</h2>
+    <h2>Conclusão</h2>
     <p>
-      Até aqui cobrimos operações lógicas, shifts e campos de bits em Thumb-2.
-      O próximo texto entra em <strong>interrupções e exceções</strong>: SVC,
-      PendSV e SysTick — os três pilares que todo RTOS em Cortex-M precisa
-      entender. Até lá, tente escrever um loop que alterna o bit 0 de um
-      registrador usando <code>EORS</code> e verifique os bytes com
+      Em Thumb-2, <code>ANDS</code>/<code>TST</code> testam e isolam bits,
+      <code>ORRS</code> liga, <code>EORS</code> alterna e <code>BICS</code>
+      limpa; <code>LSLS</code>/<code>LSRS</code>/<code>ASRS</code> com
+      imediato cabem em 16 bits, enquanto as formas com imediato das lógicas
+      são de 32 bits (as formas só com registradores baixos têm versão de 16 bits).
+      <code>UBFX</code>, <code>BFI</code> e <code>BFC</code> manipulam campos de bits
+      numa instrução só — e, ao contrário do que este artigo afirmava antes,
+      existem em ARM mode e em Thumb-2 a partir de ARMv6T2, faltando só nos
+      núcleos mais antigos ou mínimos (ARM1176, Cortex-M0).
+    </p>
+    <p>
+      O uso típico é o <em>read-modify-write</em> de registradores de
+      periférico em microcontroladores, e o ganho de densidade de código dos
+      encodings de 16 bits importa onde a memória Flash é pequena. Para praticar,
+      escreva um laço que alterna o bit 0 de um registrador com
+      <code>EORS</code> e confira os bytes com
       <code>arm-none-eabi-objdump -d</code>.
     </p>
+    <h3>Para ir além</h3>
+    <ul>
+      <li><a routerLink="/artigos/thumb-e-thumb-2">Thumb e Thumb-2: instruções de 16/32 bits</a> — como o processador distingue instruções de 16 e 32 bits.</li>
+      <li><a routerLink="/artigos/decodificando-thumb-a-mao">Decodificando Thumb à mão</a> — ler campos como os de <code>F361 1006</code> bit a bit.</li>
+      <li><a routerLink="/artigos/instrucoes-condicionais-thumb">Instruções condicionais em Thumb: IT blocks e execução condicional</a> — o bloco <code>IT</code> citado acima.</li>
+      <li><a routerLink="/artigos/flags-e-desvios-condicionais">Flags e desvios condicionais: N/Z/C/V, bge/blt/bne</a> — o que as flags <code>N Z C V</code> significam.</li>
+    </ul>
+
+    <h2>Referências</h2>
+    <ul>
+      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0403/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-M</em></a> (DDI 0403). Descrição e codificação Thumb-2 de <code>AND</code>, <code>ORR</code>, <code>EOR</code>, <code>BIC</code>, <code>MVN</code>, <code>TST</code>, shifts, <code>ROR</code>, <code>BFI</code>, <code>BFC</code> e <code>UBFX</code>.</li>
+      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C). Os mesmos mnemônicos em ARM mode, incluindo <code>BFI</code>/<code>BFC</code>/<code>UBFX</code>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Machine Directives&quot;</a> (GNU Binutils). Diretivas <code>.syntax</code>, <code>.thumb</code>, <code>.arm</code>, <code>.cpu</code>, <code>.thumb_func</code> e <code>.ltorg</code>.</li>
+      <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub). <code>ArmCore</code>, <code>ArmTraceListener</code> e <code>ArmArchitecture.ARMV7M</code>, usados no hospedeiro.</li>
+    </ul>
+    <p><em>Bytes e saídas conferidos com devkitARM (<code>arm-none-eabi-as</code>/<code>-objdump</code>) e <code>arm-jitter</code> 1.4.0.</em></p>
   `,
 })
 export class ArticleManipulacaoBitsThumb {}
