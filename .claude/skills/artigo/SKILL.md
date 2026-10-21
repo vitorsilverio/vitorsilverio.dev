@@ -52,6 +52,15 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
   - Saídas mostradas no artigo = saída real da execução. O código mostrado no artigo e o arquivo para download devem produzir a mesma saída (inclusive formatação).
 - [ ] Linguagem de bloco de código nova no site (primeira vez com `xml`, `yaml`...)? Abra no navegador nos **dois temas** e confira se nenhum CSS global colide com as classes de token do Prism (ex.: `.tag` × `token tag`).
 
+## Imagens (capturas de tela, diagramas)
+
+- **Onde ficam:** até publicar, em `site/proximos-artigos/<slug>-exemplos/img/` (ignorada pelo git). Na publicação, mova para `site/public/assets/artigos/<slug>/` e cite no `.md` o caminho final `/assets/artigos/<slug>/<arquivo>`.
+- **Sintaxe:** bloco ` ```figura ` com uma linha por imagem, `src | alt | largura x altura | legenda` (detalhes em `site/CLAUDE.md`). Dimensões vazias são lidas do arquivo. `![alt](src)` só converte se o arquivo for achado; o gerador avisa quando não.
+- **Alt descritivo:** diz o que a imagem *mostra e comprova* ("Janela do Ghidra com `main` desmontada e o desvio em destaque"), não "captura de tela". `alt` vazio só para imagem puramente decorativa.
+- **Nada essencial só na imagem:** o texto precisa carregar a informação (valores, endereços, nomes de menu); a imagem confirma. Código e saída de terminal continuam em bloco de código, não em print.
+- **Peso e formato:** PNG para captura de tela, WebP (ou JPEG) para foto; largura entre 1400 e 1600 px (a coluna tem 45rem, o dobro cobre tela retina), sem passar de ~300 KB cada quando der. Recorte só o que importa. Legenda curta; o clique abre o original.
+- **Confidencialidade:** capturas de artigo não publicado não entram no git antes do dia (ver abaixo); confira também que não aparecem nome de usuário, caminhos pessoais ou chaves.
+
 ## Confidencialidade antes de publicar
 
 O repositório é **público**. Até o dia da publicação, nada do artigo pode entrar no git: rascunho, exemplos, binários e capturas. O rascunho fica em `site/proximos-artigos/<slug>.md`, e os exemplos de um artigo novo ficam em `site/proximos-artigos/<slug>-exemplos/`; as duas pastas são ignoradas pelo git. Na publicação, os exemplos vão para `DOCS/curso-arm/exemplos/` (ou outra pasta definitiva), e o espelho em `site/public/` é feito pelo `gen:assets`.

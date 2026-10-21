@@ -92,7 +92,7 @@ Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` p
 
 ## Componentes de conteúdo (usar no lugar de `<pre>` quando couber)
 
-Dois blocos especiais no markdown viram componente — o gerador cuida do import.
+Alguns blocos especiais no markdown viram componente — o gerador cuida do import.
 
 **Fita de bits anotada** (`app-bit-field`): uma linha por campo,
 `bits | nome | valor | descrição`, do bit mais significativo para o menos. O
@@ -133,6 +133,27 @@ Até 5 itens fica horizontal em telas largas; mais que isso fica sempre vertical
   > arm-none-eabi-as | monta
   soma5.o | objeto" />
 ```
+
+**Figura** (`app-figura`, `src/app/shared/figura/`): `<figure>` + imagem + legenda, na largura
+da coluna do artigo, com borda e raio do tema (a borda impede captura clara de "vazar" no tema
+escuro). Usa `NgOptimizedImage` sem loader de CDN (o loader padrão devolve o `src` como está:
+vale lazy loading, reserva de espaço e avisos de dev, não `srcset`). A imagem é um link para o
+original em nova aba (sem lightbox). Inputs: `src`, `alt`, `largura`, `altura` (todos
+obrigatórios, dimensões intrínsecas do arquivo), `legenda`, `prioridade` (só acima da dobra).
+`alt=""` só para imagem decorativa (e então não há link). No markdown, uma figura por linha,
+`src | alt | largura x altura | legenda`; largura x altura pode ficar vazio e é lida do arquivo:
+
+````markdown
+```figura
+/assets/artigos/meu-artigo/main.png | Janela do Ghidra com a função main desmontada | 1500 x 900 | A função main no CodeBrowser.
+/assets/artigos/meu-artigo/simbolos.png | Árvore de símbolos expandida | | Dimensões lidas do arquivo.
+```
+````
+
+`![alt](src)` também vira `<app-figura>` quando o arquivo é encontrado (em `public/`, ao lado
+do `.md` ou em `<slug>-exemplos/img/`); o título (`"..."`) vira a legenda. Se o arquivo não for
+achado, o gerador **avisa** e deixa um `<img>` simples: troque pela cerca ` ```figura ` com
+`largura x altura`. Imagens ficam em `public/assets/artigos/<slug>/` (ver skill `artigo`).
 
 **Detecção automática.** Listagem de objdump tem forma reconhecível (endereço,
 bytes em hex, mnemônico), então o gerador converte sozinho — a cerca pode ser

@@ -1,0 +1,33 @@
+<figure class="fg">
+  @if (decorativa()) {
+    <img
+      class="fg-img"
+      [ngSrc]="src()"
+      [width]="largura()"
+      [height]="altura()"
+      [priority]="prioridade()"
+      alt=""
+    />
+  } @else {
+    <a
+      class="fg-link"
+      [href]="src()"
+      target="_blank"
+      rel="noopener"
+      title="Abrir a imagem original em outra aba"
+    >
+      <img
+        class="fg-img"
+        [ngSrc]="src()"
+        [width]="largura()"
+        [height]="altura()"
+        [priority]="prioridade()"
+        [alt]="alt()"
+      />
+      <span class="fg-sr">(abre a imagem original em outra aba)</span>
+    </a>
+  }
+  @if (legenda()) {
+    <figcaption class="fg-cap">{{ legenda() }}</figcaption>
+  }
+</figure>

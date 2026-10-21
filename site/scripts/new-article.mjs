@@ -5,6 +5,7 @@ import { execSync } from 'node:child_process';
 import { marked } from 'marked';
 import { highlightCode } from './lib/highlight.mjs';
 import { ehObjdump, pareceBitField } from './lib/blocos.mjs';
+import { dimensoes, parseFiguras } from './lib/imagem.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -42,7 +43,7 @@ const USAGE =
 // --------------------------------------------------------------------------
 let mdMeta = null;
 let mdTemplate = null;
-let mdUsa = { routerLink: false, bitField: false, objdump: false };
+let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false };
 
 if (opts.from) {
   const mdPath = resolve(SITE_ROOT, opts.from);
@@ -57,7 +58,7 @@ if (opts.from) {
       (m) => m[1],
     ),
   );
-  const { html, usa } = mdBodyToHtml(mdMeta.body, knownSlugs);
+  const { html, usa } = mdBodyToHtml(mdMeta.body, knownSlugs, dirname(mdPath));
   mdTemplate = html;
   mdUsa = usa;
 }
@@ -255,11 +256,33 @@ function escAttr(s) {
  * - remove o rodapé "**Referências cruzadas:** ..." (redundante com a seção
  *   "Artigos relacionados" que o próprio article-detail já renderiza)
  */
-function mdBodyToHtml(body, knownSlugs = new Set()) {
-  const usa = { routerLink: false, bitField: false, objdump: false };
+function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
+  const usa = { routerLink: false, bitField: false, objdump: false, figura: false };
   const deadLinks = [];
   const candidatosBf = [];
   let autoObjdump = 0;
+  const avisosImg = [];
+
+  /// Dimensões do arquivo: em public/ (já publicado) ou ao lado do .md (rascunho).
+  const lerDims = (src) => {
+    // public/ (publicado), ao lado do .md, ou <slug>-exemplos/img/ (rascunho que já
+    // cita o caminho final /assets/artigos/<slug>/x.png).
+    const rel = src.replace(/^\//, '');
+    const f = [
+      resolve(SITE_ROOT, 'public', rel),
+      resolve(mdDir, rel),
+      resolve(mdDir, `${mdMeta?.slug}-exemplos`, 'img', basename(src)),
+    ].find((c) => existsSync(c));
+    return f ? dimensoes(readFileSync(f)) : null;
+  };
+  const tagFigura = (f) => {
+    usa.figura = true;
+    const leg = f.legenda ? `\n      legenda="${escAttr(f.legenda)}"` : '';
+    return (
+      `<app-figura\n      src="${escAttr(f.src)}"\n      alt="${escAttr(f.alt)}"` +
+      `\n      [largura]="${f.largura}"\n      [altura]="${f.altura}"${leg}\n    />\n`
+    );
+  };
 
   // Remove a linha de "Referências cruzadas" (e sua régua/linhas em branco).
   let src = body.replace(
@@ -292,6 +315,11 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
       const l = legenda ? `\n      legenda="${escAttr(legenda)}"` : '';
       return `<app-objdump${l}\n      listagem="${escAttr(text)}"\n    />\n`;
     }
+    if (tipo === 'figura') {
+      const { figuras, erros } = parseFiguras(text, lerDims);
+      avisosImg.push(...erros);
+      return figuras.map(tagFigura).join('');
+    }
     if (tipo === 'bitfield') {
       usa.bitField = true;
       const l = legenda ? `\n      titulo="${escAttr(legenda)}"` : '';
@@ -315,6 +343,19 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
 
     const { html, langClass } = highlightCode(text, tipo);
     return `<pre><code class="${langClass}">${html}</code></pre>\n`;
+  };
+
+  // ![alt](src): vira <app-figura> se as dimensões puderem ser lidas do arquivo
+  // (public/ ou ao lado do .md); senão avisa e mantém <img> simples.
+  renderer.image = ({ href, title, text }) => {
+    const d = lerDims(href);
+    if (d && text.trim()) return tagFigura({ src: href, alt: text, ...d, legenda: title ?? '' });
+    avisosImg.push(
+      text.trim()
+        ? `imagem sem dimensões legíveis (arquivo não encontrado?): ${href}. Use a cerca \`\`\`figura com "largura x altura".`
+        : `imagem sem alt: ${href}`,
+    );
+    return `<img src="${escAttr(href)}" alt="${escAttr(text)}" />`;
   };
 
   renderer.table = (token) => {
@@ -373,6 +414,10 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
   // seções; no site o padrão é sem <hr>. Remove as réguas temáticas.
   html = html.replace(/<hr\s*\/?>\n?/g, '');
 
+  // `![alt](src)` sozinho vira <p><app-figura/></p>; <figure> dentro de <p> é HTML
+  // inválido (o navegador fecha o <p> antes). Tira o parágrafo em volta.
+  html = html.replace(/<p>(<app-figura\b[^>]*?\/>)\s*<\/p>/g, '$1');
+
   // Angular: TODA chave vira entidade, não só o par `{{`/`}}`.
   //
   // Uma chave solta basta para o parser tentar ler uma mensagem ICU e explodir
@@ -387,6 +432,9 @@ function mdBodyToHtml(body, knownSlugs = new Set()) {
       `⚠ ${deadLinks.length} link(s) para artigo(s) não publicado(s) — mantidos como texto:\n  ` +
         [...new Set(deadLinks)].join('\n  '),
     );
+  }
+  if (avisosImg.length) {
+    console.warn(`⚠ ${avisosImg.length} problema(s) com imagens:\n  ` + avisosImg.join('\n  '));
   }
   if (autoObjdump) {
     console.log(`• ${autoObjdump} bloco(s) reconhecido(s) como objdump → <app-objdump>`);
@@ -409,7 +457,7 @@ function buildPostComponent() {
   const safe = bodyHtml.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '$\\{');
 
   // O stub (sem `--from`) já vem com um link, então importa RouterLink.
-  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false };
+  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false };
 
   const nomes = [];
   const linhas = [];
@@ -420,6 +468,10 @@ function buildPostComponent() {
   if (usa.bitField) {
     nomes.push('BitField');
     linhas.push("import { BitField } from '../../../shared/bit-field/bit-field';");
+  }
+  if (usa.figura) {
+    nomes.push('Figura');
+    linhas.push("import { Figura } from '../../../shared/figura/figura';");
   }
   if (usa.objdump) {
     nomes.push('Objdump');
