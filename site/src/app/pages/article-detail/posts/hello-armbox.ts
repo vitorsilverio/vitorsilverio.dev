@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-hello-armbox',
   template: `
     <p>
@@ -39,6 +40,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
       o decodificador, a IR e o backend de código que estudaremos ao longo do
       curso.
     </p>
+    <app-nota n="1">
+      Os <em>kuser helpers</em> ficam em endereços fixos: segundo a documentação do kernel, por exemplo <code>__kuser_memory_barrier</code> em <code>0xffff0fa0</code>, <code>__kuser_cmpxchg</code> em <code>0xffff0fc0</code> e <code>__kuser_get_tls</code> em <code>0xffff0fe0</code>. Todos caem dentro da página de vetores do Linux ARM (<code>0xffff0000</code> a <code>0xffff0fff</code>). É nessa página que o <code>arm-box</code> mapeia os helpers, porque binários com libc estática chamam esses endereços para operações atômicas, barreira de memória e acesso ao TLS (armazenamento local da <em>thread</em>); o comentário da classe <code>KuserHelpers</code> do <code>arm-box</code> descreve isso.
+    </app-nota>
 
     <h2>Pré-requisitos</h2>
     <ul>
@@ -71,6 +75,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
       <code>r4</code>–<code>r6</code> quando precisam), e a chamada é feita com
       <code>svc #0</code>.
     </p>
+    <app-nota n="2">
+      O Linux ARM antigo fazia diferente. Na ABI antiga (OABI, <em>Old ABI</em>) o número da chamada ia dentro da própria instrução (<code>swi NR</code>), sem passar por registrador; a EABI, que usamos aqui, usa <code>swi 0x0</code> com o número em <code>r7</code>. A página <em>syscall(2)</em> do Linux man-pages lista as duas convenções. (<code>swi</code> é o nome antigo do <code>svc</code>: é a mesma instrução.)
+    </app-nota>
 
     <pre><code class="language-armasm">.syntax unified
 .text
@@ -246,11 +253,13 @@ arm-none-eabi-ld <span class="token parameter variable">-static</span> <span cla
 
     <h2>Referências</h2>
     <ul>
-      <li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenção ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>).</li>
+      <li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenções ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>) e OABI (<code>swi NR</code>, com o número na própria instrução).</li>
       <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils): a forma <code>ldr Rd, =expressão</code> e a <em>literal pool</em>.</li>
       <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/ld/Entry-Point.html" target="_blank" rel="noopener"><em>GNU ld</em>, seção 3.4.1 &quot;Setting the Entry Point&quot;</a>: como o ponto de entrada é escolhido.</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>arm-box</code></a> (GitHub): opções de linha de comando, pilha ABI, <em>kuser helpers</em> e syscalls suportadas.</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub): decodificador, interpretador de IR e backend JIT.</li>
+      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/kernel_user_helpers.html" target="_blank" rel="noopener"><em>Kernel-provided User Helpers</em></a>: endereços fixos dos <em>kuser helpers</em> no Linux ARM.</li>
+      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/memory.html" target="_blank" rel="noopener"><em>Kernel Memory Layout on ARM Linux</em></a>: a página de vetores em <code>0xffff0000</code>–<code>0xffff0fff</code>.</li>
     </ul>
   `,
 })

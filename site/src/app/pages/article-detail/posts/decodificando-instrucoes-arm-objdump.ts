@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BitField } from '../../../shared/bit-field/bit-field';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, BitField, Objdump],
+  imports: [RouterLink, BitField, Objdump, Nota],
   selector: 'app-article-decodificando-instrucoes-arm-objdump',
   template: `
     <p>
@@ -86,6 +87,9 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       <em>always</em> (executa sempre). É por isso que quase toda instrução
       começa com <code>e…</code>.
     </p>
+    <app-nota n="1">
+      O valor <code>1111</code> no campo <code>cond</code> é um caso à parte. Do ARMv5 em diante ele não é uma condição: é o espaço das instruções que não têm condição, como o <code>blx</code> com imediato. Montei um <code>blx</code> para uma função Thumb e o <code>objdump</code> mostrou <code>faffffff</code>, que começa com <code>f</code>. Por isso o decodificador do <code>arm-jitter</code> trata <code>cond = 1111</code> separado do resto, como você verá mais adiante.
+    </app-nota>
     <p>
       Logo abaixo, bits <code>[27:26]</code> dizem a "família". Para o nosso
       laço, três famílias aparecem:
@@ -187,6 +191,9 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
         É assim que constantes pequenas cabem numa instrução só.
       </li>
     </ul>
+    <app-nota n="2">
+      O imediato do ARM é um byte (<code>imm8</code>) rotacionado à direita por <code>2 × rot</code> bits, com <code>rot</code> de 4 bits. Então <code>mov r0, #0x3fc</code> cabe numa instrução (<code>e3a00fff</code>: <code>imm8 = 0xff</code>, <code>rot = 15</code>, isto é, <code>0xff</code> rotacionado 30 bits), mas <code>mov r0, #0x101</code> não: com <code>-march=armv5te</code> o montador responde <code>Error: invalid constant (101) after fixup</code>. Com <code>-march=armv7-a</code> o mesmo fonte monta, porque o montador usa <code>movw r0, #257</code> (<code>e3000101</code>), uma instrução que carrega 16 bits direto e só existe a partir do ARMv6T2.
+    </app-nota>
 
     <h3><code>cmp r2, r3</code> = <code>e1520003</code></h3>
     <p>

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-do-c-ao-binario-arm',
   template: `
 <p>
@@ -65,6 +66,9 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> soma-O0.o
     />
 <p>A saída tem 25 instruções (o <code>.text</code> tem <code>0x64</code> bytes, 100 bytes a 4 por instrução). Os comentários depois de <code>@</code> são anotações deste artigo, não saída do <code>objdump</code> (que só comenta <code>push</code>/<code>pop</code> com a forma equivalente em <code>str</code>/<code>ldr</code>).</p>
 <p>Cada variável (<code>n</code>, <code>acc</code>, <code>i</code>) mora num slot da pilha, referenciado por <code>[fp, #offset]</code>. Toda operação faz <code>ldr</code> → conta → <code>str</code>. É lento, mas é uma tradução direta do C — ideal para depurar, porque cada variável tem um endereço de memória que o depurador enxerga. Repare no <strong>prólogo</strong> (<code>push &#123;fp&#125;</code> / <code>add fp, sp, #0</code> / <code>sub sp, sp, #20</code>) e no <strong>epílogo</strong> (<code>add sp, fp, #0</code> / <code>pop &#123;fp&#125;</code> / <code>bx lr</code>): o prólogo guarda o <code>fp</code> do chamador, aponta <code>fp</code> para o frame novo e reserva 20 bytes de locais; o epílogo desfaz tudo e <code>bx lr</code> volta ao chamador. Esse protocolo segue a convenção de chamada AAPCS (<em>Procedure Call Standard for the Arm Architecture</em>), que também define que o primeiro argumento chega em <code>r0</code> e o retorno sai em <code>r0</code>. Para saber mais sobre sub-rotinas e pilha, veja o <a routerLink="/artigos/sub-rotinas-arm-bl-bx-pilha">artigo de sub-rotinas</a>.</p>
+<app-nota n="1">
+  <code>fp</code> é o apelido de <code>r11</code>: o <code>objdump</code> mostra <code>mov r0, fp</code> para <code>mov r0, r11</code>. Em Thumb o GCC usa outro registrador como ponteiro de quadro: compilando o mesmo <code>soma.c</code> com <code>-O0 -march=armv4t -mthumb</code>, o prólogo saiu <code>push &#123;r7, lr&#125;</code> e <code>add r7, sp, #0</code>. E com <code>-O2</code>, como você vê abaixo, nem existe ponteiro de quadro.
+</app-nota>
 <h2><code>-O2</code>: o mesmo resultado, outro caminho</h2>
 <app-objdump
       listagem="00000000 &lt;soma_ate&gt;:

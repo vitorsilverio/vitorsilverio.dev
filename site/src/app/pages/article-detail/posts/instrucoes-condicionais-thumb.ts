@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
 import { BitField } from '../../../shared/bit-field/bit-field';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump, BitField],
+  imports: [RouterLink, Objdump, BitField, Nota],
   selector: 'app-article-instrucoes-condicionais-thumb',
   template: `
     <p>
@@ -99,6 +100,9 @@ import { BitField } from '../../../shared/bit-field/bit-field';
       <code>blt</code> foi tomado, <code>movs r0, #0</code> executou e o
       <em>exit code</em> é 0.
     </p>
+    <app-nota n="1">
+      O <code>.n</code> em <code>blt.n</code> e <code>b.n</code> é do <code>objdump</code>: <em>narrow</em>, a forma de 16 bits. O Thumb-2 tem também a forma de 32 bits, <em>wide</em>, escrita <code>.w</code>. Quem escolhe é o montador: num teste meu, um <code>bne</code> para um rótulo a 400 bytes de distância saiu como <code>bne.w</code> (<code>f040 80c8</code>) com <code>-march=armv7-a</code>, e com <code>-march=armv6-m</code>, que só tem a forma curta, o mesmo fonte falhou com <code>Error: branch out of range</code>. Também dá para pedir uma delas: <code>bne.w</code> gerou 4 bytes onde o <code>bne</code> comum gerou 2 (<code>d1fd</code>).
+    </app-nota>
 
     <h2>Thumb-2: os IT blocks</h2>
     <p>
@@ -325,6 +329,9 @@ import { BitField } from '../../../shared/bit-field/bit-field';
         mais legível.
       </li>
     </ul>
+    <app-nota n="2">
+      Na prática os compiladores já evitam blocos <code>IT</code> grandes. O manual do GCC descreve a opção <code>-mrestrict-it</code>, que limita a geração de blocos <code>IT</code> às regras do ARMv8-A: cada bloco só pode ter uma instrução de 16 bits, de um conjunto selecionado. A opção vem ligada por padrão no modo Thumb do ARMv8-A. Um <code>ITE</code> com duas instruções, como o do exemplo, é o tipo de bloco que o GCC não gera nesse modo.
+    </app-nota>
 
     <h2>O que o arm-jitter faz com isso</h2>
     <p>
@@ -421,6 +428,7 @@ import { BitField } from '../../../shared/bit-field/bit-field';
       <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C). A instrução <code>IT</code> (codificação T1, <code>firstcond</code> e <code>mask</code>), o <code>ITSTATE</code> com o pseudocódigo <code>ITAdvance()</code>, e a regra <code>setflags = !InITBlock()</code> das codificações Thumb de 16 bits.</li>
       <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Options.html" target="_blank" rel="noopener"><em>Using as</em>, "ARM Options"</a> (GNU Binutils). As opções <code>-march</code>, <code>-mthumb</code> e <code>-mimplicit-it</code>.</li>
       <li>Vítor Silvério — <code>arm-jitter</code> 1.5.0: <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/ir/StandardIrBlockLifter.java" target="_blank" rel="noopener"><code>StandardIrBlockLifter.java</code></a> (tradução do bloco <code>IT</code> para IR), <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/core/ItState.java" target="_blank" rel="noopener"><code>ItState.java</code></a> (expansão e avanço do <code>ITSTATE</code>) e <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/decoder/DecodedInstruction.java" target="_blank" rel="noopener"><code>DecodedInstruction.java</code></a> (<code>withItContext</code>).</li>
+      <li>Free Software Foundation — <a href="https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html" target="_blank" rel="noopener"><em>Using the GNU Compiler Collection</em>, &quot;ARM Options&quot;</a>. A opção <code>-mrestrict-it</code>.</li>
     </ul>
     <p><em>Bytes e saídas conferidos com devkitARM (<code>arm-none-eabi-as</code> 2.46, <code>-ld</code>, <code>-objdump</code>) e <code>arm-box</code> com <code>arm-jitter</code> 1.5.0, nos três backends.</em></p>
   `,

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
+  imports: [Nota],
   selector: 'app-article-signals',
   template: `
     <p>
@@ -80,6 +82,9 @@ depois do set, sem ler: 1
       <code>double.set(1)</code> nem compila: o TypeScript responde
       <code>Property 'set' does not exist on type 'Signal&lt;number&gt;'</code>.
     </p>
+    <app-nota n="1">
+      Um signal só avisa os interessados quando o valor novo é diferente do anterior, e por padrão a comparação é por referência (<code>Object.is()</code>, segundo o guia oficial). Por isso <code>count.set(4)</code> quando <code>count</code> já vale 4 não dispara nada, e uma lista alterada no lugar (<code>lista().push(3)</code>) também não: testei com um <code>computed</code> que lia o tamanho da lista e ele continuou devolvendo o valor antigo. Para atualizar, troque a referência (<code>lista.set([...lista(), 3])</code>) ou passe uma função <code>equal</code> própria ao criar o signal.
+    </app-nota>
 
     <h2>Um componente completo</h2>
     <p>

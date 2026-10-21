@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Fluxo } from '../../../shared/fluxo/fluxo';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Fluxo, Objdump],
+  imports: [RouterLink, Fluxo, Objdump, Nota],
   selector: 'app-article-montar-e-ligar-arm',
   template: `
 <p>Quem escreve o primeiro programa em assembly ARM costuma digitar duas linhas de comando sem saber direito o
@@ -140,6 +141,9 @@ SECTIONS
 <li><strong><code>FLASH</code> em <code>0x0</code></strong> — o Cortex-M lê o valor inicial do <code>SP</code> em <code>0x0</code> e o endereço de reset em <code>0x4</code> (o manual ARMv7-M descreve essa tabela). No ARM clássico (ARMv4–v7-A), <code>0x0</code> guarda instruções de <em>branch</em> para cada handler.</li>
 <li><strong><code>KEEP(...)</code></strong> — quando o link usa <code>--gc-sections</code> (coleta de seções não referenciadas, comum em firmware), o linker vê que ninguém &quot;chama&quot; a tabela de vetores e a descarta, e o boot lê lixo. <code>KEEP</code> a protege. O <code>--gc-sections</code> não é ligado por padrão no <code>ld</code>, mas o hábito é manter o <code>KEEP</code> sempre.</li>
 </ul>
+<app-nota n="1">
+  No Linux ARM os vetores não ficam em <code>0x0</code>. Segundo a documentação do kernel, a página de vetores da CPU é mapeada em <code>0xffff0000</code> a <code>0xffff0fff</code> quando a CPU suporta relocação de vetores (o bit V de um registrador de controle). Num ELF de usuário você não vê isso: o kernel cuida dessa página, e é nela que ficam os <em>kuser helpers</em>, rotinas que o kernel deixa em endereços fixos para os programas.
+</app-nota>
 <h2><code>gcc</code> como motorista</h2>
 <p><code>arm-none-eabi-gcc</code> sabe chamar <code>as</code> e <code>ld</code> na ordem certa:</p>
 <pre><code class="language-bash"><span class="token comment"># monta + liga em um passo (sem libc), com um linker script:</span>
@@ -223,6 +227,8 @@ arm-none-eabi-gcc <span class="token parameter variable">-c</span> <span class="
 <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C): vetores de exceção do perfil A/R, a partir do endereço base <code>0x0</code>.</li>
 <li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst" target="_blank" rel="noopener"><em>ELF for the Arm Architecture</em></a> (AAELF32): tipos de relocation, incluindo <code>R_ARM_ABS32</code>.</li>
 <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte do <code>arm-box</code></a> (GitHub): <code>testdata/flash.ld</code> e o loader de ELF.</li>
+<li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/memory.html" target="_blank" rel="noopener"><em>Kernel Memory Layout on ARM Linux</em></a>: a página de vetores da CPU em <code>0xffff0000</code>–<code>0xffff0fff</code>.</li>
+<li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/kernel_user_helpers.html" target="_blank" rel="noopener"><em>Kernel-provided User Helpers</em></a>: rotinas do kernel em endereços fixos dessa página.</li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 3, lição 2. Ver também: <a routerLink="/artigos/ambiente-arm">Setup do ambiente ARM</a>, <a routerLink="/artigos/hello-armbox">Criando um executável ARM e rodando no arm-box</a>.</em></p>
 `,

@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
 import { BitField } from '../../../shared/bit-field/bit-field';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump, BitField],
+  imports: [RouterLink, Objdump, BitField, Nota],
   selector: 'app-article-sub-rotinas-arm-bl-bx-pilha',
   template: `
     <p>
@@ -183,6 +184,9 @@ import { BitField } from '../../../shared/bit-field/bit-field';
         outra (aninhamento).
       </li>
     </ul>
+    <app-nota n="1">
+      É comum ver o epílogo escrito como <code>pop &#123;r4, pc&#125;</code>, sem o <code>bx lr</code>: o endereço guardado na pilha vai direto para o <code>PC</code>, e a função volta com uma instrução a menos. Troquei as duas últimas linhas de <code>add2</code> por isso e o programa continuou devolvendo 7 no <code>arm-box</code>. A palavra muda de <code>e8bd4010</code> para <code>e8bd8010</code>: a lista de registradores passa de <code>0x4010</code> (bit 14, o <code>lr</code>) para <code>0x8010</code> (bit 15, o <code>pc</code>). É a forma que o GCC gera: compilando uma função que chama outras com <code>-O2</code>, o epílogo saiu <code>pop &#123;r4, r5, r6, pc&#125;</code>.
+    </app-nota>
 
     <h2>Vendo acontecer: rodando e depurando</h2>
     <p>

@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
 import { BitField } from "../../../shared/bit-field/bit-field";
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump, BitField],
+  imports: [RouterLink, Objdump, BitField, Nota],
   selector: 'app-article-anatomia-instrucao-arm',
   template: `
 <p>Você abre um <code>objdump</code> de um binário ARM e vê <code>e0810002 add r0, r1, r2</code>. De onde saiu aquele <code>e0810002</code>? Em ARM de 32 bits, toda instrução é uma palavra de 32 bits dividida em campos de largura fixa: quem decide a operação, quais registradores, se há um imediato, se a instrução é condicional. Saber ler esses campos é a diferença entre confiar no desmontador e entender o que a CPU recebe. Este artigo abre o formato campo a campo, com palavras reais, e mostra como o decodificador do <code>arm-jitter</code> extrai os mesmos campos em Java.</p>
@@ -92,6 +93,9 @@ import { BitField } from "../../../shared/bit-field/bit-field";
 <h2>O <code>Operand2</code> e o barrel shifter</h2>
 <p>Doze bits, dois formatos:</p>
 <p><strong>Imediato (I = 1):</strong> <code>rotate[11:8]</code> + <code>imm8[7:0]</code>. O valor final é <code>imm8</code> rotacionado à direita por <code>2 × rotate</code>. É por isso que <code>#0x3F00</code> cabe (<code>0x3F</code> ror 24) mas <code>#0x3F1</code> não — não existe rotação par de um byte que produza esse padrão. O montador resolve isso por você ou reclama.</p>
+<app-nota n="1">
+  Quando a constante não cabe, o montador tenta a instrução &quot;gêmea&quot; antes de reclamar. Conferi com o <code>arm-none-eabi-as</code> (<code>-march=armv7-a</code>): <code>mov r0, #0xffffffff</code> virou <code>mvn r0, #0</code> (<code>e3e00000</code>), <code>add r0, r1, #-1</code> virou <code>sub r0, r1, #1</code>, <code>cmp r0, #-1</code> virou <code>cmn r0, #1</code> e <code>and r0, r1, #0xffffff00</code> virou <code>bic r0, r1, #255</code>.
+</app-nota>
 <p><strong>Registrador deslocado (I = 0):</strong> <code>shift[11:4]</code> + <code>Rm[3:0]</code>. O <code>shift</code> pode ser por imediato (<code>Rm, LSL #3</code>) ou por outro registrador (<code>Rm, LSL r4</code>). Os tipos:</p>
 <div class="scroll-x">
   <table>

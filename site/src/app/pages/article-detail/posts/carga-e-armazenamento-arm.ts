@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Nota],
   selector: 'app-article-carga-e-armazenamento-arm',
   template: `
     <p>
@@ -58,6 +59,9 @@ import { RouterLink } from '@angular/router';
       (<code>LDM</code>, <code>STM</code>, <code>PUSH</code>, <code>POP</code>), mas todas seguem a mesma
       regra: fora delas, nada acessa a memória. Este artigo usa só <code>LDR</code> e <code>STR</code>.
     </p>
+    <app-nota n="1">
+      O deslocamento que cada variante aceita não é o mesmo. <code>LDR</code> e <code>LDRB</code> vão até 4095 bytes (12 bits), mas <code>LDRH</code>, <code>STRH</code> e <code>LDRSB</code> só até 255 (8 bits). Conferi no <code>arm-none-eabi-as</code>: <code>ldr r0, [r1, #4095]</code> e <code>ldrh r0, [r1, #255]</code> montam; <code>ldr r0, [r1, #4096]</code> e <code>ldrh r0, [r1, #256]</code> dão <code>Error: bad immediate value</code>.
+    </app-nota>
     <p>
       Isso parece limitação, mas simplifica a decodificação: toda instrução de
       processamento de dados tem a mesma forma, e o acesso à memória fica concentrado

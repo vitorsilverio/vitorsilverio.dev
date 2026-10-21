@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Nota],
   selector: 'app-article-manipulacao-bits-thumb',
   template: `
     <p>
@@ -164,6 +165,9 @@ import { RouterLink } from '@angular/router';
       <code>S</code>: ele <strong>não</strong> mexe nas flags. Com o sufixo
       (<code>MVNS</code>) o assembler gera <code>F07F 0000</code> em Thumb-2.
     </p>
+    <app-nota n="1">
+      O imediato do Thumb-2 tem mais truques que o do ARM. Além de um byte rotacionado, ele aceita um byte repetido em três padrões: <code>0x00XY00XY</code>, <code>0xXY00XY00</code> e <code>0xXYXYXYXY</code>. Montei <code>orr.w r0, r1, #0x12121212</code>, <code>#0x00120012</code> e <code>#0x12001200</code> e as três saíram numa instrução de 32 bits (<code>f041 3012</code>, <code>f041 1012</code> e <code>f041 2012</code>); <code>#0x12341234</code> foi recusado com <code>invalid constant</code>. No modo ARM, <code>orr r0, r1, #0x12121212</code> também é recusado.
+    </app-nota>
 
     <h3><code>TST</code> — testar bits sem alterar registradores</h3>
     <p>
@@ -247,6 +251,9 @@ import { RouterLink } from '@angular/router';
         <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação à direita (os bits que saem pela direita entram pela esquerda; o carry recebe o último bit que saiu). A rotação <em>com</em> carry é a <code>RRX</code></td><td><code>ROR r0, r1, #8</code></td></tr>
       </tbody>
     </table></div>
+    <app-nota n="2">
+      A diferença entre o <code>ASR</code> e a divisão do C aparece ao compilar <code>x / 2</code> com sinal. O GCC 16.1 (<code>-O2 -march=armv7-a</code>) não usa só o <code>asr</code>: gera <code>add r0, r0, r0, lsr #31</code> e depois <code>asr r0, r0, #1</code>. A soma acrescenta o bit de sinal (1 quando <code>x</code> é negativo) para corrigir o arredondamento: com <code>x = -3</code>, <code>-3 + 1 = -2</code> e o <code>asr</code> dá <code>-1</code>, como a divisão do C. O <code>lsr #31</code> vem de graça no segundo operando, graças ao barrel shifter.
+    </app-nota>
 
     <h3>Bytes verificados</h3>
     <pre><code class="language-armasm">    <span class="token operator">/</span><span class="token operator">*</span> <span class="token directive property">ARM</span> <span class="token operator">*</span><span class="token operator">/</span>
@@ -296,13 +303,13 @@ import { RouterLink } from '@angular/router';
       usam campos de bits nos registradores.
     </p>
     <p>
-      <strong>Nota importante (corrigida):</strong> <code>BFI</code>,
+      <code>BFI</code>,
       <code>BFC</code> e <code>UBFX</code> chegaram com a arquitetura
       <strong>ARMv6T2</strong> e existem tanto em Thumb-2 quanto em ARM mode a
       partir de ARMv7-A. No modo ARM, o assembler com
       <code>-march=armv7-a</code> gera <code>E7C60211</code> (<code>bfi r0, r1,
       #4, #3</code>), <code>E7CF021F</code> (<code>bfc r0, #4, #12</code>) e
-      <code>E7E70451</code> (<code>ubfx r0, r1, #8, #8</code>). O que faltava era
+      <code>E7E70451</code> (<code>ubfx r0, r1, #8, #8</code>). O que limita é
       o <em>processador</em>: com <code>-mcpu=arm1176jzf-s</code> (ARMv6K, sem T2)
       o assembler rejeita as três em ARM mode, e com <code>-mcpu=cortex-m0</code>
       (ARMv6-M) rejeita também em Thumb. Elas existem em
@@ -407,12 +414,12 @@ import { RouterLink } from '@angular/router';
     <span class="token instruction keyword">BFI</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token register symbol">r2</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>      @ <span class="token register symbol">r1</span><span class="token punctuation">[</span><span class="token number">1</span>:<span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">01</span><span class="token punctuation">,</span> sem tocar nos outros bits
     <span class="token instruction keyword">STR</span>  <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x00</span><span class="token punctuation">]</span></code></pre>
     <p>
-      A versão anterior deste artigo usava <code>r0</code> ao mesmo tempo como
-      endereço-base e como valor, e limpava o bit com
-      <code>BICS r0, r0, 0xFFFFFFFE</code>, que zera <em>todos</em> os bits menos
-      o 0. Aqui o endereço fica em <code>r0</code>, o valor lido em
+      Repare que o endereço fica em <code>r0</code>, o valor lido em
       <code>r1</code> e a máscara do <code>BIC</code> é exatamente o conjunto de
-      bits a limpar.
+      bits a limpar. Dois erros comuns aqui são usar o mesmo registrador como
+      endereço-base e como valor, e limpar o bit com
+      <code>BICS r0, r0, 0xFFFFFFFE</code>, que zera <em>todos</em> os bits menos
+      o 0.
     </p>
 
     <h2>Quando usar cada instrução</h2>
@@ -528,7 +535,7 @@ r1 final = 12340008</code></pre>
     <ul>
       <li><code>AND</code>: <code>0x…78 &amp; 0x0F = 8</code>. <code>ORR</code>: <code>0x1234567F</code>. <code>EOR</code>: <code>0x…78 ^ 1 = 0x…79</code>. <code>BIC</code>: <code>0x…78 &amp; ~0xF0 = 0x…08</code>, o nibble 1 zerado.</li>
       <li><code>MVN</code>: <code>r5 = FFFFFFFF</code> e as flags <strong>não mudam</strong> (continuam <code>N0 Z0</code>), como esperado sem o <code>S</code>.</li>
-      <li><code>LSLS #3</code>: <code>0x12345678 × 8 = 0x91A2B3C0</code> (e não ×4, como a versão anterior do artigo dizia). O bit 31 virou 1, então <code>N1</code>. <code>ASRS #4</code> sobre esse valor negativo repete o bit de sinal: <code>0xF91A2B3C</code>.</li>
+      <li><code>LSLS #3</code>: <code>0x12345678 × 8 = 0x91A2B3C0</code>. O bit 31 virou 1, então <code>N1</code>. <code>ASRS #4</code> sobre esse valor negativo repete o bit de sinal: <code>0xF91A2B3C</code>.</li>
       <li><code>MOVS …, ROR #8</code>: <code>0x78123456</code>, o byte baixo foi para o topo. <code>UBFX #8,#8</code>: <code>0x56</code>, o byte 1.</li>
       <li><code>MOVS r3, #0</code> liga <code>Z1</code>; <code>BFI r3, r4, #4, #3</code> copia <code>111</code> para os bits 6:4: <code>0x70</code>. <code>BFC r1, #4, #12</code> zera os bits 15:4: <code>0x5678</code> vira <code>0x0008</code>, <code>r1 = 0x12340008</code>.</li>
       <li><code>TST #0x08</code>: <code>0x…08 &amp; 8 ≠ 0</code>, <code>Z0</code>. <code>TST #0x04</code>: <code>… &amp; 4 = 0</code>, <code>Z1</code>. Nenhum registrador mudou.</li>

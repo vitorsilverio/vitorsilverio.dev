@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-convencoes-assembly-arm',
   template: `
 <p>Dois programadores podem escrever a mesma instrução ARM de jeitos diferentes, e o montador de um não aceita o texto do outro. Comentário com <code>@</code> ou com <code>;</code>? Sufixo de condição antes ou depois do <code>S</code>? Antes de ler código ARM, ou de comparar o que você escreveu com a saída do <code>objdump</code>, vale saber qual dialeto está em jogo. Este artigo fixa o dialeto usado em uma trilha de artigos sobre ARM: a sintaxe unificada (UAL) do montador GNU, as diretivas que aparecem nos exemplos e o formato da saída do <code>objdump</code>.</p>
@@ -36,6 +37,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
   </table>
 </div>
 <p>Uma armadilha para quem vem do <code>armasm</code>: no GAS, o <code>;</code> <strong>não</strong> inicia comentário, ele separa instruções na mesma linha. Um <code>mov r0, #1 ; comentario</code> falha com <code>Error: bad instruction &#96;comentario'</code>, porque o montador tentou ler &quot;comentario&quot; como uma segunda instrução. Um <code>#</code> no primeiro caractere da linha também comenta a linha inteira.</p>
+<app-nota n="1">
+  O caractere de comentário muda com a arquitetura. No AArch64 (que não é o assunto desta trilha) o GNU <code>as</code> usa <code>//</code>, não <code>@</code>: no <code>aarch64-none-elf-as</code> que testei, <code>mov x0, #1 @ c</code> falha com <code>unexpected characters following instruction</code>, e <code>mov x0, #1 // c</code> monta. O <code>#</code> no início da linha comenta a linha inteira nas duas.
+</app-nota>
 <h2>Diretivas do GAS que vão aparecer</h2>
 <p>Um <code>.s</code> típico da trilha tem esta cara (<code>armbox/testdata/hello.s</code>):</p>
 <pre><code class="language-armasm">    .arch armv5te        @ arquitetura alvo <span class="token punctuation">(</span>afeta quais instruções são aceitas<span class="token punctuation">)</span>
@@ -177,6 +181,7 @@ loop:
 <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, &quot;ARM Opcodes&quot;</a>. As pseudo-instruções <code>adr</code> e <code>ldr Rd, =const</code> e sua tradução para <code>add</code>/<code>sub</code> ou <code>mov</code>/<code>mvn</code>.</li>
 <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/101754/0615/armasm-Legacy-Assembler-Reference/armasm-Directives-Reference/AREA" target="_blank" rel="noopener"><em>Arm Compiler Reference Guide</em> 6.15, &quot;armasm Directives Reference: AREA&quot;</a>. A diretiva <code>AREA</code> e a sintaxe do <code>armasm</code>.</li>
 <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte do <code>armbox</code></a>, arquivo <code>testdata/hello.s</code>. O programa mínimo usado como exemplo.</li>
+<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/AArch64_002dChars.html" target="_blank" rel="noopener"><em>Using as</em>, &quot;AArch64 Syntax: Special Characters&quot;</a>. <code>//</code> como comentário no AArch64.</li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 0, lição 3.</em></p>
 `,

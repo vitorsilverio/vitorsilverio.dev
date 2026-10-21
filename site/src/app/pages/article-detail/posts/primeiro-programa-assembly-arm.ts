@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-primeiro-programa-assembly-arm',
   template: `
 <p>Para entender de verdade como um processador ARM executa um programa, nada substitui escrever esse programa em
@@ -86,7 +87,7 @@ instrução e o mnemônico que o <code>arm-none-eabi-as</code> gerou a partir do
    10030:	e2533001 	subs	r3, r3, #1
    10034:	1afffffa 	bne	10024"
     />
-<p>Três pontos que não aparecem só lendo o fonte:</p>
+<p>Quatro pontos que não aparecem só lendo o fonte:</p>
 <ul>
 <li><strong><code>bxle lr</code> é condicional, não um <code>if</code> escondido.</strong> <code>BX</code> aceita o mesmo sufixo de
 condição de qualquer instrução ARM (o <a routerLink="/artigos/anatomia-instrucao-arm">campo <code>cond</code></a>
@@ -142,6 +143,9 @@ copia <code>r1</code> pra <code>r0</code> se a última <code>cmp</code> deu &quo
 <p>Com desvio, a CPU precisa adivinhar o caminho (o preditor de desvios) e, se errar, descarta o trabalho já
 iniciado no pipeline. Aqui não existe desvio nenhum: <code>movlt</code> é uma instrução comum de mover registrador, só que com um bit de condição
 embutido nela. Essa é a predicação da qual o <a routerLink="/artigos/flags-e-desvios-condicionais">artigo de flags</a> fala, aqui pagando o aluguel.</p>
+<app-nota n="1">
+  No AArch64 as instruções comuns não levam sufixo de condição: o <code>aarch64-none-elf-as</code> responde <code>unknown mnemonic</code> para <code>movlt</code> e para <code>addne</code>. A seleção condicional é a instrução <code>csel</code>. Compilei um <code>max</code> em C para AArch64 com o GCC 16.1 (<code>-O2</code>) e saiu <code>cmp w0, w1</code> seguido de <code>csel w0, w0, w1, ge</code>: <code>w0</code> fica com o primeiro operando se <code>a &gt;= b</code> e com o segundo caso contrário.
+</app-nota>
 <blockquote>
 <p>O compilador faz o mesmo: no <a routerLink="/artigos/do-c-ao-binario-arm">artigo de C</a>, o <code>-O2</code> transformou um <code>if</code> num par <code>cmp</code>/<code>movXX</code> sempre que o corpo cabia numa instrução.</p>
 </blockquote>

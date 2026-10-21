@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Objdump } from '../../../shared/objdump/objdump';
+import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Objdump],
+  imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-registradores-e-cpsr-arm',
   template: `
 <p>Abra o dump de registradores de um depurador ARM e aparecem <code>r0</code> a <code>r15</code>, <code>sp</code>, <code>lr</code>, <code>pc</code> e um <code>cpsr</code> com um valor hexadecimal como <code>0x600000df</code>. Para ler isso você precisa saber duas coisas que o ARM faz de um jeito próprio: o <strong>CPSR</strong> (<em>Current Program Status Register</em>) empacota flags, máscaras de interrupção e o modo de execução numa única palavra de 32 bits, e alguns registradores existem em <strong>várias cópias</strong>, uma por modo (<em>register banking</em>). Este artigo decodifica o CPSR bit a bit, explica os modos e o SPSR, e mostra como o emulador <code>arm-jitter</code> modela tudo isso.</p>
@@ -35,6 +36,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <p>Não há registrador de flags entre esses 16 — as flags moram no <strong>CPSR</strong>, um registrador à parte, acessível só por <code>MRS</code>/<code>MSR</code> e implicitamente pelas instruções com sufixo <code>S</code> e pelos desvios condicionais.</p>
 <h3>O PC não aponta para &quot;a instrução atual&quot;</h3>
 <p>Herança do pipeline clássico de 3 estágios: ler R15 devolve o endereço da instrução em execução <strong>+ 8</strong> em estado ARM (<strong>+ 4</strong> em Thumb). Por isso <code>adr r1, msg</code> no <a routerLink="/artigos/por-que-emular-arm">primeiro artigo</a> virou <code>add r1, pc, #20</code> e não <code>#28</code> — o montador já descontou o offset do pipeline. Escrever em R15 é um desvio.</p>
+<app-nota n="1">
+  No AArch64 não há essa herança: o <code>pc</code> não é um dos registradores numerados e não serve de operando comum. O <code>aarch64-none-elf-as</code> recusa <code>mov x0, pc</code>; para obter o endereço atual você usa <code>adr x0, .</code>, e o valor é o da própria instrução, sem o <code>+ 8</code> (o <code>objdump</code> mostrou <code>adr x0, 0</code>, deslocamento zero).
+</app-nota>
 <h2>O CPSR, bit a bit</h2>
 <p>O <em>Current Program Status Register</em> carrega o estado de execução. Os campos que importam nesta trilha:</p>
 <div class="scroll-x">
