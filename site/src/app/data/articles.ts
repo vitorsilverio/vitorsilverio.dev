@@ -104,8 +104,8 @@ export const articles: readonly ArticleMeta[] = [
     slug: 'instrucoes-condicionais-thumb',
     title: 'Instruções condicionais em Thumb: IT blocks e execução condicional',
     date: '2026-09-01',
-    readingTime: '9 min',
-    excerpt: 'No ARM, quase toda instrução é condicional. No Thumb-1, poucas são. O Thumb-2 resolve com IT blocks — veja como funcionam com bytes reais.',
+    readingTime: '11 min',
+    excerpt: 'No Thumb original só o desvio é condicional; o Thumb-2 devolve a execução condicional com os blocos IT. Veja o mesmo if/else com e sem desvio, a decodificação do IT e a regra de que instruções de 16 bits não alteram flags dentro do bloco.',
     tags: ['ARM', 'Assembly', 'Thumb', 'Thumb-2', 'IT', 'condicionais', 'Tutorial'],
   },
   {
