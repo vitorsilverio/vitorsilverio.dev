@@ -27,17 +27,23 @@ export class ConsentService {
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map((e) => e.urlAfterRedirects),
+      map((e): string | null => e.urlAfterRedirects),
     ),
-    { initialValue: '/' },
+    { initialValue: null },
   );
 
   constructor() {
-    // Em SPA, envia page_view a cada navegação (após o aceite e com o GA carregado).
+    // Única fonte de page_view do site: exatamente um por página vista. O gtag é
+    // configurado com send_page_view: false (ver loadGoogleAnalytics), então este
+    // efeito cobre a página inicial (quando o consentimento passa a 'granted') e
+    // cada navegação do SPA (quando a URL muda).
     effect(() => {
       const granted = this.consent() === 'granted';
-      const path = this.url();
-      if (!granted || !this.isBrowser) {
+      // Antes da 1ª navegação concluída não há URL real: espera o NavigationEnd
+      // em vez de enviar um page_view falso para '/'. Se o serviço nasceu depois
+      // do NavigationEnd, router.url já é a URL atual.
+      const path = this.url() ?? (this.router.navigated ? this.router.url : null);
+      if (!granted || !this.isBrowser || path === null) {
         return;
       }
       this.sendPageView(path);
@@ -99,8 +105,7 @@ export class ConsentService {
 
   private sendPageView(path: string): void {
     const win = this.document.defaultView as
-      | (Window & { gtag?: (...args: unknown[]) => void })
-      | null;
+      (Window & { gtag?: (...args: unknown[]) => void }) | null;
     if (win && typeof win.gtag === 'function') {
       // Envia título e URL reais para o GA ter dados úteis no SPA
       // (o <title> por artigo já é definido via Title service).
@@ -133,13 +138,16 @@ export class ConsentService {
     gtag.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
     this.document.head.appendChild(gtag);
 
+    // send_page_view: false evita o page_view automático do 'config', que
+    // duplicaria o enviado pelo efeito do construtor (que tem o título e a URL
+    // corretos de cada rota do SPA).
     const init = this.document.createElement('script');
     init.id = 'ga-init';
     init.textContent = `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '${id}', { send_page_view: true });
+      gtag('config', '${id}', { send_page_view: false });
     `;
     this.document.head.appendChild(init);
   }
@@ -151,8 +159,7 @@ export class ConsentService {
     this.document.getElementById('ga-gtag')?.remove();
     this.document.getElementById('ga-init')?.remove();
     const win = this.document.defaultView as
-      | (Window & { dataLayer?: unknown; gtag?: unknown })
-      | null;
+      (Window & { dataLayer?: unknown; gtag?: unknown }) | null;
     if (win) {
       win.dataLayer = undefined;
       win.gtag = undefined;
