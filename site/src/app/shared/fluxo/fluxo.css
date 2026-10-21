@@ -29,6 +29,9 @@ ol.fl-list {
   flex-direction: column;
   align-items: stretch;
   gap: 0.25rem;
+  /* Na vertical, sem esticar as caixas pela coluna inteira em telas largas. */
+  max-width: 30rem;
+  margin-inline: auto;
 }
 
 .fl-box {
@@ -106,26 +109,28 @@ ol.fl-list {
   transform: translateX(-50%) rotate(45deg);
 }
 
-/* Telas largas (largura do próprio componente): fila horizontal. */
+/* Telas largas (largura do próprio componente): fila horizontal, só para fluxos
+   curtos (ver Fluxo.longo). */
 @container (min-width: 40rem) {
-  ol.fl-list {
+  .fl:not(.fl--longo) ol.fl-list {
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+    max-width: none;
   }
 
-  .fl-box {
+  .fl:not(.fl--longo) .fl-box {
     flex: 0 1 auto;
     padding: 0.8rem 1.1rem;
   }
 
-  .fl-step {
+  .fl:not(.fl--longo) .fl-step {
     flex: 1 1 0;
     min-width: 0;
   }
 
   /* Seta para a direita, abaixo do verbo e acima do comando não: fica entre eles. */
-  .fl-seta {
+  .fl:not(.fl--longo) .fl-seta {
     order: 2;
     width: 100%;
     max-width: 7rem;
@@ -133,7 +138,7 @@ ol.fl-list {
     margin: 0.2rem 0;
   }
 
-  .fl-seta::after {
+  .fl:not(.fl--longo) .fl-seta::after {
     left: auto;
     right: 0;
     bottom: auto;
@@ -141,7 +146,7 @@ ol.fl-list {
     transform: translateY(-50%) rotate(-45deg);
   }
 
-  .fl-step .fl-cmd {
+  .fl:not(.fl--longo) .fl-step .fl-cmd {
     order: 3;
   }
 }

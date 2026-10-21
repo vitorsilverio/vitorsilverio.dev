@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Fluxo } from '../../../shared/fluxo/fluxo';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Fluxo],
   selector: 'app-article-decoder-do-arm-jitter',
   template: `
 <p>Um emulador ARM precisa transformar bytes da memória em ações: somar dois registradores, ler um endereço, desviar. Decodificar uma instrução à mão é o primeiro passo, e o <code>arm-jitter</code> faz o mesmo em Java, mas não para aí: ele eleva blocos inteiros de instruções para uma <strong>representação intermediária</strong> (IR) imutável e roda um otimizador sobre ela antes de executar. O <code>arm-jitter</code> é uma biblioteca Java que decodifica e executa instruções ARM; o <code>arm-box</code> é um programa de linha de comando que a usa para rodar executáveis ARM.</p>
@@ -15,9 +16,18 @@ import { RouterLink } from '@angular/router';
 <p><strong>O que você precisa:</strong> só para ler, nada. Para repetir os experimentos, um JDK 25, o <code>arm-jitter-1.3.0.jar</code> e o arquivo <a href="/curso-arm/exemplos/java/decoder-do-arm-jitter-DecodeELift.java"><code>decoder-do-arm-jitter-DecodeELift.java</code></a>. Não é preciso toolchain ARM: as palavras de instrução já estão escritas no código. Conhecer o layout de uma instrução ARM ajuda; o <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">artigo sobre decodificação à mão</a> cobre isso, mas cada campo usado aqui é explicado.</p>
 <h2>O caminho de um byte</h2>
 <p>O laço de execução do <code>ArmCore</code> (o processador emulado) é <code>step()</code>: busca uma instrução, decodifica, executa. O <a routerLink="/artigos/fetch-decode-execute-armcore">artigo de fetch–decode–execute</a> o detalha. Por dentro, os bytes passam por quatro estágios:</p>
-<pre><code class="language-text">memória       decoder            lifter            otimizador       backend
-[bytes]  →  DecodedInstruction  →  IrBlock (List&lt;IrOp&gt;)  →  IrBlock'  →  interpretador
-                                                                          ou JIT</code></pre>
+<app-fluxo
+  titulo="Do byte na memória à execução"
+  itens="[bytes] | memória
+         > ArmDecoder | decodifica
+         DecodedInstruction | uma instrução
+         > StandardIrBlockLifter | traduz
+         IrBlock | lista de IrOp
+         > ir.opt | otimiza
+         IrBlock' | bloco otimizado
+         > interpretador ou JIT | executa
+         ArmCore | registradores e memória"
+/>
 <ol>
 <li><strong>Decoder</strong> (<code>ArmDecoder</code> / <code>ThumbDecoder</code>) — separa os campos de <strong>uma</strong> instrução num <code>record</code> neutro.</li>
 <li><strong>Lifter</strong> (<code>StandardIrBlockLifter</code>) — decodifica em sequência a partir de um <code>startPc</code> e traduz cada instrução para uma ou mais operações de IR, até um terminal (branch, <code>SVC</code>) ou um limite. O resultado é um <strong><code>IrBlock</code></strong>.</li>

@@ -1,5 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
+const MAX_ITENS_EM_FILA = 5;
+
 /** Um item do fluxo: um artefato (caixa) ou uma etapa (seta entre caixas). */
 interface Item {
   readonly tipo: 'artefato' | 'etapa';
@@ -56,4 +58,10 @@ export class Fluxo {
   readonly itens = input.required<string>();
 
   protected readonly lista = computed(() => parseItens(this.itens()));
+
+  /**
+   * Mais de 5 itens (3 caixas e 2 etapas) não cabem em fila na coluna do artigo
+   * sem quebrar nomes de classe no meio: esses fluxos ficam sempre na vertical.
+   */
+  protected readonly longo = computed(() => this.lista().length > MAX_ITENS_EM_FILA);
 }

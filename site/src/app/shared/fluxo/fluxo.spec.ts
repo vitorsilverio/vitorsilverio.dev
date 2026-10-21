@@ -48,6 +48,14 @@ describe('Fluxo', () => {
     expect(el.querySelector('figcaption')).toBeNull();
   });
 
+  it('marca como longo (sempre vertical) o fluxo com mais de 5 itens', () => {
+    expect(render(ITENS).querySelector('figure')?.classList.contains('fl--longo')).toBe(false);
+    const longo = `${ITENS}
+> objcopy | extrai
+soma5.bin | bytes crus`;
+    expect(render(longo).querySelector('figure')?.classList.contains('fl--longo')).toBe(true);
+  });
+
   it('ignora linhas vazias', () => {
     const el = render('\n a.s | fonte \n\n > as | monta \n\n a.o | objeto\n');
     expect(el.querySelectorAll('ol > li')).toHaveLength(3);
