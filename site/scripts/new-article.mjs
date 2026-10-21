@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import { highlightCode } from './lib/highlight.mjs';
 import { ehObjdump, pareceBitField } from './lib/blocos.mjs';
 import { dimensoes, parseFiguras } from './lib/imagem.mjs';
+import { tagNota } from './lib/nota.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -43,7 +44,7 @@ const USAGE =
 // --------------------------------------------------------------------------
 let mdMeta = null;
 let mdTemplate = null;
-let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false };
+let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false };
 
 if (opts.from) {
   const mdPath = resolve(SITE_ROOT, opts.from);
@@ -95,6 +96,7 @@ const read = (p) => readFileSync(p, 'utf8');
 const write = (p, c) => {
   if (DRY_RUN) {
     console.log(`  (dry-run) escreveria ${p}`);
+    if (opts.print && p === postFile) console.log(c);
     return;
   }
   writeFileSync(p, c, 'utf8');
@@ -257,11 +259,13 @@ function escAttr(s) {
  *   "Artigos relacionados" que o próprio article-detail já renderiza)
  */
 function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
-  const usa = { routerLink: false, bitField: false, objdump: false, figura: false };
+  const usa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false };
   const deadLinks = [];
   const candidatosBf = [];
   let autoObjdump = 0;
+  let numNota = 0;
   const avisosImg = [];
+  const avisosNota = [];
 
   /// Dimensões do arquivo: em public/ (já publicado) ou ao lado do .md (rascunho).
   const lerDims = (src) => {
@@ -319,6 +323,16 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
       const { figuras, erros } = parseFiguras(text, lerDims);
       avisosImg.push(...erros);
       return figuras.map(tagFigura).join('');
+    }
+    if (tipo === 'nota') {
+      const tag = tagNota(numNota + 1, text, (md) => marked.parseInline(md, { renderer }));
+      if (tag === null) {
+        avisosNota.push('bloco ```nota vazio (ignorado)');
+        return '';
+      }
+      numNota++;
+      usa.nota = true;
+      return tag;
     }
     if (tipo === 'bitfield') {
       usa.bitField = true;
@@ -436,6 +450,11 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   if (avisosImg.length) {
     console.warn(`⚠ ${avisosImg.length} problema(s) com imagens:\n  ` + avisosImg.join('\n  '));
   }
+  if (avisosNota.length) {
+    console.warn(
+      `⚠ ${avisosNota.length} problema(s) com notas:\n  ` + avisosNota.join('\n  '),
+    );
+  }
   if (autoObjdump) {
     console.log(`• ${autoObjdump} bloco(s) reconhecido(s) como objdump → <app-objdump>`);
   }
@@ -457,7 +476,7 @@ function buildPostComponent() {
   const safe = bodyHtml.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '$\\{');
 
   // O stub (sem `--from`) já vem com um link, então importa RouterLink.
-  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false };
+  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false, nota: false };
 
   const nomes = [];
   const linhas = [];
@@ -472,6 +491,10 @@ function buildPostComponent() {
   if (usa.figura) {
     nomes.push('Figura');
     linhas.push("import { Figura } from '../../../shared/figura/figura';");
+  }
+  if (usa.nota) {
+    nomes.push('Nota');
+    linhas.push("import { Nota } from '../../../shared/nota/nota';");
   }
   if (usa.objdump) {
     nomes.push('Objdump');

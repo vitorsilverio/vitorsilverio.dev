@@ -68,7 +68,7 @@ listados em `src/app/data/articles.ts` e roteados de forma lazy via `postLoaders
 npm run novo-artigo -- --from proximos-artigos/<arquivo>.md
 ```
 
-ou por flags (`--slug <slug-kebab> --title "..." --tags "A,B" --excerpt "..."`) para um stub.
+`--dry-run --print` mostra o `.ts` gerado sem gravar nada. Ou por flags (`--slug <slug-kebab> --title "..." --tags "A,B" --excerpt "..."`) para um stub.
 
 O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar os 4 pontos:
 
@@ -195,9 +195,25 @@ Artigos da trilha ainda mostram "Lição X de N" (`app-lesson-badge`) e "Próxim
 ## Notas e glossário inline
 
 **Nota** (`app-nota`, `src/app/shared/nota/`): uma digressão ou ressalva curta, escrita **depois** do
-parágrafo ou da lista a que se refere, com o número à mão (o rótulo "Nota N" precisa existir no HTML
-pré-renderizado): `<app-nota n="1">texto</app-nota>` e `Nota` em `imports` do post. É uma caixa sempre
-visível no desktop; no celular começa recolhida. Use pouco: só para o que enriquece sem ser essencial.
+parágrafo ou da lista a que se refere. É uma caixa sempre visível no desktop; no celular começa
+recolhida. Use pouco: só para o que enriquece sem ser essencial.
+
+No **rascunho** (`proximos-artigos/*.md`) use a cerca `nota`; o gerador numera sozinho (1, 2, 3… na
+ordem em que aparecem), converte o Markdown inline (código, **negrito**, *itálico*, links), escapa o que o
+Angular não aceita (`@`, chaves, crase, `${`) e acrescenta o import `Nota`. Linha em branco separa
+parágrafos (vários viram `<p>`); cerca vazia é ignorada com aviso.
+
+````markdown
+Parágrafo a que a nota se refere.
+
+```nota
+A *pegadinha*: no `arm-box` o `r15` lê como PC + 8. Veja [o artigo](/artigos/slug).
+```
+````
+
+`<app-nota n="1">texto</app-nota>` (com `Nota` em `imports`) é o HTML que o gerador produz; escreva-o à
+mão **só ao editar um post já publicado**, com o número à mão (o rótulo "Nota N" precisa existir no HTML
+pré-renderizado). Em post publicado, renumere manualmente se inserir uma nota no meio.
 
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário

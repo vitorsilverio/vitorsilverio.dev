@@ -40,7 +40,7 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
    Regras: cite a **seção específica** do manual sempre que o artigo afirma algo dele (layout do `CPSR`, vetor de exceção, codificação de instrução). **Nunca invente** URL, número de seção, ISBN ou edição: confira cada link com WebFetch antes de publicar e, se não conseguir confirmar um detalhe, cite sem o detalhe. Links internos do blog **não** contam como referência (eles vão no "Para ir além").
 8. Rodapé da trilha (`*Trilha: ... · Módulo X, lição Y.*`) quando for artigo de curso.
 
-**Notas e glossário inline.** Ressalvas e curiosidades que não são essenciais podem ir numa nota `<app-nota n="N">` depois do parágrafo (ver `site/CLAUDE.md`); verifique os fatos como qualquer outro trecho. A tabela do Glossário também alimenta o glossário inline automático: confira na prévia quais termos foram marcados e use `data-glossario="nao"`/`"sim"` na linha da tabela se algum não fizer sentido.
+**Notas e glossário inline.** No rascunho use a cerca `nota` (Markdown inline; o gerador numera e importa `Nota`; `<app-nota n="N">` só se escreve à mão em post publicado — ver `site/CLAUDE.md`). Quando usar: ressalva, curiosidade ou diferença entre arquiteturas — **nunca** algo essencial ao entendimento (quem pular a nota não pode perder nada). Fatos verificados como em qualquer outro trecho. No máximo ~3 por artigo. Posicione **depois** do parágrafo ou da lista a que se refere, nunca entre um ":" e a lista que ele introduz. A tabela do Glossário também alimenta o glossário inline automático: confira na prévia quais termos foram marcados e use `data-glossario="nao"`/`"sim"` na linha da tabela se algum não fizer sentido.
 
 ## Checklist de revisão (rode em todo artigo, rascunho ou não)
 
