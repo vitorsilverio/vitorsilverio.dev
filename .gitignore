@@ -43,3 +43,5 @@ pnpm-debug.log*
 # System files
 .DS_Store
 Thumbs.db
+# Pautas e pesquisas de tendência: só locais (o repositório é público)
+DOCS/pauta/
