@@ -122,7 +122,7 @@ export const articles: readonly ArticleMeta[] = [
     date: '2026-09-03',
     readingTime: '11 min',
     excerpt: 'Semihosting é o contrato que deixa firmware sem sistema operacional imprimir e encerrar pedindo serviços ao depurador ou emulador: R0 traz a operação, R1 o parâmetro e uma instrução de captura (BKPT #0xAB no Cortex-M) dispara a chamada. Este artigo mostra os números corretos das operações, roda um exemplo no arm-box e explica o que o emulador implementa e onde ele diverge da especificação.',
-    tags: ['ARM', 'Semihosting', 'Syscalls', 'EABI', 'arm-box', 'Debug', 'Tutorial'],
+    tags: ['ARM', 'Semihosting', 'arm-box', 'Debug', 'Tutorial'],
   },
   {
     slug: 'por-que-emular-arm',
