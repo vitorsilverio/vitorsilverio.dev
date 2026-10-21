@@ -1,29 +1,39 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Objdump } from '../../../shared/objdump/objdump';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, Objdump],
   selector: 'app-article-hello-armbox',
   template: `
     <p>
-      Neste primeiro artigo prático do nosso curso de arquitetura ARM, você vai
-      escrever um programa em <strong>assembly ARM</strong> do zero, montá-lo em
-      um executável ELF real e rodá-lo no <strong>arm-box</strong> — o runner
-      Linux user-mode construído sobre o <a
+      Para entender como um processador ARM executa um programa, nada substitui escrever um em
+      <strong>assembly</strong> (a linguagem de máquina em forma de texto, uma instrução por linha),
+      transformá-lo num executável de verdade e vê-lo rodar. Este artigo faz isso do zero com um
+      &quot;hello world&quot;: um programa que imprime uma frase e termina com um código de saída conhecido.
+      Ele roda no <strong>arm-box</strong>, um programa de linha de comando escrito em Java que carrega
+      executáveis ARM de 32 bits no formato <strong>ELF</strong> (<em>Executable and Linkable Format</em>) e
+      os executa como um Linux faria. Por baixo do <code>arm-box</code> está o <a
         href="https://github.com/vitorsilverio/arm-jitter"
         target="_blank"
         rel="noopener"
         >arm-jitter</a
-      >. No final, você verá <code>hello from a real ELF</code> impresso por um
-      núcleo ARM emulado em Java.
+      >, a biblioteca Java que decodifica e executa as instruções ARM. No final, você verá
+      <code>hello from a real ELF</code> impresso por um núcleo ARM emulado em Java.
     </p>
+    <p>Até o fim você vai:</p>
+    <ol>
+      <li>escrever um programa em assembly ARM que usa chamadas de sistema do Linux;</li>
+      <li>montá-lo e ligá-lo num ELF com o toolchain GNU;</li>
+      <li>rodá-lo no <code>arm-box</code> e conferir a saída e o código de saída.</li>
+    </ol>
 
     <h2>O que é o arm-box</h2>
     <p>
       O <code>arm-box</code> é um runner de binários ARM 32-bit no estilo do
       <code>qemu-arm</code>. Ele carrega um ELF estático, monta a pilha no formato
-      ABI do Linux, mapeia os <em>kuser helpers</em> do kernel ARM e traduz as
-      syscalls EABI para o sistema hospedeiro. O pulo do gato: a CPU que executa
+      ABI do Linux, mapeia os <em>kuser helpers</em> (pequenas rotinas que o kernel Linux ARM deixa numa página fixa de memória) e traduz as
+      syscalls EABI (as chamadas de sistema do Linux ARM, descritas abaixo) para o sistema hospedeiro. O pulo do gato: a CPU que executa
       esse binário é o JIT do <code>arm-jitter</code> (por padrão
       <code>ARMV5TE</code>), então tudo que roda aqui está exercitando de verdade
       o decodificador, a IR e o backend de código que estudaremos ao longo do
@@ -32,24 +42,25 @@ import { RouterLink } from '@angular/router';
 
     <h2>Pré-requisitos</h2>
     <ul>
-      <li>JDK 25 (recomendo o JBR) e Maven.</li>
+      <li>JDK 25 (recomendo o JBR) e Maven. Com um Java mais antigo o <code>arm-box</code> não inicia
+      (<code>UnsupportedClassVersionError</code>); confira com <code>java -version</code>.</li>
       <li>
         Toolchain ARM bare-metal: <code>arm-none-eabi-as</code> /
         <code>arm-none-eabi-ld</code> (vem no
         <a href="https://devkitpro.org/" target="_blank" rel="noopener">devkitARM</a
-        >). O <code>arm-box</code> usa <code>-nostdlib</code>, então não precisa de
-        libc.
+        >). O programa deste artigo não usa libc: ele fala direto com o kernel por chamadas de sistema, então
+        basta o <code>as</code> e o <code>ld</code>, sem o <code>gcc</code>.
       </li>
       <li>
         O próprio <code>arm-box</code>:
-        <code>git clone https://github.com/vitorsilverio/armbox &amp;&amp; cd armbox &amp;&amp; mvn package</code>.
+        <code>git clone https://github.com/vitorsilverio/armbox &amp;&amp; cd armbox &amp;&amp; mvn package</code>,
+        que gera <code>target/armbox.jar</code>.
       </li>
     </ul>
     <p class="muted">
       Sem toolchain? Os testes de integração do arm-box montam ELFs sintéticos em
       memória, então <code>mvn test</code> funciona mesmo sem compilador ARM
-      instalado. Mas para acompanhar este tutorial, o <code>as</code>/<code>ld</code>
-      faz diferença.
+      instalado. Mas para acompanhar este tutorial é preciso o <code>as</code>/<code>ld</code>.
     </p>
 
     <h2>O programa em assembly</h2>
@@ -91,7 +102,9 @@ msg_len <span class="token operator">=</span> . <span class="token operator">-</
       </li>
       <li>
         <code>mov r0, #1</code> e os <code>ldr</code> posicionam os argumentos da
-        <code>write</code> (fd, buffer, tamanho).
+        <code>write</code> (fd, buffer, tamanho). <code>ldr r1, =msg</code> é uma pseudo-instrução do
+        montador: ele guarda o endereço de <code>msg</code> numa <em>literal pool</em> (bloco de constantes logo
+        depois do código) e gera um <code>ldr</code> relativo ao PC que o busca de lá.
       </li>
       <li>
         <code>mov r7, #4</code> + <code>svc #0</code> dispara a syscall. Repare que
@@ -112,22 +125,44 @@ arm-none-eabi-ld <span class="token parameter variable">-static</span> <span cla
 
     <p>
       Quer conferir o binário antes de rodar? <code>arm-none-eabi-objdump -d hello.elf</code>
-      mostra a desmontagem — ótimo exercício para o próximo módulo do curso, onde
-      decodificamos essas instruções "à mão".
+      mostra a desmontagem (aqui no endereço <code>0x8000</code>, o padrão do <code>ld</code> do devkitARM, que
+      também é o <em>entry point</em>):
+    </p>
+    <app-objdump
+      listagem="00008000 &lt;_start&gt;:
+    8000:	e3a00001 	mov	r0, #1
+    8004:	e59f1014 	ldr	r1, [pc, #20]	@ 8020 &lt;_start+0x20&gt;
+    8008:	e59f2014 	ldr	r2, [pc, #20]	@ 8024 &lt;_start+0x24&gt;
+    800c:	e3a07004 	mov	r7, #4
+    8010:	ef000000 	svc	0x00000000
+    8014:	e3a0002a 	mov	r0, #42	@ 0x2a
+    8018:	e3a07001 	mov	r7, #1
+    801c:	ef000000 	svc	0x00000000
+    8020:	00009028 	.word	0x00009028
+    8024:	00000016 	.word	0x00000016"
+    />
+    <p>
+      As duas últimas palavras são a <em>literal pool</em>: <code>0x9028</code> é o endereço final de
+      <code>msg</code> (na seção <code>.data</code>) e <code>0x16</code> = 22 é o tamanho da frase, calculado por
+      <code>. - msg</code> na montagem. Os dois <code>ldr</code> (<code>[pc, #20]</code>) leem essas palavras.
+      O <code>objdump</code> também mostra <code>r0, #42</code> como <code>0x2a</code>: é o mesmo número em hexadecimal.
     </p>
 
     <h2>Rodando no arm-box</h2>
     <p>Com o <code>arm-box</code> já buildado:</p>
 
-    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar hello.elf</code></pre>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar hello.elf</code></pre>
 
     <p>Saída esperada:</p>
     <pre><code class="language-plaintext">hello from a real ELF</code></pre>
     <p>
       O código de saída do processo é o <code>exit()</code> do guest — no nosso
       caso, <strong>42</strong>. Você pode confirmar com
-      <code>echo $?</code> (ou <code>echo %ERRORLEVEL%</code> no Windows).
+      <code>echo $?</code> (ou <code>echo %ERRORLEVEL%</code> no <code>cmd</code> do Windows):
     </p>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar hello.elf <span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token variable">$?</span></code></pre>
+    <pre><code class="language-text">hello from a real ELF
+42</code></pre>
 
     <h2>Inspecionando a execução</h2>
     <p>
@@ -144,19 +179,79 @@ arm-none-eabi-ld <span class="token parameter variable">-static</span> <span cla
         primeira divergência — prova que os dois motores concordam.
       </li>
     </ul>
-    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox-1.0-SNAPSHOT.jar <span class="token parameter variable">--check</span> hello.elf</code></pre>
-
-    <h2>Próximos passos</h2>
     <p>
-      Parabéns — você acabou de fazer um binário ARM real executar dentro de um
-      emulador escrito em Java. A partir daqui vamos descer camadas: no próximo
-      texto veremos o <strong>banco de registradores e o <code>CPSR</code></strong>,
-      depois como <strong>ler o <code>objdump</code> e decodificar instruções ARM à
-      mão</strong>, e então abrir o capô do arm-jitter para entender o
-      <code>ArmCore</code> e o decodificador. Se quiser acompanhar o curso do
-      início, confira a <a routerLink="/artigos">lista de artigos</a>. Até a
-      próxima!
+      Neste programa, <code>--check</code> e <code>--interp</code> imprimem a mesma frase e devolvem o mesmo código
+      de saída, <code>42</code>:
     </p>
+    <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar <span class="token parameter variable">--check</span> hello.elf</code></pre>
+
+    <h2>Glossário</h2>
+    <div class="scroll-x"><table>
+      <thead>
+        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Assembly</th><td>linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
+        <tr><th scope="row"><code>arm-box</code></th><td>runner Linux <em>user-mode</em> em Java (no estilo do <code>qemu-arm</code>): carrega um ELF ARM estático e traduz as chamadas de sistema para o hospedeiro</td></tr>
+        <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa instruções ARM; motor do <code>arm-box</code></td></tr>
+        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
+        <tr><th scope="row"><em>Entry point</em> (<code>e_entry</code>)</th><td>endereço da primeira instrução, gravado no cabeçalho do ELF; aqui o símbolo <code>_start</code></td></tr>
+        <tr><th scope="row">Syscall (chamada de sistema)</th><td>pedido de um serviço ao kernel; no ARM EABI o número vai em <code>r7</code>, os argumentos em <code>r0</code>–<code>r6</code> e a instrução é <code>svc #0</code></td></tr>
+        <tr><th scope="row"><code>svc</code></th><td><em>supervisor call</em>: instrução que dispara a chamada de sistema</td></tr>
+        <tr><th scope="row">EABI</th><td><em>Embedded Application Binary Interface</em>: convenção binária do ARM, inclusive a das chamadas de sistema do Linux</td></tr>
+        <tr><th scope="row"><em>Literal pool</em></th><td>bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
+        <tr><th scope="row"><em>kuser helpers</em></th><td>rotinas que o kernel Linux ARM publica em endereços fixos (<code>0xFFFF0Fxx</code>)</td></tr>
+        <tr><th scope="row"><code>.syntax unified</code></th><td>diretiva do montador que ativa a sintaxe unificada ARM/Thumb</td></tr>
+        <tr><th scope="row"><em>Exit code</em></th><td>número que o processo devolve ao terminar; aqui 42</td></tr>
+        <tr><th scope="row"><code>--check</code> / <code>--interp</code></th><td>opções do <code>arm-box</code>: JIT e interpretador em paralelo, aborta se divergirem / só o interpretador de referência</td></tr>
+        <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Comandos</h2>
+    <div class="scroll-x"><table>
+      <thead>
+        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><code>git clone https://github.com/vitorsilverio/armbox &amp;&amp; cd armbox &amp;&amp; mvn package</code></th><td>baixa e compila o <code>arm-box</code>, gerando <code>target/armbox.jar</code></td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te hello.s -o hello.o</code></th><td>monta o fonte para ARMv5TE</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-ld -static -o hello.elf hello.o</code></th><td>liga o objeto num ELF executável</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-objdump -d hello.elf</code></th><td>desmonta o ELF</td></tr>
+        <tr><th scope="row"><code>java -jar target/armbox.jar hello.elf</code></th><td>roda o ELF no <code>arm-box</code></td></tr>
+        <tr><th scope="row"><code>java -jar target/armbox.jar --check hello.elf</code></th><td>roda com JIT e interpretador em paralelo</td></tr>
+        <tr><th scope="row"><code>java -jar target/armbox.jar --interp hello.elf</code></th><td>roda só no interpretador de referência</td></tr>
+        <tr><th scope="row"><code>echo $?</code> / <code>echo %ERRORLEVEL%</code></th><td>mostra o código de saída do último comando (shell POSIX / <code>cmd</code> do Windows)</td></tr>
+        <tr><th scope="row"><code>java -version</code></th><td>confere a versão do Java (precisa ser 25 ou mais nova)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Conclusão</h2>
+    <p>
+      Um executável ARM útil precisa de pouco: duas chamadas de sistema (<code>write</code> e <code>exit</code>),
+      um <code>_start</code>, um <code>as</code> e um <code>ld</code>. O <code>arm-box</code> carrega o ELF, entrega o
+      controle ao <code>_start</code> e traduz o <code>svc #0</code> para o sistema hospedeiro, devolvendo o
+      <code>exit(42)</code> do programa como código de saída do processo. A partir daqui você pode escrever outros
+      programas pequenos em assembly e conferi-los do mesmo jeito, e usar <code>--check</code> para ter certeza de
+      que o JIT e o interpretador concordam.
+    </p>
+    <h3>Para ir além</h3>
+    <ul>
+      <li><a routerLink="/artigos/montar-e-ligar-arm">Montando e ligando um executável ARM</a> — o que o <code>as</code> e o <code>ld</code> fazem de fato.</li>
+      <li><a routerLink="/artigos/registradores-e-cpsr-arm">Registradores e CPSR</a> — os registradores usados acima, em detalhe.</li>
+      <li><a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão com o objdump</a> — ler as palavras de 32 bits do disassembly.</li>
+      <li><a routerLink="/artigos/gdb-no-armbox">Depurando ARM com GDB no arm-box</a> — ver o programa rodar instrução a instrução.</li>
+      <li><a routerLink="/artigos">Lista de artigos</a> do blog.</li>
+    </ul>
+
+    <h2>Referências</h2>
+    <ul>
+      <li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenção ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>).</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils): a forma <code>ldr Rd, =expressão</code> e a <em>literal pool</em>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/ld/Entry-Point.html" target="_blank" rel="noopener"><em>GNU ld</em>, seção 3.4.1 &quot;Setting the Entry Point&quot;</a>: como o ponto de entrada é escolhido.</li>
+      <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>arm-box</code></a> (GitHub): opções de linha de comando, pilha ABI, <em>kuser helpers</em> e syscalls suportadas.</li>
+      <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub): decodificador, interpretador de IR e backend JIT.</li>
+    </ul>
   `,
 })
 export class ArticleHelloArmbox {}
