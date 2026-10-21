@@ -6,8 +6,18 @@ import { Objdump } from '../../../shared/objdump/objdump';
   imports: [RouterLink, Objdump],
   selector: 'app-article-por-que-emular-arm',
   template: `
+<p>Como se aprende a arquitetura de um processador? O caminho clássico é ler o manual do fabricante. Este artigo defende outro: escrever um <strong>emulador</strong>, um programa que lê as instruções de um processador (aqui, o ARM) e reproduz o efeito de cada uma em outro computador. Como o emulador precisa produzir exatamente o resultado que o hardware produziria, ele obriga a entender cada detalhe, inclusive os que o manual só menciona de passagem.</p>
+<p>O artigo abre uma trilha sobre ARM construída em cima de projetos Java que eu mantenho. Os dois principais são o <code>arm-jitter</code>, uma biblioteca que executa, depura e compila instruções ARM, e o <code>armbox</code>, um programa de linha de comando que roda executáveis ARM de 32 bits em cima dela (no estilo do <code>qemu-arm</code>). Outros projetos, apresentados abaixo, usam a mesma biblioteca para emular consoles.</p>
+<p>Até o fim você vai saber:</p>
+<ol>
+<li>por que implementar a semântica de uma instrução ensina mais do que lê-la;</li>
+<li>quais projetos compõem o material de apoio e o que cada um executa;</li>
+<li>quais gerações do ARM a trilha percorre e o que cada uma acrescenta;</li>
+<li>como é, na prática, um programa ARM mínimo e a sua desmontagem.</li>
+</ol>
+<p><strong>O que você precisa:</strong> nada para acompanhar a leitura; não é preciso saber assembly nem Java. Se quiser repetir o exemplo final, precisa do toolchain GNU <code>arm-none-eabi</code> (testado aqui com o devkitARM, GCC 16.1.0 e binutils 2.46) e, para executá-lo, do <code>armbox</code> com JDK 25. A instalação está no <a routerLink="/artigos/ambiente-arm">artigo de ambiente</a>.</p>
 <h2>A ideia da trilha</h2>
-<p>Dá para aprender arquitetura ARM lendo o <em>Architecture Reference Manual</em> de capa a capa. São umas 8000 páginas. A alternativa desta trilha é outra: <strong>aprender implementando</strong>. Cada conceito — um registrador, uma flag, um modo de exceção — vira código que decide o que acontece quando aquela instrução executa. Não tem como &quot;mais ou menos entender&quot; o carry do <code>ADCS</code> quando o seu emulador precisa produzir o bit certo.</p>
+<p>Dá para aprender arquitetura ARM lendo o <em>Architecture Reference Manual</em> de capa a capa, mas são milhares de páginas. A alternativa desta trilha é outra: <strong>aprender implementando</strong>. Cada conceito — um registrador, uma flag, um modo de exceção — vira código que decide o que acontece quando aquela instrução executa. Não tem como &quot;mais ou menos entender&quot; o carry do <code>ADCS</code> quando o seu emulador precisa produzir o bit certo.</p>
 <p>O material de apoio é um conjunto de projetos Java que eu mantenho:</p>
 <ul>
 <li><strong><code>arm-jitter</code></strong> — a biblioteca-núcleo. Executa, depura e compila (JIT) blocos ARM/THUMB. Não tem <code>main</code>: é um core para ser embutido.</li>
@@ -20,8 +30,8 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <p>Um livro descreve o comportamento. Um emulador <strong>é</strong> o comportamento. Três coisas ficam concretas quando você implementa:</p>
 <ol>
 <li><strong>Não existe caso omisso.</strong> O manual pode dizer &quot;o resultado é <code>UNPREDICTABLE</code>&quot;. O emulador tem que fazer <em>alguma coisa</em> — e escolher o quê te força a entender por que a arquitetura deixou aquilo em aberto.</li>
-<li><strong>Estado é tudo.</strong> Registradores bancados por modo, <code>SPSR</code>, o bit T do <code>CPSR</code>, o bit 0 do <code>PC</code> que seleciona ARM ou Thumb — tudo isso deixa de ser trivia e vira uma variável que você lê e escreve na ordem certa, ou o programa convidado quebra.</li>
-<li><strong>O binário é a verdade.</strong> Você para de pensar em <code>mov r0, #1</code> e passa a pensar em <code>0xE3A00001</code>. Decodificar esse número — separar <code>cond</code>, opcode, <code>Rd</code>, operando — é o exercício central dos módulos 2 e 3.</li>
+<li><strong>Estado é tudo.</strong> Registradores bancados por modo, <code>SPSR</code>, o bit T do <code>CPSR</code>, o bit 0 do endereço de destino de um <code>BX</code> que seleciona ARM ou Thumb — tudo isso deixa de ser trivia e vira uma variável que você lê e escreve na ordem certa, ou o programa convidado quebra.</li>
+<li><strong>O binário é a verdade.</strong> Você para de pensar em <code>mov r0, #1</code> e passa a pensar em <code>0xE3A00001</code>. Decodificar esse número — separar <code>cond</code>, opcode, <code>Rd</code>, operando — é o exercício central do módulo 2 da trilha.</li>
 </ol>
 <h2>O ecossistema, em uma tabela</h2>
 <div class="scroll-x">
@@ -33,14 +43,14 @@ import { Objdump } from '../../../shared/objdump/objdump';
       <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca-núcleo (core + decoder + IR + JIT + GDB)</td><td>blocos ARM/THUMB, embutido por um hospedeiro</td></tr>
       <tr><th scope="row"><code>armbox</code></th><td>Runner Linux user-mode</td><td>ELF estático 32-bit + syscalls EABI</td></tr>
       <tr><th scope="row"><code>gbaemu</code></th><td>Emulador de GBA</td><td>ARM7TDMI (ARMv4T)</td></tr>
-      <tr><th scope="row"><code>ndsemu</code></th><td>Emulador de NDS</td><td>ARM9 + ARM7 (ARMv5TE)</td></tr>
+      <tr><th scope="row"><code>ndsemu</code></th><td>Emulador de NDS</td><td>ARM9 (ARMv5TE) + ARM7 (ARMv4T)</td></tr>
       <tr><th scope="row"><code>n3dsemu</code></th><td>Emulador de 3DS</td><td>ARM11 MPCore (ARMv6K)</td></tr>
       <tr><th scope="row"><code>virtual-arm-box</code></th><td>Máquina ARM completa (softmmu)</td><td>kernel Linux ARM até shell <code>busybox</code></td></tr>
     </tbody>
   </table>
 </div>
 <h2>A linha do tempo do ARM que a trilha percorre</h2>
-<p>Os emuladores da coleção cobrem, sem querer, quase toda a evolução do ARM de 32 bits. É essa a espinha do módulo 5:</p>
+<p>Os emuladores da coleção cobrem, sem querer, quase toda a evolução do ARM de 32 bits. É essa a espinha do módulo 5 da trilha. A última coluna resume o que o preset correspondente do <code>arm-jitter</code> habilita; não é a lista completa de cada arquitetura:</p>
 <div class="scroll-x">
   <table>
     <thead>
@@ -49,9 +59,9 @@ import { Objdump } from '../../../shared/objdump/objdump';
     <tbody>
       <tr><th scope="row">ARMv4T</th><td>ARM7TDMI</td><td>GBA</td><td>ARM + Thumb, o conjunto base</td></tr>
       <tr><th scope="row">ARMv5TE</th><td>ARM9E</td><td>NDS</td><td><code>BLX</code>, <code>CLZ</code>, multiplicações DSP/saturating, <code>LDRD</code>/<code>STRD</code></td></tr>
-      <tr><th scope="row">ARMv6K</th><td>ARM11</td><td>3DS, Raspberry Pi 1</td><td><code>LDREX</code>/<code>STREX</code>, SIMD paralelo, <code>CPS</code>/<code>SETEND</code>/<code>WFI</code></td></tr>
+      <tr><th scope="row">ARMv6K</th><td>ARM11</td><td>3DS, Raspberry Pi 1</td><td><code>LDREX</code>/<code>STREX</code>/<code>CLREX</code>, SIMD paralelo, <code>CPS</code>/<code>SETEND</code>/<code>WFI</code></td></tr>
       <tr><th scope="row">ARMv6-M / v7-M</th><td>Cortex-M</td><td>firmware</td><td>perfil M: <code>MSP</code>/<code>PSP</code>, <code>xPSR</code>, NVIC, sem modos bancados clássicos</td></tr>
-      <tr><th scope="row">ARMv7-A</th><td>Cortex-A</td><td>Linux/Android 32-bit</td><td><code>MOVW</code>/<code>MOVT</code>, <code>SDIV</code>/<code>UDIV</code>, bitfield, barreiras, VFPv2</td></tr>
+      <tr><th scope="row">ARMv7-A</th><td>Cortex-A</td><td>Linux/Android 32-bit</td><td><code>MOVW</code>/<code>MOVT</code>, <code>SDIV</code>/<code>UDIV</code>, bitfield, barreiras, VFPv2 (ponto flutuante)</td></tr>
       <tr><th scope="row">AArch64</th><td>ARMv8-A</td><td>Linux arm64</td><td>64 bits, <code>X0</code>–<code>X30</code>, sem banking por modo, exceções por <em>Exception Level</em></td></tr>
     </tbody>
   </table>
@@ -83,11 +93,21 @@ msg_end:</code></pre>
    10008:	e3a02016 	mov	r2, #22
    1000c:	e3a07004 	mov	r7, #4
    10010:	ef000000 	svc	0x00000000
-   10014:	e3a0002a 	mov	r0, #42
+   10014:	e3a0002a 	mov	r0, #42	@ 0x2a
    10018:	e3a07001 	mov	r7, #1
    1001c:	ef000000 	svc	0x00000000"
     />
-<p>Reparou que <code>adr r1, msg</code> virou <code>add r1, pc, #20</code>? Esse tipo de tradução — do que você escreve para o que a máquina realmente executa — é o assunto da trilha. No <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">artigo de decodificação</a> a gente pega números como <code>0xe3a00001</code> e separa campo por campo.</p>
+<p>Reparou que <code>adr r1, msg</code> virou <code>add r1, pc, #20</code>? A pseudo-instrução <code>adr</code> é uma conveniência do montador: ele a traduz para uma soma relativa ao <code>PC</code> (o contador de programa). A conta fecha porque, no modo ARM, ler o <code>PC</code> numa instrução devolve o endereço dela mais 8: <code>0x10004 + 8 = 0x1000c</code>, e <code>0x1000c + 20 = 0x10020</code>, o endereço de <code>msg</code>. Esse tipo de tradução — do que você escreve para o que a máquina realmente executa — é o assunto da trilha. No <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">artigo de decodificação</a> a gente pega números como <code>0xe3a00001</code> e separa campo por campo.</p>
+<p>Para rodar o programa, monte, ligue e execute no <code>armbox</code> (o <code>-Ttext=0x10000</code> põe o código no endereço <code>0x10000</code>, o mesmo da desmontagem acima):</p>
+<pre><code class="language-bash">arm-none-eabi-as <span class="token parameter variable">-march</span><span class="token operator">=</span>armv5te <span class="token parameter variable">-o</span> hello.o hello.s
+arm-none-eabi-ld <span class="token parameter variable">-Ttext</span><span class="token operator">=</span>0x10000 <span class="token parameter variable">-o</span> hello.elf hello.o
+arm-none-eabi-objdump <span class="token parameter variable">-d</span> hello.elf
+<span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar hello.elf
+<span class="token builtin class-name">echo</span> <span class="token variable">$?</span></code></pre>
+<p>A saída das duas últimas linhas, capturada numa execução real:</p>
+<pre><code class="language-text">hello from a real ELF
+42</code></pre>
+<p>O texto sai da primeira chamada de sistema (<code>write</code>); o <code>42</code> é o código de saída que o programa passou na segunda (<code>exit</code>), e o <code>echo $?</code> o mostra. (Em shells que não são POSIX, o código de saída vem por outro mecanismo, por exemplo <code>$LASTEXITCODE</code> no PowerShell.)</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
   <table>
@@ -102,11 +122,60 @@ msg_end:</code></pre>
       <tr><th scope="row">JIT</th><td><em>Just-In-Time</em> — compilar blocos do guest para código nativo do host em tempo de execução</td></tr>
       <tr><th scope="row">Interpretador</th><td>Executar instrução por instrução, sem compilar; a referência de semântica</td></tr>
       <tr><th scope="row">Bare-metal</th><td>Código sem sistema operacional por baixo</td></tr>
+      <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca Java que executa, depura e compila (JIT) instruções ARM/Thumb; sem <code>main</code>, é embutida por um programa hospedeiro</td></tr>
+      <tr><th scope="row"><code>armbox</code></th><td>Programa de linha de comando que carrega um executável ARM de 32 bits e o roda sobre o <code>arm-jitter</code>, no estilo do <code>qemu-arm</code></td></tr>
+      <tr><th scope="row">Runner user-mode</th><td>Emulador que executa só o programa do usuário e traduz suas chamadas de sistema para o sistema do host, sem emular o kernel</td></tr>
+      <tr><th scope="row">Syscall / <code>svc</code></th><td>Chamada de sistema: pedido de um serviço ao sistema operacional. No ARM, a instrução <code>svc</code> (antes chamada <code>swi</code>) a dispara</td></tr>
+      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato dos executáveis Linux, com cabeçalho, seções e endereço de entrada</td></tr>
+      <tr><th scope="row"><code>CPSR</code> / <code>SPSR</code></th><td>Registrador de status do programa (flags, modo, bit T) e a cópia dele guardada ao entrar em uma exceção</td></tr>
+      <tr><th scope="row">Flags e carry</th><td>Bits N/Z/C/V do <code>CPSR</code>; o <em>carry</em> (C) é o &quot;vai-um&quot; da última operação, usado por <code>ADCS</code> (soma com carry que atualiza flags)</td></tr>
+      <tr><th scope="row">Registradores bancados</th><td>Cópias de alguns registradores (como <code>SP</code> e <code>LR</code>) que existem por modo do processador</td></tr>
+      <tr><th scope="row">Thumb</th><td>Conjunto de instruções compactas (16 bits, depois também 32) do ARM; o bit T do <code>CPSR</code> indica o estado atual</td></tr>
+      <tr><th scope="row"><code>UNPREDICTABLE</code></th><td>Termo do manual da Arm para um resultado que a arquitetura deliberadamente não define</td></tr>
+      <tr><th scope="row">Toolchain <code>arm-none-eabi</code></th><td>Compilador, montador, ligador e desmontador (<code>gcc</code>, <code>as</code>, <code>ld</code>, <code>objdump</code>) para ARM sem sistema operacional</td></tr>
+      <tr><th scope="row"><code>objdump</code></th><td>Ferramenta que desmonta um executável: mostra endereço, bytes e mnemônico de cada instrução</td></tr>
+      <tr><th scope="row">Pseudo-instrução</th><td>Instrução aceita pelo montador que não existe no processador (como <code>adr</code>) e vira outra na montagem</td></tr>
+      <tr><th scope="row">Softmmu / máquina completa</th><td>Emulação de um computador inteiro (CPU, MMU e periféricos), capaz de rodar um kernel, em oposição ao modo usuário</td></tr>
     </tbody>
   </table>
 </div>
-<h2>Próximo passo</h2>
-<p>O <a routerLink="/artigos/ambiente-arm">próximo artigo</a> monta a bancada: JDK, Maven, o toolchain <code>arm-none-eabi</code> e os repositórios, para você conseguir compilar e rodar cada exemplo daqui pra frente.</p>
+<h2>Comandos</h2>
+<div class="scroll-x">
+  <table>
+    <thead>
+      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te -o hello.o hello.s</code></th><td>Monta o fonte <code>hello.s</code> para a arquitetura ARMv5TE, gerando o objeto <code>hello.o</code></td></tr>
+      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o hello.elf hello.o</code></th><td>Liga o objeto em um executável ELF com o código em <code>0x10000</code></td></tr>
+      <tr><th scope="row"><code>arm-none-eabi-objdump -d hello.elf</code></th><td>Desmonta a seção de código do executável</td></tr>
+      <tr><th scope="row"><code>java -jar target/armbox.jar hello.elf</code></th><td>Executa o ELF no <code>armbox</code> (jar gerado por <code>mvn package</code> no repositório do <code>armbox</code>)</td></tr>
+      <tr><th scope="row"><code>echo $?</code></th><td>Mostra o código de saída do último comando (em PowerShell: <code>$LASTEXITCODE</code>)</td></tr>
+    </tbody>
+  </table>
+</div>
+<h2>Conclusão</h2>
+<p>Implementar um processador força o que ler não força: não existe caso omisso, o estado inteiro (registradores bancados, <code>SPSR</code>, bit T) precisa estar certo, e o binário, não o texto do manual, é a verdade. Por isso a trilha parte de código real (o <code>arm-jitter</code> e os emuladores construídos sobre ele) e percorre o ARM de 32 bits do ARMv4T ao ARMv7-A, com as variantes Cortex-M e o AArch64 de 64 bits.</p>
+<p>Esse método vale para qualquer arquitetura, não só para ARM: quem precisa decidir o que acontece em cada bit aprende o que a especificação realmente diz.</p>
+<h3>Para ir além</h3>
+<ul>
+<li><a routerLink="/artigos/ambiente-arm">Setup do ambiente ARM</a>: JDK, Maven, o toolchain e os repositórios, para repetir os exemplos.</li>
+<li><a routerLink="/artigos/convencoes-assembly-arm">Convenções de assembly da trilha</a>: a sintaxe, as diretivas e a leitura do <code>objdump</code>.</li>
+<li><a routerLink="/artigos/arm-jitter-api-java">Usando o arm-jitter direto pela API Java</a>: embutir o núcleo num programa seu.</li>
+<li><a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão com o objdump</a>.</li>
+</ul>
+<h2>Referências</h2>
+<ul>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C). Fonte normativa para modos, <code>CPSR</code>/<code>SPSR</code> e registradores bancados no ARM de 32 bits.</li>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0487/latest/" target="_blank" rel="noopener"><em>Arm Architecture Reference Manual for A-profile architecture</em></a> (DDI 0487). Referência do AArch64 e dos níveis de exceção.</li>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0403/latest/" target="_blank" rel="noopener"><em>ARMv7-M Architecture Reference Manual</em></a> (DDI 0403). Referência do perfil M.</li>
+<li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte e README do <code>arm-jitter</code></a>. A tabela de presets (<code>ARMV4T</code>, <code>ARMV5TE</code>, <code>ARMV6K</code>, <code>ARMV7A</code>, perfil M, AArch64) usada nas tabelas deste artigo.</li>
+<li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>armbox</code></a>, incluindo <code>testdata/hello.s</code>.</li>
+<li>Vítor Silvério — repositórios <a href="https://github.com/vitorsilverio/gbaemu" target="_blank" rel="noopener"><code>gbaemu</code></a>, <a href="https://github.com/vitorsilverio/ndsemu" target="_blank" rel="noopener"><code>ndsemu</code></a>, <a href="https://github.com/vitorsilverio/n3dsemu" target="_blank" rel="noopener"><code>n3dsemu</code></a> e <a href="https://github.com/vitorsilverio/virtual-arm-box" target="_blank" rel="noopener"><code>virtual-arm-box</code></a>. As CPUs de cada console (ARMv4T, ARM9 ARMv5TE e ARM7 ARMv4T, ARMv6K) e a máquina <code>versatilepb</code> que boota Linux até o shell.</li>
+<li>Martin Korth — <a href="https://problemkaputt.de/gbatek.htm#gbatechnicaldata" target="_blank" rel="noopener"><em>GBATEK</em>, &quot;GBA Technical Data&quot; e &quot;DS Technical Data&quot;</a> (<code>#dstechnicaldata</code>). GBA com ARM7TDMI; DS com ARM946E-S e ARM7TDMI.</li>
+<li>3dbrew — <a href="https://www.3dbrew.org/wiki/Hardware" target="_blank" rel="noopener"><em>Hardware</em></a>. 3DS com núcleos ARM11 MPCore.</li>
+<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, &quot;ARM Opcodes&quot;</a>. A pseudo-instrução <code>adr</code> como <code>add</code>/<code>sub</code> relativo ao PC.</li>
+</ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 0, lição 1.</em></p>
 `,
 })
