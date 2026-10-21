@@ -63,4 +63,14 @@ O fluxo detalhado (e os 4 pontos de wiring) está em `site/CLAUDE.md`. Resumo:
 5. `npm run build` e `npm run test -- --watch=false` (em `site/`).
 6. Ofereça `npx ng serve` para o usuário pré-visualizar. Commit só quando o usuário pedir, no padrão `Artigo: <título>`.
 
-Se depois de gerado for preciso mexer no conteúdo, edite `src/app/pages/article-detail/posts/<slug>.ts` direto e mantenha o `.md` em sincronia, para o caso de o artigo ser gerado de novo.
+## Artigos já publicados: nunca regenerar
+
+Depois de publicado, **o componente `src/app/pages/article-detail/posts/<slug>.ts` é a fonte da verdade**. Não apague nem regenere o post a partir do `.md`: o HTML publicado pode ter correções feitas à mão que não estão no Markdown, e a regeneração conflita com os componentes `app-bit-field`/`app-objdump` já montados. Para revisar ou corrigir um artigo publicado:
+
+- edite o `.ts` direto, preservando o que está correto (componentes, tabelas, imports, correções antigas) e seguindo o padrão de HTML do próprio arquivo;
+- dentro da template string: escape `` ` `` e `${`; no HTML, `&#123;`/`&#125;` para chaves e `&#64;` para `@`;
+- blocos de código novos entram como `<pre><code class="language-XX">` em texto puro e recebem o realce com `node scripts/highlight-posts.mjs` (idempotente; percorre todos os posts, então rode uma vez só, sem outro agente editando posts ao mesmo tempo);
+- `readingTime`/`excerpt` mudam em `src/app/data/articles.ts`, à mão;
+- valide com `npm run build` e `npm run test -- --watch=false`.
+
+O `.md` em `proximos-artigos/` só vale até a publicação; se for atualizado depois, é apenas registro.
