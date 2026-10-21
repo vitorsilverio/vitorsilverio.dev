@@ -7,15 +7,34 @@ import { BitField } from '../../../shared/bit-field/bit-field';
   selector: 'app-article-flags-e-desvios-condicionais',
   template: `
     <p>
-      No <a routerLink="/artigos/sub-rotinas-arm-bl-bx-pilha">artigo anterior</a>
-      a gente viu o <code>BL</code> salvando o retorno em <code>LR</code> e o
-      <code>BX</code> copiando de volta. Mas como o processador
-      <strong>decide</strong> se um desvio acontece ou não? A resposta está nos
-      4 bits do topo do <strong>CPSR</strong>: <code>N, Z, C, V</code> — as
-      <em>flags</em>. Cada <code>CMP</code> atualiza essas flags, e cada
+      Um laço <code>while</code> ou um <code>if</code> em C vira, em assembly
+      ARM, uma comparação seguida de um desvio condicional. Mas como o
+      processador <strong>decide</strong> se o desvio acontece? A resposta
+      está nos 4 bits do topo do <strong>CPSR</strong> (<em>Current Program
+      Status Register</em>, o registrador de status): <code>N, Z, C, V</code>,
+      as <em>flags</em>. Cada <code>CMP</code> atualiza essas flags, e cada
       desvio condicional (<code>bge</code>, <code>blt</code>,
-      <code>bne</code>…) consulta exatamente elas. É o que este texto explica
-      em detalhe.
+      <code>bne</code>…) consulta exatamente elas.
+    </p>
+    <p>
+      Este artigo explica como cada flag é calculada e como os desvios as
+      combinam, usando um laço de soma real. Você vai:
+    </p>
+    <ol>
+      <li>ver onde ficam as flags no <code>CPSR</code> e quais instruções as escrevem;</li>
+      <li>calcular <code>N</code>, <code>Z</code>, <code>C</code> e <code>V</code> à mão para um <code>cmp</code>;</li>
+      <li>conferir o cálculo contra um emulador e entender por que <code>bge</code> usa <code>N == V</code>.</li>
+    </ol>
+    <p>
+      O emulador é o <code>arm-jitter</code>, uma biblioteca Java que executa
+      instruções ARM (o <code>arm-box</code> é o programa de linha de comando
+      que a usa). <strong>O que você precisa:</strong> para só ler, nada. Para
+      repetir os experimentos, o toolchain ARM bare-metal (devkitARM), um JDK
+      25 e o <code>arm-jitter-1.3.0.jar</code>, com os arquivos
+      <a href="/curso-arm/exemplos/decodificando-instrucoes-arm-objdump.s"><code>decodificando-instrucoes-arm-objdump.s</code></a>,
+      <a href="/curso-arm/exemplos/java/flags-e-desvios-condicionais-TraceFlags.java"><code>flags-e-desvios-condicionais-TraceFlags.java</code></a> e
+      <a href="/curso-arm/exemplos/java/flags-e-desvios-condicionais-OverflowFlags.java"><code>flags-e-desvios-condicionais-OverflowFlags.java</code></a>.
+      Não é preciso saber assembly de antemão.
     </p>
 
     <h2>O CPSR: onde as flags vivem</h2>
@@ -44,8 +63,10 @@ import { BitField } from '../../../shared/bit-field/bit-field';
     <p>
       O <code>CMP</code> é um <code>SUBS</code> que só atualiza flags — o
       resultado (a subtração) é descartado. Olhe os bytes reais do
-      <code>sum.elf</code> (do
-      <a routerLink="/artigos/carga-e-armazenamento-arm">artigo de carga e armazenamento</a>):
+      <code>sum.elf</code>, um programa que soma o vetor <code>3, 7, 1, 9, 4</code>
+      num laço de <code>cmp</code> e <code>bge</code> (o
+      <a routerLink="/artigos/carga-e-armazenamento-arm">artigo de carga e armazenamento</a>
+      o explica por inteiro):
     </p>
     <app-bit-field
       titulo="e1520003 = cmp r2, r3"
@@ -122,7 +143,8 @@ import { BitField } from '../../../shared/bit-field/bit-field';
     </p>
     <p>
       Nos exemplos com valores pequenos (0, 3, 5), <code>V</code> sempre é
-      0 — não cabe num inteiro de 32 bits com sinal.
+      0: a subtração nunca sai da faixa de um inteiro de 32 bits com sinal.
+      Mais adiante há um caso em que <code>V</code> vale 1.
     </p>
 
     <h2>Tabela completa: como cada desvio consulta as flags</h2>
@@ -176,7 +198,7 @@ V = 0   (sem overflow)
 
 bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
 
-    <h3>Caso 3: <code>r2 = 3, r3 = 0</code> (laço continua)</h3>
+    <h3>Caso 3: <code>r2 = 3, r3 = 0</code> (hipotético: <code>r2 ≥ r3</code>, o <code>bge</code> desvia)</h3>
     <pre><code class="language-text">cmp r2, r3   @ 3 − 0 = 3
 N = 0   (bit 31 = 0)
 Z = 0   (resultado ≠ 0)
@@ -185,17 +207,36 @@ V = 0   (sem overflow)
 
 bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
 
-    <h2>Começando do zero: onde o <code>CMP</code> pega carona</h2>
+    <h2>O laço inteiro, conferido no emulador</h2>
     <p>
-      O primeiro passo do laço é <code>mov r2, #0</code> — ele começa com zero.
-      Mas de onde vem o valor que define o resultado do CMP? Do
-      <code>CMP r2, r3</code> (comparação entre r2 e r3) e das flags que ele
-      gera.
+      No programa real, <code>r2</code> começa em 0 (<code>mov r2, #0</code>),
+      sobe de 1 em 1 e <code>r3</code> vale 5. Os casos 1 e 2 acima são a
+      primeira e a última volta. O programa
+      <a href="/curso-arm/exemplos/java/flags-e-desvios-condicionais-TraceFlags.java"><code>flags-e-desvios-condicionais-TraceFlags.java</code></a>
+      roda o <code>sum.elf</code> no <code>arm-jitter</code> 1.3.0 e imprime
+      as flags depois de cada <code>cmp</code> do laço:
     </p>
+    <pre><code class="language-text">cmp r2=0, r3=5 -&gt; N=1 Z=0 C=0 V=0
+  bge done -&gt; nao desviou
+cmp r2=1, r3=5 -&gt; N=1 Z=0 C=0 V=0
+  bge done -&gt; nao desviou
+cmp r2=2, r3=5 -&gt; N=1 Z=0 C=0 V=0
+  bge done -&gt; nao desviou
+cmp r2=3, r3=5 -&gt; N=1 Z=0 C=0 V=0
+  bge done -&gt; nao desviou
+cmp r2=4, r3=5 -&gt; N=1 Z=0 C=0 V=0
+  bge done -&gt; nao desviou
+cmp r2=5, r3=5 -&gt; N=0 Z=1 C=1 V=0
+  bge done -&gt; desviou (saiu do laco)
+r1 (soma) = 24</code></pre>
     <ul>
-      <li>Quando <code>r2 &lt; r3</code>, o CMP gera <code>N = 1</code> e <code>C = 0</code>. O <code>bge</code> vê <code>N ≠ V</code> e não pula — o laço continua.</li>
-      <li>Quando <code>r2 = r3</code>, o CMP gera <code>Z = 1</code>. O <code>bge</code> vê <code>N = V</code> (ambos 0) e pula — o laço termina.</li>
+      <li>Enquanto <code>r2 &lt; r3</code> (para estes valores pequenos), o <code>cmp</code> gera <code>N = 1</code> e <code>C = 0</code>. O <code>bge</code> vê <code>N ≠ V</code> e não desvia: o laço continua.</li>
+      <li>Quando <code>r2 = r3</code>, o <code>cmp</code> gera <code>Z = 1</code> e <code>C = 1</code>. O <code>bge</code> vê <code>N = V</code> (ambos 0) e desvia: o laço termina com a soma 24 em <code>r1</code>.</li>
     </ul>
+    <p>
+      (O <code>bge</code> não consulta <code>Z</code>: ele desvia em
+      <code>r2 = r3</code> porque <code>N = V</code> também vale nesse caso.)
+    </p>
 
     <h2>Quando N ≠ V: o caso do <code>BLT</code></h2>
     <p>
@@ -205,7 +246,49 @@ bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
       pularia. É a condição correta para "r2 é menor que r3".
     </p>
 
-    <h2>Glossário: como testar cada flag</h2>
+    <h2>Por que o <code>bge</code> usa <code>N == V</code> e não só <code>N</code></h2>
+    <p>
+      Se o resultado nunca estourasse, bastaria olhar <code>N</code>. Mas a
+      subtração pode sair da faixa de inteiros com sinal, e aí o bit de sinal
+      do resultado <em>mente</em>; é para corrigir isso que existe o
+      <code>V</code>. O programa
+      <a href="/curso-arm/exemplos/java/flags-e-desvios-condicionais-OverflowFlags.java"><code>flags-e-desvios-condicionais-OverflowFlags.java</code></a>
+      executa um único <code>cmp r0, r1</code> (<code>e1500001</code>) no
+      <code>arm-jitter</code> com três pares de valores:
+    </p>
+    <pre><code class="language-text">cmp r0=2147483647, r1=-1 -&gt; N=1 Z=0 C=0 V=1 | GE=true LT=false HS=false LO=true
+cmp r0=-2147483648, r1=1 -&gt; N=0 Z=0 C=1 V=1 | GE=false LT=true HS=true LO=false
+cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code></pre>
+    <ul>
+      <li>
+        <strong>Linha 1.</strong> <code>2147483647 − (−1)</code> daria
+        <code>2147483648</code>, que não cabe em 32 bits com sinal: o
+        resultado vira <code>0x80000000</code> (<code>N = 1</code>) e
+        <code>V = 1</code>. Como <code>N == V</code>, o <code>GE</code> vale:
+        com sinal, 2147483647 realmente é maior que −1, ainda que o
+        resultado pareça negativo.
+      </li>
+      <li>
+        <strong>Linha 2.</strong> <code>−2147483648 − 1</code> também estoura:
+        o resultado vira <code>0x7FFFFFFF</code> (<code>N = 0</code>) e
+        <code>V = 1</code>. <code>N ≠ V</code>, então <code>LT</code> vale
+        (com sinal, −2147483648 é menor que 1).
+      </li>
+      <li>
+        <strong>Comparação sem sinal.</strong> As condições <code>HS</code>
+        (<code>C = 1</code>) e <code>LO</code> (<code>C = 0</code>) tratam os
+        mesmos bits como números sem sinal e discordam das com sinal: na
+        linha 1, <code>0x7FFFFFFF</code> é menor que <code>0xFFFFFFFF</code>
+        (<code>LO</code>), embora seja maior com sinal (<code>GE</code>).
+      </li>
+      <li>
+        <strong>Linha 3</strong> é o exercício do fim do artigo
+        (<code>7 − 3</code>): <code>N = 0, Z = 0, C = 1, V = 0</code>, e
+        <code>LT</code> não vale.
+      </li>
+    </ul>
+
+    <h2>Inspecionar as flags no GDB</h2>
     <div class="scroll-x"><table>
       <caption>Flags e como inspecioná-las</caption>
       <thead>
@@ -224,23 +307,73 @@ bge done   @ N == V ?  0 == 0  →  SIM  →  sai do laço</code></pre>
       Quando o <code>arm-jitter</code> executa um <code>CMP</code>, ele calcula
       a subtração e <strong>escreve os 4 bits no CPSR do core emulado</strong>.
       Quando chega o <code>BGE</code>, ele lê o CPSR e verifica se
-      <code>N == V</code>. É exatamente isso que vimos no
-      <a routerLink="/artigos/gdb-no-armbox">artigo do GDB</a>: o
-      <code>info registers cpsr</code> mostrava esses bits mudando instrução a
-      instrução. Agora você sabe <strong>por que</strong> o bit Z vira 1 quando
-      <code>r2 == r3</code> e o laço termina.
+      <code>N == V</code>. Foi isso que o traço acima mostrou. Num depurador,
+      <code>info registers cpsr</code> exibe esses bits mudando instrução a
+      instrução (o <a routerLink="/artigos/gdb-no-armbox">artigo do GDB</a>
+      mostra uma sessão real). Agora você sabe <strong>por que</strong> o bit
+      Z vira 1 quando <code>r2 == r3</code> e o laço termina.
     </p>
 
-    <h2>Próximo passo</h2>
+    <h2>Glossário</h2>
+    <div class="scroll-x"><table>
+      <thead>
+        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><code>CPSR</code></th><td><em>Current Program Status Register</em>: registrador de status de 32 bits; guarda as flags, o modo do processador e outros bits de controle.</td></tr>
+        <tr><th scope="row">Flag</th><td>bit de status escrito por instruções com <code>S = 1</code> e lido por instruções condicionais.</td></tr>
+        <tr><th scope="row"><code>N</code> / <code>Z</code> / <code>C</code> / <code>V</code></th><td>negativo, zero, <em>carry</em> (vai-um; na subtração, o inverso do <em>borrow</em>) e <em>overflow</em> com sinal.</td></tr>
+        <tr><th scope="row"><code>CMP</code></th><td>compara dois valores: subtrai, descarta o resultado e mantém só as flags.</td></tr>
+        <tr><th scope="row">Complemento de dois</th><td>representação de inteiros com sinal em que o bit 31 indica o sinal.</td></tr>
+        <tr><th scope="row"><em>Borrow</em></th><td>&quot;empréstimo&quot; de uma subtração sem sinal quando o minuendo é menor que o subtraendo.</td></tr>
+        <tr><th scope="row">Desvio condicional</th><td>instrução de salto (<code>beq</code>, <code>bne</code>, <code>bge</code>, <code>blt</code>…) que só desvia se a condição sobre as flags for verdadeira.</td></tr>
+        <tr><th scope="row"><code>cond</code></th><td>campo de 4 bits do topo da instrução ARM que escolhe a condição.</td></tr>
+        <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Comandos</h2>
+    <div class="scroll-x"><table>
+      <thead>
+        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td>monta o assembly em objeto.</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td>liga em um ELF estático.</td></tr>
+        <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary f.elf f.bin</code></th><td>extrai a imagem binária crua do ELF (aqui, a partir de <code>0x8000</code>).</td></tr>
+        <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar X.java</code></th><td>compila um exemplo Java contra o <code>arm-jitter</code>.</td></tr>
+        <tr><th scope="row"><code>java -cp "arm-jitter-1.3.0.jar;." TraceFlags f.bin</code></th><td>roda o traço de flags (no Linux/macOS, troque <code>;</code> por <code>:</code>).</td></tr>
+        <tr><th scope="row"><code>info registers cpsr</code></th><td>no GDB, mostra o <code>CPSR</code>.</td></tr>
+        <tr><th scope="row"><code>p/t $cpsr</code></th><td>no GDB, imprime o <code>CPSR</code> em binário.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Conclusão</h2>
     <p>
-      Até agora só vimos instruções de 32 bits fixos. O próximo texto quebra
-      essa regra de vez: o <strong>Thumb e o Thumb-2</strong>, onde instruções
-      têm 16 ou 32 bits e o decodificador precisa ler o <em>tamanho</em> antes
-      do opcode — e onde o <code>BX</code> e o bit 0 viram essenciais para
-      trocar de modo. Até lá, tente calcular as flags manualmente para
-      <code>CMP r0, r1</code> com <code>r0 = 7, r1 = 3</code> (resposta:
-      N=0, Z=0, C=1, V=0) e verifique se o <code>BLT</code> pularia ou não.
+      O <code>CPSR</code> guarda quatro flags: <code>N</code> (sinal do
+      resultado), <code>Z</code> (resultado zero), <code>C</code> (vai-um, ou
+      o inverso do <em>borrow</em> na subtração) e <code>V</code> (estouro com
+      sinal). O <code>CMP</code> é uma subtração que só escreve essas flags, e
+      cada desvio condicional é uma expressão lógica sobre elas:
+      <code>bge</code> é <code>N == V</code>, <code>bne</code> é
+      <code>Z == 0</code>, <code>blo</code> é <code>C == 0</code>. Você
+      calculou as flags à mão, conferiu no emulador o laço inteiro e viu que
+      <code>V</code> é o que mantém a comparação com sinal correta quando a
+      subtração estoura. Tudo isso vale para qualquer <code>if</code> ou laço
+      compilado para ARM.
     </p>
+    <h2>Para ir além</h2>
+    <ul>
+      <li>Como o decodificador extrai o campo <code>cond</code> da instrução: <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão</a>.</li>
+      <li>Instruções de 16 bits e execução condicional via <code>IT</code>: <a routerLink="/artigos/thumb-e-thumb-2">Thumb e Thumb-2</a>.</li>
+      <li>Exercício: calcule as flags de <code>cmp r0, r1</code> com <code>r0 = 2</code> e <code>r1 = 9</code> e diga se <code>blt</code> e <code>blo</code> desviariam (ambos desviam).</li>
+    </ul>
+    <h2>Referências</h2>
+    <ul>
+      <li>Arm — <em>Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): tabela de condições (<code>cond</code>) e definição de <code>CMP</code>/<code>SUB</code>, incluindo o cálculo de <code>C</code> e <code>V</code> (pseudocódigo <code>AddWithCarry</code>). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
+      <li>Martin Korth — <em>GBATEK</em>, seção "ARM CPU Flags &amp; Condition Field (cond)". <a href="https://problemkaputt.de/gbatek.htm" target="_blank" rel="noopener">problemkaputt.de/gbatek.htm</a></li>
+      <li>Código-fonte do <code>arm-jitter</code> v1.3.0 — <code>core/src/main/java/dev/vitorsilverio/armjitter/core/CpsrRegister.java</code> e <code>Condition.java</code>.</li>
+    </ul>
   `,
 })
 export class ArticleFlagsEDesviosCondicionais {}
