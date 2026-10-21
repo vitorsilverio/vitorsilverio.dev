@@ -92,6 +92,7 @@ export class ProseEnhance implements AfterViewChecked, OnDestroy {
     this.el.querySelectorAll<HTMLElement>(SELETOR_ROLAVEL).forEach((r) => this.regiao(r));
     this.titulos();
     if (this.isBrowser) {
+      this.removerOrfaos();
       this.el.querySelectorAll<HTMLElement>('pre').forEach((pre) => this.copiavel(pre));
     }
   }
@@ -215,6 +216,17 @@ export class ProseEnhance implements AfterViewChecked, OnDestroy {
     s.setAttribute('role', 'status');
     this.el.append(s);
     this.status = s;
+  }
+
+  /**
+   * O `.code-block` é nosso, mas o `pre` dentro dele é do Angular. Se o Angular
+   * descartar a view do post e desenhá-la de novo (acontece no dev server), ele
+   * leva o `pre` e o invólucro fica para trás, vazio, onde o `pre` estava.
+   */
+  private removerOrfaos(): void {
+    this.el.querySelectorAll<HTMLElement>('.code-block').forEach((b) => {
+      if (!b.querySelector(':scope > pre')) b.remove();
+    });
   }
 
   private copiavel(pre: HTMLElement): void {

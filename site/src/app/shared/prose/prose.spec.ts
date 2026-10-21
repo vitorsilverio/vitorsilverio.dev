@@ -131,6 +131,17 @@ describe('ProseEnhance', () => {
     expect(prose.querySelectorAll('h2 .heading-anchor').length).toBe(4);
   });
 
+  it('remove o invólucro que ficou sem o <pre> (view redesenhada)', async () => {
+    const f = await montar();
+    const prose = (f.nativeElement as HTMLElement).querySelector('.prose') as HTMLElement;
+    const ref = f.debugElement.children[1].injector.get(ProseEnhance);
+    // O Angular leva o <pre> dele e deixa o invólucro vazio no lugar.
+    prose.querySelector('.code-block pre')?.remove();
+    ref.varrer();
+    expect(prose.querySelectorAll('.code-block').length).toBe(0);
+    expect(prose.querySelectorAll('.code-copy').length).toBe(0);
+  });
+
   it('alimenta o sumário com as seções h2 (só a partir de 4)', async () => {
     const f = await montar();
     const links = (f.nativeElement as HTMLElement).querySelectorAll('app-prose-toc nav a');
