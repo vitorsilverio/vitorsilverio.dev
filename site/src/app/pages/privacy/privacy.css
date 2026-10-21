@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+.policy {
+  max-width: 70ch;
+}
+
+.policy section {
+  margin-top: 2rem;
+}
+
+.policy h2 {
+  font-size: 1.3rem;
+  margin: 0 0 0.6rem;
+}
+
+.policy p,
+.policy li {
+  line-height: 1.65;
+}
+
+.policy ul {
+  padding-left: 1.25rem;
+}
+
+.policy li + li {
+  margin-top: 0.4rem;
+}
+
+.policy a {
+  overflow-wrap: anywhere;
+}
+
+.reopen {
+  min-height: 2.75rem;
+}
+
+.note {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Links dentro do texto distinguíveis sem depender só da cor (WCAG 1.4.1). */
+.policy a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

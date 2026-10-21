@@ -14,6 +14,7 @@ describe('Acessibilidade (axe-core)', () => {
     '/projetos',
     '/curriculo',
     '/curso-arm',
+    '/privacidade',
     '/artigos',
     '/artigos?tag=ARM',
     '/pagina-que-nao-existe',

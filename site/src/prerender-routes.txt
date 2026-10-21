@@ -2,6 +2,7 @@
 /projetos
 /curriculo
 /curso-arm
+/privacidade
 /artigos
 /artigos/boas-vindas
 /artigos/angular-signals-na-pratica

@@ -42,6 +42,7 @@ const pages = [
     'emuladores e ferramentas em Java (arm-jitter, arm-box, gbaemu, gbcemu, ndsemu, n3dsemu)',
   ],
   ['Currículo', '/curriculo', 'experiência, formação, certificações e contato'],
+  ['Privacidade', '/privacidade', 'que dados o site coleta e como mudar a escolha de cookies'],
 ];
 
 const out = `# Vítor Silvério

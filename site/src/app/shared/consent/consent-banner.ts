@@ -7,11 +7,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ConsentService } from './consent.service';
 
 @Component({
   selector: 'app-consent-banner',
-  imports: [],
+  imports: [RouterLink],
   template: `
     @if (consent.visible()) {
       @if (collapsed()) {
@@ -29,6 +30,9 @@ import { ConsentService } from './consent.service';
           <p class="consent-text">
             Usamos o Google Analytics para entender como o site é usado. Nada é coletado antes do
             seu consentimento.
+            <a class="consent-link" routerLink="/privacidade"
+              >Saiba mais<span class="visually-hidden"> sobre privacidade</span></a
+            >
           </p>
           <div class="consent-actions">
             <button type="button" class="btn-reject" (click)="consent.reject()">Rejeitar</button>

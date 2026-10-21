@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { provideRouter } from '@angular/router';
 import { ConsentBanner } from './consent-banner';
 import { ConsentService } from './consent.service';
 
@@ -23,7 +22,7 @@ describe('ConsentBanner', () => {
     localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
-        { provide: Router, useValue: { events: new Subject(), navigated: false, url: '/' } },
+        provideRouter([]),
       ],
     });
     service = TestBed.inject(ConsentService);

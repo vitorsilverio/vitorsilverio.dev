@@ -24,6 +24,7 @@ const staticPages = [
   { loc: '/projetos', priority: '0.8', changefreq: 'monthly' },
   { loc: '/curriculo', priority: '0.8', changefreq: 'monthly' },
   { loc: '/curso-arm', priority: '0.9', changefreq: 'weekly' },
+  { loc: '/privacidade', priority: '0.3', changefreq: 'yearly' },
   { loc: '/artigos', priority: '0.9', changefreq: 'weekly' },
 ];
 

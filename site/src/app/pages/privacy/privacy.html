@@ -1,0 +1,179 @@
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Transparência</span>
+      <h1>Política de privacidade</h1>
+      <p>
+        Um resumo direto do que este site coleta, quando e por quê. Última atualização: 21 de
+        outubro de 2026.
+      </p>
+    </header>
+
+    <div class="policy">
+      <section aria-labelledby="p-quem">
+        <h2 id="p-quem">Quem é o responsável</h2>
+        <p>
+          O site vitorsilverio.dev é mantido por Vítor Silvério, pessoa física, que decide como os
+          dados descritos aqui são tratados (o controlador, no termo da Lei Geral de Proteção de
+          Dados, a LGPD).
+        </p>
+      </section>
+
+      <section aria-labelledby="p-sem">
+        <h2 id="p-sem">O que acontece sem o seu consentimento</h2>
+        <p>Ao navegar, o site guarda no seu navegador apenas o necessário para funcionar:</p>
+        <ul>
+          <li>
+            <strong>Tema claro ou escuro</strong>, para lembrar a sua preferência (chave
+            <code>vs-theme</code> no armazenamento local).
+          </li>
+          <li>
+            <strong>A sua escolha sobre cookies</strong> (chave <code>analytics-consent</code>, com
+            o valor <code>granted</code> ou <code>denied</code>).
+          </li>
+        </ul>
+        <p>
+          Esses dados ficam só no seu navegador e não são enviados a ninguém. Enquanto você não
+          aceitar, o Google Analytics não é carregado.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-com">
+        <h2 id="p-com">O que acontece se você aceitar</h2>
+        <p>
+          Ao clicar em Aceitar, o site carrega o Google Analytics 4 (da Google) para medir o uso.
+          Ele registra:
+        </p>
+        <ul>
+          <li>cada página vista (endereço e título da página);</li>
+          <li>
+            nos artigos, até onde você rolou a leitura (marcos de 25%, 50%, 75% e 90%) e quanto
+            tempo ficou lendo;
+          </li>
+          <li>
+            dados técnicos que o próprio Google Analytics coleta, como tipo de navegador e
+            dispositivo, origem do acesso e localização aproximada, e identificadores gravados em
+            cookies (como o <code>_ga</code>) para reconhecer o mesmo navegador entre visitas.
+          </li>
+        </ul>
+        <p>
+          O objetivo é um só: entender quais artigos são lidos e se o conteúdo funciona. Os dados
+          não são usados por este site para publicidade nem vendidos.
+        </p>
+        <p>Se você rejeitar, nada disso é carregado, e o site continua funcionando por inteiro.</p>
+      </section>
+
+      <section aria-labelledby="p-giscus">
+        <h2 id="p-giscus">Comentários dos artigos (Giscus e GitHub)</h2>
+        <p>
+          Os comentários usam o Giscus, que guarda cada conversa nas Discussions do GitHub do
+          projeto. Para que a caixa de comentários apareça, a página de cada artigo carrega um
+          script de giscus.app e exibe conteúdo vindo do GitHub, o que expõe o seu endereço IP a
+          esses serviços. Isso acontece ao abrir um artigo e
+          <strong>não depende da escolha feita no aviso de cookies</strong>. Para comentar ou reagir
+          é preciso entrar com a sua conta do GitHub; o que você escrever fica público, sob a
+          política do GitHub.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-terceiros">
+        <h2 id="p-terceiros">Terceiros envolvidos</h2>
+        <ul>
+          <li>
+            <strong>Google Analytics</strong>, somente com o seu consentimento:
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"
+              >política de privacidade do Google<span class="visually-hidden">
+                (abre em nova aba)</span
+              ></a
+            >.
+          </li>
+          <li>
+            <strong>GitHub Pages</strong>, que hospeda o site. Como em qualquer servidor web, ele
+            pode registrar o seu endereço IP e dados da requisição em logs de acesso, mesmo sem
+            consentimento:
+            <a
+              href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement"
+              target="_blank"
+              rel="noopener"
+              >declaração de privacidade do GitHub<span class="visually-hidden">
+                (abre em nova aba)</span
+              ></a
+            >.
+          </li>
+          <li>
+            <strong>Giscus e GitHub</strong>, para os comentários, como descrito acima:
+            <a href="https://giscus.app/pt" target="_blank" rel="noopener"
+              >giscus.app<span class="visually-hidden"> (abre em nova aba)</span></a
+            >.
+          </li>
+          <li>
+            <strong>Google Search Console</strong>, usado só para ver dados agregados de busca (como
+            termos e páginas que aparecem no Google). Não coloca nada no seu navegador.
+          </li>
+        </ul>
+        <p>
+          Os botões de compartilhar (LinkedIn, X e WhatsApp) são links comuns: nada deles é
+          carregado até você clicar, e então valem as políticas de cada serviço.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-retencao">
+        <h2 id="p-retencao">Por quanto tempo os dados ficam</h2>
+        <p>
+          Os dados do Google Analytics seguem o período de retenção definido na configuração da
+          propriedade do Analytics deste site; esta página não fixa outro prazo. A preferência de
+          tema e a escolha de cookies ficam no seu navegador até você limpá-las. Comentários
+          permanecem nas Discussions do GitHub até serem apagados.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-escolha">
+        <h2 id="p-escolha">Como mudar a sua escolha</h2>
+        <p>
+          Você pode aceitar ou rejeitar a qualquer momento, sem prejuízo ao uso do site. Rejeitar
+          descarrega o Google Analytics.
+        </p>
+        <p>
+          <button type="button" class="btn btn-primary reopen" (click)="reopen()">
+            Rever minha escolha de cookies
+          </button>
+        </p>
+        <p>
+          Para apagar também os cookies e dados já gravados, limpe os dados do site nas
+          configurações do seu navegador.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-direitos">
+        <h2 id="p-direitos">Seus direitos</h2>
+        <p>
+          Pela LGPD (art. 18), você pode pedir confirmação de que seus dados são tratados, acesso a
+          eles, correção, anonimização, bloqueio ou eliminação de dados desnecessários ou tratados
+          em desacordo com a lei, informação sobre com quem são compartilhados, e revogar o
+          consentimento. Como o site não pede cadastro nem identifica você pelo nome, o que existe
+          são identificadores do navegador; para exercer os direitos, indique a data aproximada do
+          acesso e o dispositivo usado.
+        </p>
+      </section>
+
+      <section aria-labelledby="p-contato">
+        <h2 id="p-contato">Contato</h2>
+        <p>
+          Para dúvidas ou pedidos sobre esta política, fale com Vítor Silvério pelo
+          <a href="https://www.linkedin.com/in/vitorsilverio/" target="_blank" rel="noopener"
+            >LinkedIn<span class="visually-hidden"> (abre em nova aba)</span></a
+          >
+          ou pelo
+          <a href="https://github.com/vitorsilverio" target="_blank" rel="noopener"
+            >GitHub<span class="visually-hidden"> (abre em nova aba)</span></a
+          >.
+        </p>
+      </section>
+
+      <p class="note">
+        Este texto é um resumo informativo para o leitor e não substitui orientação jurídica.
+        Mudanças relevantes serão refletidas aqui, com a data de atualização.
+      </p>
+    </div>
+  </div>
+</section>

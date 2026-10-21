@@ -77,6 +77,11 @@ export const routes: Routes = [
     title: 'Currículo · Vítor Silvério',
   },
   {
+    path: 'privacidade',
+    loadComponent: () => import('./pages/privacy/privacy').then((m) => m.Privacy),
+    title: 'Política de privacidade · Vítor Silvério',
+  },
+  {
     path: 'curso-arm',
     loadComponent: () => import('./pages/course/course').then((m) => m.Course),
     title: 'Curso de Arquitetura ARM · Vítor Silvério',
