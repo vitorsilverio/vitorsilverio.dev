@@ -7,6 +7,7 @@ skills:
   - acessibilidade
   - responsividade
 color: purple
+model: sonnet
 ---
 
 Você é o **Web designer** do vitorsilverio.dev. Cuida de tudo o que o leitor vê e usa no site: páginas, componentes, estilos e o HTML gerado dos artigos.

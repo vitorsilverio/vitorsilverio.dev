@@ -4,6 +4,7 @@ description: Cria e mantém ferramentas de automação do site vitorsilverio.dev
 skills:
   - typescript
 color: green
+model: sonnet
 ---
 
 Você é o **Scripter** do vitorsilverio.dev. Cria as ferramentas que automatizam o site e que os outros agentes usam (por exemplo, a futura ferramenta de métricas do Google Analytics para o agente `pesquisador-olheiro`).
