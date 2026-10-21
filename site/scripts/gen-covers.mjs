@@ -30,7 +30,24 @@ function wrap(title, max = 24) {
     }
   }
   if (cur) lines.push(cur);
-  return lines.slice(0, 3);
+  return lines;
+}
+
+// Título em até 3 linhas na fonte grande; se não couber, até 4 numa fonte menor
+// (que cabe mais caracteres por linha, sem invadir o desenho à direita). Só se
+// nem assim couber, corta na 4ª linha com reticências — nunca no meio sem aviso.
+const TITULO_GRANDE = { size: 62, max: 24, lines: 3, y: 240, step: 74 };
+const TITULO_MENOR = { size: 50, max: 29, lines: 4, y: 222, step: 58 };
+
+function layoutTitle(title) {
+  const grande = wrap(title, TITULO_GRANDE.max);
+  if (grande.length <= TITULO_GRANDE.lines) return { ...TITULO_GRANDE, lines: grande };
+  const menor = wrap(title, TITULO_MENOR.max);
+  if (menor.length > TITULO_MENOR.lines) {
+    menor.length = TITULO_MENOR.lines;
+    menor[TITULO_MENOR.lines - 1] += '…';
+  }
+  return { ...TITULO_MENOR, lines: menor };
 }
 
 function wrapTags(items, max = 38) {
@@ -49,11 +66,11 @@ function wrapTags(items, max = 38) {
 }
 
 function buildSvg({ title, date, tags, accent }) {
-  const lines = wrap(title);
+  const { lines, size, y, step } = layoutTitle(title);
   const titleSvg = lines
     .map(
       (ln, i) =>
-        `<text x="80" y="${240 + i * 74}" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="62" font-weight="700" fill="#ffffff">${esc(ln)}</text>`,
+        `<text x="80" y="${y + i * step}" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="${size}" font-weight="700" fill="#ffffff">${esc(ln)}</text>`,
     )
     .join('\n  ');
   const dateStr = new Intl.DateTimeFormat('pt-BR', {
