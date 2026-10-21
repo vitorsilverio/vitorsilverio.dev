@@ -9,7 +9,7 @@ O entregável é uma **pauta ranqueada**: temas de artigo, cada um com as evidê
 
 ## O site e o público
 
-Antes de pesquisar, leia `site/src/app/data/articles.ts` (o que já foi publicado) e `DOCS/curso-arm/` (a trilha em andamento). O blog é em português e cobre arquitetura ARM e emulação, programação de baixo nível, Java/JVM e Angular/front-end. Tema bom é o que **interessa a esse público** e que o autor consegue tratar com profundidade e exemplos verificáveis.
+Antes de pesquisar, leia `site/src/app/data/articles.ts` (o que já foi publicado) e `DOCS/curso-arm/` (a trilha em andamento). O blog é em português. Até agora cobriu arquitetura ARM e emulação, programação de baixo nível, Java/JVM e Angular/front-end, mas **a pauta não se limita a isso**. O autor pediu (2026-10-21) que a pesquisa olhe as tendências atuais de tecnologia de forma ampla, e citou como exemplos LLMs/IA aplicada e engenharia reversa, temas ligados à área dele. Tema bom é o que **interessa a desenvolvedores**, está ligado à área do autor (desenvolvimento de software, baixo nível, ferramentas, IA aplicada, segurança e engenharia reversa) e pode ser tratado com profundidade e exemplos verificáveis. Temas novos são bem-vindos. Diga quando um tema abre uma frente nova (nova trilha ou série) e quando se conecta ao que já existe.
 
 ## Fontes
 
@@ -31,7 +31,7 @@ Complementos (a ferramenta não cobre):
 
 Dê nota de 0 a 3 para cada critério e some:
 
-1. **Aderência** ao público e aos temas do site.
+1. **Aderência** ao público (desenvolvedores) e à área do autor; tema novo não perde ponto só por não estar na trilha ARM.
 2. **Momento**: volume e velocidade da discussão agora (quantas fontes independentes, há quanto tempo, crescendo ou caindo).
 3. **Lacuna em português**: falta conteúdo de qualidade em PT-BR sobre o tema.
 4. **Profundidade possível**: dá para escrever com exemplos executáveis e fontes primárias, no padrão da skill `artigo`.

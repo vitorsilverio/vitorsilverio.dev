@@ -28,6 +28,20 @@
       "termos": ["Angular", "TypeScript"],
       "lobstersTags": [],
       "devtoTags": ["angular", "typescript"]
+    },
+    {
+      "id": "llm-ia",
+      "nome": "LLMs e IA aplicada ao desenvolvimento",
+      "termos": ["LLM", "AI agents", "MCP"],
+      "lobstersTags": ["ai"],
+      "devtoTags": ["ai", "llm"]
+    },
+    {
+      "id": "engenharia-reversa",
+      "nome": "Engenharia reversa e segurança de baixo nível",
+      "termos": ["reverse engineering", "Ghidra", "decompiler"],
+      "lobstersTags": ["reversing", "security"],
+      "devtoTags": ["reverseengineering", "security"]
     }
   ],
   "blogs": [
