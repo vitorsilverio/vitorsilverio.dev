@@ -68,7 +68,8 @@ O fluxo detalhado (e os 4 pontos de wiring) está em `site/CLAUDE.md`. Resumo:
 Depois de publicado, **o componente `src/app/pages/article-detail/posts/<slug>.ts` é a fonte da verdade**. Não apague nem regenere o post a partir do `.md`: o HTML publicado pode ter correções feitas à mão que não estão no Markdown, e a regeneração conflita com os componentes `app-bit-field`/`app-objdump` já montados. Para revisar ou corrigir um artigo publicado:
 
 - edite o `.ts` direto, preservando o que está correto (componentes, tabelas, imports, correções antigas) e seguindo o padrão de HTML do próprio arquivo;
-- dentro da template string: escape `` ` `` e `${`; no HTML, `&#123;`/`&#125;` para chaves e `&#64;` para `@`;
+- dentro da template string: escape `` ` `` e `${`; no HTML, `&#123;`/`&#125;` para chaves e `&#64;` para `@`. Atenção: `&#123;&#123;` colado o Angular lê como interpolação e quebra o template; para exibir `{{ x }}` use `&#123;<!-- -->&#123; x &#125;<!-- -->&#125;`;
+- `routerLink` exige `imports: [RouterLink]` no componente; sem ele o link sai sem `href` no HTML pré-renderizado (link morto);
 - blocos de código novos entram como `<pre><code class="language-XX">` em texto puro e recebem o realce com `node scripts/highlight-posts.mjs` (idempotente; percorre todos os posts, então rode uma vez só, sem outro agente editando posts ao mesmo tempo);
 - `readingTime`/`excerpt` mudam em `src/app/data/articles.ts`, à mão;
 - valide com `npm run build` e `npm run test -- --watch=false`.
