@@ -60,6 +60,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/arm-jitter-api-java').then((m) => m.ArticleArmJitterApiJava),
   'ghidra-llm-binario-arm': () =>
     import('./pages/article-detail/posts/ghidra-llm-binario-arm').then((m) => m.ArticleGhidraLlmBinarioArm),
+  'php2shell-anatomia-rce-php': () =>
+    import('./pages/article-detail/posts/php2shell-anatomia-rce-php').then((m) => m.ArticlePhp2shellAnatomiaRcePhp),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

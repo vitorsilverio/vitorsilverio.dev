@@ -226,4 +226,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Importe um ELF ARM/Thumb no Ghidra, aprenda a ler o decompilador, ligue o Ghidra a um modelo de linguagem pelo protocolo MCP e confira, com o código-fonte na mão, o que o modelo acertou, onde exagerou e onde só o decompilador enganou todo mundo.',
     tags: ['ARM', 'Thumb', 'Engenharia reversa', 'Ghidra', 'MCP', 'IA', 'Tutorial'],
   },
+  {
+    slug: 'php2shell-anatomia-rce-php',
+    title: 'php2shell: como funcionam as duas falhas de RCE do PHP e como se defender',
+    date: '2026-10-22',
+    readingTime: '13 min',
+    excerpt: 'Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo em nível conceitual, sem exploit, e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.',
+    tags: ['PHP', 'Segurança', 'CVE', 'RCE', 'PHP-FPM', 'mod_php', 'Defesa'],
+  },
 ];

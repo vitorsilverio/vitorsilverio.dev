@@ -31,6 +31,7 @@
 /artigos/montar-e-ligar-arm
 /artigos/arm-jitter-api-java
 /artigos/ghidra-llm-binario-arm
+/artigos/php2shell-anatomia-rce-php
 /tags/arm
 /tags/tutorial
 /tags/arm-jitter
@@ -63,6 +64,8 @@
 /tags/c
 /tags/carreira
 /tags/chamada
+/tags/cve
+/tags/defesa
 /tags/elf
 /tags/engenharia-reversa
 /tags/eor
@@ -79,11 +82,16 @@
 /tags/linker
 /tags/load-store
 /tags/mcp
+/tags/mod-php
 /tags/modos
 /tags/orr
 /tags/pessoal
+/tags/php
+/tags/php-fpm
 /tags/pipeline
 /tags/predicacao
+/tags/rce
+/tags/seguranca
 /tags/semihosting
 /tags/signals
 /tags/sub-rotinas
