@@ -5,7 +5,20 @@
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 
-loadLanguages(['bash', 'armasm', 'typescript', 'java', 'c']);
+loadLanguages([
+  'bash',
+  'armasm',
+  'typescript',
+  'java',
+  'c',
+  'nginx',
+  'apacheconf',
+  'ini',
+  'log',
+  'php',
+  'json',
+  'yaml',
+]);
 
 // Aliases de linguagem usados nos artigos -> gramática do Prism.
 const LANG_ALIAS = {
@@ -19,6 +32,9 @@ const LANG_ALIAS = {
   java: 'java',
   c: 'c',
   h: 'c',
+  apache: 'apacheconf',
+  conf: 'ini',
+  yml: 'yaml',
 };
 
 const NAMED = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };

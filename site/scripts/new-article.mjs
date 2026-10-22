@@ -306,6 +306,14 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
 
   const renderer = new marked.Renderer();
 
+  // Título da seção corrente, para nomear tabelas que não têm legenda explícita.
+  let tituloSecao = null;
+  renderer.heading = function (token) {
+    const t = (token.text ?? '').trim();
+    if (t) tituloSecao = t;
+    return marked.Renderer.prototype.heading.call(this, token);
+  };
+
   // A "linguagem" do fence é o tipo; o resto da linha vira legenda.
   //   ```objdump  Trecho do laço
   //   ```bitfield e0810002 = add r0, r1, r2
@@ -375,6 +383,12 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   renderer.table = (token) => {
     const cap = captions.shift();
     const caption = cap ? `<caption>${escapeHtml(cap)}</caption>` : '';
+    // Nome acessível: legenda explícita; senão o título da seção; senão genérico.
+    const rotulo = cap
+      ? `${cap} (rolável)`
+      : tituloSecao
+        ? `Tabela: ${tituloSecao} (rolável)`
+        : 'Tabela (rolável)';
     const head = token.header
       .map((c) => `<th scope="col">${marked.parseInline(c.text)}</th>`)
       .join('');
@@ -392,7 +406,7 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
       .join('\n');
     return (
       // Tabela larga rola dentro do contêiner: precisa de foco por teclado (WCAG 2.1.1).
-      `<div class="scroll-x" tabindex="0" role="group" aria-label="${escAttr(cap ?? 'Tabela')} (rolável)">\n  <table>\n    ${caption}` +
+      `<div class="scroll-x" tabindex="0" role="group" aria-label="${escAttr(rotulo)}">\n  <table>\n    ${caption}` +
       `<thead>\n      <tr>${head}</tr>\n    </thead>\n` +
       `    <tbody>\n${rows}\n    </tbody>\n  </table>\n</div>\n`
     );

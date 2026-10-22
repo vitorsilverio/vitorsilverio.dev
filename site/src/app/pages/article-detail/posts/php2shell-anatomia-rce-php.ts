@@ -54,7 +54,7 @@ import { Nota } from '../../../shared/nota/nota';
 <pre><code class="language-bash">php-fpm <span class="token parameter variable">-v</span>
 apache2 <span class="token parameter variable">-M</span> <span class="token operator">|</span> <span class="token function">grep</span> php</code></pre>
 <p><strong>Passo 2: compare com as versões corrigidas.</strong></p>
-<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
+<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Estou exposto? (rolável)">
   <table>
     <thead>
       <tr><th scope="col">Ramo</th><th scope="col">Corrigido em</th></tr>
@@ -115,11 +115,11 @@ php-fpm <span class="token parameter variable">-tt</span> <span class="token ope
 <li><strong>Processos que caem.</strong> No FPM, linhas como <code>child ... exited on signal 11 (SIGSEGV)</code> no log do <code>php-fpm</code>; no Apache, <code>child pid ... exit signal Segmentation fault</code> no <code>error.log</code>. Falhas de segmentação em sequência, num servidor que antes não as tinha, merecem investigação (e podem indicar também tentativas fracassadas).</li>
 <li><strong>Requisições multipart suspeitas.</strong> <code>POST</code> com <code>Content-Type: multipart/form-data</code> em rotas que normalmente não recebem arquivo, corpos incomumente grandes em relação ao que a aplicação espera, ou com transferência <strong>chunked</strong> (<code>Transfer-Encoding: chunked</code>) sem <code>Content-Length</code>. Por padrão os logs de acesso não registram isso, então vale habilitar temporariamente os campos no formato de log:</li>
 </ol>
-<pre><code class="language-nginx"># nginx: acrescente ao log_format
-log_format php2shell '$remote_addr [$time_local] "$request" $status $request_length '
-                     'te="$http_transfer_encoding" ct="$content_type"';</code></pre>
-<pre><code class="language-apache"># Apache: LogFormat com o tipo e a codificação de transferência
-LogFormat "%h %t \\"%r\\" %&gt;s %I te=\\"%&#123;Transfer-Encoding&#125;i\\" ct=\\"%&#123;Content-Type&#125;i\\"" php2shell</code></pre>
+<pre><code class="language-nginx"><span class="token comment"># nginx: acrescente ao log_format</span>
+<span class="token directive"><span class="token keyword">log_format</span> php2shell <span class="token string">'<span class="token variable">$remote_addr</span> [<span class="token variable">$time_local]</span> "<span class="token variable">$request</span>" <span class="token variable">$status</span> <span class="token variable">$request_length</span> '</span>
+                     <span class="token string">'te="<span class="token variable">$http_transfer_encoding</span>" ct="<span class="token variable">$content_type</span>"'</span></span><span class="token punctuation">;</span></code></pre>
+<pre><code class="language-apache"><span class="token comment"># Apache: LogFormat com o tipo e a codificação de transferência</span>
+<span class="token directive-inline property">LogFormat</span> <span class="token string">"<span class="token variable">%h</span> <span class="token variable">%t</span> \\"<span class="token variable">%r</span>\\" %>s <span class="token variable">%I</span> te=\\"<span class="token variable">%&#123;Transfer-Encoding&#125;</span>i\\" ct=\\"<span class="token variable">%&#123;Content-Type&#125;</span>i\\""</span> php2shell</code></pre>
 <ol start="4">
 <li><strong>Padrão de dois tempos.</strong> Como o ataque usa uma requisição para deixar estado corrompido e outra para consumi-lo, procure, num mesmo IP e janela curta, uma requisição multipart anormal seguida de outra de upload progress ou de erro fatal. Nos logs, uma sequência de <code>POST</code> multipart e uma queda de worker logo depois.</li>
 <li><strong>Sinais pós-comprometimento.</strong> Se houver suspeita, o que vale mais que o log de entrada é a máquina: arquivos <code>.php</code> novos ou alterados em diretórios de upload e de aplicação, processos filhos incomuns do usuário do servidor web (<code>www-data</code>, <code>apache</code>, <code>nginx</code>), conexões de saída novas. Compare com o último deploy conhecido.</li>
@@ -130,7 +130,7 @@ LogFormat "%h %t \\"%r\\" %&gt;s %I te=\\"%&#123;Transfer-Encoding&#125;i\\" ct=
 <span class="token function">awk</span> <span class="token string">'$0 ~ /te="chunked"/ &amp;&amp; $0 ~ /multipart/'</span> /var/log/nginx/php2shell.log</code></pre>
 <p>Se encontrar algo, trate como incidente: isole, preserve os logs, atualize e troque credenciais acessíveis ao processo PHP (senhas de banco, chaves de API, <code>wp-config.php</code> e equivalentes), porque RCE roda com os privilégios do worker.</p>
 <h2>Glossário</h2>
-<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
+<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Glossário (rolável)">
   <table>
     <thead>
       <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
@@ -162,7 +162,7 @@ LogFormat "%h %t \\"%r\\" %&gt;s %I te=\\"%&#123;Transfer-Encoding&#125;i\\" ct=
   </table>
 </div>
 <h2>Comandos</h2>
-<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
+<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Comandos (rolável)">
   <table>
     <thead>
       <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
