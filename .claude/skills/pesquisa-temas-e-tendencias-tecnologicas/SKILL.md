@@ -9,7 +9,7 @@ O entregável é uma **pauta ranqueada**: temas de artigo, cada um com as evidê
 
 ## O site e o público
 
-Antes de pesquisar, leia `site/src/app/data/articles.ts` (o que já foi publicado) e `DOCS/curso-arm/` (a trilha em andamento). O blog é em português. Até agora cobriu arquitetura ARM e emulação, programação de baixo nível, Java/JVM e Angular/front-end, mas **a pauta não se limita a isso**. O autor pediu (2026-10-21) que a pesquisa olhe as tendências atuais de tecnologia de forma ampla, e citou como exemplos LLMs/IA aplicada e engenharia reversa, temas ligados à área dele. Tema bom é o que **interessa a desenvolvedores**, está ligado à área do autor (desenvolvimento de software, baixo nível, ferramentas, IA aplicada, segurança e engenharia reversa) e pode ser tratado com profundidade e exemplos verificáveis. Temas novos são bem-vindos. Diga quando um tema abre uma frente nova (nova trilha ou série) e quando se conecta ao que já existe.
+Antes de pesquisar, leia **`DOCS/pauta/HISTORICO-TOP5.md`** (o top 5 dos últimos dias) e leve esses temas em conta: dê continuidade (encadeie séries, aproveite o que ficou forte mas ainda não virou artigo) e não re-ranqueie no topo algo que acabou de sair. Leia também `site/src/app/data/articles.ts` (o que já foi publicado) e `DOCS/curso-arm/` (a trilha em andamento). O blog é em português. Até agora cobriu arquitetura ARM e emulação, programação de baixo nível, Java/JVM e Angular/front-end, mas **a pauta não se limita a isso**. O autor pediu (2026-10-21) que a pesquisa olhe as tendências atuais de tecnologia de forma ampla, e citou como exemplos LLMs/IA aplicada e engenharia reversa, temas ligados à área dele. Tema bom é o que **interessa a desenvolvedores**, está ligado à área do autor (desenvolvimento de software, baixo nível, ferramentas, IA aplicada, segurança e engenharia reversa) e pode ser tratado com profundidade e exemplos verificáveis. Temas novos são bem-vindos. Diga quando um tema abre uma frente nova (nova trilha ou série) e quando se conecta ao que já existe.
 
 ## Fontes
 
@@ -48,6 +48,8 @@ Dê nota de 0 a 3 para cada critério e some:
 ## Confidencialidade
 
 O repositório é **público**. A pauta é salva em `DOCS/pauta/PAUTA-AAAA-MM-DD.md`, que está no `.gitignore`. Nunca versione pauta, ranking ou ficha de artigo futuro, nem os cite em mensagem de commit. Rotina do autor: pauta todo dia; a série ARM fica para o fim de semana.
+
+Ao terminar a rodada, **atualize `DOCS/pauta/HISTORICO-TOP5.md`**: acrescente o top 5 do dia no topo e mantenha só os **últimos 7 dias** (remova os mais antigos). Esse arquivo também está no `.gitignore`.
 
 ## Formato da entrega
 
