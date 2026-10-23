@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --bg: #f6f6f9;
   --surface: #ffffff;
   --surface-2: #f0f0f5;
@@ -51,6 +52,7 @@
 }
 
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0e0e16;
   --surface: #181822;
   --surface-2: #20202c;
@@ -470,6 +472,12 @@ button.tag:hover {
 .scroll-x:focus-visible,
 .prose pre:focus-visible {
   outline-offset: -3px;
+}
+
+/* O bloco de código é escuro nos dois temas e o contorno fica por dentro dele: o --ring do tema
+   claro (índigo escuro) dava só 2,1:1 contra o fundo do bloco (WCAG 1.4.11 pede 3:1). */
+.prose pre:focus-visible {
+  outline-color: #c7d2fe;
 }
 
 .prose table {

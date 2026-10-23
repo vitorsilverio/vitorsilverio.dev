@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { secoesFormula, tagFormula } from './formula.mjs';
+import { palavrasSoltas, secoesFormula, tagFormula } from './formula.mjs';
 
 const ident = (s: string) => s;
 const corpo = [
@@ -58,6 +58,18 @@ describe('formula', () => {
     const r = tagFormula('', '\\frac{1', ident);
     expect(r.html).toBeNull();
     expect(r.erros[0]).toContain('LaTeX inválido');
+  });
+
+  it('avisa de palavra solta no LaTeX (comando sem a barra invertida)', () => {
+    const r = tagFormula('', 'T(k) approx 2^{k/2}', ident);
+    expect(r.erros).toHaveLength(1);
+    expect(r.erros[0]).toContain('"approx"');
+  });
+
+  it('não avisa de comandos com barra, \\text{...} nem de letras isoladas', () => {
+    expect(palavrasSoltas('T(k) \\approx 2^{k/2} \\quad\\text{até}\\quad \\mathrm{mod}\\, n')).toEqual([]);
+    expect(palavrasSoltas('x(d \\cdot G) \\mapsto d')).toEqual([]);
+    expect(tagFormula('', 'Q = d \\cdot G', ident).erros).toEqual([]);
   });
 
   it('cerca vazia vira aviso', () => {

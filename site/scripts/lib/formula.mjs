@@ -25,6 +25,18 @@ function mathml(tex, display) {
   return html.replace(/ xmlns="[^"]*"/, '');
 }
 
+/**
+ * Palavra solta no LaTeX quase sempre é um comando sem a barra invertida (`approx` em vez de
+ * `\approx`): o Temml aceita e desenha as letras uma a uma, em itálico. Texto de verdade
+ * entra em `\text{...}`, `\mathrm{...}` etc., que são ignorados aqui.
+ */
+export function palavrasSoltas(tex) {
+  const semTexto = tex
+    .replace(/\\(?:text|textbf|textit|mathrm|mathbf|mathit|operatorname|mbox)\s*\{[^}]*\}/g, ' ')
+    .replace(/\\[A-Za-z]+/g, ' ');
+  return [...new Set(semTexto.match(/[A-Za-z]{4,}/g) ?? [])];
+}
+
 /** Divide o corpo em seções separadas por uma linha só com `---`. */
 export function secoesFormula(texto) {
   return texto
@@ -47,6 +59,10 @@ export function tagFormula(titulo, texto, renderInline) {
     eq = mathml(tex.replace(/\s*\n\s*/g, ' '), true);
   } catch (e) {
     return { html: null, erros: [`LaTeX inválido em \`\`\`formula (${e.message}): ${tex}`] };
+  }
+
+  for (const w of palavrasSoltas(tex)) {
+    erros.push(`LaTeX com a palavra solta "${w}": faltou a barra invertida (\\${w}) ou \\text{${w}}?`);
   }
 
   const itens = [];

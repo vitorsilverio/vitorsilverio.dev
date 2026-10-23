@@ -1,4 +1,12 @@
-import { Component, computed, input } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+} from '@angular/core';
 
 let proximoId = 0;
 
@@ -36,6 +44,35 @@ let proximoId = 0;
 export class Formula {
   /** Nome curto da fórmula (opcional), mostrado no cabeçalho. */
   readonly titulo = input<string>('');
+
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    const destroy = inject(DestroyRef);
+    afterNextRender(() => {
+      const eq = this.el.nativeElement.querySelector<HTMLElement>('.eq');
+      if (!eq || typeof ResizeObserver === 'undefined') return;
+      // O servidor não sabe medir e marca o painel como focável; aqui só fica na ordem de Tab
+      // a fórmula que de fato rola (mesma regra de `ProseEnhance` para `pre` e tabelas).
+      const ajustar = () => {
+        if (eq.clientWidth === 0) return;
+        const rola = eq.scrollWidth > eq.clientWidth + 1;
+        if (rola) {
+          eq.setAttribute('tabindex', '0');
+          eq.setAttribute('role', 'group');
+        } else {
+          eq.removeAttribute('tabindex');
+          eq.removeAttribute('role');
+        }
+      };
+      const obs = new ResizeObserver(ajustar);
+      obs.observe(eq);
+      const math = eq.querySelector('math');
+      if (math) obs.observe(math);
+      ajustar();
+      destroy.onDestroy(() => obs.disconnect());
+    });
+  }
 
   protected readonly idTitulo = `formula-titulo-${++proximoId}`;
 

@@ -93,7 +93,7 @@ import { Nota } from '../../../shared/nota/nota';
   <p>Percorro os múltiplos de <code>G</code> em ordem e comparo cada um com <code>Q</code>. Como <code>d &lt; 256</code>, são no máximo 255 comparações; o <code>k</code> em que o ponto casa com <code>Q</code> é a chave privada <code>d</code>.</p>
 </app-formula>
 <app-formula titulo="Custo do baby-step giant-step">
-  <math display="block" class="tml-display" style="display:block math;"><mrow><mi>T</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>k</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mi>a</mi><mi>p</mi><mi>p</mi><mi>r</mi><mi>o</mi><mi>x</mi><msup><mn>2</mn><mrow><mi>k</mi><mi>/</mi><mn>2</mn></mrow></msup></mrow></math>
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mi>T</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>k</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mo>≈</mo><msup><mn>2</mn><mrow><mi>k</mi><mi>/</mi><mn>2</mn></mrow></msup></mrow></math>
   <dl>
     <dt><math><mi>k</mi></math></dt>
     <dd>o tamanho de <code>d</code> em bits</dd>

@@ -72,4 +72,72 @@ describe('Formula', () => {
     expect(b.querySelector('.eq')!.getAttribute('aria-label')).toMatch(/^Fórmula \(/);
     expect(a.querySelector('.titulo')!.id).not.toBe(b.querySelector('.titulo')!.id);
   });
+
+  describe('parada de Tab só quando a fórmula rola', () => {
+    let medidas = { cliente: 0, conteudo: 0 };
+    let callbacks: Array<() => void> = [];
+    const original = {
+      cliente: Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth'),
+      conteudo: Object.getOwnPropertyDescriptor(Element.prototype, 'scrollWidth'),
+      observer: globalThis.ResizeObserver,
+    };
+
+    beforeEach(() => {
+      callbacks = [];
+      Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
+        configurable: true,
+        get(this: HTMLElement) {
+          return this.classList.contains('eq') ? medidas.cliente : 0;
+        },
+      });
+      Object.defineProperty(Element.prototype, 'scrollWidth', {
+        configurable: true,
+        get(this: Element) {
+          return this.classList.contains('eq') ? medidas.conteudo : 0;
+        },
+      });
+      globalThis.ResizeObserver = class {
+        constructor(cb: () => void) {
+          callbacks.push(cb);
+        }
+        observe() {}
+        disconnect() {}
+      } as unknown as typeof ResizeObserver;
+    });
+
+    afterEach(() => {
+      if (original.cliente)
+        Object.defineProperty(HTMLElement.prototype, 'clientWidth', original.cliente);
+      if (original.conteudo)
+        Object.defineProperty(Element.prototype, 'scrollWidth', original.conteudo);
+      globalThis.ResizeObserver = original.observer;
+    });
+
+    it('tira o painel da ordem de Tab quando a fórmula cabe inteira', async () => {
+      medidas = { cliente: 600, conteudo: 600 };
+      const el = await montar();
+      const eq = el.querySelector<HTMLElement>('.eq')!;
+      expect(eq.hasAttribute('tabindex')).toBe(false);
+      expect(eq.hasAttribute('role')).toBe(false);
+    });
+
+    it('mantém o painel focável e com role quando a fórmula rola', async () => {
+      medidas = { cliente: 227, conteudo: 343 };
+      const el = await montar();
+      const eq = el.querySelector<HTMLElement>('.eq')!;
+      expect(eq.tabIndex).toBe(0);
+      expect(eq.getAttribute('role')).toBe('group');
+      expect(eq.getAttribute('aria-label')).toContain('role na horizontal');
+    });
+
+    it('reavalia quando o tamanho muda (girar a tela, zoom)', async () => {
+      medidas = { cliente: 600, conteudo: 600 };
+      const el = await montar();
+      const eq = el.querySelector<HTMLElement>('.eq')!;
+      expect(eq.hasAttribute('tabindex')).toBe(false);
+      medidas = { cliente: 300, conteudo: 600 };
+      callbacks.forEach((cb) => cb());
+      expect(eq.tabIndex).toBe(0);
+    });
+  });
 });
