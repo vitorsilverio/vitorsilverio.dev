@@ -47,6 +47,8 @@ export class ProseEnhance implements AfterViewChecked, OnDestroy {
 
   private readonly usados = new Set<string>();
   private readonly feitos = new WeakSet<Element>();
+  /** Nome acessível de cada região rolável: só vale enquanto ela tem role (ver ajustarRolagem). */
+  private readonly nomes = new WeakMap<Element, { label: string | null; labelledby: string | null }>();
   private status: HTMLElement | null = null;
   private mutation?: MutationObserver;
   private resize?: ResizeObserver;
@@ -105,6 +107,7 @@ export class ProseEnhance implements AfterViewChecked, OnDestroy {
     if (!r.hasAttribute('aria-label') && !r.hasAttribute('aria-labelledby')) {
       r.setAttribute('aria-label', this.rotuloRegiao(r));
     }
+    this.nomes.set(r, { label: r.getAttribute('aria-label'), labelledby: r.getAttribute('aria-labelledby') });
   }
 
   private rotuloRegiao(r: HTMLElement): string {
@@ -138,9 +141,15 @@ export class ProseEnhance implements AfterViewChecked, OnDestroy {
       if (rola) {
         r.setAttribute('tabindex', '0');
         r.setAttribute('role', 'group');
+        const n = this.nomes.get(r);
+        if (n?.label != null) r.setAttribute('aria-label', n.label);
+        if (n?.labelledby != null) r.setAttribute('aria-labelledby', n.labelledby);
       } else {
         r.removeAttribute('tabindex');
         r.removeAttribute('role');
+        // aria-label/labelledby em elemento sem role é proibido (axe: aria-prohibited-attr; WCAG 4.1.2).
+        r.removeAttribute('aria-label');
+        r.removeAttribute('aria-labelledby');
       }
     });
   }

@@ -171,7 +171,7 @@ import { Nota } from '../../../shared/nota/nota';
       Cada condição (bits 31..28) é uma combinação lógica de N, Z, C, V.
       Tabela com os mais usados:
     </p>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Desvios condicionais e suas flags</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Cond</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Expressão lógica</th><th scope="col" role="columnheader">Quando usar</th></tr>
@@ -308,7 +308,7 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
     </ul>
 
     <h2>Inspecionar as flags no GDB</h2>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Flags e como inspecioná-las</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Flag</th><th scope="col" role="columnheader">Bit</th><th scope="col" role="columnheader">Testar no GDB</th></tr>

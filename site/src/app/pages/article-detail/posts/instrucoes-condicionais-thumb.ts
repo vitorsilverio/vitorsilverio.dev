@@ -179,7 +179,7 @@ import { Nota } from '../../../shared/nota/nota';
         O <code>firstcond</code> (bits 7..4) é o código da condição do
         <strong>primeiro</strong> bloco (THEN). Para <code>LT</code>, é
         <code>1011</code>.
-        <div class="scroll-x"><table class="tabela-lista" role="table">
+        <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
           <caption>Tabela de Condições</caption>
           <thead role="rowgroup">
             <tr role="row"><th scope="col" role="columnheader">Código</th><th scope="col" role="columnheader">Condição</th></tr>
@@ -217,7 +217,7 @@ import { Nota } from '../../../shared/nota/nota';
       </ol>
       Portanto, a sequência final une o THEN obrigatório da primeira instrução com o ELSE calculado da segunda: <strong><code>ITE</code></strong>.
 
-      <div class="scroll-x"><table class="tabela-lista" role="table">
+      <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
         <caption>Tabela de máscaras possíveis e como elas se traduzem em instruções THEN/ELSE dependendo do valor de firstcond[0]</caption>
         <thead role="rowgroup">
           <tr role="row"><th scope="col" role="columnheader">mask</th><th scope="col" role="columnheader">Terminador</th><th scope="col" role="columnheader">Qtd. de Instruções</th><th scope="col" role="columnheader">Se firstcond[0] == 0</th><th scope="col" role="columnheader">Se firstcond[0] == 1</th></tr>

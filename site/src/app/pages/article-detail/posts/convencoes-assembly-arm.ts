@@ -23,7 +23,7 @@ import { Nota } from '../../../shared/nota/nota';
 <p>A diretiva é necessária: segundo o manual do GNU <code>as</code>, o padrão é a sintaxe <em>divided</em>. Na prática o programa mínimo <code>hello.s</code> do <code>arm-box</code> funciona sem ela, porque só usa instruções sem sufixos. Mas basta um <code>addsne</code> para a diferença aparecer: em um arquivo sem <code>.syntax unified</code>, o <code>arm-none-eabi-as</code> responde <code>Error: bad instruction &#96;addsne r0,r0,#1'</code>, porque na sintaxe dividida a ordem é outra (veja &quot;Anatomia de um mnemônico&quot; adiante).</p>
 <p>O montador é o <strong><code>arm-none-eabi-as</code></strong> do toolchain GNU. É o mesmo <code>as</code> do GCC — então a sintaxe de diretivas é a do <strong>GAS</strong> (GNU assembler), não a do <code>armasm</code> da ARM. As diferenças que importam:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Item</th><th scope="col" role="columnheader">GAS (esta trilha)</th><th scope="col" role="columnheader"><code>armasm</code> (ARM)</th></tr>
     </thead>

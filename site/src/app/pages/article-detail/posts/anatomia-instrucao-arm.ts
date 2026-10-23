@@ -58,7 +58,7 @@ import { Nota } from '../../../shared/nota/nota';
     />
 <h3><code>e0810002</code> = <code>add r0, r1, r2</code></h3>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Campo</th><th scope="col" role="columnheader">Bits</th><th scope="col" role="columnheader">Valor</th><th scope="col" role="columnheader">Leitura</th></tr>
     </thead>
@@ -98,7 +98,7 @@ import { Nota } from '../../../shared/nota/nota';
 </app-nota>
 <p><strong>Registrador deslocado (I = 0):</strong> <code>shift[11:4]</code> + <code>Rm[3:0]</code>. O <code>shift</code> pode ser por imediato (<code>Rm, LSL #3</code>) ou por outro registrador (<code>Rm, LSL r4</code>). Os tipos:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Tipo</th><th scope="col" role="columnheader">Bits [6:5]</th><th scope="col" role="columnheader">Efeito</th><th scope="col" role="columnheader">Afeta C (com S)?</th></tr>
     </thead>
@@ -133,7 +133,7 @@ import { Nota } from '../../../shared/nota/nota';
 />
 
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Bit</th><th scope="col" role="columnheader">Nome</th><th scope="col" role="columnheader">1 significa</th></tr>
     </thead>
@@ -148,7 +148,7 @@ import { Nota } from '../../../shared/nota/nota';
 </div>
 <p>As três formas do assembly:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Assembly</th><th scope="col" role="columnheader">P</th><th scope="col" role="columnheader">W</th><th scope="col" role="columnheader">Efeito</th></tr>
     </thead>

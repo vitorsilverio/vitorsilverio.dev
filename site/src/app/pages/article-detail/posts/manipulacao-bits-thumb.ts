@@ -56,7 +56,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token punctuation">(</span><span class="token number">32</span><span class="token operator">-</span>bit wide<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">ANDS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f011 000f</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th><th scope="col" role="columnheader">Codificação</th></tr>
@@ -77,7 +77,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">ORRS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f051 000f</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
@@ -99,7 +99,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">EORS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>    <span class="token comment">; f091 0001</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
@@ -120,7 +120,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">BICS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0xF0</span>    <span class="token comment">; f031 00f0</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
@@ -146,7 +146,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">MVN.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>            <span class="token comment">; f06f 0000</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
@@ -180,7 +180,7 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">TST.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x04</span>         <span class="token comment">; f010 0f04</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
@@ -200,7 +200,7 @@ import { Nota } from '../../../shared/nota/nota';
     </p>
 
     <h2>Tabela: operações lógicas (bytes verificados)</h2>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Operações lógicas — ARM vs Thumb-2</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">ARM (hex)</th><th scope="col" role="columnheader">Thumb-2 (hex)</th><th scope="col" role="columnheader">Tamanho</th><th scope="col" role="columnheader">flags?</th></tr>
@@ -267,7 +267,7 @@ import { Nota } from '../../../shared/nota/nota';
     <span class="token instruction keyword">LSRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>         <span class="token comment">; 0888  (16-bit!)</span>
     <span class="token instruction keyword">ASRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>         <span class="token comment">; 1048  (16-bit!)</span>
     <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ROR <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; ea5f 2031  (é o que o assembler gera para RORS r0, r1, #8)</span></code></pre>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Shifts — bytes verificados (devkitARM)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">ARM (hex)</th><th scope="col" role="columnheader">Thumb (hex)</th><th scope="col" role="columnheader">Tamanho</th></tr>
@@ -349,7 +349,7 @@ import { Nota } from '../../../shared/nota/nota';
     <p>Bytes: <code>F3 C1 20 07</code></p>
 
     <h2>Tabela: instruções de campo de bits</h2>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>BFI, BFC, UBFX — bytes verificados</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Bytes (hex)</th><th scope="col" role="columnheader">Tamanho</th><th scope="col" role="columnheader">Disponível em (ARMv7)</th><th scope="col" role="columnheader">Uso típico</th></tr>
@@ -362,7 +362,7 @@ import { Nota } from '../../../shared/nota/nota';
     </table></div>
 
     <h2>Comparativo ARM vs Thumb-2: o que muda de fato</h2>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Diferenças entre ARM mode e Thumb-2</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Aspecto</th><th scope="col" role="columnheader">ARM mode</th><th scope="col" role="columnheader">Thumb-2</th></tr>

@@ -19,7 +19,7 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>Os 16 registradores visíveis</h2>
 <p>Em qualquer instante, o programa enxerga <strong>R0–R15</strong>, todos de 32 bits:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Registrador</th><th scope="col" role="columnheader">Apelido</th><th scope="col" role="columnheader">Papel</th></tr>
     </thead>
@@ -42,7 +42,7 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>O CPSR, bit a bit</h2>
 <p>O <em>Current Program Status Register</em> carrega o estado de execução. Os campos que importam nesta trilha:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Bits</th><th scope="col" role="columnheader">Campo</th><th scope="col" role="columnheader">Significado</th></tr>
     </thead>
@@ -68,7 +68,7 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>Modos de processador e register banking</h2>
 <p>O ARM tem <strong>modos</strong> de execução. Cada exceção entra em um modo específico, e alguns registradores são <strong>bancados</strong>: R13/R14 (e, no FIQ, também R8–R12) têm cópias físicas distintas por modo. Trocar de modo troca <em>qual</em> R13 você enxerga — sem salvar nada explicitamente.</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">M[4:0]</th><th scope="col" role="columnheader">Entra quando</th><th scope="col" role="columnheader">Bancados além de R0–R12/R15</th></tr>
     </thead>

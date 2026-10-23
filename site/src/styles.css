@@ -77,6 +77,21 @@ html {
      lateral do conteúdo centralizado quando a barra de rolagem aparece
      (causa comum de CLS em desktop). */
   scrollbar-gutter: stable;
+  /* O cabeçalho é fixo no topo (sticky, ~4rem): âncoras e elementos focados por Shift+Tab não
+     podem ficar atrás dele (WCAG 2.4.11). Com o scroll-margin-top de 0.5rem dos títulos, a
+     âncora continua parando 5rem abaixo do topo, como antes. */
+  scroll-padding-top: 4.5rem;
+}
+
+/* Foco não encoberto (WCAG 2.4.11): enquanto o banner de cookies está na tela (fixo, até ~9rem
+   em tela estreita), o navegador não pode deixar o elemento focado por Tab atrás dele. */
+html:has(.consent-banner) {
+  scroll-padding-bottom: 10rem;
+}
+
+/* E no fim da página, onde não há mais o que rolar, o rodapé ganha respiro para sair de baixo dele. */
+html:has(.consent-banner) body {
+  padding-bottom: 9rem;
 }
 
 body {
@@ -317,13 +332,13 @@ button.tag:hover {
 .prose h2 {
   margin-top: 2rem;
   font-size: 1.6rem;
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 0.5rem;
 }
 
 .prose h3 {
   margin-top: 1.5rem;
   font-size: 1.3rem;
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 0.5rem;
 }
 
 /* Link direto para a seção, criado em runtime por ProseEnhance. */
@@ -489,6 +504,12 @@ button.tag:hover {
   font-size: 0.95rem;
 }
 
+/* Opt-out da lista (comparação entre colunas, células curtas): continua tabela, mas sem o piso de
+   32rem, para caber sem rolar quando o conteúdo é curto; se não couber, o contêiner rola. */
+.prose table.tabela-matriz {
+  min-width: 0;
+}
+
 .prose caption {
   text-align: left;
   font-weight: 600;
@@ -516,27 +537,27 @@ button.tag:hover {
    Quem decide é a largura do próprio contêiner (container query), não a da janela: abaixo de
    40rem o bloco vira "nome da coluna: valor" por linha. Sem suporte a :has()/@container a
    tabela segue rolando como antes. Opt-out: class="tabela-matriz" no <table> (sem a marcação). */
-.scroll-x:has(> table.tabela-lista) {
+.scroll-x:has(> table.tabela-lista:not(.tabela-matriz)) {
   container-type: inline-size;
 }
 
 @container (max-width: 40rem) {
-  .prose table.tabela-lista {
+  .prose table.tabela-lista:not(.tabela-matriz) {
     display: block;
     min-width: 0;
   }
 
-  .prose table.tabela-lista caption {
+  .prose table.tabela-lista:not(.tabela-matriz) caption {
     display: block;
   }
 
-  .prose table.tabela-lista tbody {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody {
     display: block;
   }
 
   /* O cabeçalho sai só da vista: continua na árvore de acessibilidade (nada de display: none),
      e é ele que dá nome às colunas para o leitor de tela. */
-  .prose table.tabela-lista thead {
+  .prose table.tabela-lista:not(.tabela-matriz) thead {
     display: block;
     position: absolute;
     width: 1px;
@@ -548,7 +569,7 @@ button.tag:hover {
     white-space: nowrap;
   }
 
-  .prose table.tabela-lista tbody tr {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody tr {
     display: block;
     margin: 0 0 0.75rem;
     padding: 0.25rem 0.875rem;
@@ -557,26 +578,26 @@ button.tag:hover {
     background: var(--surface);
   }
 
-  .prose table.tabela-lista tbody tr:last-child {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody tr:last-child {
     margin-bottom: 0;
   }
 
-  .prose table.tabela-lista tbody th,
-  .prose table.tabela-lista tbody td {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody th,
+  .prose table.tabela-lista:not(.tabela-matriz) tbody td {
     display: block;
     padding: 0.5rem 0;
     border: 0;
     overflow-wrap: anywhere;
   }
 
-  .prose table.tabela-lista tbody tr > * + * {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody tr > * + * {
     border-top: 1px solid var(--border);
   }
 
   /* Rótulo "nome da coluna:". A 2ª declaração, com texto alternativo vazio depois da barra,
      tira o rótulo gerado da leitura (o leitor de tela já anuncia o cabeçalho da coluna pela
      semântica de tabela); navegadores sem essa sintaxe ignoram a 2ª e ficam com a 1ª. */
-  .prose table.tabela-lista tbody [data-label]::before {
+  .prose table.tabela-lista:not(.tabela-matriz) tbody [data-label]::before {
     content: attr(data-label) ':';
     content: attr(data-label) ':' / '';
     display: block;
@@ -660,7 +681,7 @@ button.tag:hover {
 }
 
 .prose tr[id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 0.5rem;
 }
 
 .prose tr.glos-alvo > * {

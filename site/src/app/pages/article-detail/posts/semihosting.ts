@@ -29,7 +29,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <h2>A instrução de captura depende do perfil</h2>
 <p>Não existe uma única instrução de semihosting. Ela muda conforme o perfil do processador e o conjunto de instruções (<code>A32</code> é o modo ARM de 32 bits, <code>T32</code> é o Thumb, <code>A64</code> é o AArch64). A tabela abaixo é a da especificação da Arm:</p>
 <div class="scroll-x">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <caption>Instruções de captura do semihosting</caption>
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Perfil / estado</th><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Opcode</th></tr>

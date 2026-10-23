@@ -14,6 +14,10 @@
   color: #f8fafc;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Com texto ampliado (200%) ou zoom alto o banner pode passar da tela: rola por dentro
+     em vez de esconder os botões (WCAG 1.4.4 e 1.4.10). */
+  max-height: calc(100dvh - 1rem);
+  overflow-y: auto;
 }
 
 .consent-text {
@@ -44,11 +48,13 @@
 /* Rejeitar e Aceitar: mesmo tamanho, mesmo peso, lado a lado. */
 .consent-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .consent-actions button {
-  flex: 1 1 0;
+  flex: 1 1 7rem;
+  min-width: 0;
   min-height: 2.75rem;
   cursor: pointer;
   border-radius: 8px;

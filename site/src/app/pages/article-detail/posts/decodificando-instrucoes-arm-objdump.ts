@@ -120,7 +120,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       O <code>bge</code> do nosso laço só desvia se o resultado foi "maior ou
       igual". Isso vive no cond. Tabela dos mais usados:
     </p>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Códigos de condição ARM (bits 31..28)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Cond (bin)</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Significado</th></tr>
@@ -139,7 +139,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
 
     <h2>Glossário: opcodes de processamento de dados</h2>
     <p>Os 4 bits do <code>opcode</code> (bits 24..21) determinam a operação:</p>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Principais opcodes (bits 24..21)</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Opcode (bin)</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Operação</th></tr>

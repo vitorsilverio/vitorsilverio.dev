@@ -119,6 +119,8 @@ describe('Formula', () => {
       const eq = el.querySelector<HTMLElement>('.eq')!;
       expect(eq.hasAttribute('tabindex')).toBe(false);
       expect(eq.hasAttribute('role')).toBe(false);
+      // aria-label sem role é proibido (axe aria-prohibited-attr): sai junto com o role.
+      expect(eq.hasAttribute('aria-label')).toBe(false);
     });
 
     it('mantém o painel focável e com role quando a fórmula rola', async () => {
@@ -138,6 +140,7 @@ describe('Formula', () => {
       medidas = { cliente: 300, conteudo: 600 };
       callbacks.forEach((cb) => cb());
       expect(eq.tabIndex).toBe(0);
+      expect(eq.getAttribute('aria-label')).toContain('role na horizontal');
     });
   });
 });

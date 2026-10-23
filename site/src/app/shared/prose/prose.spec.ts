@@ -154,4 +154,52 @@ describe('ProseEnhance', () => {
     const resumo = (f.nativeElement as HTMLElement).querySelector('app-prose-toc summary');
     expect(resumo?.textContent).toContain('4 seções');
   });
+  describe('regiões roláveis com medida real', () => {
+    const orig = {
+      ro: globalThis.ResizeObserver,
+      cw: Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth'),
+      sw: Object.getOwnPropertyDescriptor(Element.prototype, 'scrollWidth'),
+    };
+    let medidas = { cliente: 600, conteudo: 600 };
+
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
+        configurable: true,
+        get: () => medidas.cliente,
+      });
+      Object.defineProperty(Element.prototype, 'scrollWidth', {
+        configurable: true,
+        get: () => medidas.conteudo,
+      });
+      globalThis.ResizeObserver = class {
+        observe() {}
+        disconnect() {}
+        unobserve() {}
+      } as unknown as typeof ResizeObserver;
+    });
+
+    afterEach(() => {
+      if (orig.cw) Object.defineProperty(HTMLElement.prototype, 'clientWidth', orig.cw);
+      if (orig.sw) Object.defineProperty(Element.prototype, 'scrollWidth', orig.sw);
+      globalThis.ResizeObserver = orig.ro;
+    });
+
+    it('região que cabe inteira fica sem tabindex, sem role e sem nome (aria-label sem role é proibido)', async () => {
+      medidas = { cliente: 600, conteudo: 600 };
+      const el = (await montar()).nativeElement as HTMLElement;
+      const pre = el.querySelector('pre')!;
+      expect(pre.hasAttribute('tabindex')).toBe(false);
+      expect(pre.hasAttribute('role')).toBe(false);
+      expect(pre.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('região que rola mantém tabindex, role group e o nome', async () => {
+      medidas = { cliente: 300, conteudo: 600 };
+      const el = (await montar()).nativeElement as HTMLElement;
+      const pre = el.querySelector('pre')!;
+      expect(pre.getAttribute('tabindex')).toBe('0');
+      expect(pre.getAttribute('role')).toBe('group');
+      expect(pre.getAttribute('aria-label')).toBe('Código Bash (rolável)');
+    });
+  });
 });

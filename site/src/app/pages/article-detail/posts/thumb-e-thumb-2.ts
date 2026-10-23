@@ -287,7 +287,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
       A mesma função (<code>add_arm</code> vs <code>add_thumb</code>) e o programa
       inteiro (o <code>size</code> do toolchain mede a seção <code>.text</code>):
     </p>
-    <div class="scroll-x"><table class="tabela-lista" role="table">
+    <div class="scroll-x"><table class="tabela-lista tabela-matriz" role="table">
       <caption>Comparação de tamanho</caption>
       <thead role="rowgroup">
         <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Trecho</th><th scope="col" role="columnheader">Tamanho</th></tr>

@@ -60,9 +60,12 @@ export class Formula {
         if (rola) {
           eq.setAttribute('tabindex', '0');
           eq.setAttribute('role', 'group');
+          eq.setAttribute('aria-label', this.rotuloFormula());
         } else {
           eq.removeAttribute('tabindex');
           eq.removeAttribute('role');
+          // aria-label em elemento sem role é proibido (axe: aria-prohibited-attr; WCAG 4.1.2).
+          eq.removeAttribute('aria-label');
         }
       };
       const obs = new ResizeObserver(ajustar);

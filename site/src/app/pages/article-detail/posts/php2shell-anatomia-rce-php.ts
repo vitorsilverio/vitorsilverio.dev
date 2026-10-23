@@ -55,7 +55,7 @@ import { Nota } from '../../../shared/nota/nota';
 apache2 <span class="token parameter variable">-M</span> <span class="token operator">|</span> <span class="token function">grep</span> php</code></pre>
 <p><strong>Passo 2: compare com as versões corrigidas.</strong></p>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Estou exposto? (rolável)">
-  <table class="tabela-lista" role="table">
+  <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Ramo</th><th scope="col" role="columnheader">Corrigido em</th></tr>
     </thead>
