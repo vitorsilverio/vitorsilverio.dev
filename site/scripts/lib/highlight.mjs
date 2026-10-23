@@ -23,6 +23,8 @@ loadLanguages([
   'powershell',
   'sql',
   'diff',
+  // Sessão de terminal: linhas com `$ `/`# ` são comando (bash), o resto é saída.
+  'shell-session',
 ]);
 
 // Aliases de linguagem usados nos artigos -> gramática do Prism.
@@ -45,6 +47,9 @@ const LANG_ALIAS = {
   node: 'javascript',
   ps1: 'powershell',
   pwsh: 'powershell',
+  console: 'shell-session',
+  terminal: 'shell-session',
+  'sh-session': 'shell-session',
 };
 
 const NAMED = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
