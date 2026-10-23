@@ -161,40 +161,40 @@ import { Nota } from '../../../shared/nota/nota';
 <p><strong>O que o verificador não faz.</strong> Ele só procura escalares pequenos (ou quase <code>n</code>) em P-256 e P-384. Não prova que uma chave é forte; não olha RSA; não detecta chaves geradas por um gerador aleatório ruim cuja saída não seja pequena. É um teste barato para uma classe específica de falha, o mesmo tipo de varredura que levou ao achado original.</p>
 <h3>Laboratório: uma chave fraca e uma normal</h3>
 <p>O <code>gerar_lab.py</code> cria dois certificados <strong>autoassinados</strong> de CA, com nome fictício (&quot;Laboratorio Ficticio&quot;), válidos por 30 dias e sem relação com nenhum domínio real. Um usa <code>ec.derive_private_key(7, ec.SECP384R1())</code>, ou seja, <code>d = 7</code>, de propósito. O outro usa <code>ec.generate_private_key</code>, ou seja, o que deveria acontecer. Rodei (Python 3.12.0, <code>cryptography</code> 46.0.7, 23/10/2026 00:47 UTC):</p>
-<pre><code class="language-text">$ python gerar_lab.py
-gerados: lab-fraca.pem, lab-normal.pem
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python gerar_lab.py</span></span>
+<span class="token output">gerados: lab-fraca.pem, lab-normal.pem
 
-$ python chave_fraca.py lab-fraca.pem lab-normal.pem
-FRACA  lab-fraca.pem  (secp384r1; escalar &lt;= 65536)
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python chave_fraca.py lab-fraca.pem lab-normal.pem</span></span>
+<span class="token output">FRACA  lab-fraca.pem  (secp384r1; escalar &lt;= 65536)
 ok     lab-normal.pem  (secp384r1; nenhum escalar &lt;= 65536)
 2 certificado(s), 2 com chave EC P-256/P-384, 1 fraca(s); 2.7 s
 
-$ python teste_chave_fraca.py
-ok: tabela confere com derive_private_key em P-256 e P-384</code></pre>
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python teste_chave_fraca.py</span></span>
+<span class="token output">ok: tabela confere com derive_private_key em P-256 e P-384</span></code></pre>
 <p>O verificador acusa só o certificado construído com <code>d = 7</code>. Note que ele <strong>não imprime</strong> <code>d</code>: só diz que a chave é fraca. Fiz isso de propósito, e pelo mesmo motivo não publico nem os valores de <code>d</code> das chaves da eMudhra. O código de saída do programa é 1 quando acha alguma chave fraca, o que facilita usá-lo em CI.</p>
 <p>E o <code>openssl</code> não vê nada de errado, o que é a lição principal do laboratório. Com o OpenSSL 3.5.0:</p>
-<pre><code class="language-text">$ openssl x509 -in lab-fraca.pem -noout -subject -issuer -dates -ext basicConstraints
-subject=O=Laboratorio Ficticio, CN=CA de Laboratorio Fraca
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl x509 <span class="token parameter variable">-in</span> lab-fraca.pem <span class="token parameter variable">-noout</span> <span class="token parameter variable">-subject</span> <span class="token parameter variable">-issuer</span> <span class="token parameter variable">-dates</span> <span class="token parameter variable">-ext</span> basicConstraints</span></span>
+<span class="token output">subject=O=Laboratorio Ficticio, CN=CA de Laboratorio Fraca
 issuer=O=Laboratorio Ficticio, CN=CA de Laboratorio Fraca
 notBefore=Oct 22 00:00:00 2026 GMT
 notAfter=Nov 21 00:00:00 2026 GMT
 X509v3 Basic Constraints: critical
     CA:TRUE
 
-$ openssl x509 -in lab-fraca.pem -noout -text | grep -E "ASN1 OID|NIST CURVE"
-                ASN1 OID: secp384r1
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl x509 <span class="token parameter variable">-in</span> lab-fraca.pem <span class="token parameter variable">-noout</span> <span class="token parameter variable">-text</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-E</span> <span class="token string">"ASN1 OID|NIST CURVE"</span></span></span>
+<span class="token output">                ASN1 OID: secp384r1
                 NIST CURVE: P-384
 
-$ openssl verify -CAfile lab-fraca.pem lab-fraca.pem
-lab-fraca.pem: OK</code></pre>
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl verify <span class="token parameter variable">-CAfile</span> lab-fraca.pem lab-fraca.pem</span></span>
+<span class="token output">lab-fraca.pem: OK</span></code></pre>
 <p>É um certificado P-384 perfeitamente bem formado, que passa na verificação. Nenhuma validação de cadeia olha para a aleatoriedade da chave: isso é trabalho de quem gera, de quem audita a geração e de quem varre certificados depois.</p>
 <h3>Nas oito intermediárias reais</h3>
 <p>Os SHA-256 das oito intermediárias estão no comentário 0 do bug. O script <code>baixar_intermediarias.sh</code> baixa cada uma do <a href="https://crt.sh" target="_blank" rel="noopener">crt.sh</a> por impressão digital, confere que o SHA-256 baixado é o mesmo pedido e junta tudo num PEM. São certificados públicos e já revogados. Rodei o verificador sobre esse arquivo (23/10/2026, 00:47 UTC):</p>
-<pre><code class="language-text">$ sh baixar_intermediarias.sh /e/tools/emudhra/teste8
-8 certificados conferidos em /e/tools/emudhra/teste8/emudhra-8.pem
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sh</span> baixar_intermediarias.sh /e/tools/emudhra/teste8</span></span>
+<span class="token output">8 certificados conferidos em /e/tools/emudhra/teste8/emudhra-8.pem
 
-$ python -W ignore chave_fraca.py --bundle /e/tools/emudhra/teste8/emudhra-8.pem
-FRACA  CN=EM EV TLS CA - G3B,O=eMudhra BV,C=NL  (secp384r1; escalar &lt;= 65536)
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python <span class="token parameter variable">-W</span> ignore chave_fraca.py <span class="token parameter variable">--bundle</span> /e/tools/emudhra/teste8/emudhra-8.pem</span></span>
+<span class="token output">FRACA  CN=EM EV TLS CA - G3B,O=eMudhra BV,C=NL  (secp384r1; escalar &lt;= 65536)
 FRACA  CN=EM OV TLS CA - G3B,O=eMudhra BV,C=NL  (secp384r1; escalar &lt;= 65536)
 FRACA  CN=EM DV TLS CA - G3B,O=eMudhra BV,C=NL  (secp384r1; escalar &lt;= 65536)
 FRACA  CN=EM EV TLS CA - G3C,O=eMudhra Inc,C=US  (secp384r1; escalar &lt;= 65536)
@@ -202,13 +202,13 @@ FRACA  CN=EM OV TLS CA - G3C,O=eMudhra Inc,C=US  (secp384r1; escalar &lt;= 65536
 FRACA  CN=EM DV TLS CA - G3C,O=eMudhra Inc,C=US  (secp384r1; escalar &lt;= 65536)
 FRACA  CN=EM OV CS CA - G3B,O=eMudhra BV,C=NL  (secp384r1; escalar &lt;= 65536)
 FRACA  CN=EM OV CS CA - G3C,O=eMudhra Inc,C=US  (secp384r1; escalar &lt;= 65536)
-8 certificado(s), 8 com chave EC P-256/P-384, 8 fraca(s); 2.6 s</code></pre>
+8 certificado(s), 8 com chave EC P-256/P-384, 8 fraca(s); 2.6 s</span></code></pre>
 <p>Oito de oito, em menos de três segundos, usando uma biblioteca comum. Ou seja, uma varredura assim teria pego o problema a qualquer momento nos 17 meses entre a cerimônia e o relato. O resultado é do meu script; a lista de certificados é a do bug. Ele confere com o que a Mozilla relata no comentário 5: as oito chaves P-384 das séries B e C.</p>
 <p>Um detalhe do certificado, lido com o OpenSSL: a intermediária <code>EM DV TLS CA - G3C</code> vale de 30/04/2025 a 28/04/2040, ou seja, 15 anos. Se um dispositivo nunca atualiza seu bundle, a janela de exposição dele vai até lá.</p>
 <h3>Varredura de um bundle</h3>
 <p>O mesmo script, com <code>--bundle</code>, percorre todos os certificados de um PEM. Eu o rodei no bundle do <code>certifi</code> instalado aqui (2023.11.17), no <code>certifi</code> 2026.10.19 e no conjunto de raízes que o Node 24.17.0 traz (<code>tls.rootCertificates</code>). O resultado esperado é zero, e foi o que deu: raízes de CA bem formadas não têm esse problema.</p>
-<pre><code class="language-text">$ python -W ignore chave_fraca.py --bundle "$(python -c 'import certifi;print(certifi.where())')"
-146 certificado(s), 40 com chave EC P-256/P-384, 0 fraca(s); 4.3 s</code></pre>
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python <span class="token parameter variable">-W</span> ignore chave_fraca.py <span class="token parameter variable">--bundle</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span>python <span class="token parameter variable">-c</span> 'import certifi<span class="token punctuation">;</span>print<span class="token punctuation">(</span>certifi.where<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token variable">)</span></span>')"</span></span></span>
+<span class="token output">146 certificado(s), 40 com chave EC P-256/P-384, 0 fraca(s); 4.3 s</span></code></pre>
 <p>(O <code>-W ignore</code> esconde um aviso de depreciação da biblioteca sobre um certificado do bundle antigo, que tem número de série negativo. Não é erro do script.) No <code>certifi</code> 2026.10.19: 120 certificados, 39 com chave EC, 0 fracas. No bundle do Node 24.17.0: 145 certificados, 43 com chave EC, 0 fracas. Zero é o resultado certo para <strong>raízes</strong>; o problema do dia estava em intermediárias, que não vêm nos bundles, e sim nas cadeias que os servidores enviam.</p>
 <h2>Quem fica protegido e quem não</h2>
 <p>Os navegadores se protegeram por três mecanismos:</p>
@@ -221,25 +221,25 @@ FRACA  CN=EM OV CS CA - G3C,O=eMudhra Inc,C=US  (secp384r1; escalar &lt;= 65536)
 <h3>Laboratório de revogação</h3>
 <p>O <code>lab_revogacao.py</code> monta, em memória e num diretório temporário, uma hierarquia <strong>fictícia</strong> de três níveis, <code>Raiz de Laboratorio → Intermediaria de Laboratorio → servidor.lab.invalid</code> (o sufixo <code>.invalid</code> é reservado e nunca resolve na internet), todas com chaves aleatórias <strong>normais</strong>. A raiz <strong>revoga a intermediária</strong> numa CRL com o motivo <em>cACompromise</em>, o mesmo da eMudhra. Um servidor TLS local em <code>127.0.0.1</code> apresenta a cadeia revogada. Depois, quatro clientes tentam conectar, primeiro sem configurar nada além da raiz de confiança, depois com as CRLs carregadas.</p>
 <p>Python, no próprio script:</p>
-<pre><code class="language-text">$ python lab_revogacao.py
-cliente Python padrão          : ACEITOU  HTTP/1.0 200 OK
-cliente Python com as CRLs     : REJEITOU certificate revoked</code></pre>
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python lab_revogacao.py</span></span>
+<span class="token output">cliente Python padrão          : ACEITOU  HTTP/1.0 200 OK
+cliente Python com as CRLs     : REJEITOU certificate revoked</span></code></pre>
 <p>Com o servidor ativo (<code>python lab_revogacao.py --servir DIR</code>), conectei também com <code>curl</code> 8.13.0 (OpenSSL 3.5.0), Node 24.17.0 e um cliente Java (<code>ClienteLab.java</code>, JBR 25.0.3):</p>
-<pre><code class="language-text">$ curl -sS --cacert raiz.pem --resolve servidor.lab.invalid:8443:127.0.0.1 https://servidor.lab.invalid:8443/
-ola do servidor de laboratorio
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sS</span> <span class="token parameter variable">--cacert</span> raiz.pem <span class="token parameter variable">--resolve</span> servidor.lab.invalid:8443:127.0.0.1 https://servidor.lab.invalid:8443/</span></span>
+<span class="token output">ola do servidor de laboratorio
 
-$ curl -sS --cacert raiz.pem --crlfile crls.pem --resolve servidor.lab.invalid:8443:127.0.0.1 https://servidor.lab.invalid:8443/
-curl: (60) SSL certificate problem: certificate revoked
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sS</span> <span class="token parameter variable">--cacert</span> raiz.pem <span class="token parameter variable">--crlfile</span> crls.pem <span class="token parameter variable">--resolve</span> servidor.lab.invalid:8443:127.0.0.1 https://servidor.lab.invalid:8443/</span></span>
+<span class="token output">curl: (60) SSL certificate problem: certificate revoked
 
-$ node cliente_lab.js DIR         # tls.connect(&#123; ca &#125;), sem CRL
-authorized: true authorizationError: null
-$ node cliente_lab.js DIR crl     # tls.connect(&#123; ca, crl &#125;)
-erro: CERT_REVOKED certificate revoked
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">node</span> cliente_lab.js DIR         <span class="token comment"># tls.connect(&#123; ca &#125;), sem CRL</span></span></span>
+<span class="token output">authorized: true authorizationError: null
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">node</span> cliente_lab.js DIR crl     <span class="token comment"># tls.connect(&#123; ca, crl &#125;)</span></span></span>
+<span class="token output">erro: CERT_REVOKED certificate revoked
 
-$ java ClienteLab.java DIR
-ACEITOU  CN=servidor.lab.invalid, O=Laboratorio Ficticio
-$ java ClienteLab.java DIR crl
-REJEITOU Certificate has been revoked, reason: CA_COMPROMISE, revocation date: Wed Sep 30 21:00:00 GMT-03:00 2026, authority: CN=Raiz de Laboratorio, O=Laboratorio Ficticio, extension OIDs: [2.5.29.21]</code></pre>
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">java</span> ClienteLab.java DIR</span></span>
+<span class="token output">ACEITOU  CN=servidor.lab.invalid, O=Laboratorio Ficticio
+</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">java</span> ClienteLab.java DIR crl</span></span>
+<span class="token output">REJEITOU Certificate has been revoked, reason: CA_COMPROMISE, revocation date: Wed Sep 30 21:00:00 GMT-03:00 2026, authority: CN=Raiz de Laboratorio, O=Laboratorio Ficticio, extension OIDs: [2.5.29.21]</span></code></pre>
 <p>O resultado é o mesmo nos quatro: <strong>a cadeia com a intermediária revogada é aceita por padrão e só é recusada quando o programador carrega as CRLs e liga a verificação</strong>. Isso bate com a documentação:</p>
 <ul>
 <li><strong>Python</strong>: <code>VERIFY_DEFAULT</code> é o modo em que &quot;as CRLs não são checadas&quot;; para checar é preciso ligar <code>VERIFY_CRL_CHECK_LEAF</code> ou <code>VERIFY_CRL_CHECK_CHAIN</code> e carregar as listas (documentação do módulo <code>ssl</code>). Conferi no meu Python: <code>ctx.verify_flags</code> do contexto padrão não tem nenhum dos dois bits de CRL.</li>
@@ -251,8 +251,8 @@ REJEITOU Certificate has been revoked, reason: CA_COMPROMISE, revocation date: W
 <h2>Inspecionar a cadeia de um servidor e de um bundle</h2>
 <p>Os comandos <code>openssl</code> abaixo respondem a três perguntas práticas: &quot;que cadeia o servidor me manda?&quot;, &quot;o que tem dentro deste certificado?&quot; e &quot;o que o meu bundle contém?&quot;.</p>
 <p><strong>Cadeia de um servidor.</strong> <code>s_client -showcerts</code> mostra os certificados enviados e o resultado da verificação; <code>-servername</code> envia o SNI (o nome do site, necessário em servidores que hospedam vários). Capturei com o OpenSSL 3.5.0 em 23/10/2026, 00:39 UTC, apenas conectando (não há nada de forjado aqui):</p>
-<pre><code class="language-text">$ openssl s_client -connect example.com:443 -servername example.com -showcerts &lt;/dev/null
-...
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl s_client <span class="token parameter variable">-connect</span> example.com:443 <span class="token parameter variable">-servername</span> example.com <span class="token parameter variable">-showcerts</span> <span class="token operator">&lt;</span>/dev/null</span></span>
+<span class="token output">...
 Certificate chain
  0 s:CN=example.com
    i:C=US, O=SSL Corporation, CN=Cloudflare TLS Issuing ECC CA 3
@@ -267,22 +267,22 @@ Certificate chain
    i:C=GB, ST=Greater Manchester, L=Salford, O=Comodo CA Limited, CN=AAA Certificate Services
    a:PKEY: EC, (secp384r1); sigalg: sha256WithRSAEncryption
 ...
-Verification: OK</code></pre>
+Verification: OK</span></code></pre>
 <p><code>s:</code> é o titular (<em>subject</em>) e <code>i:</code> o emissor (<em>issuer</em>): cada <code>i:</code> é o <code>s:</code> do certificado seguinte. A linha <code>a:</code> diz qual é a chave e qual algoritmo assinou. O quarto certificado é uma raiz <strong>certificada de forma cruzada</strong> por outra (o <code>i:</code> é a &quot;AAA Certificate Services&quot;, a mesma raiz da nota acima): é assim que uma certificação cruzada aparece no <code>s_client</code>. Para verificar se uma cadeia passa por algo que você quer evitar, olhe os <code>i:</code> de cima a baixo.</p>
 <p><strong>Um certificado em detalhe.</strong> <code>openssl x509 -noout -text -fingerprint</code> mostra tudo; os campos que eu olho primeiro são <code>subject</code>, <code>issuer</code>, <code>dates</code>, <code>Basic Constraints</code> e o tipo da chave. Para uma das oito intermediárias:</p>
-<pre><code class="language-text">$ openssl x509 -in 0164D7CE...4D19.pem -noout -subject -issuer -dates -serial -ext basicConstraints
-subject=C=US, O=eMudhra Inc, CN=EM DV TLS CA - G3C
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl x509 <span class="token parameter variable">-in</span> 0164D7CE<span class="token punctuation">..</span>.4D19.pem <span class="token parameter variable">-noout</span> <span class="token parameter variable">-subject</span> <span class="token parameter variable">-issuer</span> <span class="token parameter variable">-dates</span> <span class="token parameter variable">-serial</span> <span class="token parameter variable">-ext</span> basicConstraints</span></span>
+<span class="token output">subject=C=US, O=eMudhra Inc, CN=EM DV TLS CA - G3C
 issuer=C=IN, O=eMudhra Technologies Limited, CN=emSign Root TLS CA - G3
 notBefore=Apr 30 15:35:09 2025 GMT
 notAfter=Apr 28 18:30:00 2040 GMT
 serial=588B2E3C2BB8CDA13E1A1209254321
 X509v3 Basic Constraints: critical
-    CA:TRUE, pathlen:0</code></pre>
+    CA:TRUE, pathlen:0</span></code></pre>
 <p>(O nome do arquivo está abreviado aqui; no seu disco é o SHA-256 completo.) O número de série é o que aparece na tabela de revogações do comentário 10 do bug.</p>
 <p><strong>Verificar uma cadeia contra um bundle.</strong> <code>openssl verify -CAfile raizes.pem -untrusted intermediarias.pem folha.pem</code> faz o que um cliente faz, sem rede. No laboratório acima, <code>openssl verify -CAfile lab-fraca.pem lab-fraca.pem</code> devolveu <code>OK</code>. Para forçar o <code>openssl verify</code> a consultar CRLs, combine <code>-crl_check_all</code> com <code>-CRLfile</code> (veja <code>openssl-verify(1)</code>; não repeti isso no laboratório, onde usei os quatro clientes acima).</p>
 <p><strong>Listar o conteúdo de um bundle PEM.</strong> Um bundle é um arquivo com muitos certificados em sequência. Esta combinação do <code>openssl</code> lista o <code>subject</code> e o <code>issuer</code> de cada um:</p>
-<pre><code class="language-text">$ openssl crl2pkcs7 -nocrl -certfile certifi-2023.pem | openssl pkcs7 -print_certs -noout | grep -i -A1 emsign
-subject=C=IN, OU=emSign PKI, O=eMudhra Technologies Limited, CN=emSign Root CA - G1
+<pre><code class="language-console"><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">openssl crl2pkcs7 <span class="token parameter variable">-nocrl</span> <span class="token parameter variable">-certfile</span> certifi-2023.pem <span class="token operator">|</span> openssl pkcs7 <span class="token parameter variable">-print_certs</span> <span class="token parameter variable">-noout</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-A1</span> emsign</span></span>
+<span class="token output">subject=C=IN, OU=emSign PKI, O=eMudhra Technologies Limited, CN=emSign Root CA - G1
 issuer=C=IN, OU=emSign PKI, O=eMudhra Technologies Limited, CN=emSign Root CA - G1
 
 subject=C=IN, OU=emSign PKI, O=eMudhra Technologies Limited, CN=emSign ECC Root CA - G3
@@ -292,7 +292,7 @@ subject=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign Root CA - C1
 issuer=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign Root CA - C1
 
 subject=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign ECC Root CA - C3
-issuer=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign ECC Root CA - C3</code></pre>
+issuer=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign ECC Root CA - C3</span></code></pre>
 <p>No bundle do <code>certifi</code> 2023.11.17 que eu tinha instalado, a raiz <code>emSign ECC Root CA - G3</code> continua lá, junto com G1, C1 e C3. Esse é o ponto do artigo em uma linha: <strong>a minha instalação de Python, de 2023, ainda confia na raiz que Firefox e Chrome estão removendo</strong>.</p>
 <h2>Checklist para hoje</h2>
 <p>Conferi o estado de cada ferramenta no meu computador em 23/10/2026, entre 00:38 e 00:47 UTC:</p>
