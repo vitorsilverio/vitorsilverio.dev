@@ -21,9 +21,7 @@ describe('ConsentBanner', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-      ],
+      providers: [provideRouter([])],
     });
     service = TestBed.inject(ConsentService);
     fixture = TestBed.createComponent(ConsentBanner);
@@ -87,5 +85,80 @@ describe('ConsentBanner', () => {
     service.reset();
     await flush();
     expect(q('.consent-banner')).not.toBeNull();
+  });
+
+  describe('foco e aviso depois da escolha', () => {
+    let main: HTMLElement;
+    let foco: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      main = document.createElement('main');
+      main.id = 'conteudo';
+      main.tabIndex = -1;
+      document.body.appendChild(main);
+    });
+
+    afterEach(() => {
+      foco?.mockRestore();
+      main.remove();
+    });
+
+    it.each([
+      ['Aceitar', '.btn-accept', 'granted'],
+      ['Rejeitar', '.btn-reject', 'denied'],
+    ])('%s leva o foco ao <main> sem rolar a página', async (_n, seletor, estado) => {
+      foco = vi.spyOn(main, 'focus');
+      q(seletor)!.focus();
+      q(seletor)!.click();
+      await flush();
+      expect(service.consent()).toBe(estado);
+      expect(document.activeElement).toBe(main);
+      expect(foco).toHaveBeenCalledWith({ preventScroll: true });
+    });
+
+    it('anuncia a preferência salva numa região role="status" que já existia', async () => {
+      const aviso = q('[role="status"]')!;
+      expect(aviso.textContent?.trim()).toBe('');
+      q('.btn-accept')!.click();
+      await flush();
+      expect(q('[role="status"]')).toBe(aviso);
+      expect(aviso.textContent).toContain('Preferência de cookies salva');
+    });
+
+    it('limpa o aviso quando o banner é reaberto', async () => {
+      q('.btn-reject')!.click();
+      await flush();
+      service.reset();
+      await flush();
+      expect(q('[role="status"]')!.textContent?.trim()).toBe('');
+    });
+
+    it('devolve o foco ao botão que reabriu o banner (rodapé)', async () => {
+      q('.btn-reject')!.click();
+      await flush();
+      const rodape = document.createElement('button');
+      document.body.appendChild(rodape);
+      rodape.focus();
+      service.reset();
+      await flush();
+      q('.btn-accept')!.click();
+      await flush();
+      expect(document.activeElement).toBe(rodape);
+      rodape.remove();
+    });
+
+    it('se quem reabriu sumiu do DOM, cai no <main>', async () => {
+      q('.btn-reject')!.click();
+      await flush();
+      const rodape = document.createElement('button');
+      document.body.appendChild(rodape);
+      rodape.focus();
+      service.reset();
+      rodape.remove();
+      await flush();
+      q('.btn-reject')!.click();
+      await flush();
+      expect(document.activeElement).toBe(main);
+    });
   });
 });

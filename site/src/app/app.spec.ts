@@ -76,3 +76,34 @@ describe('App · menu móvel', () => {
     fora.remove();
   });
 });
+
+describe('App · botão de tema', () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([]), provideLocationMocks()],
+    }).compileComponents();
+  });
+
+  it('tem rótulo fixo e informa o estado só por aria-pressed', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const botao = el.querySelector('.theme-toggle') as HTMLButtonElement;
+    const rotulo = botao.getAttribute('aria-label');
+    expect(rotulo).toBe('Tema escuro');
+
+    const antes = botao.getAttribute('aria-pressed');
+    botao.click();
+    fixture.detectChanges();
+    const depois = botao.getAttribute('aria-pressed');
+
+    expect(['true', 'false']).toContain(antes);
+    expect(depois).toBe(antes === 'true' ? 'false' : 'true');
+    expect(botao.getAttribute('aria-label')).toBe(rotulo);
+    expect(document.documentElement.getAttribute('data-theme')).toBe(
+      depois === 'true' ? 'dark' : 'light',
+    );
+  });
+});

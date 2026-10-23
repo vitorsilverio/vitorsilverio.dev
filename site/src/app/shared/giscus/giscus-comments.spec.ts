@@ -126,4 +126,46 @@ describe('GiscusComments', () => {
     expect(el.querySelector('button.btn')).not.toBeNull();
     expect(giscusScripts().length).toBe(0);
   });
+
+  it('traduz o title do iframe do Giscus para "Comentários" quando ele é criado', async () => {
+    const f = create();
+    await f.whenStable();
+    button(f).click();
+    f.detectChanges();
+    await f.whenStable();
+
+    // Simula o client.js: cria o iframe em inglês dentro do contêiner .giscus.
+    const frame = document.createElement('iframe');
+    frame.className = 'giscus-frame';
+    frame.title = 'Comments';
+    root(f).querySelector('.giscus')!.appendChild(frame);
+    await new Promise((r) => setTimeout(r));
+
+    expect(frame.title).toBe('Comentários');
+  });
+
+  it('não observa nem altera nada antes do clique, e para de observar ao trocar de estado', async () => {
+    const f = create();
+    await f.whenStable();
+    const fora = document.createElement('iframe');
+    fora.title = 'Comments';
+    root(f).appendChild(fora);
+    await new Promise((r) => setTimeout(r));
+    expect(fora.title).toBe('Comments');
+
+    button(f).click();
+    f.detectChanges();
+    await f.whenStable();
+    const host = root(f).querySelector('.giscus')!;
+    f.componentInstance.slug.set('outro-artigo');
+    f.detectChanges();
+    await f.whenStable();
+    f.detectChanges();
+
+    const tardio = document.createElement('iframe');
+    tardio.title = 'Comments';
+    host.appendChild(tardio);
+    await new Promise((r) => setTimeout(r));
+    expect(tardio.title).toBe('Comments');
+  });
 });

@@ -112,7 +112,7 @@
   font-weight: 600;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40em) {
   .consent-banner {
     left: 1rem;
     right: 1rem;

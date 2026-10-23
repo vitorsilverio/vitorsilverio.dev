@@ -65,7 +65,7 @@ li a {
   min-height: 1.75rem;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .toc:not(.toc-lateral) ol {
     columns: 2;
     column-gap: 2rem;

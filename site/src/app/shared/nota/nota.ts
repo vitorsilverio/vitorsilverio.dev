@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 /** Abaixo daqui a nota pode ser recolhida; de 768px para cima fica sempre visível. */
-export const CONSULTA_NOTA_RECOLHIVEL = '(max-width: 767.98px)';
+export const CONSULTA_NOTA_RECOLHIVEL = '(max-width: 47.99em)';
 
 let proximoId = 0;
 

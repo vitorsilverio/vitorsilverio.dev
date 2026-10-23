@@ -95,7 +95,7 @@
   z-index: 1;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40em) {
   .article-card {
     grid-template-columns: 11rem 1fr;
   }

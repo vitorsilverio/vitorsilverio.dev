@@ -144,7 +144,7 @@ a.lesson-link:hover {
   border: 1px solid var(--border);
 }
 
-@media (max-width: 560px) {
+@media (max-width: 35em) {
   .lesson-link {
     grid-template-columns: auto 1fr;
   }

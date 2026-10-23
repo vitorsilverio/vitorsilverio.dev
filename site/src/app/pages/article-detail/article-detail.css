@@ -64,7 +64,7 @@
 
 /* Largo: coluna do artigo + coluna lateral com o sumário fixo na rolagem.
    O mesmo breakpoint está em CONSULTA_SUMARIO_LATERAL (prose-toc.ts). */
-@media (min-width: 1100px) {
+@media (min-width: 68.75em) {
   .article-wrap {
     max-width: calc(var(--leitura) + var(--vao) + var(--lateral) + 2.5rem);
   }
@@ -190,7 +190,7 @@
   font-size: 0.85rem;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 35em) {
   .article-nav {
     grid-template-columns: 1fr;
   }

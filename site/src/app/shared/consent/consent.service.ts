@@ -23,6 +23,12 @@ export class ConsentService {
   // da hidratação, via applyStored() (chamado em afterNextRender).
   readonly consent = signal<ConsentState>('unknown');
 
+  /**
+   * Elemento que tinha o foco quando o banner foi reaberto (o botão "Preferências de
+   * cookies" do rodapé). O banner devolve o foco a ele depois da escolha.
+   */
+  invoker: HTMLElement | null = null;
+
   /** Mostra o banner só quando o usuário ainda não decidiu. */
   readonly visible = computed(() => this.consent() === 'unknown');
 
@@ -93,6 +99,8 @@ export class ConsentService {
     } catch {
       /* ignore */
     }
+    const active = this.document.activeElement;
+    this.invoker = active instanceof HTMLElement && active !== this.document.body ? active : null;
     this.consent.set('unknown');
   }
 

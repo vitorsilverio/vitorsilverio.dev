@@ -113,7 +113,7 @@
   gap: 0.4rem;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 53.75em) {
   .resume-grid {
     grid-template-columns: 1fr;
   }

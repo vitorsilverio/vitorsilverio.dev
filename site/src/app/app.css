@@ -121,6 +121,14 @@
   background: var(--surface-2);
 }
 
+/* Estado do tema (aria-pressed): ligado = tema escuro ativo. O rótulo é fixo; o estado vem do
+   atributo e do realce do botão. */
+.theme-toggle[aria-pressed='true'] {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
 .menu-toggle {
   display: none;
   width: 44px;
@@ -211,7 +219,7 @@
   color: var(--text);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 47.5em) {
   .menu-toggle {
     display: block;
   }

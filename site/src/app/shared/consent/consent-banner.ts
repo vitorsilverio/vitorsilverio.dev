@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ConsentService } from './consent.service';
 
@@ -14,6 +15,7 @@ import { ConsentService } from './consent.service';
   selector: 'app-consent-banner',
   imports: [RouterLink],
   template: `
+    <p class="visually-hidden" role="status">{{ message() }}</p>
     @if (consent.visible()) {
       @if (collapsed()) {
         <div class="consent-bar" role="region" aria-label="Consentimento de rastreio">
@@ -35,8 +37,8 @@ import { ConsentService } from './consent.service';
             >
           </p>
           <div class="consent-actions">
-            <button type="button" class="btn-reject" (click)="consent.reject()">Rejeitar</button>
-            <button type="button" class="btn-accept" (click)="consent.accept()">Aceitar</button>
+            <button type="button" class="btn-reject" (click)="decide(false)">Rejeitar</button>
+            <button type="button" class="btn-accept" (click)="decide(true)">Aceitar</button>
           </div>
         </div>
       }
@@ -47,6 +49,7 @@ import { ConsentService } from './consent.service';
 export class ConsentBanner {
   protected readonly consent = inject(ConsentService);
   private readonly injector = inject(Injector);
+  private readonly document = inject(DOCUMENT);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /**
@@ -55,13 +58,46 @@ export class ConsentBanner {
    */
   protected readonly collapsed = signal(false);
 
+  /** Aviso de status (região live, fora da vista): confirma a escolha para leitores de tela. */
+  protected readonly message = signal('');
+
   constructor() {
     // Quando a escolha é feita (ou reaberta pelo rodapé), volta ao estado expandido.
     effect(() => {
       if (!this.consent.visible()) {
         this.collapsed.set(false);
+      } else {
+        this.message.set('');
       }
     });
+  }
+
+  /**
+   * Aceitar/Rejeitar removem os botões do DOM, e o foco cairia no body. Ele vai para quem
+   * reabriu o banner (o botão do rodapé), se ainda existir, ou para o <main>: o leitor
+   * continua de onde a página começa, sem rolagem (preventScroll) e sem contorno
+   * (o <main> tem tabindex="-1", só focável por código).
+   */
+  protected decide(accepted: boolean): void {
+    const invoker = this.consent.invoker;
+    this.consent.invoker = null;
+    if (accepted) {
+      this.consent.accept();
+    } else {
+      this.consent.reject();
+    }
+    this.message.set('Preferência de cookies salva.');
+    afterNextRender(
+      () => {
+        const target =
+          invoker && invoker.isConnected
+            ? invoker
+            : (this.document.getElementById('conteudo') ??
+              this.document.querySelector<HTMLElement>('main'));
+        target?.focus({ preventScroll: true });
+      },
+      { injector: this.injector },
+    );
   }
 
   /** Esc recolhe sem aceitar nem rejeitar; o foco vai para o botão que reabre. */

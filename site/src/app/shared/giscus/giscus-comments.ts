@@ -7,6 +7,7 @@ import {
   inject,
   Injector,
   input,
+  OnDestroy,
   PLATFORM_ID,
   signal,
   viewChild,
@@ -18,6 +19,7 @@ import { giscusConfig } from '../../data/giscus.config';
 const GISCUS_ORIGIN = 'https://giscus.app';
 const SCRIPT_ID = 'giscus-script';
 const AUTOLOAD_KEY = 'giscus-autoload';
+const IFRAME_TITLE = 'Comentários';
 
 /**
  * Comentários via Giscus em modelo "click-to-load": nenhuma requisição a
@@ -30,7 +32,7 @@ const AUTOLOAD_KEY = 'giscus-autoload';
   templateUrl: './giscus-comments.html',
   styleUrl: './giscus-comments.css',
 })
-export class GiscusComments {
+export class GiscusComments implements OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly theme = inject(ThemeService);
   private readonly injector = inject(Injector);
@@ -50,6 +52,7 @@ export class GiscusComments {
   private readonly host = viewChild<ElementRef<HTMLElement>>('host');
 
   private ready = false;
+  private titleObserver: MutationObserver | null = null;
   private lastTerm: string | null = null;
 
   constructor() {
@@ -133,7 +136,12 @@ export class GiscusComments {
     );
   }
 
+  ngOnDestroy(): void {
+    this.stopTitleObserver();
+  }
+
   private reset(): void {
+    this.stopTitleObserver();
     document.getElementById(SCRIPT_ID)?.remove();
     this.ready = false;
     this.active.set(false);
@@ -142,6 +150,7 @@ export class GiscusComments {
   }
 
   private fail(): void {
+    this.stopTitleObserver();
     document.getElementById(SCRIPT_ID)?.remove();
     this.ready = false;
     this.active.set(false);
@@ -177,8 +186,37 @@ export class GiscusComments {
     script.setAttribute('data-theme', this.theme.theme() === 'dark' ? c.themeDark : c.themeLight);
     script.onerror = () => this.fail();
     // O client.js do Giscus monta o iframe no .giscus que encontra.
+    this.watchIframeTitle(host);
     host.appendChild(script);
     this.waitForIframe();
+  }
+
+  /**
+   * O client.js cria o iframe com title="Comments" (em inglês). Quando ele aparece no
+   * contêiner, troca o título para português (WCAG 4.1.2/3.1.2: nome acessível no idioma da
+   * página). Observar o contêiner cobre também o iframe recriado e não depende de quando o
+   * script do Giscus termina; nada é observado antes de o leitor pedir os comentários.
+   */
+  private watchIframeTitle(host: HTMLElement): void {
+    this.stopTitleObserver();
+    const apply = () => {
+      host.querySelectorAll<HTMLIFrameElement>('iframe').forEach((frame) => {
+        if (frame.title !== IFRAME_TITLE) {
+          frame.title = IFRAME_TITLE;
+        }
+      });
+    };
+    apply();
+    if (typeof MutationObserver === 'undefined') {
+      return;
+    }
+    this.titleObserver = new MutationObserver(apply);
+    this.titleObserver.observe(host, { childList: true, subtree: true });
+  }
+
+  private stopTitleObserver(): void {
+    this.titleObserver?.disconnect();
+    this.titleObserver = null;
   }
 
   private waitForIframe(): void {

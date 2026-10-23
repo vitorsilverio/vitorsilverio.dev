@@ -16,7 +16,7 @@ import type { ProseHeading, ProseEnhance } from './prose';
 export const MIN_SECOES_SUMARIO = 4;
 
 /** A partir daqui o sumário vira coluna lateral fixa (o CSS do artigo usa o mesmo valor). */
-export const CONSULTA_SUMARIO_LATERAL = '(min-width: 1100px)';
+export const CONSULTA_SUMARIO_LATERAL = '(min-width: 68.75em)';
 
 /**
  * Sumário das seções (`h2`) de um artigo. Existe uma única cópia no DOM:
