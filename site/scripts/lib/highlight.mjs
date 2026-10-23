@@ -18,6 +18,11 @@ loadLanguages([
   'php',
   'json',
   'yaml',
+  'python',
+  'javascript',
+  'powershell',
+  'sql',
+  'diff',
 ]);
 
 // Aliases de linguagem usados nos artigos -> gramática do Prism.
@@ -35,6 +40,11 @@ const LANG_ALIAS = {
   apache: 'apacheconf',
   conf: 'ini',
   yml: 'yaml',
+  py: 'python',
+  js: 'javascript',
+  node: 'javascript',
+  ps1: 'powershell',
+  pwsh: 'powershell',
 };
 
 const NAMED = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };

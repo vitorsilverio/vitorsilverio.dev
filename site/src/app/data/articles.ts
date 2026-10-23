@@ -238,7 +238,7 @@ export const articles: readonly ArticleMeta[] = [
     slug: 'emudhra-chaves-de-ca-um-byte',
     title: 'Chaves de CA com um byte: o que a falha da eMudhra ensina sobre confiança em certificados',
     date: '2026-10-23',
-    readingTime: '20 min',
+    readingTime: '30 min',
     excerpt: 'Em 17 de outubro de 2026 alguém percebeu que as chaves privadas de oito autoridades intermediárias da eMudhra eram inteiros menores que 256, recuperáveis em milissegundos. Conto a linha do tempo com as fontes primárias, explico por que um byte basta para destruir uma chave de curva elíptica, escrevo um verificador de chaves fracas em Python (testado em laboratório e nas oito intermediárias reais) e mostro, com quatro clientes TLS, quem continua exposto: curl, Python, Node e Java aceitam uma cadeia revogada se você não configurar nada.',
     tags: ['Segurança', 'PKI', 'TLS', 'Certificados', 'Criptografia', 'eMudhra', 'Python', 'OpenSSL', 'Tutorial'],
   },

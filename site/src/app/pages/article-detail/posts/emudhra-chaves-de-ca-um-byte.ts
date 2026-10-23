@@ -73,33 +73,33 @@ import { Nota } from '../../../shared/nota/nota';
 <p>A ideia: percorrer <code>d = 1..limite</code> e comparar com a chave pública. O jeito mais óbvio, usando <code>ec.derive_private_key(d, curva)</code> da biblioteca <code>cryptography</code>, funciona, mas medi <strong>2,2 ms por candidato</strong> na minha máquina: com <code>limite = 2**16</code> (65 536 valores), seriam cerca de 2,4 minutos <strong>por certificado</strong>. Para varrer um bundle inteiro, não serve.</p>
 <p>Reescrevi a busca como uma <strong>tabela</strong>: construo uma vez por curva um dicionário <code>x de d·G → d</code> somando <code>G</code> repetidamente em Python puro (aritmética em inteiros grandes, que o Python faz sem biblioteca), e cada certificado passa a custar uma consulta ao dicionário. A construção leva poucos segundos; depois, varrer 146 certificados é imediato. Para não confiar só na minha aritmética, o script confirma cada achado com <code>derive_private_key</code> (a biblioteca) e o arquivo <code>teste_chave_fraca.py</code> compara a tabela com a biblioteca em P-256 e P-384.</p>
 <p>O núcleo, em <code>chave_fraca.py</code>:</p>
-<pre><code class="language-python">LIMITE_PADRAO = 2**16
+<pre><code class="language-python">LIMITE_PADRAO <span class="token operator">=</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">16</span>
 
-def tabela(nome_curva, limite=LIMITE_PADRAO):
-    """&#123;x de d*G: d&#125; para d = 1..limite. Calculada uma vez por curva (cerca de 1 s)."""
-    chave = (nome_curva, limite)
-    if chave not in _tabelas:
-        curva, p, _ = CURVAS[nome_curva]
-        g = ec.derive_private_key(1, curva).public_key().public_numbers()
-        G = (g.x, g.y)
-        P, tab = G, &#123;G[0]: 1&#125;
-        for d in range(2, limite + 1):
-            P = _dobrar(P, p) if d == 2 else _somar(P, G, p)
-            tab[P[0]] = d
-        _tabelas[chave] = tab
-    return _tabelas[chave]
+<span class="token keyword">def</span> <span class="token function">tabela</span><span class="token punctuation">(</span>nome_curva<span class="token punctuation">,</span> limite<span class="token operator">=</span>LIMITE_PADRAO<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""&#123;x de d*G: d&#125; para d = 1..limite. Calculada uma vez por curva (cerca de 1 s)."""</span>
+    chave <span class="token operator">=</span> <span class="token punctuation">(</span>nome_curva<span class="token punctuation">,</span> limite<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> chave <span class="token keyword">not</span> <span class="token keyword">in</span> _tabelas<span class="token punctuation">:</span>
+        curva<span class="token punctuation">,</span> p<span class="token punctuation">,</span> _ <span class="token operator">=</span> CURVAS<span class="token punctuation">[</span>nome_curva<span class="token punctuation">]</span>
+        g <span class="token operator">=</span> ec<span class="token punctuation">.</span>derive_private_key<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> curva<span class="token punctuation">)</span><span class="token punctuation">.</span>public_key<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>public_numbers<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        G <span class="token operator">=</span> <span class="token punctuation">(</span>g<span class="token punctuation">.</span>x<span class="token punctuation">,</span> g<span class="token punctuation">.</span>y<span class="token punctuation">)</span>
+        P<span class="token punctuation">,</span> tab <span class="token operator">=</span> G<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>G<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">&#125;</span>
+        <span class="token keyword">for</span> d <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> limite <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            P <span class="token operator">=</span> _dobrar<span class="token punctuation">(</span>P<span class="token punctuation">,</span> p<span class="token punctuation">)</span> <span class="token keyword">if</span> d <span class="token operator">==</span> <span class="token number">2</span> <span class="token keyword">else</span> _somar<span class="token punctuation">(</span>P<span class="token punctuation">,</span> G<span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+            tab<span class="token punctuation">[</span>P<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> d
+        _tabelas<span class="token punctuation">[</span>chave<span class="token punctuation">]</span> <span class="token operator">=</span> tab
+    <span class="token keyword">return</span> _tabelas<span class="token punctuation">[</span>chave<span class="token punctuation">]</span>
 
 
-def escalar_fraco(chave_publica, limite=LIMITE_PADRAO):
-    """Devolve o d (menor que \`limite\`, ou n - d) tal que d*G == chave pública; ou None."""
-    nums = chave_publica.public_numbers()
-    nome = chave_publica.curve.name
-    d = tabela(nome, limite).get(nums.x)
-    if d is None:
-        return None
-    curva, p, n = CURVAS[nome]
-    esperado = ec.derive_private_key(d, curva).public_key().public_numbers()
-    return d if esperado.y == nums.y else n - d</code></pre>
+<span class="token keyword">def</span> <span class="token function">escalar_fraco</span><span class="token punctuation">(</span>chave_publica<span class="token punctuation">,</span> limite<span class="token operator">=</span>LIMITE_PADRAO<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Devolve o d (menor que \`limite\`, ou n - d) tal que d*G == chave pública; ou None."""</span>
+    nums <span class="token operator">=</span> chave_publica<span class="token punctuation">.</span>public_numbers<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    nome <span class="token operator">=</span> chave_publica<span class="token punctuation">.</span>curve<span class="token punctuation">.</span>name
+    d <span class="token operator">=</span> tabela<span class="token punctuation">(</span>nome<span class="token punctuation">,</span> limite<span class="token punctuation">)</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span>nums<span class="token punctuation">.</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> d <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">None</span>
+    curva<span class="token punctuation">,</span> p<span class="token punctuation">,</span> n <span class="token operator">=</span> CURVAS<span class="token punctuation">[</span>nome<span class="token punctuation">]</span>
+    esperado <span class="token operator">=</span> ec<span class="token punctuation">.</span>derive_private_key<span class="token punctuation">(</span>d<span class="token punctuation">,</span> curva<span class="token punctuation">)</span><span class="token punctuation">.</span>public_key<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>public_numbers<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> d <span class="token keyword">if</span> esperado<span class="token punctuation">.</span>y <span class="token operator">==</span> nums<span class="token punctuation">.</span>y <span class="token keyword">else</span> n <span class="token operator">-</span> d</code></pre>
 <p>As funções <code>_somar</code> e <code>_dobrar</code> (soma e dobra de pontos em coordenadas afins, <code>y² = x³ - 3x + b</code>) e as constantes públicas das curvas (<code>p</code> e <code>n</code>, da norma FIPS 186) estão no arquivo completo, junto com a interface de linha de comando. O <code>limite</code> de 2¹⁶ cobre com folga o caso da eMudhra (<code>d &lt; 256</code>); aumentar custa memória e tempo lineares.</p>
 <p><strong>O que o verificador não faz.</strong> Ele só procura escalares pequenos (ou quase <code>n</code>) em P-256 e P-384. Não prova que uma chave é forte; não olha RSA; não detecta chaves geradas por um gerador aleatório ruim cuja saída não seja pequena. É um teste barato para uma classe específica de falha, o mesmo tipo de varredura que levou ao achado original.</p>
 <h3>Laboratório: uma chave fraca e uma normal</h3>

@@ -54,6 +54,8 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
   - Assembly ARM: montar/ligar com o toolchain (devkitARM/devkitA64, fora do PATH, ver memória `arm-toolchain-paths`) e, se o artigo mostra saída, rodar no `armbox`.
   - Java contra o `arm-jitter`: compilar **cada trecho**, não só o arquivo de exemplo, com o `javac` da JBR 25 (`/c/Users/user/.jdks/jbr-25.0.3/bin`; o `java` do PATH é GraalVM 17) contra `~/.m2/repository/dev/vitorsilverio/arm-jitter/<v>/arm-jitter-<v>.jar` (**não** o `-javadoc.jar`). Confira assinaturas com `javap`. Rascunhos já citaram sobrecargas inexistentes e nomes de parâmetro errados.
   - Saídas mostradas no artigo = saída real da execução. O código mostrado no artigo e o arquivo para download devem produzir a mesma saída (inclusive formatação).
+- [ ] **Reading time realista:** conte as palavras do `.md` inteiro (código e tabelas inclusos) e divida por **250**; acima de 15 min, arredonde para cima em múltiplos de 5. Artigo técnico se lê devagar — em 2026-10-22 o Vítor levou ~30 min num artigo de ~7,6 mil palavras marcado como 20.
+- [ ] Toda linguagem usada em bloco de código tem gramática carregada em `site/scripts/lib/highlight.mjs` (`loadLanguages` + `LANG_ALIAS`); senão o bloco sai sem destaque, sem erro nenhum.
 - [ ] Linguagem de bloco de código nova no site (primeira vez com `xml`, `yaml`...)? Abra no navegador nos **dois temas** e confira se nenhum CSS global colide com as classes de token do Prism (ex.: `.tag` × `token tag`).
 
 ## Imagens (capturas de tela, diagramas)
