@@ -87,7 +87,7 @@ O script já faz tudo o que é listado abaixo. Nunca faça à mão sem atualizar
    Páginas de tag (`/tags/<slug>/`) com 1 artigo saem `noindex` e fora do sitemap.
 5. `npm run gen:assets` (roda no fim do gerador e no `prebuild`): regenera capas,
    `public/sitemap.xml`, `public/feed.xml`, `public/llms.txt` e
-   `public/curso-arm/exemplos/` (espelho de `DOCS/curso-arm/exemplos/`).
+   `public/curso-arm/exemplos/` (espelho de `DOCS/curso-arm/exemplos/`, trilha ARM) e `public/exemplos/` (espelho de `DOCS/exemplos/<slug>/`, demais artigos).
    Não editar esses arquivos à mão.
 
 Depois de escrever o conteúdo real em `posts/<slug>.ts`, rode `npm run build` para validar

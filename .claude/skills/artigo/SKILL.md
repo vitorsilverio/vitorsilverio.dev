@@ -28,7 +28,7 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
    - **pré-requisitos** concretos: versões (JDK, toolchain), arquivos de exemplo, o que *não* é preciso.
    Nunca abra direto em detalhe técnico.
 2. **Desenvolvimento do tema**: seções `##` que vão do conceito ao detalhe. Defina cada termo na primeira vez que ele aparece. Siglas sempre por extenso na primeira menção.
-3. **Exemplos, quando o tema pede**: código completo e executável, com link para o arquivo em `/curso-arm/exemplos/...` quando houver. Mostre a **saída real** e explique o que ela revela, linha por linha quando valer a pena.
+3. **Exemplos, quando o tema pede**: código completo e executável, com link para o arquivo quando houver: `/curso-arm/exemplos/...` para a trilha ARM e `/exemplos/<slug>/...` para os demais artigos. Mostre a **saída real** e explique o que ela revela, linha por linha quando valer a pena.
 4. **Glossário** (`## Glossário`): tabela `| Termo | O que é |` com todo termo técnico, classe ou sigla usado no texto. Cada definição deve ser compreensível sem ler o resto do artigo.
 5. **Comandos** (`## Comandos`): tabela `| Comando | O que faz |` com todo comando de shell que aparece no artigo, incluindo variações por SO (`;` vs `:` no classpath, etc.). Omita só se o artigo não tiver nenhum comando.
 6. **Conclusão** (`## Conclusão`): o que o leitor aprendeu, em 1–2 parágrafos ou bullets, e onde isso se aplica. Depois disso, um "Próximo passo" ou "Para ir além" com links **opcionais**. A conclusão precisa fechar o raciocínio por conta própria. Não pode ser só "no próximo artigo...".
@@ -69,7 +69,7 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
 
 ## Confidencialidade antes de publicar
 
-O repositório é **público**. Até o dia da publicação, nada do artigo pode entrar no git: rascunho, exemplos, binários e capturas. O rascunho fica em `site/proximos-artigos/<slug>.md`, e os exemplos de um artigo novo ficam em `site/proximos-artigos/<slug>-exemplos/`; as duas pastas são ignoradas pelo git. Na publicação, os exemplos vão para `DOCS/curso-arm/exemplos/` (ou outra pasta definitiva), e o espelho em `site/public/` é feito pelo `gen:assets`.
+O repositório é **público**. Até o dia da publicação, nada do artigo pode entrar no git: rascunho, exemplos, binários e capturas. O rascunho fica em `site/proximos-artigos/<slug>.md`, e os exemplos de um artigo novo ficam em `site/proximos-artigos/<slug>-exemplos/`; as duas pastas são ignoradas pelo git. Na publicação, os exemplos vão para `DOCS/curso-arm/exemplos/` (trilha ARM) ou `DOCS/exemplos/<slug>/` (qualquer outro artigo), e o espelho em `site/public/` é feito pelo `gen:assets`.
 
 ## Publicação
 

@@ -16,7 +16,7 @@ Seu trabalho é produzir artigos que se sustentam sozinhos, corretos e verificad
 1. Entenda o tema e o leitor: leia o rascunho (se houver), os artigos relacionados já publicados (`site/src/app/data/articles.ts`) e, na trilha ARM, `DOCS/curso-arm/` (ROTEIRO, MANIFESTO, FILA-SUGERIDA).
 2. Investigue antes de escrever: código-fonte real dos projetos citados (por exemplo `C:\Users\user\IdeaProjects\arm-jitter` e `armbox`, lendo a tag da versão citada com `git show <tag>:<arquivo>`), documentação primária e fontes reconhecidas.
 3. Toda afirmação técnica precisa de evidência: código compilado e executado, saída real capturada, link aberto e conferido. O que não puder ser verificado sai do texto ou é marcado no relatório; **nunca invente** API, saída, número de seção, URL ou dado bibliográfico.
-4. Exemplos novos vão para `DOCS/curso-arm/exemplos/` (ou o equivalente do tema) e precisam rodar como mostrado.
+4. Exemplos novos vão para `DOCS/curso-arm/exemplos/` (trilha ARM) ou `DOCS/exemplos/<slug>/` (demais artigos, servidos em `/exemplos/<slug>/`) e precisam rodar como mostrado.
 
 ## Limites
 
