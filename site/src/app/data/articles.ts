@@ -234,4 +234,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo em nível conceitual, sem exploit, e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.',
     tags: ['PHP', 'Segurança', 'CVE', 'RCE', 'PHP-FPM', 'mod_php', 'Defesa'],
   },
+  {
+    slug: 'emudhra-chaves-de-ca-um-byte',
+    title: 'Chaves de CA com um byte: o que a falha da eMudhra ensina sobre confiança em certificados',
+    date: '2026-10-23',
+    readingTime: '20 min',
+    excerpt: 'Em 17 de outubro de 2026 alguém percebeu que as chaves privadas de oito autoridades intermediárias da eMudhra eram inteiros menores que 256, recuperáveis em milissegundos. Conto a linha do tempo com as fontes primárias, explico por que um byte basta para destruir uma chave de curva elíptica, escrevo um verificador de chaves fracas em Python (testado em laboratório e nas oito intermediárias reais) e mostro, com quatro clientes TLS, quem continua exposto: curl, Python, Node e Java aceitam uma cadeia revogada se você não configurar nada.',
+    tags: ['Segurança', 'PKI', 'TLS', 'Certificados', 'Criptografia', 'eMudhra', 'Python', 'OpenSSL', 'Tutorial'],
+  },
 ];

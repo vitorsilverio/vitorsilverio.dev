@@ -62,6 +62,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/ghidra-llm-binario-arm').then((m) => m.ArticleGhidraLlmBinarioArm),
   'php2shell-anatomia-rce-php': () =>
     import('./pages/article-detail/posts/php2shell-anatomia-rce-php').then((m) => m.ArticlePhp2shellAnatomiaRcePhp),
+  'emudhra-chaves-de-ca-um-byte': () =>
+    import('./pages/article-detail/posts/emudhra-chaves-de-ca-um-byte').then((m) => m.ArticleEmudhraChavesDeCaUmByte),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

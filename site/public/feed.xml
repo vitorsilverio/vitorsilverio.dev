@@ -6,7 +6,23 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Thu, 22 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Chaves de CA com um byte: o que a falha da eMudhra ensina sobre confiança em certificados</title>
+      <link>https://vitorsilverio.dev/artigos/emudhra-chaves-de-ca-um-byte/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/emudhra-chaves-de-ca-um-byte/</guid>
+      <pubDate>Fri, 23 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Em 17 de outubro de 2026 alguém percebeu que as chaves privadas de oito autoridades intermediárias da eMudhra eram inteiros menores que 256, recuperáveis em milissegundos. Conto a linha do tempo com as fontes primárias, explico por que um byte basta para destruir uma chave de curva elíptica, escrevo um verificador de chaves fracas em Python (testado em laboratório e nas oito intermediárias reais) e mostro, com quatro clientes TLS, quem continua exposto: curl, Python, Node e Java aceitam uma cadeia revogada se você não configurar nada.</description>
+      <category>Segurança</category>
+      <category>PKI</category>
+      <category>TLS</category>
+      <category>Certificados</category>
+      <category>Criptografia</category>
+      <category>eMudhra</category>
+      <category>Python</category>
+      <category>OpenSSL</category>
+      <category>Tutorial</category>
+    </item>
     <item>
       <title>php2shell: como funcionam as duas falhas de RCE do PHP e como se defender</title>
       <link>https://vitorsilverio.dev/artigos/php2shell-anatomia-rce-php/</link>

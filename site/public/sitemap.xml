@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-22</lastmod>
+    <lastmod>2026-10-23</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,18 +20,18 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-22</lastmod>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-22</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/arm/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/arm/</loc>
     <lastmod>2026-10-21</lastmod>
   </url>
   <url>
@@ -97,6 +97,10 @@
   <url>
     <loc>https://vitorsilverio.dev/tags/registradores/</loc>
     <lastmod>2026-09-06</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/trilha/</loc>
@@ -236,5 +240,10 @@
     <loc>https://vitorsilverio.dev/artigos/php2shell-anatomia-rce-php/</loc>
     <lastmod>2026-10-22</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/php2shell-anatomia-rce-php.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/emudhra-chaves-de-ca-um-byte/</loc>
+    <lastmod>2026-10-23</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/emudhra-chaves-de-ca-um-byte.png</image:loc></image:image>
   </url>
 </urlset>
