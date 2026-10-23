@@ -29,16 +29,16 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <h2>A instrução de captura depende do perfil</h2>
 <p>Não existe uma única instrução de semihosting. Ela muda conforme o perfil do processador e o conjunto de instruções (<code>A32</code> é o modo ARM de 32 bits, <code>T32</code> é o Thumb, <code>A64</code> é o AArch64). A tabela abaixo é a da especificação da Arm:</p>
 <div class="scroll-x">
-  <table>
+  <table class="tabela-lista" role="table">
     <caption>Instruções de captura do semihosting</caption>
-    <thead>
-      <tr><th scope="col">Perfil / estado</th><th scope="col">Instrução</th><th scope="col">Opcode</th></tr>
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Perfil / estado</th><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Opcode</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">M, Thumb (Cortex-M)</th><td><code>BKPT #0xAB</code></td><td><code>0xBEAB</code></td></tr>
-      <tr><th scope="row">A e R, A32 (modo ARM)</th><td><code>SVC #0x123456</code> (ou <code>HLT #0xF000</code>)</td><td><code>0xEF123456</code> (ou <code>0xE10F0070</code>)</td></tr>
-      <tr><th scope="row">A e R, T32 (Thumb)</th><td><code>SVC #0xAB</code> (ou <code>HLT #0x3C</code>)</td><td><code>0xDFAB</code> (ou <code>0xBABC</code>)</td></tr>
-      <tr><th scope="row">A64 (AArch64)</th><td><code>HLT #0xF000</code></td><td><code>0xD45E0000</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Perfil / estado">M, Thumb (Cortex-M)</th><td role="cell" data-label="Instrução"><code>BKPT #0xAB</code></td><td role="cell" data-label="Opcode"><code>0xBEAB</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Perfil / estado">A e R, A32 (modo ARM)</th><td role="cell" data-label="Instrução"><code>SVC #0x123456</code> (ou <code>HLT #0xF000</code>)</td><td role="cell" data-label="Opcode"><code>0xEF123456</code> (ou <code>0xE10F0070</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Perfil / estado">A e R, T32 (Thumb)</th><td role="cell" data-label="Instrução"><code>SVC #0xAB</code> (ou <code>HLT #0x3C</code>)</td><td role="cell" data-label="Opcode"><code>0xDFAB</code> (ou <code>0xBABC</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Perfil / estado">A64 (AArch64)</th><td role="cell" data-label="Instrução"><code>HLT #0xF000</code></td><td role="cell" data-label="Opcode"><code>0xD45E0000</code></td></tr>
     </tbody>
   </table>
 </div>
@@ -47,21 +47,21 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <h2>Os números das operações</h2>
 <p>Estes são os números definidos pela especificação (a lista completa tem mais itens, como <code>SYS_TIME</code> e <code>SYS_GET_CMDLINE</code>). Os que o <code>arm-box</code> implementa estão em negrito, e são só três:</p>
 <div class="scroll-x">
-  <table>
+  <table class="tabela-lista" role="table">
     <caption>Operações de semihosting (valor em R0)</caption>
-    <thead>
-      <tr><th scope="col">R0</th><th scope="col">Operação</th><th scope="col">O que faz</th></tr>
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">R0</th><th scope="col" role="columnheader">Operação</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>0x01</code></th><td><code>SYS_OPEN</code></td><td>Abre um arquivo no host (bloco de 3 campos); devolve um identificador não nulo, ou -1 se falhar</td></tr>
-      <tr><th scope="row"><code>0x02</code></th><td><code>SYS_CLOSE</code></td><td>Fecha um arquivo do host</td></tr>
-      <tr><th scope="row"><code>0x03</code></th><td><strong><code>SYS_WRITEC</code></strong></td><td>Escreve <strong>um</strong> caractere; <code>R1</code> é o endereço do byte</td></tr>
-      <tr><th scope="row"><code>0x04</code></th><td><strong><code>SYS_WRITE0</code></strong></td><td>Escreve uma string terminada em NUL; <code>R1</code> é o endereço do primeiro byte</td></tr>
-      <tr><th scope="row"><code>0x05</code></th><td><code>SYS_WRITE</code></td><td>Escreve um buffer num arquivo (bloco de 3 campos)</td></tr>
-      <tr><th scope="row"><code>0x06</code></th><td><code>SYS_READ</code></td><td>Lê de um arquivo para um buffer</td></tr>
-      <tr><th scope="row"><code>0x07</code></th><td><code>SYS_READC</code></td><td>Lê um caractere do console</td></tr>
-      <tr><th scope="row"><code>0x18</code></th><td><strong><code>SYS_EXIT</code></strong></td><td>Informa que o programa terminou</td></tr>
-      <tr><th scope="row"><code>0x20</code></th><td><code>SYS_EXIT_EXTENDED</code></td><td>Como <code>SYS_EXIT</code>, pensado para informar um status de saída</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x01</code></th><td role="cell" data-label="Operação"><code>SYS_OPEN</code></td><td role="cell" data-label="O que faz">Abre um arquivo no host (bloco de 3 campos); devolve um identificador não nulo, ou -1 se falhar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x02</code></th><td role="cell" data-label="Operação"><code>SYS_CLOSE</code></td><td role="cell" data-label="O que faz">Fecha um arquivo do host</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x03</code></th><td role="cell" data-label="Operação"><strong><code>SYS_WRITEC</code></strong></td><td role="cell" data-label="O que faz">Escreve <strong>um</strong> caractere; <code>R1</code> é o endereço do byte</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x04</code></th><td role="cell" data-label="Operação"><strong><code>SYS_WRITE0</code></strong></td><td role="cell" data-label="O que faz">Escreve uma string terminada em NUL; <code>R1</code> é o endereço do primeiro byte</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x05</code></th><td role="cell" data-label="Operação"><code>SYS_WRITE</code></td><td role="cell" data-label="O que faz">Escreve um buffer num arquivo (bloco de 3 campos)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x06</code></th><td role="cell" data-label="Operação"><code>SYS_READ</code></td><td role="cell" data-label="O que faz">Lê de um arquivo para um buffer</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x07</code></th><td role="cell" data-label="Operação"><code>SYS_READC</code></td><td role="cell" data-label="O que faz">Lê um caractere do console</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x18</code></th><td role="cell" data-label="Operação"><strong><code>SYS_EXIT</code></strong></td><td role="cell" data-label="O que faz">Informa que o programa terminou</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="R0"><code>0x20</code></th><td role="cell" data-label="Operação"><code>SYS_EXIT_EXTENDED</code></td><td role="cell" data-label="O que faz">Como <code>SYS_EXIT</code>, pensado para informar um status de saída</td></tr>
     </tbody>
   </table>
 </div>
@@ -144,17 +144,17 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> semihosti
 <h2>Semihosting não é syscall do Linux</h2>
 <p>Um erro comum é misturar semihosting com as chamadas de sistema do Linux ARM (a <strong>EABI</strong>, <em>Embedded Application Binary Interface</em>). Elas se parecem, pois ambas pedem um serviço ao ambiente, mas diferem em tudo o que importa:</p>
 <div class="scroll-x">
-  <table>
+  <table class="tabela-lista" role="table">
     <caption>Semihosting x chamadas de sistema Linux (EABI)</caption>
-    <thead>
-      <tr><th scope="col">Aspecto</th><th scope="col">Semihosting (Cortex-M)</th><th scope="col">Chamada de sistema Linux ARM</th></tr>
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Aspecto</th><th scope="col" role="columnheader">Semihosting (Cortex-M)</th><th scope="col" role="columnheader">Chamada de sistema Linux ARM</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Instrução</th><td><code>BKPT #0xAB</code></td><td><code>SVC #0</code></td></tr>
-      <tr><th scope="row">Número da operação</th><td><code>R0</code></td><td><code>R7</code></td></tr>
-      <tr><th scope="row">Parâmetros</th><td><code>R1</code> (um valor, ou ponteiro para um bloco)</td><td><code>R0</code>–<code>R5</code></td></tr>
-      <tr><th scope="row">Quem atende</th><td>depurador ou emulador</td><td>o kernel (ou o emulador no modo <code>linux-user</code>)</td></tr>
-      <tr><th scope="row">Existe sem sistema operacional?</th><td>sim: é para isso que serve</td><td>não: supõe um kernel Linux</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Instrução</th><td role="cell" data-label="Semihosting (Cortex-M)"><code>BKPT #0xAB</code></td><td role="cell" data-label="Chamada de sistema Linux ARM"><code>SVC #0</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Número da operação</th><td role="cell" data-label="Semihosting (Cortex-M)"><code>R0</code></td><td role="cell" data-label="Chamada de sistema Linux ARM"><code>R7</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Parâmetros</th><td role="cell" data-label="Semihosting (Cortex-M)"><code>R1</code> (um valor, ou ponteiro para um bloco)</td><td role="cell" data-label="Chamada de sistema Linux ARM"><code>R0</code>–<code>R5</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Quem atende</th><td role="cell" data-label="Semihosting (Cortex-M)">depurador ou emulador</td><td role="cell" data-label="Chamada de sistema Linux ARM">o kernel (ou o emulador no modo <code>linux-user</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Existe sem sistema operacional?</th><td role="cell" data-label="Semihosting (Cortex-M)">sim: é para isso que serve</td><td role="cell" data-label="Chamada de sistema Linux ARM">não: supõe um kernel Linux</td></tr>
     </tbody>
   </table>
 </div>
@@ -162,45 +162,45 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> semihosti
 
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Semihosting</th><td>Interface em que o programa pede serviços (imprimir, ler, abrir arquivo, sair) ao depurador ou emulador por meio de uma instrução de captura</td></tr>
-      <tr><th scope="row">Host</th><td>O computador, depurador ou emulador que atende o pedido do programa</td></tr>
-      <tr><th scope="row">Bare-metal</th><td>Programa que roda direto no hardware, sem sistema operacional</td></tr>
-      <tr><th scope="row">Cortex-M</th><td>Família de processadores ARM para microcontroladores; só executa Thumb</td></tr>
-      <tr><th scope="row">Thumb / T32</th><td>Conjunto de instruções compacto da ARM (16 e 32 bits)</td></tr>
-      <tr><th scope="row"><code>BKPT</code></th><td>Instrução de ponto de parada (<em>breakpoint</em>); com imediato <code>0xAB</code> é a captura do semihosting no perfil M</td></tr>
-      <tr><th scope="row"><code>SVC</code></th><td>Chamada ao supervisor (<em>Supervisor Call</em>); usada em semihosting nos perfis A/R e nas chamadas de sistema Linux</td></tr>
-      <tr><th scope="row"><code>HLT</code></th><td>Instrução de parada (<em>halt</em>); captura do semihosting no AArch64 (<code>HLT #0xF000</code>)</td></tr>
-      <tr><th scope="row">Tabela de vetores</th><td>Tabela no início da memória de um Cortex-M: valor inicial do <code>SP</code> e endereços dos tratadores de exceção, incluindo o de reset</td></tr>
-      <tr><th scope="row"><code>MSP</code></th><td>Ponteiro de pilha principal (<em>Main Stack Pointer</em>) do Cortex-M</td></tr>
-      <tr><th scope="row"><code>SYS_WRITE0</code></th><td>Operação <code>0x04</code>: escreve uma string terminada em NUL</td></tr>
-      <tr><th scope="row"><code>SYS_WRITEC</code></th><td>Operação <code>0x03</code>: escreve um caractere (o parâmetro é o endereço do byte)</td></tr>
-      <tr><th scope="row"><code>SYS_EXIT</code></th><td>Operação <code>0x18</code>: informa o fim do programa; no AArch32 o parâmetro é um código de motivo</td></tr>
-      <tr><th scope="row"><code>ADP_Stopped_ApplicationExit</code></th><td>Código de motivo <code>0x20026</code>: "o aplicativo terminou normalmente"</td></tr>
-      <tr><th scope="row">EABI</th><td>Interface binária de aplicações embarcadas da Arm; no Linux ARM define como chamar o kernel (<code>SVC #0</code>, número em <code>R7</code>)</td></tr>
-      <tr><th scope="row"><code>arm-box</code></th><td>Programa de linha de comando que executa binários ARM; tem os modos <code>linux-user</code> e <code>cortex-m</code></td></tr>
-      <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca Java que decodifica e executa instruções ARM; é o núcleo do <code>arm-box</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Semihosting</th><td role="cell" data-label="O que é">Interface em que o programa pede serviços (imprimir, ler, abrir arquivo, sair) ao depurador ou emulador por meio de uma instrução de captura</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Host</th><td role="cell" data-label="O que é">O computador, depurador ou emulador que atende o pedido do programa</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bare-metal</th><td role="cell" data-label="O que é">Programa que roda direto no hardware, sem sistema operacional</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Cortex-M</th><td role="cell" data-label="O que é">Família de processadores ARM para microcontroladores; só executa Thumb</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / T32</th><td role="cell" data-label="O que é">Conjunto de instruções compacto da ARM (16 e 32 bits)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BKPT</code></th><td role="cell" data-label="O que é">Instrução de ponto de parada (<em>breakpoint</em>); com imediato <code>0xAB</code> é a captura do semihosting no perfil M</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SVC</code></th><td role="cell" data-label="O que é">Chamada ao supervisor (<em>Supervisor Call</em>); usada em semihosting nos perfis A/R e nas chamadas de sistema Linux</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>HLT</code></th><td role="cell" data-label="O que é">Instrução de parada (<em>halt</em>); captura do semihosting no AArch64 (<code>HLT #0xF000</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Tabela de vetores</th><td role="cell" data-label="O que é">Tabela no início da memória de um Cortex-M: valor inicial do <code>SP</code> e endereços dos tratadores de exceção, incluindo o de reset</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MSP</code></th><td role="cell" data-label="O que é">Ponteiro de pilha principal (<em>Main Stack Pointer</em>) do Cortex-M</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_WRITE0</code></th><td role="cell" data-label="O que é">Operação <code>0x04</code>: escreve uma string terminada em NUL</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_WRITEC</code></th><td role="cell" data-label="O que é">Operação <code>0x03</code>: escreve um caractere (o parâmetro é o endereço do byte)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_EXIT</code></th><td role="cell" data-label="O que é">Operação <code>0x18</code>: informa o fim do programa; no AArch32 o parâmetro é um código de motivo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ADP_Stopped_ApplicationExit</code></th><td role="cell" data-label="O que é">Código de motivo <code>0x20026</code>: "o aplicativo terminou normalmente"</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">EABI</th><td role="cell" data-label="O que é">Interface binária de aplicações embarcadas da Arm; no Linux ARM define como chamar o kernel (<code>SVC #0</code>, número em <code>R7</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">Programa de linha de comando que executa binários ARM; tem os modos <code>linux-user</code> e <code>cortex-m</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">Biblioteca Java que decodifica e executa instruções ARM; é o núcleo do <code>arm-box</code></td></tr>
     </tbody>
   </table>
 </div>
 
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>mvn package</code></th><td>Compila o <code>arm-box</code> e gera <code>target/armbox.jar</code> (dentro da pasta do repositório)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-as -mcpu=cortex-m3 -o x.o x.s</code></th><td>Monta o assembly para Cortex-M3 (Thumb-2)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -T flash.ld -o x.elf x.o</code></th><td>Liga usando o linker script, que coloca a tabela de vetores em <code>0x0</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>Desmonta o executável, mostrando endereços, bytes e instruções</td></tr>
-      <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7m --machine=cortex-m x.elf</code></th><td>Executa o firmware no modo Cortex-M (ARMv7-M), com semihosting</td></tr>
-      <tr><th scope="row"><code>echo $?</code></th><td>Mostra o status de saída do último comando (no PowerShell: <code>$LASTEXITCODE</code>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn package</code></th><td role="cell" data-label="O que faz">Compila o <code>arm-box</code> e gera <code>target/armbox.jar</code> (dentro da pasta do repositório)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -mcpu=cortex-m3 -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta o assembly para Cortex-M3 (Thumb-2)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -T flash.ld -o x.elf x.o</code></th><td role="cell" data-label="O que faz">Liga usando o linker script, que coloca a tabela de vetores em <code>0x0</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">Desmonta o executável, mostrando endereços, bytes e instruções</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7m --machine=cortex-m x.elf</code></th><td role="cell" data-label="O que faz">Executa o firmware no modo Cortex-M (ARMv7-M), com semihosting</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code></th><td role="cell" data-label="O que faz">Mostra o status de saída do último comando (no PowerShell: <code>$LASTEXITCODE</code>)</td></tr>
     </tbody>
   </table>
 </div>

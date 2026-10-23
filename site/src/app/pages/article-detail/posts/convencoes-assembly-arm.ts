@@ -23,16 +23,16 @@ import { Nota } from '../../../shared/nota/nota';
 <p>A diretiva é necessária: segundo o manual do GNU <code>as</code>, o padrão é a sintaxe <em>divided</em>. Na prática o programa mínimo <code>hello.s</code> do <code>arm-box</code> funciona sem ela, porque só usa instruções sem sufixos. Mas basta um <code>addsne</code> para a diferença aparecer: em um arquivo sem <code>.syntax unified</code>, o <code>arm-none-eabi-as</code> responde <code>Error: bad instruction &#96;addsne r0,r0,#1'</code>, porque na sintaxe dividida a ordem é outra (veja &quot;Anatomia de um mnemônico&quot; adiante).</p>
 <p>O montador é o <strong><code>arm-none-eabi-as</code></strong> do toolchain GNU. É o mesmo <code>as</code> do GCC — então a sintaxe de diretivas é a do <strong>GAS</strong> (GNU assembler), não a do <code>armasm</code> da ARM. As diferenças que importam:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Item</th><th scope="col">GAS (esta trilha)</th><th scope="col"><code>armasm</code> (ARM)</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Item</th><th scope="col" role="columnheader">GAS (esta trilha)</th><th scope="col" role="columnheader"><code>armasm</code> (ARM)</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Comentário de linha</th><td><code>@ comentário</code></td><td><code>; comentário</code></td></tr>
-      <tr><th scope="row">Comentário de bloco</th><td><code>/* ... */</code></td><td>—</td></tr>
-      <tr><th scope="row">Rótulo</th><td><code>nome:</code></td><td><code>nome</code> (coluna 1)</td></tr>
-      <tr><th scope="row">Constante</th><td><code>.word 0x10</code></td><td><code>DCD 0x10</code></td></tr>
-      <tr><th scope="row">Seção de código</th><td><code>.text</code></td><td><code>AREA nome, CODE</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Item">Comentário de linha</th><td role="cell" data-label="GAS (esta trilha)"><code>@ comentário</code></td><td role="cell" data-label="armasm (ARM)"><code>; comentário</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Item">Comentário de bloco</th><td role="cell" data-label="GAS (esta trilha)"><code>/* ... */</code></td><td role="cell" data-label="armasm (ARM)">—</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Item">Rótulo</th><td role="cell" data-label="GAS (esta trilha)"><code>nome:</code></td><td role="cell" data-label="armasm (ARM)"><code>nome</code> (coluna 1)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Item">Constante</th><td role="cell" data-label="GAS (esta trilha)"><code>.word 0x10</code></td><td role="cell" data-label="armasm (ARM)"><code>DCD 0x10</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Item">Seção de código</th><td role="cell" data-label="GAS (esta trilha)"><code>.text</code></td><td role="cell" data-label="armasm (ARM)"><code>AREA nome, CODE</code></td></tr>
     </tbody>
   </table>
 </div>
@@ -53,20 +53,20 @@ msg:
     .ascii  <span class="token string">"hello from a real ELF\\n"</span>   @ bytes crus na seção atual
 msg_end:</code></pre>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Diretiva</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Diretiva</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>.arch &lt;nome&gt;</code></th><td>Define a arquitetura alvo (<code>armv4t</code>, <code>armv5te</code>, <code>armv6k</code>, <code>armv7-a</code>, ...). Instrução fora do alvo → erro de montagem</td></tr>
-      <tr><th scope="row"><code>.arm</code> / <code>.thumb</code></th><td>Seleciona o estado; muda a largura e a codificação das instruções</td></tr>
-      <tr><th scope="row"><code>.syntax unified</code></th><td>Liga a UAL (recomendado sempre)</td></tr>
-      <tr><th scope="row"><code>.text</code> / <code>.data</code> / <code>.bss</code></th><td>Seção de código / dados inicializados / dados zerados</td></tr>
-      <tr><th scope="row"><code>.global &lt;sym&gt;</code></th><td>Torna o símbolo visível para o linker</td></tr>
-      <tr><th scope="row"><code>.word</code> / <code>.hword</code> / <code>.byte</code></th><td>Emite 4 / 2 / 1 bytes literais</td></tr>
-      <tr><th scope="row"><code>.ascii</code> / <code>.asciz</code></th><td>String sem / com terminador <code>NUL</code></td></tr>
-      <tr><th scope="row"><code>.align n</code> / <code>.balign n</code></th><td>Alinha o próximo dado a <code>2^n</code> / <code>n</code> bytes</td></tr>
-      <tr><th scope="row"><code>.equ NOME, valor</code></th><td>Constante de montagem (sem custo em runtime)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.arch &lt;nome&gt;</code></th><td role="cell" data-label="O que faz">Define a arquitetura alvo (<code>armv4t</code>, <code>armv5te</code>, <code>armv6k</code>, <code>armv7-a</code>, ...). Instrução fora do alvo → erro de montagem</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.arm</code> / <code>.thumb</code></th><td role="cell" data-label="O que faz">Seleciona o estado; muda a largura e a codificação das instruções</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.syntax unified</code></th><td role="cell" data-label="O que faz">Liga a UAL (recomendado sempre)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.text</code> / <code>.data</code> / <code>.bss</code></th><td role="cell" data-label="O que faz">Seção de código / dados inicializados / dados zerados</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.global &lt;sym&gt;</code></th><td role="cell" data-label="O que faz">Torna o símbolo visível para o linker</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.word</code> / <code>.hword</code> / <code>.byte</code></th><td role="cell" data-label="O que faz">Emite 4 / 2 / 1 bytes literais</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.ascii</code> / <code>.asciz</code></th><td role="cell" data-label="O que faz">String sem / com terminador <code>NUL</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.align n</code> / <code>.balign n</code></th><td role="cell" data-label="O que faz">Alinha o próximo dado a <code>2^n</code> / <code>n</code> bytes</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Diretiva"><code>.equ NOME, valor</code></th><td role="cell" data-label="O que faz">Constante de montagem (sem custo em runtime)</td></tr>
     </tbody>
   </table>
 </div>
@@ -119,47 +119,47 @@ loop:
 </ul>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te -o x.o x.s</code></th><td>Monta <code>x.s</code> → objeto <code>x.o</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>Liga <code>x.o</code> → executável <code>x.elf</code>, código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -nostdlib -o x.elf x.s</code></th><td>Monta <strong>e</strong> liga em um passo (sem libc)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>Desmonta a seção de código</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -s -j .data x.elf</code></th><td><em>Dump</em> hexadecimal de uma seção</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary x.elf x.bin</code></th><td>Extrai só os bytes (sem cabeçalho ELF)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta <code>x.s</code> → objeto <code>x.o</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">Liga <code>x.o</code> → executável <code>x.elf</code>, código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -nostdlib -o x.elf x.s</code></th><td role="cell" data-label="O que faz">Monta <strong>e</strong> liga em um passo (sem libc)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">Desmonta a seção de código</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -s -j .data x.elf</code></th><td role="cell" data-label="O que faz"><em>Dump</em> hexadecimal de uma seção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objcopy -O binary x.elf x.bin</code></th><td role="cell" data-label="O que faz">Extrai só os bytes (sem cabeçalho ELF)</td></tr>
     </tbody>
   </table>
 </div>
 <p>Todos os comandos acima foram executados com o devkitARM (GCC 16.1.0, binutils 2.46). Para <code>-march</code>, vale o mesmo que para <code>.arch</code>: pedir uma instrução que a arquitetura não tem dá erro. Por exemplo, <code>clz r0, r1</code> com <code>.arch armv4t</code> falha com <code>selected processor does not support &#96;clz r0,r1' in ARM mode</code>.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">UAL</th><td><em>Unified Assembler Language</em>: sintaxe de assembly em que ARM e Thumb usam os mesmos mnemônicos; no GNU <code>as</code> é ligada com <code>.syntax unified</code></td></tr>
-      <tr><th scope="row">Sintaxe <em>divided</em></th><td>A sintaxe antiga (e padrão do GNU <code>as</code>), em que ARM e Thumb têm escritas separadas e a condição vem antes do <code>S</code> (<code>addnes</code>)</td></tr>
-      <tr><th scope="row">GAS</th><td><em>GNU Assembler</em>, o <code>as</code> do GNU Binutils; é o montador usado pelo GCC</td></tr>
-      <tr><th scope="row"><code>armasm</code></th><td>Montador da Arm (Arm Compiler), com sintaxe própria de comentários, rótulos e diretivas</td></tr>
-      <tr><th scope="row">Toolchain <code>arm-none-eabi</code></th><td>Conjunto de ferramentas (<code>gcc</code>, <code>as</code>, <code>ld</code>, <code>objdump</code>...) que gera código ARM sem sistema operacional por baixo</td></tr>
-      <tr><th scope="row">Diretiva</th><td>Comando para o montador, que começa com ponto (<code>.text</code>, <code>.word</code>); não é uma instrução do processador</td></tr>
-      <tr><th scope="row">Rótulo</th><td>Nome seguido de <code>:</code> que marca um endereço no código ou nos dados</td></tr>
-      <tr><th scope="row">Mnemônico</th><td>Nome textual de uma instrução (<code>mov</code>, <code>add</code>, <code>bne</code>)</td></tr>
-      <tr><th scope="row">Operand2</th><td>O segundo operando de uma instrução de processamento de dados: imediato, registrador ou registrador deslocado</td></tr>
-      <tr><th scope="row">Imediato</th><td>Constante escrita na própria instrução, com <code>#</code> na frente (<code>#42</code>)</td></tr>
-      <tr><th scope="row"><code>CPSR</code></th><td><em>Current Program Status Register</em>: registrador de status com as flags N, Z, C e V, entre outros campos</td></tr>
-      <tr><th scope="row">Flags N/Z/C/V</th><td>Bits de resultado: negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal)</td></tr>
-      <tr><th scope="row">Condição (<code>cond</code>)</th><td>Sufixo de duas letras (<code>EQ</code>, <code>NE</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição; <code>AL</code> (<em>always</em>) é o padrão</td></tr>
-      <tr><th scope="row">Predicação</th><td>Execução condicional de instruções comuns (não só de desvios) pelo campo de condição</td></tr>
-      <tr><th scope="row">Pseudo-instrução</th><td>Instrução aceita pelo montador que não existe no processador e vira outra(s) na montagem (<code>ldr Rd, =const</code>, <code>adr</code>)</td></tr>
-      <tr><th scope="row"><code>objdump</code></th><td>Ferramenta que desmonta um executável, mostrando endereço, bytes e mnemônico de cada instrução</td></tr>
-      <tr><th scope="row"><em>Little-endian</em></th><td>Ordem de bytes em que o byte menos significativo fica no endereço mais baixo; o <code>objdump</code> mostra a palavra já na ordem lógica</td></tr>
-      <tr><th scope="row"><code>arm-box</code> / <code>arm-jitter</code></th><td><code>arm-box</code>: programa de linha de comando que executa binários ARM de 32 bits; <code>arm-jitter</code>: a biblioteca Java de emulação em que ele se apoia</td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de arquivo executável gerado pelo <code>ld</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">UAL</th><td role="cell" data-label="O que é"><em>Unified Assembler Language</em>: sintaxe de assembly em que ARM e Thumb usam os mesmos mnemônicos; no GNU <code>as</code> é ligada com <code>.syntax unified</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Sintaxe <em>divided</em></th><td role="cell" data-label="O que é">A sintaxe antiga (e padrão do GNU <code>as</code>), em que ARM e Thumb têm escritas separadas e a condição vem antes do <code>S</code> (<code>addnes</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">GAS</th><td role="cell" data-label="O que é"><em>GNU Assembler</em>, o <code>as</code> do GNU Binutils; é o montador usado pelo GCC</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>armasm</code></th><td role="cell" data-label="O que é">Montador da Arm (Arm Compiler), com sintaxe própria de comentários, rótulos e diretivas</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Toolchain <code>arm-none-eabi</code></th><td role="cell" data-label="O que é">Conjunto de ferramentas (<code>gcc</code>, <code>as</code>, <code>ld</code>, <code>objdump</code>...) que gera código ARM sem sistema operacional por baixo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Diretiva</th><td role="cell" data-label="O que é">Comando para o montador, que começa com ponto (<code>.text</code>, <code>.word</code>); não é uma instrução do processador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Rótulo</th><td role="cell" data-label="O que é">Nome seguido de <code>:</code> que marca um endereço no código ou nos dados</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Mnemônico</th><td role="cell" data-label="O que é">Nome textual de uma instrução (<code>mov</code>, <code>add</code>, <code>bne</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Operand2</th><td role="cell" data-label="O que é">O segundo operando de uma instrução de processamento de dados: imediato, registrador ou registrador deslocado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Imediato</th><td role="cell" data-label="O que é">Constante escrita na própria instrução, com <code>#</code> na frente (<code>#42</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: registrador de status com as flags N, Z, C e V, entre outros campos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N/Z/C/V</th><td role="cell" data-label="O que é">Bits de resultado: negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Condição (<code>cond</code>)</th><td role="cell" data-label="O que é">Sufixo de duas letras (<code>EQ</code>, <code>NE</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição; <code>AL</code> (<em>always</em>) é o padrão</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Predicação</th><td role="cell" data-label="O que é">Execução condicional de instruções comuns (não só de desvios) pelo campo de condição</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pseudo-instrução</th><td role="cell" data-label="O que é">Instrução aceita pelo montador que não existe no processador e vira outra(s) na montagem (<code>ldr Rd, =const</code>, <code>adr</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">Ferramenta que desmonta um executável, mostrando endereço, bytes e mnemônico de cada instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Little-endian</em></th><td role="cell" data-label="O que é">Ordem de bytes em que o byte menos significativo fica no endereço mais baixo; o <code>objdump</code> mostra a palavra já na ordem lógica</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code> / <code>arm-jitter</code></th><td role="cell" data-label="O que é"><code>arm-box</code>: programa de linha de comando que executa binários ARM de 32 bits; <code>arm-jitter</code>: a biblioteca Java de emulação em que ele se apoia</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de arquivo executável gerado pelo <code>ld</code></td></tr>
     </tbody>
   </table>
 </div>

@@ -206,55 +206,55 @@ arm-none-eabi-ld <span class="token parameter variable">-Ttext</span><span class
 
     <h2>Glossário</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
         </thead>
-        <tbody>
-          <tr><th scope="row">Toolchain</th><td>Conjunto de ferramentas de desenvolvimento (compilador, montador, ligador, desmontador) para um alvo</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi</code></th><td>Nome do toolchain GNU para ARM sem sistema operacional (&quot;none&quot;) e com a interface binária EABI</td></tr>
-          <tr><th scope="row">Bare-metal</th><td>Código que roda direto no hardware, sem sistema operacional por baixo</td></tr>
-          <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca Java que decodifica, executa, depura e compila (JIT) instruções ARM/Thumb</td></tr>
-          <tr><th scope="row"><code>armbox</code></th><td>Programa de linha de comando que executa executáveis ARM de 32 bits sobre o <code>arm-jitter</code>, no estilo do <code>qemu-arm</code></td></tr>
-          <tr><th scope="row">Modo usuário (user-mode)</th><td>Emulação só do programa, com as chamadas de sistema traduzidas para o host, sem emular um kernel</td></tr>
-          <tr><th scope="row">JDK / JBR</th><td>Kit de desenvolvimento Java; JBR é o <em>JetBrains Runtime</em>, a distribuição de JDK que acompanha o IntelliJ</td></tr>
-          <tr><th scope="row">Maven</th><td>Ferramenta de build e de gestão de dependências Java</td></tr>
-          <tr><th scope="row">Maven Central</th><td>Repositório público de onde o Maven baixa bibliotecas, como o <code>arm-jitter</code></td></tr>
-          <tr><th scope="row"><code>~/.m2</code></th><td>Repositório local do Maven, na sua máquina</td></tr>
-          <tr><th scope="row"><em>Uber-jar</em></th><td>Arquivo <code>.jar</code> executável que contém também todas as dependências</td></tr>
-          <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato dos executáveis Linux</td></tr>
-          <tr><th scope="row"><code>objdump</code></th><td>Ferramenta que desmonta um executável, mostrando endereço, bytes e mnemônico de cada instrução</td></tr>
-          <tr><th scope="row">devkitARM</th><td>Toolchain ARM do projeto devkitPro, voltado a consoles; inclui as ferramentas <code>arm-none-eabi-*</code></td></tr>
-          <tr><th scope="row"><code>PATH</code></th><td>Variável de ambiente com as pastas onde o shell procura comandos</td></tr>
-          <tr><th scope="row">Código de saída</th><td>Número que um programa devolve ao terminar; 0 costuma significar sucesso</td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Toolchain</th><td role="cell" data-label="O que é">Conjunto de ferramentas de desenvolvimento (compilador, montador, ligador, desmontador) para um alvo</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-none-eabi</code></th><td role="cell" data-label="O que é">Nome do toolchain GNU para ARM sem sistema operacional (&quot;none&quot;) e com a interface binária EABI</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bare-metal</th><td role="cell" data-label="O que é">Código que roda direto no hardware, sem sistema operacional por baixo</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">Biblioteca Java que decodifica, executa, depura e compila (JIT) instruções ARM/Thumb</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>armbox</code></th><td role="cell" data-label="O que é">Programa de linha de comando que executa executáveis ARM de 32 bits sobre o <code>arm-jitter</code>, no estilo do <code>qemu-arm</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo usuário (user-mode)</th><td role="cell" data-label="O que é">Emulação só do programa, com as chamadas de sistema traduzidas para o host, sem emular um kernel</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JDK / JBR</th><td role="cell" data-label="O que é">Kit de desenvolvimento Java; JBR é o <em>JetBrains Runtime</em>, a distribuição de JDK que acompanha o IntelliJ</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Maven</th><td role="cell" data-label="O que é">Ferramenta de build e de gestão de dependências Java</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Maven Central</th><td role="cell" data-label="O que é">Repositório público de onde o Maven baixa bibliotecas, como o <code>arm-jitter</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>~/.m2</code></th><td role="cell" data-label="O que é">Repositório local do Maven, na sua máquina</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Uber-jar</em></th><td role="cell" data-label="O que é">Arquivo <code>.jar</code> executável que contém também todas as dependências</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato dos executáveis Linux</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">Ferramenta que desmonta um executável, mostrando endereço, bytes e mnemônico de cada instrução</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">devkitARM</th><td role="cell" data-label="O que é">Toolchain ARM do projeto devkitPro, voltado a consoles; inclui as ferramentas <code>arm-none-eabi-*</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>PATH</code></th><td role="cell" data-label="O que é">Variável de ambiente com as pastas onde o shell procura comandos</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Código de saída</th><td role="cell" data-label="O que é">Número que um programa devolve ao terminar; 0 costuma significar sucesso</td></tr>
         </tbody>
       </table>
     </div>
 
     <h2>Comandos</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
         </thead>
-        <tbody>
-          <tr><th scope="row"><code>java -version</code> / <code>mvn -version</code></th><td>Mostram as versões do Java e do Maven (e qual JDK o Maven usa)</td></tr>
-          <tr><th scope="row"><code>sdk list java</code> / <code>sdk install java &lt;id&gt;</code></th><td>SDKMAN: lista as distribuições de JDK e instala a escolhida</td></tr>
-          <tr><th scope="row"><code>sudo apt install maven</code></th><td>Instala o Maven no Debian/Ubuntu</td></tr>
-          <tr><th scope="row"><code>brew install openjdk&#64;25 maven</code></th><td>Instala JDK 25 e Maven no macOS</td></tr>
-          <tr><th scope="row"><code>scoop bucket add java</code> / <code>scoop install openjdk25 maven</code></th><td>Windows: adiciona o bucket <code>java</code> e instala o JDK 25 e o Maven</td></tr>
-          <tr><th scope="row"><code>sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi</code></th><td>Instala o toolchain ARM no Debian/Ubuntu</td></tr>
-          <tr><th scope="row"><code>brew install arm-none-eabi-gcc</code></th><td>Instala o toolchain ARM no macOS</td></tr>
-          <tr><th scope="row"><code>pacman -S mingw-w64-ucrt-x86_64-arm-none-eabi-gcc mingw-w64-ucrt-x86_64-arm-none-eabi-binutils</code></th><td>Instala o toolchain ARM no MSYS2 (Windows)</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-gcc --version</code> / <code>arm-none-eabi-objdump --version</code></th><td>Confirmam que o toolchain está no <code>PATH</code></td></tr>
-          <tr><th scope="row"><code>git clone &lt;url&gt;</code></th><td>Baixa um repositório</td></tr>
-          <tr><th scope="row"><code>mvn package</code></th><td>Compila, roda os testes e empacota o projeto; no <code>armbox</code> gera <code>target/armbox.jar</code></td></tr>
-          <tr><th scope="row"><code>mvn install -DskipTests</code></th><td>Compila e publica o projeto no <code>~/.m2</code> sem rodar os testes</td></tr>
-          <tr><th scope="row"><code>java -jar target/armbox.jar x.elf</code></th><td>Executa o ELF ARM no <code>armbox</code></td></tr>
-          <tr><th scope="row"><code>echo $?</code> (PowerShell: <code>$LASTEXITCODE</code>)</th><td>Mostra o código de saída do último comando</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>Desmonta o código do executável</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te -o x.o x.s</code></th><td>Monta o fonte <code>x.s</code> para ARMv5TE</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>Liga o objeto em um ELF com o código em <code>0x10000</code></td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -version</code> / <code>mvn -version</code></th><td role="cell" data-label="O que faz">Mostram as versões do Java e do Maven (e qual JDK o Maven usa)</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>sdk list java</code> / <code>sdk install java &lt;id&gt;</code></th><td role="cell" data-label="O que faz">SDKMAN: lista as distribuições de JDK e instala a escolhida</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>sudo apt install maven</code></th><td role="cell" data-label="O que faz">Instala o Maven no Debian/Ubuntu</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>brew install openjdk&#64;25 maven</code></th><td role="cell" data-label="O que faz">Instala JDK 25 e Maven no macOS</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>scoop bucket add java</code> / <code>scoop install openjdk25 maven</code></th><td role="cell" data-label="O que faz">Windows: adiciona o bucket <code>java</code> e instala o JDK 25 e o Maven</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi</code></th><td role="cell" data-label="O que faz">Instala o toolchain ARM no Debian/Ubuntu</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>brew install arm-none-eabi-gcc</code></th><td role="cell" data-label="O que faz">Instala o toolchain ARM no macOS</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>pacman -S mingw-w64-ucrt-x86_64-arm-none-eabi-gcc mingw-w64-ucrt-x86_64-arm-none-eabi-binutils</code></th><td role="cell" data-label="O que faz">Instala o toolchain ARM no MSYS2 (Windows)</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc --version</code> / <code>arm-none-eabi-objdump --version</code></th><td role="cell" data-label="O que faz">Confirmam que o toolchain está no <code>PATH</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>git clone &lt;url&gt;</code></th><td role="cell" data-label="O que faz">Baixa um repositório</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn package</code></th><td role="cell" data-label="O que faz">Compila, roda os testes e empacota o projeto; no <code>armbox</code> gera <code>target/armbox.jar</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn install -DskipTests</code></th><td role="cell" data-label="O que faz">Compila e publica o projeto no <code>~/.m2</code> sem rodar os testes</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar x.elf</code></th><td role="cell" data-label="O que faz">Executa o ELF ARM no <code>armbox</code></td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code> (PowerShell: <code>$LASTEXITCODE</code>)</th><td role="cell" data-label="O que faz">Mostra o código de saída do último comando</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">Desmonta o código do executável</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta o fonte <code>x.s</code> para ARMv5TE</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">Liga o objeto em um ELF com o código em <code>0x10000</code></td></tr>
         </tbody>
       </table>
     </div>

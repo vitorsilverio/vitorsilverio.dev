@@ -138,55 +138,55 @@ core<span class="token punctuation">.</span><span class="token function">configu
 <p>Os endereços acima são os de um Game Boy Advance (pilhas na RAM interna em <code>0x03007Fxx</code>, cartucho a partir de <code>0x08000000</code>); num outro aparelho, você usaria o mapa de memória dele.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Emulador</th><td>software que executa programas de outra arquitetura reproduzindo o efeito de cada instrução</td></tr>
-      <tr><th scope="row">Hospedeiro</th><td>o programa (aqui, em Java) que cria e controla o núcleo emulado</td></tr>
-      <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa código ARM, por interpretação ou JIT</td></tr>
-      <tr><th scope="row"><code>arm-box</code></th><td>executor de linha de comando construído sobre o <code>arm-jitter</code></td></tr>
-      <tr><th scope="row"><code>AddressSpace</code></th><td>interface do barramento de memória: <code>read</code>/<code>write</code> de 8/16/32 bits</td></tr>
-      <tr><th scope="row"><code>ArmCore</code></th><td>o processador emulado: registradores, <code>CPSR</code>, busca/decodificação/execução</td></tr>
-      <tr><th scope="row"><code>SwiDispatcher</code></th><td>política para a instrução <code>SVC</code>: tratar no hospedeiro ou desviar para o vetor de exceção</td></tr>
-      <tr><th scope="row"><code>SVC</code></th><td><em>supervisor call</em>: instrução com que um programa pede um serviço ao sistema operacional (antigo <code>SWI</code>)</td></tr>
-      <tr><th scope="row">Vetor de exceção</th><td>endereço fixo (<code>0x08</code> para <code>SVC</code>) para onde o processador desvia numa exceção</td></tr>
-      <tr><th scope="row">PC</th><td><em>program counter</em> (<code>r15</code>): endereço da instrução sendo executada</td></tr>
-      <tr><th scope="row"><code>CPSR</code></th><td><em>current program status register</em>: flags <code>N Z C V</code>, máscaras de interrupção e modo atual</td></tr>
-      <tr><th scope="row">Flags <code>N Z C V</code></th><td>negativo, zero, carry (na subtração: &quot;não houve empréstimo&quot;), overflow</td></tr>
-      <tr><th scope="row">Modo (Supervisor, System, IRQ...)</th><td>nível de privilégio e contexto do processador; cada um pode ter registradores próprios</td></tr>
-      <tr><th scope="row">Registrador em banco</th><td>registrador com uma cópia por modo, como o <code>r13</code> (SP)</td></tr>
-      <tr><th scope="row"><em>Trace listener</em></th><td>objeto notificado depois de cada instrução (<code>afterInstruction</code>) ou bloco</td></tr>
-      <tr><th scope="row"><code>DecodedInstruction</code> / <code>InstructionKind</code></th><td>instrução já decodificada / sua categoria (<code>ADD</code>, <code>LOAD</code>, <code>BRANCH</code>...)</td></tr>
-      <tr><th scope="row">SMC</th><td><em>self-modifying code</em>: programa que escreve sobre o próprio código</td></tr>
-      <tr><th scope="row"><code>notifyWrite</code></th><td>aviso do <code>AddressSpace</code> de que um endereço mudou, para invalidar blocos em cache</td></tr>
-      <tr><th scope="row"><em>Little-endian</em></th><td>ordem de bytes com o menos significativo no endereço mais baixo</td></tr>
-      <tr><th scope="row">Interpretador</th><td>executa uma instrução por vez, sem compilar</td></tr>
-      <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução</td></tr>
-      <tr><th scope="row">Bloco</th><td>sequência de instruções que termina num desvio; unidade do JIT</td></tr>
-      <tr><th scope="row">IR / <code>IrBlock</code></th><td>representação intermediária de um bloco, comum a todos os backends</td></tr>
-      <tr><th scope="row">Backend</th><td>quem executa a IR: bytecode JVM, interpretador de IR, ou ambos com checagem</td></tr>
-      <tr><th scope="row"><code>JitRuntime</code></th><td>o runtime de execução por blocos, criado por <code>JitRuntimeFactory</code></td></tr>
-      <tr><th scope="row">ASM</th><td>biblioteca Java (<code>org.ow2.asm</code>) para gerar bytecode; usada pelo backend JIT</td></tr>
-      <tr><th scope="row">BIOS</th><td>código de boot gravado no aparelho, que prepara o processador antes do programa</td></tr>
-      <tr><th scope="row"><code>configureExecutionState</code></th><td>define PC, modo, conjunto de instruções (ARM/Thumb) e máscaras IRQ/FIQ de uma vez</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Emulador</th><td role="cell" data-label="O que é">software que executa programas de outra arquitetura reproduzindo o efeito de cada instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Hospedeiro</th><td role="cell" data-label="O que é">o programa (aqui, em Java) que cria e controla o núcleo emulado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa código ARM, por interpretação ou JIT</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">executor de linha de comando construído sobre o <code>arm-jitter</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>AddressSpace</code></th><td role="cell" data-label="O que é">interface do barramento de memória: <code>read</code>/<code>write</code> de 8/16/32 bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ArmCore</code></th><td role="cell" data-label="O que é">o processador emulado: registradores, <code>CPSR</code>, busca/decodificação/execução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SwiDispatcher</code></th><td role="cell" data-label="O que é">política para a instrução <code>SVC</code>: tratar no hospedeiro ou desviar para o vetor de exceção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SVC</code></th><td role="cell" data-label="O que é"><em>supervisor call</em>: instrução com que um programa pede um serviço ao sistema operacional (antigo <code>SWI</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Vetor de exceção</th><td role="cell" data-label="O que é">endereço fixo (<code>0x08</code> para <code>SVC</code>) para onde o processador desvia numa exceção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC</th><td role="cell" data-label="O que é"><em>program counter</em> (<code>r15</code>): endereço da instrução sendo executada</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>current program status register</em>: flags <code>N Z C V</code>, máscaras de interrupção e modo atual</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags <code>N Z C V</code></th><td role="cell" data-label="O que é">negativo, zero, carry (na subtração: &quot;não houve empréstimo&quot;), overflow</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo (Supervisor, System, IRQ...)</th><td role="cell" data-label="O que é">nível de privilégio e contexto do processador; cada um pode ter registradores próprios</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco</th><td role="cell" data-label="O que é">registrador com uma cópia por modo, como o <code>r13</code> (SP)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Trace listener</em></th><td role="cell" data-label="O que é">objeto notificado depois de cada instrução (<code>afterInstruction</code>) ou bloco</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>DecodedInstruction</code> / <code>InstructionKind</code></th><td role="cell" data-label="O que é">instrução já decodificada / sua categoria (<code>ADD</code>, <code>LOAD</code>, <code>BRANCH</code>...)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SMC</th><td role="cell" data-label="O que é"><em>self-modifying code</em>: programa que escreve sobre o próprio código</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>notifyWrite</code></th><td role="cell" data-label="O que é">aviso do <code>AddressSpace</code> de que um endereço mudou, para invalidar blocos em cache</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Little-endian</em></th><td role="cell" data-label="O que é">ordem de bytes com o menos significativo no endereço mais baixo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interpretador</th><td role="cell" data-label="O que é">executa uma instrução por vez, sem compilar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é"><em>just-in-time compiler</em>: compila blocos de instruções durante a execução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bloco</th><td role="cell" data-label="O que é">sequência de instruções que termina num desvio; unidade do JIT</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IR / <code>IrBlock</code></th><td role="cell" data-label="O que é">representação intermediária de um bloco, comum a todos os backends</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Backend</th><td role="cell" data-label="O que é">quem executa a IR: bytecode JVM, interpretador de IR, ou ambos com checagem</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>JitRuntime</code></th><td role="cell" data-label="O que é">o runtime de execução por blocos, criado por <code>JitRuntimeFactory</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ASM</th><td role="cell" data-label="O que é">biblioteca Java (<code>org.ow2.asm</code>) para gerar bytecode; usada pelo backend JIT</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">BIOS</th><td role="cell" data-label="O que é">código de boot gravado no aparelho, que prepara o processador antes do programa</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>configureExecutionState</code></th><td role="cell" data-label="O que é">define PC, modo, conjunto de instruções (ARM/Thumb) e máscaras IRQ/FIQ de uma vez</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>mvn dependency:get -Dartifact=dev.vitorsilverio:arm-jitter:1.3.0</code></th><td>baixa a biblioteca do Maven Central para <code>~/.m2/repository</code></td></tr>
-      <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar TraceSoma.java</code></th><td>compila o hospedeiro usando a biblioteca no classpath</td></tr>
-      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar;.&quot; TraceSoma soma5.bin</code></th><td>roda o hospedeiro no Windows (classpath separado por <code>;</code>)</td></tr>
-      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar:.&quot; TraceSoma soma5.bin</code></th><td>o mesmo no Linux/macOS (separador <code>:</code>)</td></tr>
-      <tr><th scope="row"><code>mvn dependency:get -Dartifact=org.ow2.asm:asm:9.7.1</code></th><td>baixa a biblioteca ASM, usada pelo backend JIT de bytecode</td></tr>
-      <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.3.0.jar;asm-9.7.1.jar;.&quot; X</code></th><td>roda um hospedeiro que usa <code>JitRuntimeFactory.armThumb</code> (<code>:</code> no Linux/macOS)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn dependency:get -Dartifact=dev.vitorsilverio:arm-jitter:1.3.0</code></th><td role="cell" data-label="O que faz">baixa a biblioteca do Maven Central para <code>~/.m2/repository</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.3.0.jar TraceSoma.java</code></th><td role="cell" data-label="O que faz">compila o hospedeiro usando a biblioteca no classpath</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp &quot;arm-jitter-1.3.0.jar;.&quot; TraceSoma soma5.bin</code></th><td role="cell" data-label="O que faz">roda o hospedeiro no Windows (classpath separado por <code>;</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp &quot;arm-jitter-1.3.0.jar:.&quot; TraceSoma soma5.bin</code></th><td role="cell" data-label="O que faz">o mesmo no Linux/macOS (separador <code>:</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn dependency:get -Dartifact=org.ow2.asm:asm:9.7.1</code></th><td role="cell" data-label="O que faz">baixa a biblioteca ASM, usada pelo backend JIT de bytecode</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp &quot;arm-jitter-1.3.0.jar;asm-9.7.1.jar;.&quot; X</code></th><td role="cell" data-label="O que faz">roda um hospedeiro que usa <code>JitRuntimeFactory.armThumb</code> (<code>:</code> no Linux/macOS)</td></tr>
     </tbody>
   </table>
 </div>

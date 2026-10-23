@@ -35,34 +35,34 @@ import { Objdump } from '../../../shared/objdump/objdump';
 </ol>
 <h2>O ecossistema, em uma tabela</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Projeto</th><th scope="col">Papel</th><th scope="col">O que executa</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Projeto</th><th scope="col" role="columnheader">Papel</th><th scope="col" role="columnheader">O que executa</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca-núcleo (core + decoder + IR + JIT + GDB)</td><td>blocos ARM/THUMB, embutido por um hospedeiro</td></tr>
-      <tr><th scope="row"><code>armbox</code></th><td>Runner Linux user-mode</td><td>ELF estático 32-bit + syscalls EABI</td></tr>
-      <tr><th scope="row"><code>gbaemu</code></th><td>Emulador de GBA</td><td>ARM7TDMI (ARMv4T)</td></tr>
-      <tr><th scope="row"><code>ndsemu</code></th><td>Emulador de NDS</td><td>ARM9 (ARMv5TE) + ARM7 (ARMv4T)</td></tr>
-      <tr><th scope="row"><code>n3dsemu</code></th><td>Emulador de 3DS</td><td>ARM11 MPCore (ARMv6K)</td></tr>
-      <tr><th scope="row"><code>virtual-arm-box</code></th><td>Máquina ARM completa (softmmu)</td><td>kernel Linux ARM até shell <code>busybox</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>arm-jitter</code></th><td role="cell" data-label="Papel">Biblioteca-núcleo (core + decoder + IR + JIT + GDB)</td><td role="cell" data-label="O que executa">blocos ARM/THUMB, embutido por um hospedeiro</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>armbox</code></th><td role="cell" data-label="Papel">Runner Linux user-mode</td><td role="cell" data-label="O que executa">ELF estático 32-bit + syscalls EABI</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>gbaemu</code></th><td role="cell" data-label="Papel">Emulador de GBA</td><td role="cell" data-label="O que executa">ARM7TDMI (ARMv4T)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>ndsemu</code></th><td role="cell" data-label="Papel">Emulador de NDS</td><td role="cell" data-label="O que executa">ARM9 (ARMv5TE) + ARM7 (ARMv4T)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>n3dsemu</code></th><td role="cell" data-label="Papel">Emulador de 3DS</td><td role="cell" data-label="O que executa">ARM11 MPCore (ARMv6K)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Projeto"><code>virtual-arm-box</code></th><td role="cell" data-label="Papel">Máquina ARM completa (softmmu)</td><td role="cell" data-label="O que executa">kernel Linux ARM até shell <code>busybox</code></td></tr>
     </tbody>
   </table>
 </div>
 <h2>A linha do tempo do ARM que a trilha percorre</h2>
 <p>Os emuladores da coleção cobrem, sem querer, quase toda a evolução do ARM de 32 bits. É essa a espinha do módulo 5 da trilha. A última coluna resume o que o preset correspondente do <code>arm-jitter</code> habilita; não é a lista completa de cada arquitetura:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Arquitetura</th><th scope="col">Núcleo</th><th scope="col">Guest típico</th><th scope="col">O que ela adiciona</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Arquitetura</th><th scope="col" role="columnheader">Núcleo</th><th scope="col" role="columnheader">Guest típico</th><th scope="col" role="columnheader">O que ela adiciona</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">ARMv4T</th><td>ARM7TDMI</td><td>GBA</td><td>ARM + Thumb, o conjunto base</td></tr>
-      <tr><th scope="row">ARMv5TE</th><td>ARM9E</td><td>NDS</td><td><code>BLX</code>, <code>CLZ</code>, multiplicações DSP/saturating, <code>LDRD</code>/<code>STRD</code></td></tr>
-      <tr><th scope="row">ARMv6K</th><td>ARM11</td><td>3DS, Raspberry Pi 1</td><td><code>LDREX</code>/<code>STREX</code>/<code>CLREX</code>, SIMD paralelo, <code>CPS</code>/<code>SETEND</code>/<code>WFI</code></td></tr>
-      <tr><th scope="row">ARMv6-M / v7-M</th><td>Cortex-M</td><td>firmware</td><td>perfil M: <code>MSP</code>/<code>PSP</code>, <code>xPSR</code>, NVIC, sem modos bancados clássicos</td></tr>
-      <tr><th scope="row">ARMv7-A</th><td>Cortex-A</td><td>Linux/Android 32-bit</td><td><code>MOVW</code>/<code>MOVT</code>, <code>SDIV</code>/<code>UDIV</code>, bitfield, barreiras, VFPv2 (ponto flutuante)</td></tr>
-      <tr><th scope="row">AArch64</th><td>ARMv8-A</td><td>Linux arm64</td><td>64 bits, <code>X0</code>–<code>X30</code>, sem banking por modo, exceções por <em>Exception Level</em></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">ARMv4T</th><td role="cell" data-label="Núcleo">ARM7TDMI</td><td role="cell" data-label="Guest típico">GBA</td><td role="cell" data-label="O que ela adiciona">ARM + Thumb, o conjunto base</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">ARMv5TE</th><td role="cell" data-label="Núcleo">ARM9E</td><td role="cell" data-label="Guest típico">NDS</td><td role="cell" data-label="O que ela adiciona"><code>BLX</code>, <code>CLZ</code>, multiplicações DSP/saturating, <code>LDRD</code>/<code>STRD</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">ARMv6K</th><td role="cell" data-label="Núcleo">ARM11</td><td role="cell" data-label="Guest típico">3DS, Raspberry Pi 1</td><td role="cell" data-label="O que ela adiciona"><code>LDREX</code>/<code>STREX</code>/<code>CLREX</code>, SIMD paralelo, <code>CPS</code>/<code>SETEND</code>/<code>WFI</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">ARMv6-M / v7-M</th><td role="cell" data-label="Núcleo">Cortex-M</td><td role="cell" data-label="Guest típico">firmware</td><td role="cell" data-label="O que ela adiciona">perfil M: <code>MSP</code>/<code>PSP</code>, <code>xPSR</code>, NVIC, sem modos bancados clássicos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">ARMv7-A</th><td role="cell" data-label="Núcleo">Cortex-A</td><td role="cell" data-label="Guest típico">Linux/Android 32-bit</td><td role="cell" data-label="O que ela adiciona"><code>MOVW</code>/<code>MOVT</code>, <code>SDIV</code>/<code>UDIV</code>, bitfield, barreiras, VFPv2 (ponto flutuante)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Arquitetura">AArch64</th><td role="cell" data-label="Núcleo">ARMv8-A</td><td role="cell" data-label="Guest típico">Linux arm64</td><td role="cell" data-label="O que ela adiciona">64 bits, <code>X0</code>–<code>X30</code>, sem banking por modo, exceções por <em>Exception Level</em></td></tr>
     </tbody>
   </table>
 </div>
@@ -110,47 +110,47 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> hello.elf
 <p>O texto sai da primeira chamada de sistema (<code>write</code>); o <code>42</code> é o código de saída que o programa passou na segunda (<code>exit</code>), e o <code>echo $?</code> o mostra. (Em shells que não são POSIX, o código de saída vem por outro mecanismo, por exemplo <code>$LASTEXITCODE</code> no PowerShell.)</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">ISA</th><td><em>Instruction Set Architecture</em> — o contrato entre o binário e o hardware</td></tr>
-      <tr><th scope="row">Emulador</th><td>Programa que implementa a semântica de uma ISA em outra máquina</td></tr>
-      <tr><th scope="row">Core</th><td>A parte do emulador que executa instruções (registradores + decode + execute)</td></tr>
-      <tr><th scope="row">Guest / host</th><td>O sistema emulado / a máquina que roda o emulador</td></tr>
-      <tr><th scope="row">JIT</th><td><em>Just-In-Time</em> — compilar blocos do guest para código nativo do host em tempo de execução</td></tr>
-      <tr><th scope="row">Interpretador</th><td>Executar instrução por instrução, sem compilar; a referência de semântica</td></tr>
-      <tr><th scope="row">Bare-metal</th><td>Código sem sistema operacional por baixo</td></tr>
-      <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca Java que executa, depura e compila (JIT) instruções ARM/Thumb; sem <code>main</code>, é embutida por um programa hospedeiro</td></tr>
-      <tr><th scope="row"><code>armbox</code></th><td>Programa de linha de comando que carrega um executável ARM de 32 bits e o roda sobre o <code>arm-jitter</code>, no estilo do <code>qemu-arm</code></td></tr>
-      <tr><th scope="row">Runner user-mode</th><td>Emulador que executa só o programa do usuário e traduz suas chamadas de sistema para o sistema do host, sem emular o kernel</td></tr>
-      <tr><th scope="row">Syscall / <code>svc</code></th><td>Chamada de sistema: pedido de um serviço ao sistema operacional. No ARM, a instrução <code>svc</code> (antes chamada <code>swi</code>) a dispara</td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato dos executáveis Linux, com cabeçalho, seções e endereço de entrada</td></tr>
-      <tr><th scope="row"><code>CPSR</code> / <code>SPSR</code></th><td>Registrador de status do programa (flags, modo, bit T) e a cópia dele guardada ao entrar em uma exceção</td></tr>
-      <tr><th scope="row">Flags e carry</th><td>Bits N/Z/C/V do <code>CPSR</code>; o <em>carry</em> (C) é o &quot;vai-um&quot; da última operação, usado por <code>ADCS</code> (soma com carry que atualiza flags)</td></tr>
-      <tr><th scope="row">Registradores bancados</th><td>Cópias de alguns registradores (como <code>SP</code> e <code>LR</code>) que existem por modo do processador</td></tr>
-      <tr><th scope="row">Thumb</th><td>Conjunto de instruções compactas (16 bits, depois também 32) do ARM; o bit T do <code>CPSR</code> indica o estado atual</td></tr>
-      <tr><th scope="row"><code>UNPREDICTABLE</code></th><td>Termo do manual da Arm para um resultado que a arquitetura deliberadamente não define</td></tr>
-      <tr><th scope="row">Toolchain <code>arm-none-eabi</code></th><td>Compilador, montador, ligador e desmontador (<code>gcc</code>, <code>as</code>, <code>ld</code>, <code>objdump</code>) para ARM sem sistema operacional</td></tr>
-      <tr><th scope="row"><code>objdump</code></th><td>Ferramenta que desmonta um executável: mostra endereço, bytes e mnemônico de cada instrução</td></tr>
-      <tr><th scope="row">Pseudo-instrução</th><td>Instrução aceita pelo montador que não existe no processador (como <code>adr</code>) e vira outra na montagem</td></tr>
-      <tr><th scope="row">Softmmu / máquina completa</th><td>Emulação de um computador inteiro (CPU, MMU e periféricos), capaz de rodar um kernel, em oposição ao modo usuário</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ISA</th><td role="cell" data-label="O que é"><em>Instruction Set Architecture</em> — o contrato entre o binário e o hardware</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Emulador</th><td role="cell" data-label="O que é">Programa que implementa a semântica de uma ISA em outra máquina</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Core</th><td role="cell" data-label="O que é">A parte do emulador que executa instruções (registradores + decode + execute)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Guest / host</th><td role="cell" data-label="O que é">O sistema emulado / a máquina que roda o emulador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é"><em>Just-In-Time</em> — compilar blocos do guest para código nativo do host em tempo de execução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interpretador</th><td role="cell" data-label="O que é">Executar instrução por instrução, sem compilar; a referência de semântica</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bare-metal</th><td role="cell" data-label="O que é">Código sem sistema operacional por baixo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">Biblioteca Java que executa, depura e compila (JIT) instruções ARM/Thumb; sem <code>main</code>, é embutida por um programa hospedeiro</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>armbox</code></th><td role="cell" data-label="O que é">Programa de linha de comando que carrega um executável ARM de 32 bits e o roda sobre o <code>arm-jitter</code>, no estilo do <code>qemu-arm</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Runner user-mode</th><td role="cell" data-label="O que é">Emulador que executa só o programa do usuário e traduz suas chamadas de sistema para o sistema do host, sem emular o kernel</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Syscall / <code>svc</code></th><td role="cell" data-label="O que é">Chamada de sistema: pedido de um serviço ao sistema operacional. No ARM, a instrução <code>svc</code> (antes chamada <code>swi</code>) a dispara</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato dos executáveis Linux, com cabeçalho, seções e endereço de entrada</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code> / <code>SPSR</code></th><td role="cell" data-label="O que é">Registrador de status do programa (flags, modo, bit T) e a cópia dele guardada ao entrar em uma exceção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags e carry</th><td role="cell" data-label="O que é">Bits N/Z/C/V do <code>CPSR</code>; o <em>carry</em> (C) é o &quot;vai-um&quot; da última operação, usado por <code>ADCS</code> (soma com carry que atualiza flags)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registradores bancados</th><td role="cell" data-label="O que é">Cópias de alguns registradores (como <code>SP</code> e <code>LR</code>) que existem por modo do processador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb</th><td role="cell" data-label="O que é">Conjunto de instruções compactas (16 bits, depois também 32) do ARM; o bit T do <code>CPSR</code> indica o estado atual</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>UNPREDICTABLE</code></th><td role="cell" data-label="O que é">Termo do manual da Arm para um resultado que a arquitetura deliberadamente não define</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Toolchain <code>arm-none-eabi</code></th><td role="cell" data-label="O que é">Compilador, montador, ligador e desmontador (<code>gcc</code>, <code>as</code>, <code>ld</code>, <code>objdump</code>) para ARM sem sistema operacional</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">Ferramenta que desmonta um executável: mostra endereço, bytes e mnemônico de cada instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pseudo-instrução</th><td role="cell" data-label="O que é">Instrução aceita pelo montador que não existe no processador (como <code>adr</code>) e vira outra na montagem</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Softmmu / máquina completa</th><td role="cell" data-label="O que é">Emulação de um computador inteiro (CPU, MMU e periféricos), capaz de rodar um kernel, em oposição ao modo usuário</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te -o hello.o hello.s</code></th><td>Monta o fonte <code>hello.s</code> para a arquitetura ARMv5TE, gerando o objeto <code>hello.o</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o hello.elf hello.o</code></th><td>Liga o objeto em um executável ELF com o código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d hello.elf</code></th><td>Desmonta a seção de código do executável</td></tr>
-      <tr><th scope="row"><code>java -jar target/armbox.jar hello.elf</code></th><td>Executa o ELF no <code>armbox</code> (jar gerado por <code>mvn package</code> no repositório do <code>armbox</code>)</td></tr>
-      <tr><th scope="row"><code>echo $?</code></th><td>Mostra o código de saída do último comando (em PowerShell: <code>$LASTEXITCODE</code>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te -o hello.o hello.s</code></th><td role="cell" data-label="O que faz">Monta o fonte <code>hello.s</code> para a arquitetura ARMv5TE, gerando o objeto <code>hello.o</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o hello.elf hello.o</code></th><td role="cell" data-label="O que faz">Liga o objeto em um executável ELF com o código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d hello.elf</code></th><td role="cell" data-label="O que faz">Desmonta a seção de código do executável</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar hello.elf</code></th><td role="cell" data-label="O que faz">Executa o ELF no <code>armbox</code> (jar gerado por <code>mvn package</code> no repositório do <code>armbox</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code></th><td role="cell" data-label="O que faz">Mostra o código de saída do último comando (em PowerShell: <code>$LASTEXITCODE</code>)</td></tr>
     </tbody>
   </table>
 </div>

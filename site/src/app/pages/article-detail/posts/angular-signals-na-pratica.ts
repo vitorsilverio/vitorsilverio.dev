@@ -176,20 +176,20 @@ depois do set, sem ler: 1
 
     <h2>Glossário</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
         </thead>
-        <tbody>
-          <tr><th scope="row">Signal</th><td>Contêiner reativo de valor: guarda um valor, é lido chamando-o como função e notifica quem depende dele quando muda</td></tr>
-          <tr><th scope="row"><code>set</code> / <code>update</code></th><td>Escrevem num signal: <code>set</code> com um valor novo, <code>update</code> com uma função que recebe o valor atual e devolve o novo</td></tr>
-          <tr><th scope="row"><code>computed()</code></th><td>Signal somente leitura derivado de outros signals; calculado sob demanda (preguiçoso) e guardado em cache (memoizado) até uma dependência mudar</td></tr>
-          <tr><th scope="row"><code>effect()</code></th><td>Função registrada que roda de novo sempre que os signals lidos dentro dela mudam; para efeitos colaterais, não para derivar valores</td></tr>
-          <tr><th scope="row"><code>linkedSignal()</code></th><td>Signal derivado de outro estado que também aceita <code>set</code> manual</td></tr>
-          <tr><th scope="row"><code>zone.js</code></th><td>Biblioteca que intercepta eventos assíncronos do navegador para avisar o Angular de que pode ter havido mudança de estado</td></tr>
-          <tr><th scope="row">Zoneless</th><td>Modo do Angular sem <code>zone.js</code>, em que a verificação é disparada por notificações como a mudança de um signal lido no template</td></tr>
-          <tr><th scope="row">Memoização</th><td>Guardar o resultado de um cálculo e reutilizá-lo enquanto as entradas não mudam</td></tr>
-          <tr><th scope="row">Contexto de injeção</th><td>Trecho de código em que o Angular permite chamar <code>inject()</code> e registrar um <code>effect()</code>, como o construtor de um componente</td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Signal</th><td role="cell" data-label="O que é">Contêiner reativo de valor: guarda um valor, é lido chamando-o como função e notifica quem depende dele quando muda</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>set</code> / <code>update</code></th><td role="cell" data-label="O que é">Escrevem num signal: <code>set</code> com um valor novo, <code>update</code> com uma função que recebe o valor atual e devolve o novo</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>computed()</code></th><td role="cell" data-label="O que é">Signal somente leitura derivado de outros signals; calculado sob demanda (preguiçoso) e guardado em cache (memoizado) até uma dependência mudar</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>effect()</code></th><td role="cell" data-label="O que é">Função registrada que roda de novo sempre que os signals lidos dentro dela mudam; para efeitos colaterais, não para derivar valores</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>linkedSignal()</code></th><td role="cell" data-label="O que é">Signal derivado de outro estado que também aceita <code>set</code> manual</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>zone.js</code></th><td role="cell" data-label="O que é">Biblioteca que intercepta eventos assíncronos do navegador para avisar o Angular de que pode ter havido mudança de estado</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Zoneless</th><td role="cell" data-label="O que é">Modo do Angular sem <code>zone.js</code>, em que a verificação é disparada por notificações como a mudança de um signal lido no template</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Memoização</th><td role="cell" data-label="O que é">Guardar o resultado de um cálculo e reutilizá-lo enquanto as entradas não mudam</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Contexto de injeção</th><td role="cell" data-label="O que é">Trecho de código em que o Angular permite chamar <code>inject()</code> e registrar um <code>effect()</code>, como o construtor de um componente</td></tr>
         </tbody>
       </table>
     </div>

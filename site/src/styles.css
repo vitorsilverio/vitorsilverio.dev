@@ -508,6 +508,86 @@ button.tag:hover {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
+/* ---- Tabelas como lista de definição em telas estreitas (só apresentação) ----
+   O HTML continua sendo uma <table>. A marcação vem do build (scripts/lib/tabela-lista.mjs):
+   `class="tabela-lista"`, roles ARIA explícitos (table/rowgroup/row/columnheader/rowheader/cell:
+   `display: block` em elementos de tabela faz Chrome e Safari descartarem a semântica) e
+   `data-label` em cada célula com o texto do cabeçalho da coluna.
+   Quem decide é a largura do próprio contêiner (container query), não a da janela: abaixo de
+   40rem o bloco vira "nome da coluna: valor" por linha. Sem suporte a :has()/@container a
+   tabela segue rolando como antes. Opt-out: class="tabela-matriz" no <table> (sem a marcação). */
+.scroll-x:has(> table.tabela-lista) {
+  container-type: inline-size;
+}
+
+@container (max-width: 40rem) {
+  .prose table.tabela-lista {
+    display: block;
+    min-width: 0;
+  }
+
+  .prose table.tabela-lista caption {
+    display: block;
+  }
+
+  .prose table.tabela-lista tbody {
+    display: block;
+  }
+
+  /* O cabeçalho sai só da vista: continua na árvore de acessibilidade (nada de display: none),
+     e é ele que dá nome às colunas para o leitor de tela. */
+  .prose table.tabela-lista thead {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .prose table.tabela-lista tbody tr {
+    display: block;
+    margin: 0 0 0.75rem;
+    padding: 0.25rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  .prose table.tabela-lista tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .prose table.tabela-lista tbody th,
+  .prose table.tabela-lista tbody td {
+    display: block;
+    padding: 0.5rem 0;
+    border: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .prose table.tabela-lista tbody tr > * + * {
+    border-top: 1px solid var(--border);
+  }
+
+  /* Rótulo "nome da coluna:". A 2ª declaração, com texto alternativo vazio depois da barra,
+     tira o rótulo gerado da leitura (o leitor de tela já anuncia o cabeçalho da coluna pela
+     semântica de tabela); navegadores sem essa sintaxe ignoram a 2ª e ficam com a 1ª. */
+  .prose table.tabela-lista tbody [data-label]::before {
+    content: attr(data-label) ':';
+    content: attr(data-label) ':' / '';
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

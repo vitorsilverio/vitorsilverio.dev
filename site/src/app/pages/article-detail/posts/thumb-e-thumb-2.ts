@@ -287,16 +287,16 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
       A mesma função (<code>add_arm</code> vs <code>add_thumb</code>) e o programa
       inteiro (o <code>size</code> do toolchain mede a seção <code>.text</code>):
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Comparação de tamanho</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Trecho</th><th scope="col">Tamanho</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Trecho</th><th scope="col" role="columnheader">Tamanho</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>add r0, r0, r1</code> + <code>bx lr</code></td><td>2 × 4 = 8 bytes</td></tr>
-        <tr><th scope="row">Thumb</th><td><code>adds r0, r0, r1</code> + <code>bx lr</code></td><td>2 × 2 = 4 bytes</td></tr>
-        <tr><th scope="row">ARM</th><td>programa completo (7 instruções)</td><td>28 bytes</td></tr>
-        <tr><th scope="row">Thumb</th><td>programa completo (6 instruções, uma de 32 bits)</td><td>16 bytes</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Trecho"><code>add r0, r0, r1</code> + <code>bx lr</code></td><td role="cell" data-label="Tamanho">2 × 4 = 8 bytes</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb</th><td role="cell" data-label="Trecho"><code>adds r0, r0, r1</code> + <code>bx lr</code></td><td role="cell" data-label="Tamanho">2 × 2 = 4 bytes</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Trecho">programa completo (7 instruções)</td><td role="cell" data-label="Tamanho">28 bytes</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb</th><td role="cell" data-label="Trecho">programa completo (6 instruções, uma de 32 bits)</td><td role="cell" data-label="Tamanho">16 bytes</td></tr>
       </tbody>
     </table></div>
     <p>
@@ -324,39 +324,39 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">Thumb</th><td>conjunto de instruções ARM de 16 bits, mais denso que o de 32 bits.</td></tr>
-        <tr><th scope="row">Thumb-2</th><td>extensão que mistura instruções de 16 e 32 bits no mesmo estado Thumb.</td></tr>
-        <tr><th scope="row">Halfword</th><td>palavra de 16 bits (2 bytes); a unidade de busca no Thumb.</td></tr>
-        <tr><th scope="row">CPSR e bit T</th><td>registrador de estado do programa; o bit 5 (T) diz se a CPU executa Thumb (1) ou ARM (0).</td></tr>
-        <tr><th scope="row">Interworking</th><td>misturar código ARM e Thumb no mesmo binário, trocando de estado com <code>BX</code>/<code>BLX</code>.</td></tr>
-        <tr><th scope="row"><code>BX</code></th><td>desvia para o endereço de um registrador; o bit 0 do alvo escolhe o estado (1 = Thumb, 0 = ARM).</td></tr>
-        <tr><th scope="row"><code>BL</code></th><td>desvia e grava o endereço de retorno em <code>lr</code> (R14, <em>link register</em>).</td></tr>
-        <tr><th scope="row">Bloco <code>IT</code></th><td>instrução Thumb-2 que torna condicionais até 4 instruções seguintes.</td></tr>
-        <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux; o arm-box carrega ELFs.</td></tr>
-        <tr><th scope="row"><code>.thumb</code> / <code>.thumb_func</code></th><td>diretivas do montador: gerar Thumb daqui em diante / marcar o símbolo seguinte como função Thumb (bit 0 = 1).</td></tr>
-        <tr><th scope="row"><code>svc</code></th><td>chamada ao sistema; o programa de exemplo usa <code>svc</code> com <code>r7 = 1</code> para sair (<em>exit</em> do Linux).</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb</th><td role="cell" data-label="O que é">conjunto de instruções ARM de 16 bits, mais denso que o de 32 bits.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb-2</th><td role="cell" data-label="O que é">extensão que mistura instruções de 16 e 32 bits no mesmo estado Thumb.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Halfword</th><td role="cell" data-label="O que é">palavra de 16 bits (2 bytes); a unidade de busca no Thumb.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR e bit T</th><td role="cell" data-label="O que é">registrador de estado do programa; o bit 5 (T) diz se a CPU executa Thumb (1) ou ARM (0).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interworking</th><td role="cell" data-label="O que é">misturar código ARM e Thumb no mesmo binário, trocando de estado com <code>BX</code>/<code>BLX</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BX</code></th><td role="cell" data-label="O que é">desvia para o endereço de um registrador; o bit 0 do alvo escolhe o estado (1 = Thumb, 0 = ARM).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BL</code></th><td role="cell" data-label="O que é">desvia e grava o endereço de retorno em <code>lr</code> (R14, <em>link register</em>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bloco <code>IT</code></th><td role="cell" data-label="O que é">instrução Thumb-2 que torna condicionais até 4 instruções seguintes.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">formato de arquivo executável do Linux; o arm-box carrega ELFs.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>.thumb</code> / <code>.thumb_func</code></th><td role="cell" data-label="O que é">diretivas do montador: gerar Thumb daqui em diante / marcar o símbolo seguinte como função Thumb (bit 0 = 1).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é">chamada ao sistema; o programa de exemplo usa <code>svc</code> com <code>r7 = 1</code> para sair (<em>exit</em> do Linux).</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>monta o assembly (a diretiva <code>.thumb</code> no arquivo escolhe Thumb).</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>liga o objeto, com o código em <code>0x10000</code>.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>mostra endereços, bytes (16 ou 32 bits) e mnemônicos.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-readelf -h x.elf</code></th><td>mostra o cabeçalho do ELF, incluindo o ponto de entrada (<code>0x10001</code> no exemplo Thumb).</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-size x.elf</code></th><td>mostra o tamanho das seções (<code>text</code> = código).</td></tr>
-        <tr><th scope="row"><code>java -jar armbox.jar --arch=thumb2 x.elf</code></th><td>roda o programa no arm-box com ARMv6K + Thumb-2.</td></tr>
-        <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a x.elf</code></th><td>roda com o ARMv7-A completo.</td></tr>
-        <tr><th scope="row"><code>echo $?</code></th><td>imprime o código de saída do último comando (no Windows PowerShell, <code>$LASTEXITCODE</code>).</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td role="cell" data-label="O que faz">monta o assembly (a diretiva <code>.thumb</code> no arquivo escolhe Thumb).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga o objeto, com o código em <code>0x10000</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">mostra endereços, bytes (16 ou 32 bits) e mnemônicos.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-readelf -h x.elf</code></th><td role="cell" data-label="O que faz">mostra o cabeçalho do ELF, incluindo o ponto de entrada (<code>0x10001</code> no exemplo Thumb).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-size x.elf</code></th><td role="cell" data-label="O que faz">mostra o tamanho das seções (<code>text</code> = código).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=thumb2 x.elf</code></th><td role="cell" data-label="O que faz">roda o programa no arm-box com ARMv6K + Thumb-2.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a x.elf</code></th><td role="cell" data-label="O que faz">roda com o ARMv7-A completo.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code></th><td role="cell" data-label="O que faz">imprime o código de saída do último comando (no Windows PowerShell, <code>$LASTEXITCODE</code>).</td></tr>
       </tbody>
     </table></div>
 

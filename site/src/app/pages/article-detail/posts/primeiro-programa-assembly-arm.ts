@@ -158,43 +158,43 @@ embutido nela. Essa é a predicação da qual o <a routerLink="/artigos/flags-e-
 </ul>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Assembly</th><td>linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
-      <tr><th scope="row"><code>arm-box</code></th><td>programa Java que carrega um ELF ARM de 32 bits e o executa como um Linux faria, traduzindo as chamadas de sistema para o hospedeiro</td></tr>
-      <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa instruções ARM; é o motor do <code>arm-box</code></td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável usado pelo Linux e pelo toolchain GNU</td></tr>
-      <tr><th scope="row">AAPCS</th><td><em>Procedure Call Standard for the Arm Architecture</em>: convenção de chamada (argumentos em <code>r0</code>–<code>r3</code>, resultado em <code>r0</code>)</td></tr>
-      <tr><th scope="row">Folha (<em>leaf</em>)</th><td>função que não chama nenhuma outra; não precisa salvar <code>lr</code></td></tr>
-      <tr><th scope="row"><code>lr</code> (r14)</th><td><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
-      <tr><th scope="row"><code>bl</code> / <code>bx lr</code></th><td>chamar (grava o retorno em <code>lr</code> e salta) / voltar</td></tr>
-      <tr><th scope="row"><code>svc</code></th><td><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code></td></tr>
-      <tr><th scope="row"><em>Exit code</em></th><td>número que o processo devolve ao terminar; no Linux só os 8 bits baixos chegam ao shell</td></tr>
-      <tr><th scope="row">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td>bits do registrador de estado (<code>CPSR</code>) que registram negativo, zero, <em>carry</em> e <em>overflow</em> do último resultado</td></tr>
-      <tr><th scope="row"><code>cmp</code> / <code>subs</code></th><td>comparam/subtraem e atualizam as flags (o <code>s</code> pede a atualização); <code>cmp</code> descarta o resultado</td></tr>
-      <tr><th scope="row">Campo <code>cond</code></th><td>os 4 bits mais altos da instrução ARM; dizem sob quais flags ela executa (<code>LE</code>, <code>LT</code>, <code>NE</code>...)</td></tr>
-      <tr><th scope="row">Predicação</th><td>executar (ou não) uma instrução conforme as flags, sem desviar</td></tr>
-      <tr><th scope="row">Rótulo numérico local</th><td><code>1:</code> … <code>1b</code> (para trás) / <code>1f</code> (para a frente): alvo anônimo reutilizável</td></tr>
-      <tr><th scope="row"><code>ip</code> (r12)</th><td>registrador <em>scratch</em> da AAPCS: pode ser sobrescrito sem salvar</td></tr>
-      <tr><th scope="row"><em>Nibble</em></th><td>meio byte, 4 bits; um dígito hexadecimal</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Assembly</th><td role="cell" data-label="O que é">linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">programa Java que carrega um ELF ARM de 32 bits e o executa como um Linux faria, traduzindo as chamadas de sistema para o hospedeiro</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM; é o motor do <code>arm-box</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável usado pelo Linux e pelo toolchain GNU</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em>Procedure Call Standard for the Arm Architecture</em>: convenção de chamada (argumentos em <code>r0</code>–<code>r3</code>, resultado em <code>r0</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em>leaf</em>)</th><td role="cell" data-label="O que é">função que não chama nenhuma outra; não precisa salvar <code>lr</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>lr</code> (r14)</th><td role="cell" data-label="O que é"><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>bl</code> / <code>bx lr</code></th><td role="cell" data-label="O que é">chamar (grava o retorno em <code>lr</code> e salta) / voltar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é"><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao terminar; no Linux só os 8 bits baixos chegam ao shell</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td role="cell" data-label="O que é">bits do registrador de estado (<code>CPSR</code>) que registram negativo, zero, <em>carry</em> e <em>overflow</em> do último resultado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cmp</code> / <code>subs</code></th><td role="cell" data-label="O que é">comparam/subtraem e atualizam as flags (o <code>s</code> pede a atualização); <code>cmp</code> descarta o resultado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Campo <code>cond</code></th><td role="cell" data-label="O que é">os 4 bits mais altos da instrução ARM; dizem sob quais flags ela executa (<code>LE</code>, <code>LT</code>, <code>NE</code>...)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Predicação</th><td role="cell" data-label="O que é">executar (ou não) uma instrução conforme as flags, sem desviar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Rótulo numérico local</th><td role="cell" data-label="O que é"><code>1:</code> … <code>1b</code> (para trás) / <code>1f</code> (para a frente): alvo anônimo reutilizável</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ip</code> (r12)</th><td role="cell" data-label="O que é">registrador <em>scratch</em> da AAPCS: pode ser sobrescrito sem salvar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Nibble</em></th><td role="cell" data-label="O que é">meio byte, 4 bits; um dígito hexadecimal</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>monta o fonte <code>x.s</code> em código-objeto <code>x.o</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>liga o objeto num ELF com o código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>java -jar target/armbox.jar --arch=armv7a x.elf ; echo $?</code></th><td>roda no <code>arm-box</code> e mostra o <em>exit code</em> (no Windows <code>cmd</code>, <code>echo %ERRORLEVEL%</code>)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta o ELF: endereço, bytes e mnemônico de cada instrução</td></tr>
-      <tr><th scope="row"><code>timeout 20 java -jar target/armbox.jar --arch=armv7a x.elf</code></th><td>interrompe o programa após 20 s (útil quando o laço do exercício não termina)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td role="cell" data-label="O que faz">monta o fonte <code>x.s</code> em código-objeto <code>x.o</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga o objeto num ELF com o código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --arch=armv7a x.elf ; echo $?</code></th><td role="cell" data-label="O que faz">roda no <code>arm-box</code> e mostra o <em>exit code</em> (no Windows <code>cmd</code>, <code>echo %ERRORLEVEL%</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">desmonta o ELF: endereço, bytes e mnemônico de cada instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>timeout 20 java -jar target/armbox.jar --arch=armv7a x.elf</code></th><td role="cell" data-label="O que faz">interrompe o programa após 20 s (útil quando o laço do exercício não termina)</td></tr>
     </tbody>
   </table>
 </div>

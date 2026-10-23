@@ -163,49 +163,49 @@ arm-none-eabi-gcc <span class="token parameter variable">-c</span> <span class="
 <p>56 bytes: as 9 instruções (<code>1c10 8fe2</code> é <code>0xe28f101c</code> em <em>little-endian</em>) seguidas dos 5 <code>.word</code> do vetor. É esse tipo de arquivo que um gravador de flash consome, e também o que o programa hospedeiro do <a routerLink="/artigos/arm-jitter-api-java">artigo sobre a API Java do arm-jitter</a> carrega na memória a partir de <code>0x00010000</code>. O <code>soma5.bin</code> publicado é byte a byte igual ao gerado pelo comando acima.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Montar (<em>assemble</em>)</th><td><code>.s</code> → <code>.o</code>: mnemônicos viram bytes, endereços ficam relativos</td></tr>
-      <tr><th scope="row">Ligar (<em>link</em>)</th><td><code>.o</code>(s) → executável: endereços absolutos, símbolos resolvidos</td></tr>
-      <tr><th scope="row">Relocation</th><td>marca no <code>.o</code> de &quot;aqui vai um endereço que só o linker sabe&quot;</td></tr>
-      <tr><th scope="row">Linker script</th><td>arquivo que descreve <code>MEMORY</code> e <code>SECTIONS</code></td></tr>
-      <tr><th scope="row">Entry point</th><td>endereço da primeira instrução (<code>ENTRY(...)</code> no script)</td></tr>
-      <tr><th scope="row">VMA / LMA</th><td>endereço de execução / de carga (divergem em firmware)</td></tr>
-      <tr><th scope="row"><code>KEEP</code></th><td>impede o linker de descartar uma seção &quot;não referenciada&quot;</td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de objeto e executável usado pelo toolchain GNU e pelo Linux</td></tr>
-      <tr><th scope="row">Seção (<code>.text</code>, <code>.data</code>, <code>.bss</code>)</th><td>bloco do programa: instruções, dados inicializados, dados zerados</td></tr>
-      <tr><th scope="row"><code>R_ARM_ABS32</code></th><td>tipo de relocation ARM: grava nesta palavra o endereço absoluto de 32 bits de um símbolo</td></tr>
-      <tr><th scope="row"><em>exit code</em></th><td>número que o processo devolve ao terminar (<code>echo $?</code> no shell)</td></tr>
-      <tr><th scope="row"><code>arm-box</code></th><td>programa Java que executa ELFs ARM de 32 bits como um Linux user-mode, sobre o <code>arm-jitter</code></td></tr>
-      <tr><th scope="row"><em>Freestanding</em></th><td>programa que não depende de sistema operacional nem de biblioteca C padrão (<code>-nostdlib</code>)</td></tr>
-      <tr><th scope="row"><em>Little-endian</em></th><td>ordem de bytes com o menos significativo no endereço mais baixo: <code>0xe28f101c</code> aparece como <code>1c 10 8f e2</code></td></tr>
-      <tr><th scope="row"><code>gc-sections</code></th><td>opção do linker que descarta seções que ninguém referencia</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Montar (<em>assemble</em>)</th><td role="cell" data-label="O que é"><code>.s</code> → <code>.o</code>: mnemônicos viram bytes, endereços ficam relativos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Ligar (<em>link</em>)</th><td role="cell" data-label="O que é"><code>.o</code>(s) → executável: endereços absolutos, símbolos resolvidos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Relocation</th><td role="cell" data-label="O que é">marca no <code>.o</code> de &quot;aqui vai um endereço que só o linker sabe&quot;</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Linker script</th><td role="cell" data-label="O que é">arquivo que descreve <code>MEMORY</code> e <code>SECTIONS</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Entry point</th><td role="cell" data-label="O que é">endereço da primeira instrução (<code>ENTRY(...)</code> no script)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">VMA / LMA</th><td role="cell" data-label="O que é">endereço de execução / de carga (divergem em firmware)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>KEEP</code></th><td role="cell" data-label="O que é">impede o linker de descartar uma seção &quot;não referenciada&quot;</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de objeto e executável usado pelo toolchain GNU e pelo Linux</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Seção (<code>.text</code>, <code>.data</code>, <code>.bss</code>)</th><td role="cell" data-label="O que é">bloco do programa: instruções, dados inicializados, dados zerados</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>R_ARM_ABS32</code></th><td role="cell" data-label="O que é">tipo de relocation ARM: grava nesta palavra o endereço absoluto de 32 bits de um símbolo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao terminar (<code>echo $?</code> no shell)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">programa Java que executa ELFs ARM de 32 bits como um Linux user-mode, sobre o <code>arm-jitter</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Freestanding</em></th><td role="cell" data-label="O que é">programa que não depende de sistema operacional nem de biblioteca C padrão (<code>-nostdlib</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Little-endian</em></th><td role="cell" data-label="O que é">ordem de bytes com o menos significativo no endereço mais baixo: <code>0xe28f101c</code> aparece como <code>1c 10 8f e2</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>gc-sections</code></th><td role="cell" data-label="O que é">opção do linker que descarta seções que ninguém referencia</td></tr>
 
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=ADDR -o x.elf x.o</code></th><td>liga com <code>.text</code> em <code>ADDR</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -T script.ld -o x.elf x.o</code></th><td>liga com um linker script</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -nostdlib -T s.ld -o x.elf x.s</code></th><td>monta + liga, freestanding</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary x.elf x.bin</code></th><td>extrai só os bytes</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -h x.elf</code></th><td>tabela de seções (VMA/LMA/tamanho)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-readelf -l x.elf</code></th><td><em>program headers</em> (o que o loader mapeia)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>monta <code>x.s</code> em <code>x.o</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-readelf -r x.o</code></th><td>lista as relocations pendentes de um objeto</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -dr x.o</code></th><td>desmonta o objeto e mostra cada relocation junto da palavra que ela vai preencher</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -c -o x.o x.s</code></th><td>só monta, chamando o <code>as</code></td></tr>
-      <tr><th scope="row"><code>java -jar target/armbox.jar x.elf ; echo $?</code></th><td>roda o ELF no <code>arm-box</code> e mostra o <em>exit code</em></td></tr>
-      <tr><th scope="row"><code>xxd x.bin</code></th><td>mostra os bytes do arquivo em hexadecimal</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=ADDR -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga com <code>.text</code> em <code>ADDR</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -T script.ld -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga com um linker script</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -nostdlib -T s.ld -o x.elf x.s</code></th><td role="cell" data-label="O que faz">monta + liga, freestanding</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objcopy -O binary x.elf x.bin</code></th><td role="cell" data-label="O que faz">extrai só os bytes</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -h x.elf</code></th><td role="cell" data-label="O que faz">tabela de seções (VMA/LMA/tamanho)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-readelf -l x.elf</code></th><td role="cell" data-label="O que faz"><em>program headers</em> (o que o loader mapeia)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td role="cell" data-label="O que faz">monta <code>x.s</code> em <code>x.o</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-readelf -r x.o</code></th><td role="cell" data-label="O que faz">lista as relocations pendentes de um objeto</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -dr x.o</code></th><td role="cell" data-label="O que faz">desmonta o objeto e mostra cada relocation junto da palavra que ela vai preencher</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -c -o x.o x.s</code></th><td role="cell" data-label="O que faz">só monta, chamando o <code>as</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar x.elf ; echo $?</code></th><td role="cell" data-label="O que faz">roda o ELF no <code>arm-box</code> e mostra o <em>exit code</em></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>xxd x.bin</code></th><td role="cell" data-label="O que faz">mostra os bytes do arquivo em hexadecimal</td></tr>
 
     </tbody>
   </table>

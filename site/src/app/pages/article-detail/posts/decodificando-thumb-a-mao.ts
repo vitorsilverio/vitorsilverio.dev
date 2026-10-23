@@ -18,24 +18,24 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <h2>16 bits, muitas famílias</h2>
 <p>O ARM de 32 bits cabe tudo num layout quase uniforme. O Thumb não tem esse luxo: com 16 bits, o conjunto é fatiado em <strong>famílias</strong>, identificadas pelos bits mais altos. O mapa (ARMv4T, para o Thumb de 16 bits):</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Bits [15:11]</th><th scope="col">Família</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Bits [15:11]</th><th scope="col" role="columnheader">Família</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>000xx</code> (menos <code>00011</code>)</th><td>shift por imediato (LSL/LSR/ASR)</td></tr>
-      <tr><th scope="row"><code>00011</code></th><td>ADD/SUB registrador ou imediato de 3 bits</td></tr>
-      <tr><th scope="row"><code>001xx</code></th><td>MOV/CMP/ADD/SUB com imediato de 8 bits</td></tr>
-      <tr><th scope="row"><code>010000</code></th><td>operações ALU entre dois registradores</td></tr>
-      <tr><th scope="row"><code>010001</code></th><td>operações com registradores altos (r8–r15) + <code>BX</code></td></tr>
-      <tr><th scope="row"><code>01001</code></th><td><code>LDR</code> relativo ao PC (carrega constante do <em>literal pool</em>)</td></tr>
-      <tr><th scope="row"><code>0101x</code> / <code>011xx</code> / <code>100xx</code></th><td>load/store (registrador, imediato, halfword, relativo ao SP)</td></tr>
-      <tr><th scope="row"><code>1010x</code></th><td><code>ADD Rd, PC/SP, #imm</code></td></tr>
-      <tr><th scope="row"><code>1011x</code></th><td>miscelânea: <code>ADD/SUB sp</code>, <code>PUSH</code>, <code>POP</code></td></tr>
-      <tr><th scope="row"><code>1100x</code></th><td><code>LDM</code>/<code>STM</code> (transferência múltipla)</td></tr>
-      <tr><th scope="row"><code>1101x</code></th><td>desvio <strong>condicional</strong> (cond nos bits [11:8]) + <code>SVC</code> (<code>11011111</code>)</td></tr>
-      <tr><th scope="row"><code>11100</code></th><td>desvio incondicional</td></tr>
-      <tr><th scope="row"><code>11110</code> / <code>11111</code> / <code>11101</code></th><td><code>BL</code>/<code>BLX</code> (par de dois halfwords: prefixo <code>11110</code>, sufixo <code>11111</code> para <code>BL</code> ou <code>11101</code> para <code>BLX</code>, este só a partir do ARMv5T)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>000xx</code> (menos <code>00011</code>)</th><td role="cell" data-label="Família">shift por imediato (LSL/LSR/ASR)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>00011</code></th><td role="cell" data-label="Família">ADD/SUB registrador ou imediato de 3 bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>001xx</code></th><td role="cell" data-label="Família">MOV/CMP/ADD/SUB com imediato de 8 bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>010000</code></th><td role="cell" data-label="Família">operações ALU entre dois registradores</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>010001</code></th><td role="cell" data-label="Família">operações com registradores altos (r8–r15) + <code>BX</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>01001</code></th><td role="cell" data-label="Família"><code>LDR</code> relativo ao PC (carrega constante do <em>literal pool</em>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>0101x</code> / <code>011xx</code> / <code>100xx</code></th><td role="cell" data-label="Família">load/store (registrador, imediato, halfword, relativo ao SP)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>1010x</code></th><td role="cell" data-label="Família"><code>ADD Rd, PC/SP, #imm</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>1011x</code></th><td role="cell" data-label="Família">miscelânea: <code>ADD/SUB sp</code>, <code>PUSH</code>, <code>POP</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>1100x</code></th><td role="cell" data-label="Família"><code>LDM</code>/<code>STM</code> (transferência múltipla)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>1101x</code></th><td role="cell" data-label="Família">desvio <strong>condicional</strong> (cond nos bits [11:8]) + <code>SVC</code> (<code>11011111</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>11100</code></th><td role="cell" data-label="Família">desvio incondicional</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits [15:11]"><code>11110</code> / <code>11111</code> / <code>11101</code></th><td role="cell" data-label="Família"><code>BL</code>/<code>BLX</code> (par de dois halfwords: prefixo <code>11110</code>, sufixo <code>11111</code> para <code>BL</code> ou <code>11101</code> para <code>BLX</code>, este só a partir do ARMv5T)</td></tr>
     </tbody>
   </table>
 </div>
@@ -120,38 +120,38 @@ loop:
 <p><code>BL</code>/<code>BLX</code> é a exceção: no formato legado do ARMv4T/ARMv5T são <strong>duas</strong> halfwords (prefixo + sufixo) que juntas formam um deslocamento de 22 bits. O decoder as reconhece separadamente, como <code>LONG_BRANCH_PREFIX</code> (guarda os 11 bits altos do deslocamento) e <code>LONG_BRANCH_SUFFIX</code> (guarda os 11 bits baixos e é quem desvia). Quando a arquitetura configurada tem Thumb-2, o par passa a ser decodificado como uma única instrução de 32 bits.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Halfword</th><td>16 bits — o tamanho de uma instrução Thumb</td></tr>
-      <tr><th scope="row">Família</th><td>grupo de encodings identificado pelos bits altos da halfword</td></tr>
-      <tr><th scope="row">S implícito</th><td>em Thumb, a maioria das instruções atualiza NZCV sem pedir</td></tr>
-      <tr><th scope="row">Literal pool</th><td>bloco de constantes de 32 bits que o <code>LDR Rd, =valor</code> lê via PC</td></tr>
-      <tr><th scope="row">Registrador alto</th><td>r8–r15; só algumas famílias Thumb os alcançam</td></tr>
-      <tr><th scope="row">Thumb</th><td>conjunto de instruções de 16 bits da arquitetura ARM</td></tr>
-      <tr><th scope="row">ARMv4T</th><td>versão da arquitetura ARM que introduziu o Thumb (usada no ARM7TDMI)</td></tr>
-      <tr><th scope="row">Flags NZCV</th><td>bits de status (negativo, zero, <em>carry</em>, <em>overflow</em>) que desvios condicionais consultam</td></tr>
-      <tr><th scope="row"><code>BX</code></th><td><em>Branch and Exchange</em>: desvia para o endereço de um registrador e escolhe ARM ou Thumb pelo bit 0 dele</td></tr>
-      <tr><th scope="row"><code>BL</code></th><td><em>Branch with Link</em>: desvia guardando o endereço de retorno em <code>lr</code></td></tr>
-      <tr><th scope="row"><code>IT</code></th><td>instrução do Thumb-2 que torna condicionais as próximas até quatro instruções</td></tr>
-      <tr><th scope="row"><code>ThumbDecoder</code></th><td>classe do <code>arm-jitter</code> que decodifica halfwords Thumb em <code>DecodedInstruction</code></td></tr>
-      <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Halfword</th><td role="cell" data-label="O que é">16 bits — o tamanho de uma instrução Thumb</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Família</th><td role="cell" data-label="O que é">grupo de encodings identificado pelos bits altos da halfword</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">S implícito</th><td role="cell" data-label="O que é">em Thumb, a maioria das instruções atualiza NZCV sem pedir</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Literal pool</th><td role="cell" data-label="O que é">bloco de constantes de 32 bits que o <code>LDR Rd, =valor</code> lê via PC</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador alto</th><td role="cell" data-label="O que é">r8–r15; só algumas famílias Thumb os alcançam</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb</th><td role="cell" data-label="O que é">conjunto de instruções de 16 bits da arquitetura ARM</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ARMv4T</th><td role="cell" data-label="O que é">versão da arquitetura ARM que introduziu o Thumb (usada no ARM7TDMI)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags NZCV</th><td role="cell" data-label="O que é">bits de status (negativo, zero, <em>carry</em>, <em>overflow</em>) que desvios condicionais consultam</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BX</code></th><td role="cell" data-label="O que é"><em>Branch and Exchange</em>: desvia para o endereço de um registrador e escolhe ARM ou Thumb pelo bit 0 dele</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BL</code></th><td role="cell" data-label="O que é"><em>Branch with Link</em>: desvia guardando o endereço de retorno em <code>lr</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>IT</code></th><td role="cell" data-label="O que é">instrução do Thumb-2 que torna condicionais as próximas até quatro instruções</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ThumbDecoder</code></th><td role="cell" data-label="O que é">classe do <code>arm-jitter</code> que decodifica halfwords Thumb em <code>DecodedInstruction</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv4t -mthumb x.s -o x.o</code></th><td>monta em Thumb</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>liga colocando <code>.text</code> em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d --disassembler-options=force-thumb x.elf</code></th><td>força a desmontagem Thumb</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>os símbolos <code>.thumb_func</code> já marcam o modo</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv4t -mthumb x.s -o x.o</code></th><td role="cell" data-label="O que faz">monta em Thumb</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga colocando <code>.text</code> em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d --disassembler-options=force-thumb x.elf</code></th><td role="cell" data-label="O que faz">força a desmontagem Thumb</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">os símbolos <code>.thumb_func</code> já marcam o modo</td></tr>
     </tbody>
   </table>
 </div>

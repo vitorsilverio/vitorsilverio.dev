@@ -55,16 +55,16 @@ import { Nota } from '../../../shared/nota/nota';
 apache2 <span class="token parameter variable">-M</span> <span class="token operator">|</span> <span class="token function">grep</span> php</code></pre>
 <p><strong>Passo 2: compare com as versões corrigidas.</strong></p>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Estou exposto? (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">Ramo</th><th scope="col">Corrigido em</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Ramo</th><th scope="col" role="columnheader">Corrigido em</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">8.5</th><td>8.5.12</td></tr>
-      <tr><th scope="row">8.4</th><td>8.4.27</td></tr>
-      <tr><th scope="row">8.3</th><td>8.3.36</td></tr>
-      <tr><th scope="row">8.2</th><td>8.2.35</td></tr>
-      <tr><th scope="row">8.1 e anteriores</th><td>sem correção da equipe do PHP (veja abaixo)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Ramo">8.5</th><td role="cell" data-label="Corrigido em">8.5.12</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Ramo">8.4</th><td role="cell" data-label="Corrigido em">8.4.27</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Ramo">8.3</th><td role="cell" data-label="Corrigido em">8.3.36</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Ramo">8.2</th><td role="cell" data-label="Corrigido em">8.2.35</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Ramo">8.1 e anteriores</th><td role="cell" data-label="Corrigido em">sem correção da equipe do PHP (veja abaixo)</td></tr>
     </tbody>
   </table>
 </div>
@@ -131,53 +131,53 @@ php-fpm <span class="token parameter variable">-tt</span> <span class="token ope
 <p>Se encontrar algo, trate como incidente: isole, preserve os logs, atualize e troque credenciais acessíveis ao processo PHP (senhas de banco, chaves de API, <code>wp-config.php</code> e equivalentes), porque RCE roda com os privilégios do worker.</p>
 <h2>Glossário</h2>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Glossário (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">RCE</th><td><em>Remote code execution</em>: execução remota de código. O atacante faz o servidor executar código escolhido por ele, a distância.</td></tr>
-      <tr><th scope="row">Pré-autenticação</th><td>A falha pode ser explorada sem login; basta enviar uma requisição ao servidor.</td></tr>
-      <tr><th scope="row">CVE</th><td><em>Common Vulnerabilities and Exposures</em>: identificador público e único de uma vulnerabilidade, no formato <code>CVE-ano-número</code>.</td></tr>
-      <tr><th scope="row">CVSS</th><td><em>Common Vulnerability Scoring System</em>: pontuação de gravidade de 0 a 10. As duas falhas têm 9,2 na versão 4.0.</td></tr>
-      <tr><th scope="row">CWE</th><td><em>Common Weakness Enumeration</em>: catálogo de tipos de fraqueza de software (por exemplo, CWE-416, uso após liberação).</td></tr>
-      <tr><th scope="row">SAPI</th><td><em>Server API</em>: a camada pela qual o PHP se liga ao servidor web (<code>mod_php</code>, PHP-FPM, CGI, FrankenPHP, LiteSpeed).</td></tr>
-      <tr><th scope="row"><code>mod_php</code></th><td>Módulo do Apache que embute o PHP no próprio processo do servidor; o worker é reutilizado entre requisições.</td></tr>
-      <tr><th scope="row">PHP-FPM</th><td><em>FastCGI Process Manager</em>: gerenciador de processos PHP separado do servidor web, usado com nginx, Apache e outros.</td></tr>
-      <tr><th scope="row">Worker</th><td>Processo (ou thread) que atende requisições; vive e é reutilizado por várias delas.</td></tr>
-      <tr><th scope="row">OOM</th><td><em>Out of memory</em>: falta de memória.</td></tr>
-      <tr><th scope="row"><code>memory_limit</code></th><td>Diretiva do PHP que limita a memória por script (padrão 128 MiB). <code>-1</code> remove o limite.</td></tr>
-      <tr><th scope="row"><code>post_max_size</code></th><td>Diretiva que limita o tamanho do corpo de um POST (padrão 8 MiB).</td></tr>
-      <tr><th scope="row">Erro fatal</th><td>Erro do PHP que encerra a execução da requisição na hora.</td></tr>
-      <tr><th scope="row"><code>longjmp()</code></th><td>Função de C que abandona as chamadas em andamento e salta para um ponto anterior; o PHP a usava para sair em caso de falta de memória.</td></tr>
-      <tr><th scope="row">Tabela hash</th><td>Estrutura de dados que associa chaves a valores; base dos arrays do PHP.</td></tr>
-      <tr><th scope="row">Use after free</th><td>Uso de memória depois de ela ter sido liberada; o ponteiro continua existindo, mas o conteúdo já não é do programa.</td></tr>
-      <tr><th scope="row">Estado global</th><td>Dados compartilhados que vivem fora de uma função e podem sobreviver entre etapas ou requisições.</td></tr>
-      <tr><th scope="row"><code>multipart/form-data</code></th><td>Formato de corpo HTTP usado para envio de arquivos e formulários, dividido em partes (RFC 1867).</td></tr>
-      <tr><th scope="row">Chunked</th><td>Codificação de transferência HTTP/1.1 em que o corpo chega em pedaços, sem tamanho total declarado.</td></tr>
-      <tr><th scope="row">Upload progress de sessão</th><td>Recurso do PHP (<code>session.upload_progress.*</code>) que guarda na sessão o andamento de um upload em curso.</td></tr>
-      <tr><th scope="row">cgroup</th><td>Mecanismo do kernel Linux para limitar recursos (como memória) de um grupo de processos; base dos limites de contêiner.</td></tr>
-      <tr><th scope="row">Backport</th><td>Aplicar uma correção feita numa versão nova em uma versão mais antiga.</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">RCE</th><td role="cell" data-label="O que é"><em>Remote code execution</em>: execução remota de código. O atacante faz o servidor executar código escolhido por ele, a distância.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pré-autenticação</th><td role="cell" data-label="O que é">A falha pode ser explorada sem login; basta enviar uma requisição ao servidor.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CVE</th><td role="cell" data-label="O que é"><em>Common Vulnerabilities and Exposures</em>: identificador público e único de uma vulnerabilidade, no formato <code>CVE-ano-número</code>.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CVSS</th><td role="cell" data-label="O que é"><em>Common Vulnerability Scoring System</em>: pontuação de gravidade de 0 a 10. As duas falhas têm 9,2 na versão 4.0.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CWE</th><td role="cell" data-label="O que é"><em>Common Weakness Enumeration</em>: catálogo de tipos de fraqueza de software (por exemplo, CWE-416, uso após liberação).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SAPI</th><td role="cell" data-label="O que é"><em>Server API</em>: a camada pela qual o PHP se liga ao servidor web (<code>mod_php</code>, PHP-FPM, CGI, FrankenPHP, LiteSpeed).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>mod_php</code></th><td role="cell" data-label="O que é">Módulo do Apache que embute o PHP no próprio processo do servidor; o worker é reutilizado entre requisições.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PHP-FPM</th><td role="cell" data-label="O que é"><em>FastCGI Process Manager</em>: gerenciador de processos PHP separado do servidor web, usado com nginx, Apache e outros.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Worker</th><td role="cell" data-label="O que é">Processo (ou thread) que atende requisições; vive e é reutilizado por várias delas.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">OOM</th><td role="cell" data-label="O que é"><em>Out of memory</em>: falta de memória.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>memory_limit</code></th><td role="cell" data-label="O que é">Diretiva do PHP que limita a memória por script (padrão 128 MiB). <code>-1</code> remove o limite.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>post_max_size</code></th><td role="cell" data-label="O que é">Diretiva que limita o tamanho do corpo de um POST (padrão 8 MiB).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Erro fatal</th><td role="cell" data-label="O que é">Erro do PHP que encerra a execução da requisição na hora.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>longjmp()</code></th><td role="cell" data-label="O que é">Função de C que abandona as chamadas em andamento e salta para um ponto anterior; o PHP a usava para sair em caso de falta de memória.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Tabela hash</th><td role="cell" data-label="O que é">Estrutura de dados que associa chaves a valores; base dos arrays do PHP.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Use after free</th><td role="cell" data-label="O que é">Uso de memória depois de ela ter sido liberada; o ponteiro continua existindo, mas o conteúdo já não é do programa.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Estado global</th><td role="cell" data-label="O que é">Dados compartilhados que vivem fora de uma função e podem sobreviver entre etapas ou requisições.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>multipart/form-data</code></th><td role="cell" data-label="O que é">Formato de corpo HTTP usado para envio de arquivos e formulários, dividido em partes (RFC 1867).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Chunked</th><td role="cell" data-label="O que é">Codificação de transferência HTTP/1.1 em que o corpo chega em pedaços, sem tamanho total declarado.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Upload progress de sessão</th><td role="cell" data-label="O que é">Recurso do PHP (<code>session.upload_progress.*</code>) que guarda na sessão o andamento de um upload em curso.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">cgroup</th><td role="cell" data-label="O que é">Mecanismo do kernel Linux para limitar recursos (como memória) de um grupo de processos; base dos limites de contêiner.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Backport</th><td role="cell" data-label="O que é">Aplicar uma correção feita numa versão nova em uma versão mais antiga.</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Comandos (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>php -v</code></th><td>Mostra a versão do PHP de linha de comando (que pode diferir da do servidor web).</td></tr>
-      <tr><th scope="row"><code>php-fpm -v</code></th><td>Mostra a versão do PHP-FPM instalado.</td></tr>
-      <tr><th scope="row"><code>apache2 -M | grep php</code></th><td>Lista os módulos do Apache e filtra o <code>mod_php</code>. Em algumas distribuições o comando é <code>apachectl -M</code> ou <code>httpd -M</code>.</td></tr>
-      <tr><th scope="row"><code>php -i | grep -E &#39;...&#39;</code></th><td>Mostra a configuração efetiva do PHP da linha de comando e filtra as diretivas relevantes.</td></tr>
-      <tr><th scope="row"><code>php-fpm -tt</code></th><td>Testa a configuração do FPM e imprime a configuração efetiva, inclusive dos pools.</td></tr>
-      <tr><th scope="row"><code>grep -rE &#39;...&#39; /etc/php* /etc/apache2</code></th><td>Procura diretivas (<code>memory_limit</code>, <code>upload_progress</code>, <code>php_admin_value</code>) nos arquivos de configuração.</td></tr>
-      <tr><th scope="row"><code>systemctl restart php-fpm</code> / <code>apache2</code></th><td>Reinicia o serviço para que a nova versão ou configuração valha. O nome da unidade varia (<code>php8.3-fpm</code>, <code>httpd</code>).</td></tr>
-      <tr><th scope="row"><code>grep -c &#39;Allowed memory size&#39; ...</code></th><td>Conta ocorrências de erro de memória esgotada no log do PHP.</td></tr>
-      <tr><th scope="row"><code>grep -E &#39;exited on signal 11|Segmentation fault&#39; ...</code></th><td>Procura quedas de worker por falha de segmentação nos logs do FPM e do Apache.</td></tr>
-      <tr><th scope="row"><code>awk &#39;$0 ~ /te=&quot;chunked&quot;/ &amp;&amp; $0 ~ /multipart/&#39; ...</code></th><td>Filtra do log de acesso as requisições multipart enviadas em chunked.</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>php -v</code></th><td role="cell" data-label="O que faz">Mostra a versão do PHP de linha de comando (que pode diferir da do servidor web).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>php-fpm -v</code></th><td role="cell" data-label="O que faz">Mostra a versão do PHP-FPM instalado.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>apache2 -M | grep php</code></th><td role="cell" data-label="O que faz">Lista os módulos do Apache e filtra o <code>mod_php</code>. Em algumas distribuições o comando é <code>apachectl -M</code> ou <code>httpd -M</code>.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>php -i | grep -E &#39;...&#39;</code></th><td role="cell" data-label="O que faz">Mostra a configuração efetiva do PHP da linha de comando e filtra as diretivas relevantes.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>php-fpm -tt</code></th><td role="cell" data-label="O que faz">Testa a configuração do FPM e imprime a configuração efetiva, inclusive dos pools.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>grep -rE &#39;...&#39; /etc/php* /etc/apache2</code></th><td role="cell" data-label="O que faz">Procura diretivas (<code>memory_limit</code>, <code>upload_progress</code>, <code>php_admin_value</code>) nos arquivos de configuração.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>systemctl restart php-fpm</code> / <code>apache2</code></th><td role="cell" data-label="O que faz">Reinicia o serviço para que a nova versão ou configuração valha. O nome da unidade varia (<code>php8.3-fpm</code>, <code>httpd</code>).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>grep -c &#39;Allowed memory size&#39; ...</code></th><td role="cell" data-label="O que faz">Conta ocorrências de erro de memória esgotada no log do PHP.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>grep -E &#39;exited on signal 11|Segmentation fault&#39; ...</code></th><td role="cell" data-label="O que faz">Procura quedas de worker por falha de segmentação nos logs do FPM e do Apache.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>awk &#39;$0 ~ /te=&quot;chunked&quot;/ &amp;&amp; $0 ~ /multipart/&#39; ...</code></th><td role="cell" data-label="O que faz">Filtra do log de acesso as requisições multipart enviadas em chunked.</td></tr>
     </tbody>
   </table>
 </div>

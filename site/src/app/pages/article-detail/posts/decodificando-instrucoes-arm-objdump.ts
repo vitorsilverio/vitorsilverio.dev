@@ -120,39 +120,39 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       O <code>bge</code> do nosso laço só desvia se o resultado foi "maior ou
       igual". Isso vive no cond. Tabela dos mais usados:
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Códigos de condição ARM (bits 31..28)</caption>
-      <thead>
-        <tr><th scope="col">Cond (bin)</th><th scope="col">Mnemônico</th><th scope="col">Significado</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Cond (bin)</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Significado</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>1110</code></th><td>AL</td><td>Sempre (default — por isso quase tudo começa com <code>e</code>).</td></tr>
-        <tr><th scope="row"><code>0000</code></th><td>EQ</td><td>Equal (flag Z = 1).</td></tr>
-        <tr><th scope="row"><code>0001</code></th><td>NE</td><td>Not equal (Z = 0).</td></tr>
-        <tr><th scope="row"><code>1010</code></th><td>GE</td><td>Greater or equal (N == V). É o nosso <code>bge</code>.</td></tr>
-        <tr><th scope="row"><code>1011</code></th><td>LT</td><td>Less than (N != V).</td></tr>
-        <tr><th scope="row"><code>1100</code></th><td>GT</td><td>Greater (Z = 0 e N == V).</td></tr>
-        <tr><th scope="row"><code>1101</code></th><td>LE</td><td>Less or equal (Z = 1 ou N != V).</td></tr>
-        <tr><th scope="row"><code>0010</code> / <code>0011</code></th><td>CS / CC</td><td>Carry set / clear (útil para unsigned).</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>1110</code></th><td role="cell" data-label="Mnemônico">AL</td><td role="cell" data-label="Significado">Sempre (default — por isso quase tudo começa com <code>e</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>0000</code></th><td role="cell" data-label="Mnemônico">EQ</td><td role="cell" data-label="Significado">Equal (flag Z = 1).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>0001</code></th><td role="cell" data-label="Mnemônico">NE</td><td role="cell" data-label="Significado">Not equal (Z = 0).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>1010</code></th><td role="cell" data-label="Mnemônico">GE</td><td role="cell" data-label="Significado">Greater or equal (N == V). É o nosso <code>bge</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>1011</code></th><td role="cell" data-label="Mnemônico">LT</td><td role="cell" data-label="Significado">Less than (N != V).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>1100</code></th><td role="cell" data-label="Mnemônico">GT</td><td role="cell" data-label="Significado">Greater (Z = 0 e N == V).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>1101</code></th><td role="cell" data-label="Mnemônico">LE</td><td role="cell" data-label="Significado">Less or equal (Z = 1 ou N != V).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond (bin)"><code>0010</code> / <code>0011</code></th><td role="cell" data-label="Mnemônico">CS / CC</td><td role="cell" data-label="Significado">Carry set / clear (útil para unsigned).</td></tr>
       </tbody>
     </table></div>
 
     <h2>Glossário: opcodes de processamento de dados</h2>
     <p>Os 4 bits do <code>opcode</code> (bits 24..21) determinam a operação:</p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Principais opcodes (bits 24..21)</caption>
-      <thead>
-        <tr><th scope="col">Opcode (bin)</th><th scope="col">Mnemônico</th><th scope="col">Operação</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Opcode (bin)</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Operação</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>0100</code></th><td>ADD</td><td>soma</td></tr>
-        <tr><th scope="row"><code>0010</code></th><td>SUB</td><td>subtração</td></tr>
-        <tr><th scope="row"><code>0000</code></th><td>AND</td><td>E lógico</td></tr>
-        <tr><th scope="row"><code>0001</code></th><td>EOR</td><td>OU-exclusivo</td></tr>
-        <tr><th scope="row"><code>1100</code></th><td>ORR</td><td>OU lógico</td></tr>
-        <tr><th scope="row"><code>1101</code></th><td>MOV</td><td>cópia de operando2 para Rd</td></tr>
-        <tr><th scope="row"><code>1010</code></th><td>CMP</td><td>subtrai e <strong>só</strong> atualiza flags (Rd ignorado)</td></tr>
-        <tr><th scope="row"><code>1110</code></th><td>BIC</td><td>clear bit (AND com o complemento)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>0100</code></th><td role="cell" data-label="Mnemônico">ADD</td><td role="cell" data-label="Operação">soma</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>0010</code></th><td role="cell" data-label="Mnemônico">SUB</td><td role="cell" data-label="Operação">subtração</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>0000</code></th><td role="cell" data-label="Mnemônico">AND</td><td role="cell" data-label="Operação">E lógico</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>0001</code></th><td role="cell" data-label="Mnemônico">EOR</td><td role="cell" data-label="Operação">OU-exclusivo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>1100</code></th><td role="cell" data-label="Mnemônico">ORR</td><td role="cell" data-label="Operação">OU lógico</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>1101</code></th><td role="cell" data-label="Mnemônico">MOV</td><td role="cell" data-label="Operação">cópia de operando2 para Rd</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>1010</code></th><td role="cell" data-label="Mnemônico">CMP</td><td role="cell" data-label="Operação">subtrai e <strong>só</strong> atualiza flags (Rd ignorado)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Opcode (bin)"><code>1110</code></th><td role="cell" data-label="Mnemônico">BIC</td><td role="cell" data-label="Operação">clear bit (AND com o complemento)</td></tr>
       </tbody>
     </table></div>
 
@@ -315,18 +315,18 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       Para repetir em casa (a mesma toolchain do
       <a routerLink="/artigos/ambiente-arm">ambiente ARM</a>):
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Comandos para montar, ligar e desmontar</caption>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td>Monta o assembly em objeto.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td>Liga em um ELF estático (roda no arm-box).</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d f.elf</code></th><td>Desmonta e mostra os bytes de cada instrução.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -s -j .text f.elf</code></th><td>Despeja os bytes crus da seção <code>.text</code> (na ordem da memória, little-endian).</td></tr>
-        <tr><th scope="row"><code>info registers cpsr</code></th><td>No GDB: mostra as flags que o <code>cmp</code> mudou.</td></tr>
-        <tr><th scope="row"><code>x/4xw $r0</code></th><td>No GDB: inspeciona 4 palavras a partir de <code>r0</code>.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td role="cell" data-label="O que faz">Monta o assembly em objeto.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td role="cell" data-label="O que faz">Liga em um ELF estático (roda no arm-box).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d f.elf</code></th><td role="cell" data-label="O que faz">Desmonta e mostra os bytes de cada instrução.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -s -j .text f.elf</code></th><td role="cell" data-label="O que faz">Despeja os bytes crus da seção <code>.text</code> (na ordem da memória, little-endian).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>info registers cpsr</code></th><td role="cell" data-label="O que faz">No GDB: mostra as flags que o <code>cmp</code> mudou.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>x/4xw $r0</code></th><td role="cell" data-label="O que faz">No GDB: inspeciona 4 palavras a partir de <code>r0</code>.</td></tr>
       </tbody>
     </table></div>
 
@@ -348,22 +348,22 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>objdump</code></th><td>ferramenta do GNU binutils que desmonta um binário: mostra endereço, bytes e mnemônico de cada instrução.</td></tr>
-        <tr><th scope="row">Mnemônico</th><td>nome simbólico da instrução (<code>add</code>, <code>cmp</code>, <code>bge</code>).</td></tr>
-        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato do executável que o ligador gera.</td></tr>
-        <tr><th scope="row">Little-endian</th><td>ordem de bytes em que o menos significativo vem primeiro na memória.</td></tr>
-        <tr><th scope="row">Nibble</th><td>grupo de 4 bits, um dígito hexadecimal.</td></tr>
-        <tr><th scope="row"><code>cond</code></th><td>campo de 4 bits do topo da instrução ARM com a condição de execução.</td></tr>
-        <tr><th scope="row"><code>CPSR</code></th><td><em>Current Program Status Register</em>: registrador de status, com as flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>.</td></tr>
-        <tr><th scope="row">Imediato</th><td>constante embutida na própria instrução.</td></tr>
-        <tr><th scope="row">Pós-indexado</th><td>modo de <code>ldr</code>/<code>str</code> que usa o endereço da base e só depois soma o deslocamento a ela (<code>[r0], #4</code>).</td></tr>
-        <tr><th scope="row"><em>Literal pool</em></th><td>área de constantes ao lado do código, lida com <code>ldr rX, [pc, #n]</code>.</td></tr>
-        <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">ferramenta do GNU binutils que desmonta um binário: mostra endereço, bytes e mnemônico de cada instrução.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Mnemônico</th><td role="cell" data-label="O que é">nome simbólico da instrução (<code>add</code>, <code>cmp</code>, <code>bge</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato do executável que o ligador gera.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Little-endian</th><td role="cell" data-label="O que é">ordem de bytes em que o menos significativo vem primeiro na memória.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Nibble</th><td role="cell" data-label="O que é">grupo de 4 bits, um dígito hexadecimal.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cond</code></th><td role="cell" data-label="O que é">campo de 4 bits do topo da instrução ARM com a condição de execução.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: registrador de status, com as flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Imediato</th><td role="cell" data-label="O que é">constante embutida na própria instrução.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pós-indexado</th><td role="cell" data-label="O que é">modo de <code>ldr</code>/<code>str</code> que usa o endereço da base e só depois soma o deslocamento a ela (<code>[r0], #4</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Literal pool</em></th><td role="cell" data-label="O que é">área de constantes ao lado do código, lida com <code>ldr rX, [pc, #n]</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
       </tbody>
     </table></div>
 

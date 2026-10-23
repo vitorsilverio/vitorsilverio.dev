@@ -249,3 +249,12 @@ vira um termo clicável com a definição da própria tabela (no máximo 8 por a
 `TERMOS_GENERICOS` ficam de fora; ocorrência já explicada entre parênteses é pulada). Controle por
 artigo: `data-glossario="nao"` numa `<tr>` da tabela tira o termo, `data-glossario="sim"` força um
 termo genérico, e `data-glossario="nao"` em qualquer elemento do texto exclui o que está dentro dele.
+
+## Tabelas dos artigos em telas estreitas
+
+Tabelas se apresentam como lista de definição (cada linha vira um bloco, cada célula "nome da coluna: valor") quando o `.scroll-x` que as envolve tem menos de 40rem (container query em `src/styles.css`, bloco "Tabelas como lista"). É só CSS: o HTML continua sendo `<table>`.
+
+- **Marcação (build):** `scripts/lib/tabela-lista.mjs` põe `class="tabela-lista"`, roles ARIA explícitos (`table`, `rowgroup`, `row`, `columnheader`, `rowheader`, `cell`, técnica de Adrian Roselli, porque `display: block` faz Chrome e Safari perderem a semântica) e `data-label` em cada célula (texto do `<th scope="col">`). O gerador aplica sozinho; para posts publicados, `node scripts/tabelas-lista-posts.mjs [--dry-run] [slug.ts ...]` (idempotente; relata tabelas com colspan/sem thead, que ficam como estão).
+- **Cabeçalho:** some só da vista (clip), sem `display: none`, para continuar na árvore de acessibilidade. O rótulo `::before` usa `content: attr(data-label) ':' / ''`, com texto alternativo vazio, para o leitor de tela não ler duas vezes (ele já anuncia o cabeçalho da coluna).
+- **Rolagem:** em modo lista a tabela cabe; o `ProseEnhance` já tira `tabindex` e `role` do wrapper de quem não rola.
+- **Opt-out:** `Tabela (matriz): legenda` no rascunho, ou `class="tabela-matriz"` no `<table>` de um post publicado. A tabela fica como tabela, com rolagem, em qualquer largura; o script a pula. O padrão é lista.

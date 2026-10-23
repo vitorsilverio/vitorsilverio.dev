@@ -19,17 +19,17 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>Os 16 registradores visíveis</h2>
 <p>Em qualquer instante, o programa enxerga <strong>R0–R15</strong>, todos de 32 bits:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Registrador</th><th scope="col">Apelido</th><th scope="col">Papel</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Registrador</th><th scope="col" role="columnheader">Apelido</th><th scope="col" role="columnheader">Papel</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">R0–R3</th><td>—</td><td>argumentos / retorno de função (AAPCS)</td></tr>
-      <tr><th scope="row">R4–R11</th><td>—</td><td>variáveis locais; <em>callee-saved</em></td></tr>
-      <tr><th scope="row">R12</th><td><code>ip</code></td><td>intra-procedimento</td></tr>
-      <tr><th scope="row">R13</th><td><code>sp</code></td><td>ponteiro de pilha</td></tr>
-      <tr><th scope="row">R14</th><td><code>lr</code></td><td><em>link register</em> — endereço de retorno gravado por <code>BL</code>/<code>BLX</code></td></tr>
-      <tr><th scope="row">R15</th><td><code>pc</code></td><td><em>program counter</em></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R0–R3</th><td role="cell" data-label="Apelido">—</td><td role="cell" data-label="Papel">argumentos / retorno de função (AAPCS)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R4–R11</th><td role="cell" data-label="Apelido">—</td><td role="cell" data-label="Papel">variáveis locais; <em>callee-saved</em></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R12</th><td role="cell" data-label="Apelido"><code>ip</code></td><td role="cell" data-label="Papel">intra-procedimento</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R13</th><td role="cell" data-label="Apelido"><code>sp</code></td><td role="cell" data-label="Papel">ponteiro de pilha</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R14</th><td role="cell" data-label="Apelido"><code>lr</code></td><td role="cell" data-label="Papel"><em>link register</em> — endereço de retorno gravado por <code>BL</code>/<code>BLX</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R15</th><td role="cell" data-label="Apelido"><code>pc</code></td><td role="cell" data-label="Papel"><em>program counter</em></td></tr>
     </tbody>
   </table>
 </div>
@@ -42,25 +42,25 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>O CPSR, bit a bit</h2>
 <p>O <em>Current Program Status Register</em> carrega o estado de execução. Os campos que importam nesta trilha:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Bits</th><th scope="col">Campo</th><th scope="col">Significado</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Bits</th><th scope="col" role="columnheader">Campo</th><th scope="col" role="columnheader">Significado</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">31</th><td><strong>N</strong></td><td>resultado negativo (bit 31 do resultado)</td></tr>
-      <tr><th scope="row">30</th><td><strong>Z</strong></td><td>resultado zero</td></tr>
-      <tr><th scope="row">29</th><td><strong>C</strong></td><td><em>carry</em> / <em>borrow</em> / último bit deslocado</td></tr>
-      <tr><th scope="row">28</th><td><strong>V</strong></td><td><em>overflow</em> aritmético com sinal</td></tr>
-      <tr><th scope="row">27</th><td><strong>Q</strong></td><td>saturação &quot;pegajosa&quot; (DSP/saturating); só limpa com <code>MSR</code></td></tr>
-      <tr><th scope="row">26–25, 15–10</th><td><strong>IT[7:0]</strong></td><td>estado do bloco <code>IT</code> (Thumb-2) — dividido em dois pedaços</td></tr>
-      <tr><th scope="row">24</th><td><strong>J</strong></td><td>estado Jazelle (juntamente com T, define o estado de execução; fora do escopo desta trilha)</td></tr>
-      <tr><th scope="row">19–16</th><td><strong>GE[3:0]</strong></td><td><em>greater-or-equal</em> por lane (SIMD paralelo do ARMv6)</td></tr>
-      <tr><th scope="row">9</th><td><strong>E</strong></td><td><em>endianness</em> de dados (0 = little)</td></tr>
-      <tr><th scope="row">8</th><td><strong>A</strong></td><td>mascara <em>aborts</em> assíncronos</td></tr>
-      <tr><th scope="row">7</th><td><strong>I</strong></td><td>mascara IRQ</td></tr>
-      <tr><th scope="row">6</th><td><strong>F</strong></td><td>mascara FIQ</td></tr>
-      <tr><th scope="row">5</th><td><strong>T</strong></td><td>estado Thumb (1) ou ARM (0)</td></tr>
-      <tr><th scope="row">4–0</th><td><strong>M[4:0]</strong></td><td>modo de processador (ver tabela adiante)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">31</th><td role="cell" data-label="Campo"><strong>N</strong></td><td role="cell" data-label="Significado">resultado negativo (bit 31 do resultado)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">30</th><td role="cell" data-label="Campo"><strong>Z</strong></td><td role="cell" data-label="Significado">resultado zero</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">29</th><td role="cell" data-label="Campo"><strong>C</strong></td><td role="cell" data-label="Significado"><em>carry</em> / <em>borrow</em> / último bit deslocado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">28</th><td role="cell" data-label="Campo"><strong>V</strong></td><td role="cell" data-label="Significado"><em>overflow</em> aritmético com sinal</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">27</th><td role="cell" data-label="Campo"><strong>Q</strong></td><td role="cell" data-label="Significado">saturação &quot;pegajosa&quot; (DSP/saturating); só limpa com <code>MSR</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">26–25, 15–10</th><td role="cell" data-label="Campo"><strong>IT[7:0]</strong></td><td role="cell" data-label="Significado">estado do bloco <code>IT</code> (Thumb-2) — dividido em dois pedaços</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">24</th><td role="cell" data-label="Campo"><strong>J</strong></td><td role="cell" data-label="Significado">estado Jazelle (juntamente com T, define o estado de execução; fora do escopo desta trilha)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">19–16</th><td role="cell" data-label="Campo"><strong>GE[3:0]</strong></td><td role="cell" data-label="Significado"><em>greater-or-equal</em> por lane (SIMD paralelo do ARMv6)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">9</th><td role="cell" data-label="Campo"><strong>E</strong></td><td role="cell" data-label="Significado"><em>endianness</em> de dados (0 = little)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">8</th><td role="cell" data-label="Campo"><strong>A</strong></td><td role="cell" data-label="Significado">mascara <em>aborts</em> assíncronos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">7</th><td role="cell" data-label="Campo"><strong>I</strong></td><td role="cell" data-label="Significado">mascara IRQ</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">6</th><td role="cell" data-label="Campo"><strong>F</strong></td><td role="cell" data-label="Significado">mascara FIQ</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">5</th><td role="cell" data-label="Campo"><strong>T</strong></td><td role="cell" data-label="Significado">estado Thumb (1) ou ARM (0)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">4–0</th><td role="cell" data-label="Campo"><strong>M[4:0]</strong></td><td role="cell" data-label="Significado">modo de processador (ver tabela adiante)</td></tr>
     </tbody>
   </table>
 </div>
@@ -68,20 +68,20 @@ import { Nota } from '../../../shared/nota/nota';
 <h2>Modos de processador e register banking</h2>
 <p>O ARM tem <strong>modos</strong> de execução. Cada exceção entra em um modo específico, e alguns registradores são <strong>bancados</strong>: R13/R14 (e, no FIQ, também R8–R12) têm cópias físicas distintas por modo. Trocar de modo troca <em>qual</em> R13 você enxerga — sem salvar nada explicitamente.</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Modo</th><th scope="col">M[4:0]</th><th scope="col">Entra quando</th><th scope="col">Bancados além de R0–R12/R15</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">M[4:0]</th><th scope="col" role="columnheader">Entra quando</th><th scope="col" role="columnheader">Bancados além de R0–R12/R15</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">User</th><td><code>10000</code></td><td>execução normal</td><td>— (é o banco base)</td></tr>
-      <tr><th scope="row">System</th><td><code>11111</code></td><td>igual User, mas privilegiado</td><td>compartilha o banco de User</td></tr>
-      <tr><th scope="row">FIQ</th><td><code>10001</code></td><td>interrupção rápida</td><td>R8–R12, R13, R14, SPSR</td></tr>
-      <tr><th scope="row">IRQ</th><td><code>10010</code></td><td>interrupção normal</td><td>R13, R14, SPSR</td></tr>
-      <tr><th scope="row">Supervisor</th><td><code>10011</code></td><td>reset e <code>SVC</code></td><td>R13, R14, SPSR</td></tr>
-      <tr><th scope="row">Abort</th><td><code>10111</code></td><td>falha de memória (data/prefetch abort)</td><td>R13, R14, SPSR</td></tr>
-      <tr><th scope="row">Undefined</th><td><code>11011</code></td><td>instrução indefinida / <code>UDF</code></td><td>R13, R14, SPSR</td></tr>
-      <tr><th scope="row">Monitor</th><td><code>10110</code></td><td><code>SMC</code> (TrustZone, ARMv6K+)</td><td>R13, R14, SPSR</td></tr>
-      <tr><th scope="row">Hyp</th><td><code>11010</code></td><td>Hypervisor (ARMv7VE)</td><td>R13, <code>ELR_hyp</code>, SPSR (LR é compartilhado com User)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">User</th><td role="cell" data-label="M[4:0]"><code>10000</code></td><td role="cell" data-label="Entra quando">execução normal</td><td role="cell" data-label="Bancados além de R0–R12/R15">— (é o banco base)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">System</th><td role="cell" data-label="M[4:0]"><code>11111</code></td><td role="cell" data-label="Entra quando">igual User, mas privilegiado</td><td role="cell" data-label="Bancados além de R0–R12/R15">compartilha o banco de User</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">FIQ</th><td role="cell" data-label="M[4:0]"><code>10001</code></td><td role="cell" data-label="Entra quando">interrupção rápida</td><td role="cell" data-label="Bancados além de R0–R12/R15">R8–R12, R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">IRQ</th><td role="cell" data-label="M[4:0]"><code>10010</code></td><td role="cell" data-label="Entra quando">interrupção normal</td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Supervisor</th><td role="cell" data-label="M[4:0]"><code>10011</code></td><td role="cell" data-label="Entra quando">reset e <code>SVC</code></td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Abort</th><td role="cell" data-label="M[4:0]"><code>10111</code></td><td role="cell" data-label="Entra quando">falha de memória (data/prefetch abort)</td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Undefined</th><td role="cell" data-label="M[4:0]"><code>11011</code></td><td role="cell" data-label="Entra quando">instrução indefinida / <code>UDF</code></td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Monitor</th><td role="cell" data-label="M[4:0]"><code>10110</code></td><td role="cell" data-label="Entra quando"><code>SMC</code> (TrustZone, ARMv6K+)</td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, R14, SPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Hyp</th><td role="cell" data-label="M[4:0]"><code>11010</code></td><td role="cell" data-label="Entra quando">Hypervisor (ARMv7VE)</td><td role="cell" data-label="Bancados além de R0–R12/R15">R13, <code>ELR_hyp</code>, SPSR (LR é compartilhado com User)</td></tr>
     </tbody>
   </table>
 </div>
@@ -236,48 +236,48 @@ $4 = 10000000000000000000000011011111</code></pre>
 </ul>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">R0–R15</th><td>os 16 registradores de 32 bits visíveis ao programa; R13 = SP (pilha), R14 = LR (retorno), R15 = PC (contador de programa)</td></tr>
-      <tr><th scope="row">AAPCS</th><td><em>Procedure Call Standard for the Arm Architecture</em>: a convenção de chamada (R0–R3 para argumentos, R4–R11 preservados pela função chamada)</td></tr>
-      <tr><th scope="row">CPSR</th><td><em>Current Program Status Register</em> — flags + modo + máscaras de interrupção</td></tr>
-      <tr><th scope="row">SPSR</th><td><em>Saved PSR</em> — cópia do CPSR feita ao entrar num modo de exceção</td></tr>
-      <tr><th scope="row">Flags N, Z, C, V</th><td>negativo, zero, <em>carry</em> (para subtração, ausência de empréstimo) e <em>overflow</em> com sinal</td></tr>
-      <tr><th scope="row">Banking</th><td>ter cópias físicas de um registrador, uma por modo</td></tr>
-      <tr><th scope="row">Modo</th><td>estado privilegiado da CPU; cada exceção entra em um</td></tr>
-      <tr><th scope="row">Exceção</th><td>evento (interrupção, chamada de sistema, falha de memória, instrução indefinida) que desvia a CPU para um tratador</td></tr>
-      <tr><th scope="row">IRQ / FIQ</th><td>interrupção comum / interrupção rápida (esta tem mais registradores em banco)</td></tr>
-      <tr><th scope="row">Flag pegajosa</th><td>bit que, uma vez ligado, só limpa por escrita explícita (<code>Q</code>)</td></tr>
-      <tr><th scope="row">Bloco <code>IT</code></th><td>instrução Thumb-2 que torna condicionais as até quatro instruções seguintes; o estado dele mora em <code>IT[7:0]</code> no CPSR</td></tr>
-      <tr><th scope="row">Thumb</th><td>conjunto de instruções compactas (16 bits, com extensão Thumb-2 de 32); ligado pelo bit <code>T</code></td></tr>
-      <tr><th scope="row"><code>MRS</code> / <code>MSR</code></th><td>mover CPSR/SPSR ↔ registrador de propósito geral</td></tr>
-      <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux, que o arm-box carrega</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">R0–R15</th><td role="cell" data-label="O que é">os 16 registradores de 32 bits visíveis ao programa; R13 = SP (pilha), R14 = LR (retorno), R15 = PC (contador de programa)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em>Procedure Call Standard for the Arm Architecture</em>: a convenção de chamada (R0–R3 para argumentos, R4–R11 preservados pela função chamada)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em>Current Program Status Register</em> — flags + modo + máscaras de interrupção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SPSR</th><td role="cell" data-label="O que é"><em>Saved PSR</em> — cópia do CPSR feita ao entrar num modo de exceção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (para subtração, ausência de empréstimo) e <em>overflow</em> com sinal</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Banking</th><td role="cell" data-label="O que é">ter cópias físicas de um registrador, uma por modo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo</th><td role="cell" data-label="O que é">estado privilegiado da CPU; cada exceção entra em um</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Exceção</th><td role="cell" data-label="O que é">evento (interrupção, chamada de sistema, falha de memória, instrução indefinida) que desvia a CPU para um tratador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IRQ / FIQ</th><td role="cell" data-label="O que é">interrupção comum / interrupção rápida (esta tem mais registradores em banco)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flag pegajosa</th><td role="cell" data-label="O que é">bit que, uma vez ligado, só limpa por escrita explícita (<code>Q</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bloco <code>IT</code></th><td role="cell" data-label="O que é">instrução Thumb-2 que torna condicionais as até quatro instruções seguintes; o estado dele mora em <code>IT[7:0]</code> no CPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb</th><td role="cell" data-label="O que é">conjunto de instruções compactas (16 bits, com extensão Thumb-2 de 32); ligado pelo bit <code>T</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MRS</code> / <code>MSR</code></th><td role="cell" data-label="O que é">mover CPSR/SPSR ↔ registrador de propósito geral</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">formato de arquivo executável do Linux, que o arm-box carrega</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o cpsr.o cpsr.s</code></th><td>monta o assembly para ARMv7-A</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o cpsr.elf cpsr.o</code></th><td>liga o objeto com o código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d cpsr.elf</code></th><td>desmonta o executável</td></tr>
-      <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 cpsr.elf</code></th><td>roda o programa no arm-box com o servidor GDB na porta 3333</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gdb -q cpsr.elf -ex "target remote :3333"</code></th><td>abre o GDB conectado ao arm-box</td></tr>
-      <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar RegistradoresBanking.java</code></th><td>compila o exemplo Java</td></tr>
-      <tr><th scope="row"><code>java -cp "arm-jitter-1.4.0.jar;." RegistradoresBanking</code></th><td>roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
-      <tr><th scope="row"><code>mrs r0, cpsr</code></th><td>copia o CPSR para R0</td></tr>
-      <tr><th scope="row"><code>msr cpsr_f, r0</code></th><td>escreve só o campo de flags (<code>_f</code>) do CPSR</td></tr>
-      <tr><th scope="row"><code>stepi</code></th><td>(GDB) executa uma instrução de máquina</td></tr>
-      <tr><th scope="row"><code>x/1i $pc</code></th><td>(GDB) desmonta a instrução em PC</td></tr>
-      <tr><th scope="row"><code>p $cpsr</code> / <code>p/t $cpsr</code> / <code>p/x $r0</code></th><td>(GDB) imprime o CPSR em decimal / binário e R0 em hex</td></tr>
-      <tr><th scope="row"><code>info registers cpsr</code></th><td>(GDB) mostra o CPSR em hex e decimal</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o cpsr.o cpsr.s</code></th><td role="cell" data-label="O que faz">monta o assembly para ARMv7-A</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o cpsr.elf cpsr.o</code></th><td role="cell" data-label="O que faz">liga o objeto com o código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d cpsr.elf</code></th><td role="cell" data-label="O que faz">desmonta o executável</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 cpsr.elf</code></th><td role="cell" data-label="O que faz">roda o programa no arm-box com o servidor GDB na porta 3333</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q cpsr.elf -ex "target remote :3333"</code></th><td role="cell" data-label="O que faz">abre o GDB conectado ao arm-box</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.4.0.jar RegistradoresBanking.java</code></th><td role="cell" data-label="O que faz">compila o exemplo Java</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp "arm-jitter-1.4.0.jar;." RegistradoresBanking</code></th><td role="cell" data-label="O que faz">roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mrs r0, cpsr</code></th><td role="cell" data-label="O que faz">copia o CPSR para R0</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>msr cpsr_f, r0</code></th><td role="cell" data-label="O que faz">escreve só o campo de flags (<code>_f</code>) do CPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>stepi</code></th><td role="cell" data-label="O que faz">(GDB) executa uma instrução de máquina</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>x/1i $pc</code></th><td role="cell" data-label="O que faz">(GDB) desmonta a instrução em PC</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>p $cpsr</code> / <code>p/t $cpsr</code> / <code>p/x $r0</code></th><td role="cell" data-label="O que faz">(GDB) imprime o CPSR em decimal / binário e R0 em hex</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>info registers cpsr</code></th><td role="cell" data-label="O que faz">(GDB) mostra o CPSR em hex e decimal</td></tr>
     </tbody>
   </table>
 </div>

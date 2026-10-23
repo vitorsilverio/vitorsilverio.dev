@@ -44,6 +44,8 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
 
 **Notas e glossário inline.** No rascunho use a cerca `nota` (Markdown inline; o gerador numera e importa `Nota`; `<app-nota n="N">` só se escreve à mão em post publicado — ver `site/CLAUDE.md`). Quando usar: ressalva, curiosidade ou diferença entre arquiteturas — **nunca** algo essencial ao entendimento (quem pular a nota não pode perder nada). Fatos verificados como em qualquer outro trecho. No máximo ~3 por artigo. Posicione **depois** do parágrafo ou da lista a que se refere, nunca entre um ":" e a lista que ele introduz. A tabela do Glossário também alimenta o glossário inline automático: confira na prévia quais termos foram marcados e use `data-glossario="nao"`/`"sim"` na linha da tabela se algum não fizer sentido.
 
+**Tabelas em tela estreita.** O gerador marca toda tabela para virar lista de definição ("nome da coluna: valor" por linha) quando o contêiner tem menos de 40rem; o HTML segue sendo `<table>` (só apresentação, com roles ARIA e `data-label` vindos do cabeçalho). Escreva tabelas normalmente, com cabeçalho de uma linha e sem células mescladas. Se a tabela perde sentido como lista (matriz numérica, comparação lado a lado de muitas colunas), use `Tabela (matriz): legenda` na linha acima dela: ela fica como tabela com rolagem. Em post publicado, `class="tabela-matriz"` no `<table>` faz o mesmo. Detalhes em `site/CLAUDE.md`.
+
 ## Checklist de revisão (rode em todo artigo, rascunho ou não)
 
 - [ ] Introdução cumpre os 4 pontos acima.

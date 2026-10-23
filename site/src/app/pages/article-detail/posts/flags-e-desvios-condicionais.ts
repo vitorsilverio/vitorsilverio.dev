@@ -171,23 +171,23 @@ import { Nota } from '../../../shared/nota/nota';
       Cada condição (bits 31..28) é uma combinação lógica de N, Z, C, V.
       Tabela com os mais usados:
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Desvios condicionais e suas flags</caption>
-      <thead>
-        <tr><th scope="col">Cond</th><th scope="col">Mnemônico</th><th scope="col">Expressão lógica</th><th scope="col">Quando usar</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Cond</th><th scope="col" role="columnheader">Mnemônico</th><th scope="col" role="columnheader">Expressão lógica</th><th scope="col" role="columnheader">Quando usar</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>0000</code></th><td>EQ</td><td>Z == 1</td><td>Igual (após CMP)</td></tr>
-        <tr><th scope="row"><code>0001</code></th><td>NE</td><td>Z == 0</td><td>Diferente</td></tr>
-        <tr><th scope="row"><code>0010</code></th><td>CS / HS</td><td>C == 1</td><td>Carry set (unsigned ≥)</td></tr>
-        <tr><th scope="row"><code>0011</code></th><td>CC / LO</td><td>C == 0</td><td>Carry clear (unsigned &lt;)</td></tr>
-        <tr><th scope="row"><code>0100</code></th><td>MI</td><td>N == 1</td><td>Menor que zero (negativo)</td></tr>
-        <tr><th scope="row"><code>0101</code></th><td>PL</td><td>N == 0</td><td>Positivo ou zero</td></tr>
-        <tr><th scope="row"><code>1010</code></th><td>GE</td><td>N == V</td><td>Maior ou igual (com sinal) — <strong>nosso <code>bge</code></strong></td></tr>
-        <tr><th scope="row"><code>1011</code></th><td>LT</td><td>N != V</td><td>Menor (com sinal)</td></tr>
-        <tr><th scope="row"><code>1100</code></th><td>GT</td><td>Z == 0 e N == V</td><td>Maior (com sinal)</td></tr>
-        <tr><th scope="row"><code>1101</code></th><td>LE</td><td>Z == 1 ou N != V</td><td>Menor ou igual (com sinal)</td></tr>
-        <tr><th scope="row"><code>1110</code></th><td>AL</td><td>sempre</td><td>Executa sempre (default)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0000</code></th><td role="cell" data-label="Mnemônico">EQ</td><td role="cell" data-label="Expressão lógica">Z == 1</td><td role="cell" data-label="Quando usar">Igual (após CMP)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0001</code></th><td role="cell" data-label="Mnemônico">NE</td><td role="cell" data-label="Expressão lógica">Z == 0</td><td role="cell" data-label="Quando usar">Diferente</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0010</code></th><td role="cell" data-label="Mnemônico">CS / HS</td><td role="cell" data-label="Expressão lógica">C == 1</td><td role="cell" data-label="Quando usar">Carry set (unsigned ≥)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0011</code></th><td role="cell" data-label="Mnemônico">CC / LO</td><td role="cell" data-label="Expressão lógica">C == 0</td><td role="cell" data-label="Quando usar">Carry clear (unsigned &lt;)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0100</code></th><td role="cell" data-label="Mnemônico">MI</td><td role="cell" data-label="Expressão lógica">N == 1</td><td role="cell" data-label="Quando usar">Menor que zero (negativo)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>0101</code></th><td role="cell" data-label="Mnemônico">PL</td><td role="cell" data-label="Expressão lógica">N == 0</td><td role="cell" data-label="Quando usar">Positivo ou zero</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>1010</code></th><td role="cell" data-label="Mnemônico">GE</td><td role="cell" data-label="Expressão lógica">N == V</td><td role="cell" data-label="Quando usar">Maior ou igual (com sinal) — <strong>nosso <code>bge</code></strong></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>1011</code></th><td role="cell" data-label="Mnemônico">LT</td><td role="cell" data-label="Expressão lógica">N != V</td><td role="cell" data-label="Quando usar">Menor (com sinal)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>1100</code></th><td role="cell" data-label="Mnemônico">GT</td><td role="cell" data-label="Expressão lógica">Z == 0 e N == V</td><td role="cell" data-label="Quando usar">Maior (com sinal)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>1101</code></th><td role="cell" data-label="Mnemônico">LE</td><td role="cell" data-label="Expressão lógica">Z == 1 ou N != V</td><td role="cell" data-label="Quando usar">Menor ou igual (com sinal)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Cond"><code>1110</code></th><td role="cell" data-label="Mnemônico">AL</td><td role="cell" data-label="Expressão lógica">sempre</td><td role="cell" data-label="Quando usar">Executa sempre (default)</td></tr>
       </tbody>
     </table></div>
 
@@ -308,16 +308,16 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
     </ul>
 
     <h2>Inspecionar as flags no GDB</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Flags e como inspecioná-las</caption>
-      <thead>
-        <tr><th scope="col">Flag</th><th scope="col">Bit</th><th scope="col">Testar no GDB</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Flag</th><th scope="col" role="columnheader">Bit</th><th scope="col" role="columnheader">Testar no GDB</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">N</th><td>31</td><td><code>p/t $cpsr</code> → bit 31</td></tr>
-        <tr><th scope="row">Z</th><td>30</td><td><code>p/t $cpsr</code> → bit 30</td></tr>
-        <tr><th scope="row">C</th><td>29</td><td><code>p/t $cpsr</code> → bit 29</td></tr>
-        <tr><th scope="row">V</th><td>28</td><td><code>p/t $cpsr</code> → bit 28</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Flag">N</th><td role="cell" data-label="Bit">31</td><td role="cell" data-label="Testar no GDB"><code>p/t $cpsr</code> → bit 31</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Flag">Z</th><td role="cell" data-label="Bit">30</td><td role="cell" data-label="Testar no GDB"><code>p/t $cpsr</code> → bit 30</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Flag">C</th><td role="cell" data-label="Bit">29</td><td role="cell" data-label="Testar no GDB"><code>p/t $cpsr</code> → bit 29</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Flag">V</th><td role="cell" data-label="Bit">28</td><td role="cell" data-label="Testar no GDB"><code>p/t $cpsr</code> → bit 28</td></tr>
       </tbody>
     </table></div>
 
@@ -334,36 +334,36 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>CPSR</code></th><td><em>Current Program Status Register</em>: registrador de status de 32 bits; guarda as flags, o modo do processador e outros bits de controle.</td></tr>
-        <tr><th scope="row">Flag</th><td>bit de status escrito por instruções com <code>S = 1</code> e lido por instruções condicionais.</td></tr>
-        <tr><th scope="row"><code>N</code> / <code>Z</code> / <code>C</code> / <code>V</code></th><td>negativo, zero, <em>carry</em> (vai-um; na subtração, o inverso do <em>borrow</em>) e <em>overflow</em> com sinal.</td></tr>
-        <tr><th scope="row"><code>CMP</code></th><td>compara dois valores: subtrai, descarta o resultado e mantém só as flags.</td></tr>
-        <tr><th scope="row">Complemento de dois</th><td>representação de inteiros com sinal em que o bit 31 indica o sinal.</td></tr>
-        <tr><th scope="row"><em>Borrow</em></th><td>&quot;empréstimo&quot; de uma subtração sem sinal quando o minuendo é menor que o subtraendo.</td></tr>
-        <tr><th scope="row">Desvio condicional</th><td>instrução de salto (<code>beq</code>, <code>bne</code>, <code>bge</code>, <code>blt</code>…) que só desvia se a condição sobre as flags for verdadeira.</td></tr>
-        <tr><th scope="row"><code>cond</code></th><td>campo de 4 bits do topo da instrução ARM que escolhe a condição.</td></tr>
-        <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: registrador de status de 32 bits; guarda as flags, o modo do processador e outros bits de controle.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flag</th><td role="cell" data-label="O que é">bit de status escrito por instruções com <code>S = 1</code> e lido por instruções condicionais.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>N</code> / <code>Z</code> / <code>C</code> / <code>V</code></th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (vai-um; na subtração, o inverso do <em>borrow</em>) e <em>overflow</em> com sinal.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CMP</code></th><td role="cell" data-label="O que é">compara dois valores: subtrai, descarta o resultado e mantém só as flags.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Complemento de dois</th><td role="cell" data-label="O que é">representação de inteiros com sinal em que o bit 31 indica o sinal.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Borrow</em></th><td role="cell" data-label="O que é">&quot;empréstimo&quot; de uma subtração sem sinal quando o minuendo é menor que o subtraendo.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Desvio condicional</th><td role="cell" data-label="O que é">instrução de salto (<code>beq</code>, <code>bne</code>, <code>bge</code>, <code>blt</code>…) que só desvia se a condição sobre as flags for verdadeira.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cond</code></th><td role="cell" data-label="O que é">campo de 4 bits do topo da instrução ARM que escolhe a condição.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td>monta o assembly em objeto.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td>liga em um ELF estático.</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary f.elf f.bin</code></th><td>extrai a imagem binária crua do ELF (aqui, a partir de <code>0x8000</code>).</td></tr>
-        <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar X.java</code></th><td>compila um exemplo Java contra o <code>arm-jitter</code>.</td></tr>
-        <tr><th scope="row"><code>java -cp "arm-jitter-1.3.0.jar;." TraceFlags f.bin</code></th><td>roda o traço de flags (no Linux/macOS, troque <code>;</code> por <code>:</code>).</td></tr>
-        <tr><th scope="row"><code>info registers cpsr</code></th><td>no GDB, mostra o <code>CPSR</code>.</td></tr>
-        <tr><th scope="row"><code>p/t $cpsr</code></th><td>no GDB, imprime o <code>CPSR</code> em binário.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te f.s -o f.o</code></th><td role="cell" data-label="O que faz">monta o assembly em objeto.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -static -o f.elf f.o</code></th><td role="cell" data-label="O que faz">liga em um ELF estático.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objcopy -O binary f.elf f.bin</code></th><td role="cell" data-label="O que faz">extrai a imagem binária crua do ELF (aqui, a partir de <code>0x8000</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.3.0.jar X.java</code></th><td role="cell" data-label="O que faz">compila um exemplo Java contra o <code>arm-jitter</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp "arm-jitter-1.3.0.jar;." TraceFlags f.bin</code></th><td role="cell" data-label="O que faz">roda o traço de flags (no Linux/macOS, troque <code>;</code> por <code>:</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>info registers cpsr</code></th><td role="cell" data-label="O que faz">no GDB, mostra o <code>CPSR</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>p/t $cpsr</code></th><td role="cell" data-label="O que faz">no GDB, imprime o <code>CPSR</code> em binário.</td></tr>
       </tbody>
     </table></div>
 

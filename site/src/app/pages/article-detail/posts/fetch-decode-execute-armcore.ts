@@ -98,16 +98,16 @@ $5 = 0x4</code></pre>
 <span class="token punctuation">&#125;</span></code></pre>
 <p>O ciclo &quot;puro&quot; são três linhas: pegar o <code>pc</code>, chamar <code>interpreter.stepWithResult(this)</code>, reportar. Todo o resto é a <strong>contabilidade que um núcleo real faz implicitamente</strong> e que um emulador precisa fazer à mão:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Passo do código</th><th scope="col">O que o hardware faz &quot;de graça&quot;</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Passo do código</th><th scope="col" role="columnheader">O que o hardware faz &quot;de graça&quot;</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>synchronizeModeFromCpsr()</code></th><td>o banco de registradores visível segue os bits de modo do CPSR</td></tr>
-      <tr><th scope="row"><code>sleepState</code></th><td>um <code>WFI</code>/<code>WFE</code> realmente para o clock do núcleo</td></tr>
-      <tr><th scope="row"><code>servicePendingIrq()</code></th><td>a lógica de interrupção samplea a linha de IRQ entre instruções</td></tr>
-      <tr><th scope="row"><code>catch MemoryTranslationException</code></th><td>a MMU aborta o acesso e levanta a exceção no ponto exato</td></tr>
-      <tr><th scope="row"><code>addCycles(...)</code></th><td>o contador de ciclos anda sozinho</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Passo do código"><code>synchronizeModeFromCpsr()</code></th><td role="cell" data-label="O que o hardware faz &quot;de graça&quot;">o banco de registradores visível segue os bits de modo do CPSR</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Passo do código"><code>sleepState</code></th><td role="cell" data-label="O que o hardware faz &quot;de graça&quot;">um <code>WFI</code>/<code>WFE</code> realmente para o clock do núcleo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Passo do código"><code>servicePendingIrq()</code></th><td role="cell" data-label="O que o hardware faz &quot;de graça&quot;">a lógica de interrupção samplea a linha de IRQ entre instruções</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Passo do código"><code>catch MemoryTranslationException</code></th><td role="cell" data-label="O que o hardware faz &quot;de graça&quot;">a MMU aborta o acesso e levanta a exceção no ponto exato</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Passo do código"><code>addCycles(...)</code></th><td role="cell" data-label="O que o hardware faz &quot;de graça&quot;">o contador de ciclos anda sozinho</td></tr>
     </tbody>
   </table>
 </div>
@@ -138,41 +138,41 @@ depois: pc=1000c  SUB raw=e0412000  r0=10008 r1=1000c r2=4</code></pre>
 <p>É o mesmo resultado do GDB: o <code>pc</code> avança de 4 em 4 (passo "avança" do ciclo), enquanto o <code>mov rX, pc</code> grava o endereço da própria instrução + 8. O <code>kind</code> e o <code>raw</code> vêm do <em>decode</em>. A base para escrever seu próprio tracer de registradores é essa interface (o <a routerLink="/artigos/arm-jitter-api-java">artigo sobre a API Java</a> usa a mesma ideia).</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Fetch–decode–execute</th><td>o ciclo de três passos que todo núcleo repete: buscar, decodificar, executar</td></tr>
-      <tr><th scope="row">PC (R15)</th><td><em>program counter</em>: registrador com o endereço de onde a CPU busca a próxima instrução</td></tr>
-      <tr><th scope="row">Pipeline</th><td>estágios sobrepostos; no ARM7TDMI são 3 (fetch/decode/execute), então três instruções estão em andamento ao mesmo tempo</td></tr>
-      <tr><th scope="row">PC +8 / +4</th><td>valor arquitetural de R15 ao ser lido: instrução + 8 (ARM) ou + 4 (Thumb)</td></tr>
-      <tr><th scope="row"><code>ArmCore</code></th><td>classe do arm-jitter com o estado da CPU emulada e o método <code>step()</code></td></tr>
-      <tr><th scope="row">Caminho frio</th><td>execução pelo interpretador, uma instrução por vez, sem JIT</td></tr>
-      <tr><th scope="row">JIT / bloco</th><td>compilação em tempo de execução de uma sequência de instruções (bloco) em código mais rápido</td></tr>
-      <tr><th scope="row">Oráculo (G1)</th><td>o interpretador como referência de semântica para todos os backends</td></tr>
-      <tr><th scope="row">IR</th><td>representação intermediária: formato neutro para onde a instrução decodificada é convertida antes de executar</td></tr>
-      <tr><th scope="row"><code>ArmTraceListener</code></th><td>gancho de observação por instrução / por bloco</td></tr>
-      <tr><th scope="row">WFI / WFE</th><td>instruções que põem a CPU em espera até uma interrupção ou evento</td></tr>
-      <tr><th scope="row">MMU / MPU</th><td>unidades de gerência / proteção de memória; uma falta delas vira uma exceção (<em>abort</em>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Fetch–decode–execute</th><td role="cell" data-label="O que é">o ciclo de três passos que todo núcleo repete: buscar, decodificar, executar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC (R15)</th><td role="cell" data-label="O que é"><em>program counter</em>: registrador com o endereço de onde a CPU busca a próxima instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pipeline</th><td role="cell" data-label="O que é">estágios sobrepostos; no ARM7TDMI são 3 (fetch/decode/execute), então três instruções estão em andamento ao mesmo tempo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC +8 / +4</th><td role="cell" data-label="O que é">valor arquitetural de R15 ao ser lido: instrução + 8 (ARM) ou + 4 (Thumb)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ArmCore</code></th><td role="cell" data-label="O que é">classe do arm-jitter com o estado da CPU emulada e o método <code>step()</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Caminho frio</th><td role="cell" data-label="O que é">execução pelo interpretador, uma instrução por vez, sem JIT</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT / bloco</th><td role="cell" data-label="O que é">compilação em tempo de execução de uma sequência de instruções (bloco) em código mais rápido</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Oráculo (G1)</th><td role="cell" data-label="O que é">o interpretador como referência de semântica para todos os backends</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IR</th><td role="cell" data-label="O que é">representação intermediária: formato neutro para onde a instrução decodificada é convertida antes de executar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ArmTraceListener</code></th><td role="cell" data-label="O que é">gancho de observação por instrução / por bloco</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">WFI / WFE</th><td role="cell" data-label="O que é">instruções que põem a CPU em espera até uma interrupção ou evento</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">MMU / MPU</th><td role="cell" data-label="O que é">unidades de gerência / proteção de memória; uma falta delas vira uma exceção (<em>abort</em>)</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o pcoffset.o pcoffset.s</code></th><td>monta o exemplo</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o pcoffset.elf pcoffset.o</code></th><td>liga, com o código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 pcoffset.elf</code></th><td>roda no arm-box com o servidor GDB na porta 3333</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gdb -q pcoffset.elf -ex "target remote :3333"</code></th><td>abre o GDB e conecta no arm-box</td></tr>
-      <tr><th scope="row"><code>stepi</code> / <code>si</code></th><td>(GDB) executa <strong>uma</strong> instrução de máquina (não use <code>continue</code> neste programa: ele roda até o fim)</td></tr>
-      <tr><th scope="row"><code>p/x $pc</code></th><td>(GDB) o PC atual (aponta para a próxima instrução após um <code>stepi</code>)</td></tr>
-      <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar FetchDecodeExecuteTrace.java</code></th><td>compila o exemplo Java</td></tr>
-      <tr><th scope="row"><code>java -cp "arm-jitter-1.4.0.jar;." FetchDecodeExecuteTrace</code></th><td>roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o pcoffset.o pcoffset.s</code></th><td role="cell" data-label="O que faz">monta o exemplo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o pcoffset.elf pcoffset.o</code></th><td role="cell" data-label="O que faz">liga, com o código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 pcoffset.elf</code></th><td role="cell" data-label="O que faz">roda no arm-box com o servidor GDB na porta 3333</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q pcoffset.elf -ex "target remote :3333"</code></th><td role="cell" data-label="O que faz">abre o GDB e conecta no arm-box</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>stepi</code> / <code>si</code></th><td role="cell" data-label="O que faz">(GDB) executa <strong>uma</strong> instrução de máquina (não use <code>continue</code> neste programa: ele roda até o fim)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>p/x $pc</code></th><td role="cell" data-label="O que faz">(GDB) o PC atual (aponta para a próxima instrução após um <code>stepi</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.4.0.jar FetchDecodeExecuteTrace.java</code></th><td role="cell" data-label="O que faz">compila o exemplo Java</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp "arm-jitter-1.4.0.jar;." FetchDecodeExecuteTrace</code></th><td role="cell" data-label="O que faz">roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
     </tbody>
   </table>
 </div>

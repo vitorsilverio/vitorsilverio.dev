@@ -339,42 +339,42 @@ cpsr           0x800000df          2147483871</code></pre>
 
     <h2>Glossário</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
         </thead>
-        <tbody>
-          <tr><th scope="row">ARM</th><td>família de arquiteturas de processador RISC; também o nome do conjunto de instruções de 32 bits dela.</td></tr>
-          <tr><th scope="row">RISC load/store</th><td>arquitetura em que a aritmética só opera em registradores e só instruções específicas (<code>LDR</code>/<code>STR</code>) acessam a memória.</td></tr>
-          <tr><th scope="row">Registrador</th><td>posição de armazenamento dentro da CPU; no ARM de 32 bits, 16 visíveis (R0–R15), cada um com 32 bits.</td></tr>
-          <tr><th scope="row">SP, LR, PC</th><td>R13 (ponteiro de pilha), R14 (<em>link register</em>, endereço de retorno) e R15 (contador de programa).</td></tr>
-          <tr><th scope="row">CPSR</th><td><em>Current Program Status Register</em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
-          <tr><th scope="row">Flags N, Z, C, V</th><td>negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal).</td></tr>
-          <tr><th scope="row">Modo de execução</th><td>estado de privilégio e contexto da CPU (User, Supervisor, IRQ, FIQ, Abort, Undefined, System).</td></tr>
-          <tr><th scope="row">Registrador em banco (<em>banked</em>)</th><td>registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
-          <tr><th scope="row">Thumb / Thumb-2</th><td>conjuntos de instruções compactos: 16 bits (Thumb) e mistura de 16 e 32 bits (Thumb-2).</td></tr>
-          <tr><th scope="row">Execução condicional</th><td>sufixo de condição (<code>eq</code>, <code>ne</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição.</td></tr>
-          <tr><th scope="row">Pré/pós-indexado</th><td>modos de endereçamento em que o registrador base é atualizado antes (<code>!</code>) ou depois do acesso à memória.</td></tr>
-          <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux, que o arm-box carrega.</td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ARM</th><td role="cell" data-label="O que é">família de arquiteturas de processador RISC; também o nome do conjunto de instruções de 32 bits dela.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">RISC load/store</th><td role="cell" data-label="O que é">arquitetura em que a aritmética só opera em registradores e só instruções específicas (<code>LDR</code>/<code>STR</code>) acessam a memória.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador</th><td role="cell" data-label="O que é">posição de armazenamento dentro da CPU; no ARM de 32 bits, 16 visíveis (R0–R15), cada um com 32 bits.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SP, LR, PC</th><td role="cell" data-label="O que é">R13 (ponteiro de pilha), R14 (<em>link register</em>, endereço de retorno) e R15 (contador de programa).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo de execução</th><td role="cell" data-label="O que é">estado de privilégio e contexto da CPU (User, Supervisor, IRQ, FIQ, Abort, Undefined, System).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco (<em>banked</em>)</th><td role="cell" data-label="O que é">registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / Thumb-2</th><td role="cell" data-label="O que é">conjuntos de instruções compactos: 16 bits (Thumb) e mistura de 16 e 32 bits (Thumb-2).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Execução condicional</th><td role="cell" data-label="O que é">sufixo de condição (<code>eq</code>, <code>ne</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pré/pós-indexado</th><td role="cell" data-label="O que é">modos de endereçamento em que o registrador base é atualizado antes (<code>!</code>) ou depois do acesso à memória.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">formato de arquivo executável do Linux, que o arm-box carrega.</td></tr>
         </tbody>
       </table>
     </div>
 
     <h2>Comandos</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
         </thead>
-        <tbody>
-          <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>monta o assembly para ARMv7-A.</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td>liga o objeto, colocando o código em <code>0x10000</code>.</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta o executável (endereço, bytes, mnemônico).</td></tr>
-          <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a x.elf</code></th><td>executa o programa no arm-box; o código de saída é o <code>r0</code> final.</td></tr>
-          <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 x.elf</code></th><td>sobe o servidor GDB na porta 3333 e espera o depurador.</td></tr>
-          <tr><th scope="row"><code>arm-none-eabi-gdb -q x.elf -ex "target remote :3333"</code></th><td>abre o GDB e conecta no arm-box.</td></tr>
-          <tr><th scope="row"><code>stepi</code> (ou <code>si</code>)</th><td>(GDB) executa uma instrução de máquina; <code>stepi 3</code> executa três.</td></tr>
-          <tr><th scope="row"><code>info registers r2 cpsr</code></th><td>(GDB) mostra os registradores indicados.</td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td role="cell" data-label="O que faz">monta o assembly para ARMv7-A.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">liga o objeto, colocando o código em <code>0x10000</code>.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">desmonta o executável (endereço, bytes, mnemônico).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a x.elf</code></th><td role="cell" data-label="O que faz">executa o programa no arm-box; o código de saída é o <code>r0</code> final.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a --gdb=3333 x.elf</code></th><td role="cell" data-label="O que faz">sobe o servidor GDB na porta 3333 e espera o depurador.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q x.elf -ex "target remote :3333"</code></th><td role="cell" data-label="O que faz">abre o GDB e conecta no arm-box.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>stepi</code> (ou <code>si</code>)</th><td role="cell" data-label="O que faz">(GDB) executa uma instrução de máquina; <code>stepi 3</code> executa três.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>info registers r2 cpsr</code></th><td role="cell" data-label="O que faz">(GDB) mostra os registradores indicados.</td></tr>
         </tbody>
       </table>
     </div>

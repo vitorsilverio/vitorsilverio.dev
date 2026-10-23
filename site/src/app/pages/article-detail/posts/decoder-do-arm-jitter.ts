@@ -140,40 +140,40 @@ depois do FlagMergePass:
 </ol>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Lifter</th><td>traduz <code>DecodedInstruction</code> → <code>IrOp</code></td></tr>
-      <tr><th scope="row"><code>IrBlock</code></th><td>lista imutável de <code>IrOp</code> para um intervalo <code>[startPc, endPc)</code></td></tr>
-      <tr><th scope="row"><code>IrOp.Alu</code></th><td>a operação ALU genérica da IR (opcode, dst, src1, src2, setFlags, cond)</td></tr>
-      <tr><th scope="row">Terminal</th><td>instrução que fecha um bloco: branch, <code>BX</code>, <code>SVC</code></td></tr>
-      <tr><th scope="row">Constant fold</th><td>trocar <code>op</code> de operandos constantes por <code>MOV #resultado</code></td></tr>
-      <tr><th scope="row">DCE</th><td>remover operações cujo resultado nunca é lido</td></tr>
-      <tr><th scope="row">Flag merge</th><td>remover <code>setFlags</code> quando as flags morrem sem uso</td></tr>
-      <tr><th scope="row"><code>DecodedInstruction</code></th><td><em>record</em> neutro com os campos de uma instrução decodificada (tipo, registradores, imediato, condição, flags)</td></tr>
-      <tr><th scope="row">IR</th><td>representação intermediária: estrutura entre os bytes ARM e o código executado, mais fácil de analisar e transformar</td></tr>
-      <tr><th scope="row"><code>Cycle</code> / <code>Fetch</code></th><td><code>IrOp</code>s que contam os ciclos internos e o acesso de busca de cada instrução</td></tr>
-      <tr><th scope="row"><code>CPSR</code> / flags NZCV</th><td>registrador de status e seus bits negativo, zero, <em>carry</em>, <em>overflow</em>, lidos por instruções condicionais</td></tr>
-      <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa</td></tr>
-      <tr><th scope="row">JIT</th><td><em>Just-In-Time</em>: compila blocos para bytecode JVM durante a execução</td></tr>
-      <tr><th scope="row">Vivência (<em>liveness</em>)</th><td>análise para trás de &quot;este valor ainda vai ser lido?&quot;</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Lifter</th><td role="cell" data-label="O que é">traduz <code>DecodedInstruction</code> → <code>IrOp</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>IrBlock</code></th><td role="cell" data-label="O que é">lista imutável de <code>IrOp</code> para um intervalo <code>[startPc, endPc)</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>IrOp.Alu</code></th><td role="cell" data-label="O que é">a operação ALU genérica da IR (opcode, dst, src1, src2, setFlags, cond)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Terminal</th><td role="cell" data-label="O que é">instrução que fecha um bloco: branch, <code>BX</code>, <code>SVC</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Constant fold</th><td role="cell" data-label="O que é">trocar <code>op</code> de operandos constantes por <code>MOV #resultado</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">DCE</th><td role="cell" data-label="O que é">remover operações cujo resultado nunca é lido</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flag merge</th><td role="cell" data-label="O que é">remover <code>setFlags</code> quando as flags morrem sem uso</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>DecodedInstruction</code></th><td role="cell" data-label="O que é"><em>record</em> neutro com os campos de uma instrução decodificada (tipo, registradores, imediato, condição, flags)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IR</th><td role="cell" data-label="O que é">representação intermediária: estrutura entre os bytes ARM e o código executado, mais fácil de analisar e transformar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>Cycle</code> / <code>Fetch</code></th><td role="cell" data-label="O que é"><code>IrOp</code>s que contam os ciclos internos e o acesso de busca de cada instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code> / flags NZCV</th><td role="cell" data-label="O que é">registrador de status e seus bits negativo, zero, <em>carry</em>, <em>overflow</em>, lidos por instruções condicionais</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é"><em>Just-In-Time</em>: compila blocos para bytecode JVM durante a execução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Vivência (<em>liveness</em>)</th><td role="cell" data-label="O que é">análise para trás de &quot;este valor ainda vai ser lido?&quot;</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>ver os bytes que entram no decoder</td></tr>
-      <tr><th scope="row"><code>java -jar target/armbox.jar --interp x.elf</code></th><td>rodar pelo interpretador de IR (a referência de semântica)</td></tr>
-      <tr><th scope="row"><code>java -jar target/armbox.jar --check x.elf</code></th><td>JIT e interpretador em paralelo, aborta na 1ª divergência</td></tr>
-      <tr><th scope="row"><code>javac -cp arm-jitter-1.3.0.jar decoder-do-arm-jitter-DecodeELift.java</code></th><td>compila o exemplo deste artigo contra o <code>arm-jitter</code></td></tr>
-      <tr><th scope="row"><code>java -cp "arm-jitter-1.3.0.jar;." DecodeELift</code></th><td>roda o exemplo (no Linux/macOS, troque <code>;</code> por <code>:</code>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">ver os bytes que entram no decoder</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --interp x.elf</code></th><td role="cell" data-label="O que faz">rodar pelo interpretador de IR (a referência de semântica)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --check x.elf</code></th><td role="cell" data-label="O que faz">JIT e interpretador em paralelo, aborta na 1ª divergência</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.3.0.jar decoder-do-arm-jitter-DecodeELift.java</code></th><td role="cell" data-label="O que faz">compila o exemplo deste artigo contra o <code>arm-jitter</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp "arm-jitter-1.3.0.jar;." DecodeELift</code></th><td role="cell" data-label="O que faz">roda o exemplo (no Linux/macOS, troque <code>;</code> por <code>:</code>)</td></tr>
     </tbody>
   </table>
 </div>

@@ -206,47 +206,47 @@ pc             0x8030              0x8030 &lt;done+8&gt;
 
     <h2>Glossário</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
         </thead>
-        <tbody>
-        <tr><th scope="row">Load/store</th><td>modelo em que só instruções de carga e armazenamento acessam a memória; o resto opera em registradores</td></tr>
-        <tr><th scope="row"><code>LDR</code> / <code>STR</code></th><td><em>load</em> / <em>store</em> de uma palavra de 32 bits: memória → registrador / registrador → memória</td></tr>
-        <tr><th scope="row"><em>Offset</em></th><td>deslocamento somado ao registrador base para formar o endereço</td></tr>
-        <tr><th scope="row">Pré-indexado</th><td><code>[r0, #8]</code>: usa <code>r0+8</code> como endereço; com <code>!</code> grava o resultado de volta em <code>r0</code> (<em>writeback</em>)</td></tr>
-        <tr><th scope="row">Pós-indexado</th><td><code>[r0], #4</code>: usa <code>r0</code> como endereço e só depois soma 4 a <code>r0</code></td></tr>
-        <tr><th scope="row"><em>Literal pool</em></th><td>bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
-        <tr><th scope="row"><code>cmp</code></th><td>compara dois valores (subtrai e descarta o resultado) e atualiza as flags</td></tr>
-        <tr><th scope="row"><code>bge</code></th><td><em>branch if greater or equal</em>: desvia se, na comparação com sinal, o primeiro valor for maior ou igual ao segundo</td></tr>
-        <tr><th scope="row">Flags</th><td>bits <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code> do registrador de estado, atualizados por <code>cmp</code></td></tr>
-        <tr><th scope="row"><em>Exit code</em></th><td>número devolvido pelo processo ao terminar; aqui a soma, via <code>exit(r0)</code></td></tr>
-        <tr><th scope="row"><code>svc</code></th><td><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code> (1 = exit)</td></tr>
-        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável usado pelo toolchain GNU e pelo Linux</td></tr>
-        <tr><th scope="row"><code>arm-box</code></th><td>programa Java que executa ELFs ARM de 32 bits como um Linux user-mode</td></tr>
-        <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa instruções ARM</td></tr>
-        <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
-        <tr><th scope="row">ISA</th><td><em>instruction set architecture</em>: o conjunto de instruções de uma arquitetura</td></tr>
-        <tr><th scope="row">Stub GDB</th><td>servidor do protocolo remoto do GDB embutido no <code>arm-box</code>, ativado por <code>--gdb=PORT</code></td></tr>
+        <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Load/store</th><td role="cell" data-label="O que é">modelo em que só instruções de carga e armazenamento acessam a memória; o resto opera em registradores</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>LDR</code> / <code>STR</code></th><td role="cell" data-label="O que é"><em>load</em> / <em>store</em> de uma palavra de 32 bits: memória → registrador / registrador → memória</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Offset</em></th><td role="cell" data-label="O que é">deslocamento somado ao registrador base para formar o endereço</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pré-indexado</th><td role="cell" data-label="O que é"><code>[r0, #8]</code>: usa <code>r0+8</code> como endereço; com <code>!</code> grava o resultado de volta em <code>r0</code> (<em>writeback</em>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pós-indexado</th><td role="cell" data-label="O que é"><code>[r0], #4</code>: usa <code>r0</code> como endereço e só depois soma 4 a <code>r0</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Literal pool</em></th><td role="cell" data-label="O que é">bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cmp</code></th><td role="cell" data-label="O que é">compara dois valores (subtrai e descarta o resultado) e atualiza as flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>bge</code></th><td role="cell" data-label="O que é"><em>branch if greater or equal</em>: desvia se, na comparação com sinal, o primeiro valor for maior ou igual ao segundo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags</th><td role="cell" data-label="O que é">bits <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code> do registrador de estado, atualizados por <code>cmp</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número devolvido pelo processo ao terminar; aqui a soma, via <code>exit(r0)</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é"><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code> (1 = exit)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável usado pelo toolchain GNU e pelo Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">programa Java que executa ELFs ARM de 32 bits como um Linux user-mode</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é"><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ISA</th><td role="cell" data-label="O que é"><em>instruction set architecture</em>: o conjunto de instruções de uma arquitetura</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Stub GDB</th><td role="cell" data-label="O que é">servidor do protocolo remoto do GDB embutido no <code>arm-box</code>, ativado por <code>--gdb=PORT</code></td></tr>
         </tbody>
       </table>
     </div>
 
     <h2>Comandos</h2>
     <div class="scroll-x">
-      <table>
-        <thead>
-          <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <table class="tabela-lista" role="table">
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
         </thead>
-        <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te sum.s -o sum.o</code></th><td>monta <code>sum.s</code> em código-objeto</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -static -o sum.elf sum.o</code></th><td>liga o objeto num ELF executável</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --check sum.elf</code></th><td>roda no <code>arm-box</code> com JIT e interpretador em paralelo, abortando se divergirem</td></tr>
-        <tr><th scope="row"><code>echo $?</code></th><td>mostra o <em>exit code</em> do último comando (no <code>cmd</code> do Windows, <code>echo %ERRORLEVEL%</code>)</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --gdb=3406 sum.elf</code></th><td>sobe o stub GDB na porta 3406 e espera um depurador</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-gdb -q -batch sum.elf -ex "target remote :3406" -ex ...</code></th><td>conecta ao stub e executa os comandos <code>-ex</code> em lote</td></tr>
-        <tr><th scope="row"><code>x/6dw &amp;nums</code> (no GDB)</th><td>mostra 6 palavras de 32 bits, em decimal, a partir de <code>nums</code></td></tr>
-        <tr><th scope="row"><code>break *0x8030</code> / <code>continue</code> (no GDB)</th><td>põe um breakpoint no endereço e executa até ele</td></tr>
+        <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te sum.s -o sum.o</code></th><td role="cell" data-label="O que faz">monta <code>sum.s</code> em código-objeto</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -static -o sum.elf sum.o</code></th><td role="cell" data-label="O que faz">liga o objeto num ELF executável</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --check sum.elf</code></th><td role="cell" data-label="O que faz">roda no <code>arm-box</code> com JIT e interpretador em paralelo, abortando se divergirem</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code></th><td role="cell" data-label="O que faz">mostra o <em>exit code</em> do último comando (no <code>cmd</code> do Windows, <code>echo %ERRORLEVEL%</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --gdb=3406 sum.elf</code></th><td role="cell" data-label="O que faz">sobe o stub GDB na porta 3406 e espera um depurador</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q -batch sum.elf -ex "target remote :3406" -ex ...</code></th><td role="cell" data-label="O que faz">conecta ao stub e executa os comandos <code>-ex</code> em lote</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>x/6dw &amp;nums</code> (no GDB)</th><td role="cell" data-label="O que faz">mostra 6 palavras de 32 bits, em decimal, a partir de <code>nums</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>break *0x8030</code> / <code>continue</code> (no GDB)</th><td role="cell" data-label="O que faz">põe um breakpoint no endereço e executa até ele</td></tr>
         </tbody>
       </table>
     </div>

@@ -104,50 +104,50 @@ aarch64-none-elf-gdb testdata/hello-aarch64.elf <span class="token parameter var
       quantidade e o <code>w</code> por <code>b</code> (byte),
       <code>h</code> (halfword) ou <code>g</code> (8 bytes) conforme o dado.
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Principais comandos GDB usados neste artigo</caption>
-      <thead>
-        <tr>
-          <th scope="col">Comando</th>
-          <th scope="col">O que faz</th>
+      <thead role="rowgroup">
+        <tr role="row">
+          <th scope="col" role="columnheader">Comando</th>
+          <th scope="col" role="columnheader">O que faz</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <th scope="row"><code>break loop</code> / <code>b loop</code></th>
-          <td>Define um <em>breakpoint</em> no rótulo (ou em <code>*0x...</code>).</td>
+      <tbody role="rowgroup">
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>break loop</code> / <code>b loop</code></th>
+          <td role="cell" data-label="O que faz">Define um <em>breakpoint</em> no rótulo (ou em <code>*0x...</code>).</td>
         </tr>
-        <tr>
-          <th scope="row"><code>continue</code> / <code>c</code></th>
-          <td>Roda até o próximo breakpoint ou o fim do programa.</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>continue</code> / <code>c</code></th>
+          <td role="cell" data-label="O que faz">Roda até o próximo breakpoint ou o fim do programa.</td>
         </tr>
-        <tr>
-          <th scope="row"><code>stepi</code> / <code>si</code></th>
-          <td>Executa <strong>uma</strong> instrução de máquina (o nosso "microscópio").</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>stepi</code> / <code>si</code></th>
+          <td role="cell" data-label="O que faz">Executa <strong>uma</strong> instrução de máquina (o nosso "microscópio").</td>
         </tr>
-        <tr>
-          <th scope="row"><code>info registers</code> / <code>i r</code></th>
-          <td>Mostra os registradores (<code>i r r0 r1</code> filtra para os que interessam).</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>info registers</code> / <code>i r</code></th>
+          <td role="cell" data-label="O que faz">Mostra os registradores (<code>i r r0 r1</code> filtra para os que interessam).</td>
         </tr>
-        <tr>
-          <th scope="row"><code>info registers cpsr</code> / <code>p $cpsr</code></th>
-          <td>Mostra o <strong>CPSR</strong> (registrador de status), com as flags N, Z, C, V que o <code>bge</code>/<code>blt</code> consultam. <code>p/t $cpsr</code> mostra em binário, bit a bit.</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>info registers cpsr</code> / <code>p $cpsr</code></th>
+          <td role="cell" data-label="O que faz">Mostra o <strong>CPSR</strong> (registrador de status), com as flags N, Z, C, V que o <code>bge</code>/<code>blt</code> consultam. <code>p/t $cpsr</code> mostra em binário, bit a bit.</td>
         </tr>
-        <tr>
-          <th scope="row"><code>x/4xw $r0</code></th>
-          <td>Inspeciona 4 palavras em hex a partir de <code>r0</code> (ver sintaxe acima).</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>x/4xw $r0</code></th>
+          <td role="cell" data-label="O que faz">Inspeciona 4 palavras em hex a partir de <code>r0</code> (ver sintaxe acima).</td>
         </tr>
-        <tr>
-          <th scope="row"><code>watch *(int *)0x9058</code></th>
-          <td><em>Watchpoint</em> de escrita: para quando aquela memória muda (sem símbolos de depuração, informe o tipo e o endereço).</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>watch *(int *)0x9058</code></th>
+          <td role="cell" data-label="O que faz"><em>Watchpoint</em> de escrita: para quando aquela memória muda (sem símbolos de depuração, informe o tipo e o endereço).</td>
         </tr>
-        <tr>
-          <th scope="row"><code>print $r1</code> / <code>p $r1</code></th>
-          <td>Imprime o valor de <code>r1</code> (ou de qualquer expressão).</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>print $r1</code> / <code>p $r1</code></th>
+          <td role="cell" data-label="O que faz">Imprime o valor de <code>r1</code> (ou de qualquer expressão).</td>
         </tr>
-        <tr>
-          <th scope="row"><code>disassemble</code> / <code>disas</code></th>
-          <td>Mostra o código desmontado ao redor do PC.</td>
+        <tr role="row">
+          <th scope="row" role="rowheader" data-label="Comando"><code>disassemble</code> / <code>disas</code></th>
+          <td role="cell" data-label="O que faz">Mostra o código desmontado ao redor do PC.</td>
         </tr>
       </tbody>
     </table></div>
@@ -312,44 +312,44 @@ New value = 24
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">GDB</th><td><em>GNU Debugger</em>: depurador de linha de comando do projeto GNU</td></tr>
-        <tr><th scope="row">Stub GDB</th><td>servidor do protocolo remoto do GDB; aqui, embutido no <code>arm-box</code> e ativado por <code>--gdb=PORT</code></td></tr>
-        <tr><th scope="row"><em>Remote serial protocol</em></th><td>protocolo textual com que o GDB pede registradores, memória e execução a um alvo remoto</td></tr>
-        <tr><th scope="row"><em>Breakpoint</em></th><td>ponto em que a execução para antes de executar a instrução naquele endereço</td></tr>
-        <tr><th scope="row"><em>Watchpoint</em></th><td>parada quando uma posição de memória é escrita</td></tr>
-        <tr><th scope="row"><code>stepi</code></th><td>executa exatamente uma instrução de máquina</td></tr>
-        <tr><th scope="row"><code>CPSR</code></th><td><em>current program status register</em>: flags <code>N Z C V</code>, máscaras de interrupção e modo</td></tr>
-        <tr><th scope="row">Flags <code>N Z C V</code></th><td>negativo, zero, <em>carry</em> (na subtração: sem empréstimo) e <em>overflow</em> do último resultado que atualizou as flags</td></tr>
-        <tr><th scope="row"><em>Writeback</em></th><td>atualizar o registrador base com o endereço calculado, como em <code>[r0], #4</code></td></tr>
-        <tr><th scope="row">Interpretador / JIT</th><td>o interpretador executa uma instrução por vez; o JIT (<em>just-in-time compiler</em>) compila blocos. O passo do GDB usa sempre o interpretador</td></tr>
-        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
-        <tr><th scope="row"><em>User-mode</em></th><td>execução de programa de usuário com chamadas de sistema traduzidas pelo <code>arm-box</code>, sem sistema operacional completo</td></tr>
-        <tr><th scope="row"><code>arm-box</code> / <code>arm-jitter</code></th><td>executor Java de ELFs ARM / biblioteca Java que emula o processador</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">GDB</th><td role="cell" data-label="O que é"><em>GNU Debugger</em>: depurador de linha de comando do projeto GNU</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Stub GDB</th><td role="cell" data-label="O que é">servidor do protocolo remoto do GDB; aqui, embutido no <code>arm-box</code> e ativado por <code>--gdb=PORT</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Remote serial protocol</em></th><td role="cell" data-label="O que é">protocolo textual com que o GDB pede registradores, memória e execução a um alvo remoto</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Breakpoint</em></th><td role="cell" data-label="O que é">ponto em que a execução para antes de executar a instrução naquele endereço</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Watchpoint</em></th><td role="cell" data-label="O que é">parada quando uma posição de memória é escrita</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>stepi</code></th><td role="cell" data-label="O que é">executa exatamente uma instrução de máquina</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>current program status register</em>: flags <code>N Z C V</code>, máscaras de interrupção e modo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags <code>N Z C V</code></th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (na subtração: sem empréstimo) e <em>overflow</em> do último resultado que atualizou as flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Writeback</em></th><td role="cell" data-label="O que é">atualizar o registrador base com o endereço calculado, como em <code>[r0], #4</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interpretador / JIT</th><td role="cell" data-label="O que é">o interpretador executa uma instrução por vez; o JIT (<em>just-in-time compiler</em>) compila blocos. O passo do GDB usa sempre o interpretador</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>User-mode</em></th><td role="cell" data-label="O que é">execução de programa de usuário com chamadas de sistema traduzidas pelo <code>arm-box</code>, sem sistema operacional completo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code> / <code>arm-jitter</code></th><td role="cell" data-label="O que é">executor Java de ELFs ARM / biblioteca Java que emula o processador</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>mvn package</code></th><td>compila o <code>arm-box</code> e gera <code>target/armbox.jar</code></td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --gdb=3333 x.elf</code></th><td>sobe o stub GDB na porta 3333 e espera o cliente</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --arch=aarch64 --gdb=3333 x.elf</code></th><td>o mesmo para um ELF AArch64</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-gdb x.elf -ex "target remote :3333"</code></th><td>abre o GDB e conecta ao stub</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-gdb -q -batch x.elf -ex "target remote :3333" -x cmds.gdb</code></th><td>o mesmo, sem interface interativa, lendo os comandos de um arquivo</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-nm x.elf</code></th><td>lista os símbolos e seus endereços (útil para achar <code>result</code>)</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta o ELF para escolher endereços de breakpoint</td></tr>
-        <tr><th scope="row"><code>break *ADDR if $r2 == 5</code> (GDB)</th><td>breakpoint condicional</td></tr>
-        <tr><th scope="row"><code>delete N</code> (GDB)</th><td>remove o breakpoint de número N</td></tr>
-        <tr><th scope="row"><code>x/i $pc</code> (GDB)</th><td>mostra a instrução no PC</td></tr>
-        <tr><th scope="row"><code>p/t $cpsr</code> (GDB)</th><td>imprime o CPSR em binário</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn package</code></th><td role="cell" data-label="O que faz">compila o <code>arm-box</code> e gera <code>target/armbox.jar</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --gdb=3333 x.elf</code></th><td role="cell" data-label="O que faz">sobe o stub GDB na porta 3333 e espera o cliente</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --arch=aarch64 --gdb=3333 x.elf</code></th><td role="cell" data-label="O que faz">o mesmo para um ELF AArch64</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb x.elf -ex "target remote :3333"</code></th><td role="cell" data-label="O que faz">abre o GDB e conecta ao stub</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q -batch x.elf -ex "target remote :3333" -x cmds.gdb</code></th><td role="cell" data-label="O que faz">o mesmo, sem interface interativa, lendo os comandos de um arquivo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-nm x.elf</code></th><td role="cell" data-label="O que faz">lista os símbolos e seus endereços (útil para achar <code>result</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">desmonta o ELF para escolher endereços de breakpoint</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>break *ADDR if $r2 == 5</code> (GDB)</th><td role="cell" data-label="O que faz">breakpoint condicional</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>delete N</code> (GDB)</th><td role="cell" data-label="O que faz">remove o breakpoint de número N</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>x/i $pc</code> (GDB)</th><td role="cell" data-label="O que faz">mostra a instrução no PC</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>p/t $cpsr</code> (GDB)</th><td role="cell" data-label="O que faz">imprime o CPSR em binário</td></tr>
       </tbody>
     </table></div>
 

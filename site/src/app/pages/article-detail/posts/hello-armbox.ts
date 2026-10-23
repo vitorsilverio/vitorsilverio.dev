@@ -193,43 +193,43 @@ arm-none-eabi-ld <span class="token parameter variable">-static</span> <span cla
     <pre><code class="language-bash"><span class="token function">java</span> <span class="token parameter variable">-jar</span> target/armbox.jar <span class="token parameter variable">--check</span> hello.elf</code></pre>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">Assembly</th><td>linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
-        <tr><th scope="row"><code>arm-box</code></th><td>runner Linux <em>user-mode</em> em Java (no estilo do <code>qemu-arm</code>): carrega um ELF ARM estático e traduz as chamadas de sistema para o hospedeiro</td></tr>
-        <tr><th scope="row"><code>arm-jitter</code></th><td>biblioteca Java que decodifica e executa instruções ARM; motor do <code>arm-box</code></td></tr>
-        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
-        <tr><th scope="row"><em>Entry point</em> (<code>e_entry</code>)</th><td>endereço da primeira instrução, gravado no cabeçalho do ELF; aqui o símbolo <code>_start</code></td></tr>
-        <tr><th scope="row">Syscall (chamada de sistema)</th><td>pedido de um serviço ao kernel; no ARM EABI o número vai em <code>r7</code>, os argumentos em <code>r0</code>–<code>r6</code> e a instrução é <code>svc #0</code></td></tr>
-        <tr><th scope="row"><code>svc</code></th><td><em>supervisor call</em>: instrução que dispara a chamada de sistema</td></tr>
-        <tr><th scope="row">EABI</th><td><em>Embedded Application Binary Interface</em>: convenção binária do ARM, inclusive a das chamadas de sistema do Linux</td></tr>
-        <tr><th scope="row"><em>Literal pool</em></th><td>bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
-        <tr><th scope="row"><em>kuser helpers</em></th><td>rotinas que o kernel Linux ARM publica em endereços fixos (<code>0xFFFF0Fxx</code>)</td></tr>
-        <tr><th scope="row"><code>.syntax unified</code></th><td>diretiva do montador que ativa a sintaxe unificada ARM/Thumb</td></tr>
-        <tr><th scope="row"><em>Exit code</em></th><td>número que o processo devolve ao terminar; aqui 42</td></tr>
-        <tr><th scope="row"><code>--check</code> / <code>--interp</code></th><td>opções do <code>arm-box</code>: JIT e interpretador em paralelo, aborta se divergirem / só o interpretador de referência</td></tr>
-        <tr><th scope="row">JIT</th><td><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Assembly</th><td role="cell" data-label="O que é">linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">runner Linux <em>user-mode</em> em Java (no estilo do <code>qemu-arm</code>): carrega um ELF ARM estático e traduz as chamadas de sistema para o hospedeiro</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM; motor do <code>arm-box</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Entry point</em> (<code>e_entry</code>)</th><td role="cell" data-label="O que é">endereço da primeira instrução, gravado no cabeçalho do ELF; aqui o símbolo <code>_start</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Syscall (chamada de sistema)</th><td role="cell" data-label="O que é">pedido de um serviço ao kernel; no ARM EABI o número vai em <code>r7</code>, os argumentos em <code>r0</code>–<code>r6</code> e a instrução é <code>svc #0</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é"><em>supervisor call</em>: instrução que dispara a chamada de sistema</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">EABI</th><td role="cell" data-label="O que é"><em>Embedded Application Binary Interface</em>: convenção binária do ARM, inclusive a das chamadas de sistema do Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Literal pool</em></th><td role="cell" data-label="O que é">bloco de constantes que o montador coloca perto do código para o <code>ldr rX, =valor</code> buscar</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>kuser helpers</em></th><td role="cell" data-label="O que é">rotinas que o kernel Linux ARM publica em endereços fixos (<code>0xFFFF0Fxx</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>.syntax unified</code></th><td role="cell" data-label="O que é">diretiva do montador que ativa a sintaxe unificada ARM/Thumb</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao terminar; aqui 42</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>--check</code> / <code>--interp</code></th><td role="cell" data-label="O que é">opções do <code>arm-box</code>: JIT e interpretador em paralelo, aborta se divergirem / só o interpretador de referência</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é"><em>just-in-time compiler</em>: compila blocos de instruções durante a execução (o padrão do <code>arm-box</code>)</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>git clone https://github.com/vitorsilverio/armbox &amp;&amp; cd armbox &amp;&amp; mvn package</code></th><td>baixa e compila o <code>arm-box</code>, gerando <code>target/armbox.jar</code></td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te hello.s -o hello.o</code></th><td>monta o fonte para ARMv5TE</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -static -o hello.elf hello.o</code></th><td>liga o objeto num ELF executável</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d hello.elf</code></th><td>desmonta o ELF</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar hello.elf</code></th><td>roda o ELF no <code>arm-box</code></td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --check hello.elf</code></th><td>roda com JIT e interpretador em paralelo</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --interp hello.elf</code></th><td>roda só no interpretador de referência</td></tr>
-        <tr><th scope="row"><code>echo $?</code> / <code>echo %ERRORLEVEL%</code></th><td>mostra o código de saída do último comando (shell POSIX / <code>cmd</code> do Windows)</td></tr>
-        <tr><th scope="row"><code>java -version</code></th><td>confere a versão do Java (precisa ser 25 ou mais nova)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>git clone https://github.com/vitorsilverio/armbox &amp;&amp; cd armbox &amp;&amp; mvn package</code></th><td role="cell" data-label="O que faz">baixa e compila o <code>arm-box</code>, gerando <code>target/armbox.jar</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te hello.s -o hello.o</code></th><td role="cell" data-label="O que faz">monta o fonte para ARMv5TE</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -static -o hello.elf hello.o</code></th><td role="cell" data-label="O que faz">liga o objeto num ELF executável</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d hello.elf</code></th><td role="cell" data-label="O que faz">desmonta o ELF</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar hello.elf</code></th><td role="cell" data-label="O que faz">roda o ELF no <code>arm-box</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --check hello.elf</code></th><td role="cell" data-label="O que faz">roda com JIT e interpretador em paralelo</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --interp hello.elf</code></th><td role="cell" data-label="O que faz">roda só no interpretador de referência</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code> / <code>echo %ERRORLEVEL%</code></th><td role="cell" data-label="O que faz">mostra o código de saída do último comando (shell POSIX / <code>cmd</code> do Windows)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -version</code></th><td role="cell" data-label="O que faz">confere a versão do Java (precisa ser 25 ou mais nova)</td></tr>
       </tbody>
     </table></div>
 

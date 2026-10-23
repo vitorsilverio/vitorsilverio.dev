@@ -56,14 +56,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token punctuation">(</span><span class="token number">32</span><span class="token operator">-</span>bit wide<span class="token punctuation">)</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">ANDS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f011 000f</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th><th scope="col">Codificação</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th><th scope="col" role="columnheader">Codificação</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E2 11 00 0F</code></td><td>32-bit</td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 11 00 0F</code></td><td>32-bit wide</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E2 11 00 0F</code></td><td role="cell" data-label="Codificação">32-bit</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 11 00 0F</code></td><td role="cell" data-label="Codificação">32-bit wide</td></tr>
       </tbody>
     </table></div>
 
@@ -77,14 +77,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">ORRS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x0F</span>    <span class="token comment">; f051 000f</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E3 91 00 0F</code></td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 51 00 0F</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E3 91 00 0F</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 51 00 0F</code></td></tr>
       </tbody>
     </table></div>
 
@@ -99,14 +99,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">EORS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x01</span>    <span class="token comment">; f091 0001</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E2 31 00 01</code></td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 91 00 01</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E2 31 00 01</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 91 00 01</code></td></tr>
       </tbody>
     </table></div>
 
@@ -120,14 +120,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">BICS.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0xF0</span>    <span class="token comment">; f031 00f0</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E3 D1 00 F0</code></td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 31 00 F0</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E3 D1 00 F0</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 31 00 F0</code></td></tr>
       </tbody>
     </table></div>
     <p>
@@ -146,14 +146,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">MVN.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0</span>            <span class="token comment">; f06f 0000</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E3 E0 00 00</code></td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 6F 00 00</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E3 E0 00 00</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 6F 00 00</code></td></tr>
       </tbody>
     </table></div>
     <p>
@@ -180,14 +180,14 @@ import { Nota } from '../../../shared/nota/nota';
 
     <span class="token operator">/</span><span class="token operator">*</span> Thumb<span class="token operator">-</span><span class="token number">2</span> <span class="token operator">*</span><span class="token operator">/</span>
     <span class="token instruction keyword">TST.W</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">0x04</span>         <span class="token comment">; f010 0f04</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Modo</th><th scope="col">Bytes (hex)</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Modo</th><th scope="col" role="columnheader">Bytes (hex)</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM</th><td><code>E3 10 00 04</code></td></tr>
-        <tr><th scope="row">Thumb-2</th><td><code>F0 10 0F 04</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">ARM</th><td role="cell" data-label="Bytes (hex)"><code>E3 10 00 04</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Modo">Thumb-2</th><td role="cell" data-label="Bytes (hex)"><code>F0 10 0F 04</code></td></tr>
       </tbody>
     </table></div>
     <p>
@@ -200,18 +200,18 @@ import { Nota } from '../../../shared/nota/nota';
     </p>
 
     <h2>Tabela: operações lógicas (bytes verificados)</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Operações lógicas — ARM vs Thumb-2</caption>
-      <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">ARM (hex)</th><th scope="col">Thumb-2 (hex)</th><th scope="col">Tamanho</th><th scope="col">flags?</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">ARM (hex)</th><th scope="col" role="columnheader">Thumb-2 (hex)</th><th scope="col" role="columnheader">Tamanho</th><th scope="col" role="columnheader">flags?</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>ANDS</code></th><td><code>E211000F</code></td><td><code>F011000F</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
-        <tr><th scope="row"><code>ORRS</code></th><td><code>E391000F</code></td><td><code>F051000F</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
-        <tr><th scope="row"><code>EORS</code></th><td><code>E2310001</code></td><td><code>F0910001</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
-        <tr><th scope="row"><code>BICS</code></th><td><code>E3D100F0</code></td><td><code>F03100F0</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
-        <tr><th scope="row"><code>MVN</code></th><td><code>E3E00000</code></td><td><code>F06F0000</code></td><td>32b / 32b wide</td><td>Não</td></tr>
-        <tr><th scope="row"><code>TST</code></th><td><code>E3100004</code></td><td><code>F0100F04</code></td><td>32b / 32b wide</td><td>Sim</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ANDS</code></th><td role="cell" data-label="ARM (hex)"><code>E211000F</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F011000F</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Sim</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ORRS</code></th><td role="cell" data-label="ARM (hex)"><code>E391000F</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F051000F</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Sim</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>EORS</code></th><td role="cell" data-label="ARM (hex)"><code>E2310001</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F0910001</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Sim</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BICS</code></th><td role="cell" data-label="ARM (hex)"><code>E3D100F0</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F03100F0</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Sim</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>MVN</code></th><td role="cell" data-label="ARM (hex)"><code>E3E00000</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F06F0000</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Não</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>TST</code></th><td role="cell" data-label="ARM (hex)"><code>E3100004</code></td><td role="cell" data-label="Thumb-2 (hex)"><code>F0100F04</code></td><td role="cell" data-label="Tamanho">32b / 32b wide</td><td role="cell" data-label="flags?">Sim</td></tr>
       </tbody>
     </table></div>
     <p>
@@ -239,16 +239,16 @@ import { Nota } from '../../../shared/nota/nota';
       ou rotaciona vários bits de uma só vez, sem laço de deslocamentos de 1
       bit. As instruções principais:
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Instruções de shift</caption>
-      <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">Efeito</th><th scope="col">Exemplo</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Efeito</th><th scope="col" role="columnheader">Exemplo</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>LSL Rd, Rm, #n</code></th><td>Deslocamento lógico esquerda (×2ⁿ)</td><td><code>LSL r0, r1, #3</code> → r0 = r1 × 8</td></tr>
-        <tr><th scope="row"><code>LSR Rd, Rm, #n</code></th><td>Deslocamento lógico direita (÷2ⁿ)</td><td><code>LSR r0, r1, #2</code> → r0 = r1 / 4</td></tr>
-        <tr><th scope="row"><code>ASR Rd, Rm, #n</code></th><td>Deslocamento aritmético direita (sinal preservado)</td><td><code>ASR r0, r1, #1</code> → divisão por 2 com sinal, arredondando para −∞ (−3 vira −2; a divisão do C daria −1)</td></tr>
-        <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação à direita (os bits que saem pela direita entram pela esquerda; o carry recebe o último bit que saiu). A rotação <em>com</em> carry é a <code>RRX</code></td><td><code>ROR r0, r1, #8</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>LSL Rd, Rm, #n</code></th><td role="cell" data-label="Efeito">Deslocamento lógico esquerda (×2ⁿ)</td><td role="cell" data-label="Exemplo"><code>LSL r0, r1, #3</code> → r0 = r1 × 8</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>LSR Rd, Rm, #n</code></th><td role="cell" data-label="Efeito">Deslocamento lógico direita (÷2ⁿ)</td><td role="cell" data-label="Exemplo"><code>LSR r0, r1, #2</code> → r0 = r1 / 4</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ASR Rd, Rm, #n</code></th><td role="cell" data-label="Efeito">Deslocamento aritmético direita (sinal preservado)</td><td role="cell" data-label="Exemplo"><code>ASR r0, r1, #1</code> → divisão por 2 com sinal, arredondando para −∞ (−3 vira −2; a divisão do C daria −1)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ROR Rd, Rm, #n</code></th><td role="cell" data-label="Efeito">Rotação à direita (os bits que saem pela direita entram pela esquerda; o carry recebe o último bit que saiu). A rotação <em>com</em> carry é a <code>RRX</code></td><td role="cell" data-label="Exemplo"><code>ROR r0, r1, #8</code></td></tr>
       </tbody>
     </table></div>
     <app-nota n="2">
@@ -267,16 +267,16 @@ import { Nota } from '../../../shared/nota/nota';
     <span class="token instruction keyword">LSRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">2</span>         <span class="token comment">; 0888  (16-bit!)</span>
     <span class="token instruction keyword">ASRS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> <span class="token operator">#</span><span class="token number">1</span>         <span class="token comment">; 1048  (16-bit!)</span>
     <span class="token instruction keyword">MOVS</span> <span class="token register symbol">r0</span><span class="token punctuation">,</span> <span class="token register symbol">r1</span><span class="token punctuation">,</span> ROR <span class="token operator">#</span><span class="token number">8</span>     <span class="token comment">; ea5f 2031  (é o que o assembler gera para RORS r0, r1, #8)</span></code></pre>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Shifts — bytes verificados (devkitARM)</caption>
-      <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">ARM (hex)</th><th scope="col">Thumb (hex)</th><th scope="col">Tamanho</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">ARM (hex)</th><th scope="col" role="columnheader">Thumb (hex)</th><th scope="col" role="columnheader">Tamanho</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>LSL</code></th><td><code>E1 A0 01 81</code></td><td><code>00 C8</code></td><td>32b / 16b</td></tr>
-        <tr><th scope="row"><code>LSR</code></th><td><code>E1 A0 01 21</code></td><td><code>08 88</code></td><td>32b / 16b</td></tr>
-        <tr><th scope="row"><code>ASR</code></th><td><code>E1 A0 00 C1</code></td><td><code>10 48</code></td><td>32b / 16b</td></tr>
-        <tr><th scope="row"><code>ROR</code></th><td><code>E1 A0 04 61</code></td><td><code>EA 5F 20 31</code></td><td>32b / 32b (via MOVS)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>LSL</code></th><td role="cell" data-label="ARM (hex)"><code>E1 A0 01 81</code></td><td role="cell" data-label="Thumb (hex)"><code>00 C8</code></td><td role="cell" data-label="Tamanho">32b / 16b</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>LSR</code></th><td role="cell" data-label="ARM (hex)"><code>E1 A0 01 21</code></td><td role="cell" data-label="Thumb (hex)"><code>08 88</code></td><td role="cell" data-label="Tamanho">32b / 16b</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ASR</code></th><td role="cell" data-label="ARM (hex)"><code>E1 A0 00 C1</code></td><td role="cell" data-label="Thumb (hex)"><code>10 48</code></td><td role="cell" data-label="Tamanho">32b / 16b</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ROR</code></th><td role="cell" data-label="ARM (hex)"><code>E1 A0 04 61</code></td><td role="cell" data-label="Thumb (hex)"><code>EA 5F 20 31</code></td><td role="cell" data-label="Tamanho">32b / 32b (via MOVS)</td></tr>
       </tbody>
     </table></div>
     <p>
@@ -349,30 +349,30 @@ import { Nota } from '../../../shared/nota/nota';
     <p>Bytes: <code>F3 C1 20 07</code></p>
 
     <h2>Tabela: instruções de campo de bits</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>BFI, BFC, UBFX — bytes verificados</caption>
-      <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">Bytes (hex)</th><th scope="col">Tamanho</th><th scope="col">Disponível em (ARMv7)</th><th scope="col">Uso típico</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Bytes (hex)</th><th scope="col" role="columnheader">Tamanho</th><th scope="col" role="columnheader">Disponível em (ARMv7)</th><th scope="col" role="columnheader">Uso típico</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>BFI</code></th><td><code>F3611006</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Configurar campos de registrador</td></tr>
-        <tr><th scope="row"><code>BFC</code></th><td><code>F36F100F</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Limpar registrador de periférico</td></tr>
-        <tr><th scope="row"><code>UBFX</code></th><td><code>F3C12007</code></td><td>32 bits</td><td>Thumb-2 e ARM mode</td><td>Ler campos de periférico</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BFI</code></th><td role="cell" data-label="Bytes (hex)"><code>F3611006</code></td><td role="cell" data-label="Tamanho">32 bits</td><td role="cell" data-label="Disponível em (ARMv7)">Thumb-2 e ARM mode</td><td role="cell" data-label="Uso típico">Configurar campos de registrador</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BFC</code></th><td role="cell" data-label="Bytes (hex)"><code>F36F100F</code></td><td role="cell" data-label="Tamanho">32 bits</td><td role="cell" data-label="Disponível em (ARMv7)">Thumb-2 e ARM mode</td><td role="cell" data-label="Uso típico">Limpar registrador de periférico</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>UBFX</code></th><td role="cell" data-label="Bytes (hex)"><code>F3C12007</code></td><td role="cell" data-label="Tamanho">32 bits</td><td role="cell" data-label="Disponível em (ARMv7)">Thumb-2 e ARM mode</td><td role="cell" data-label="Uso típico">Ler campos de periférico</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comparativo ARM vs Thumb-2: o que muda de fato</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Diferenças entre ARM mode e Thumb-2</caption>
-      <thead>
-        <tr><th scope="col">Aspecto</th><th scope="col">ARM mode</th><th scope="col">Thumb-2</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Aspecto</th><th scope="col" role="columnheader">ARM mode</th><th scope="col" role="columnheader">Thumb-2</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">Instruções lógicas (ANDS, ORRS…)</th><td>32 bits</td><td>32 bits wide</td></tr>
-        <tr><th scope="row">Shifts com imediato (LSLS, LSRS, ASRS)</th><td>32 bits</td><td><strong>16 bits</strong> (metade do espaço)</td></tr>
-        <tr><th scope="row"><code>ROR</code></th><td><code>MOV Rd, Rm, ROR #n</code> (<code>E1A00461</code>)</td><td>Mesma forma, 32 bits (<code>EA4F2031</code>; <code>EA5F2031</code> com <code>S</code>)</td></tr>
-        <tr><th scope="row"><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></th><td>Disponível a partir de ARMv6T2 (<code>E7C60211</code> para o <code>BFI</code> acima)</td><td>Disponível (32 bits)</td></tr>
-        <tr><th scope="row">Densidade de código</th><td>Menor</td><td>Maior (16-bit shifts)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Instruções lógicas (ANDS, ORRS…)</th><td role="cell" data-label="ARM mode">32 bits</td><td role="cell" data-label="Thumb-2">32 bits wide</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Shifts com imediato (LSLS, LSRS, ASRS)</th><td role="cell" data-label="ARM mode">32 bits</td><td role="cell" data-label="Thumb-2"><strong>16 bits</strong> (metade do espaço)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto"><code>ROR</code></th><td role="cell" data-label="ARM mode"><code>MOV Rd, Rm, ROR #n</code> (<code>E1A00461</code>)</td><td role="cell" data-label="Thumb-2">Mesma forma, 32 bits (<code>EA4F2031</code>; <code>EA5F2031</code> com <code>S</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto"><code>BFI</code>/<code>BFC</code>/<code>UBFX</code></th><td role="cell" data-label="ARM mode">Disponível a partir de ARMv6T2 (<code>E7C60211</code> para o <code>BFI</code> acima)</td><td role="cell" data-label="Thumb-2">Disponível (32 bits)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Aspecto">Densidade de código</th><td role="cell" data-label="ARM mode">Menor</td><td role="cell" data-label="Thumb-2">Maior (16-bit shifts)</td></tr>
       </tbody>
     </table></div>
     <p>
@@ -442,50 +442,50 @@ import { Nota } from '../../../shared/nota/nota';
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Termos e instruções de manipulação de bits</caption>
-      <thead>
-        <tr><th scope="col">Instrução</th><th scope="col">O que faz</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>ANDS Rd, Rn, Operand2</code></th><td>AND lógico + flags</td></tr>
-        <tr><th scope="row"><code>ORRS Rd, Rn, Operand2</code></th><td>OR lógico + flags</td></tr>
-        <tr><th scope="row"><code>EORS Rd, Rn, Operand2</code></th><td>XOR lógico + flags</td></tr>
-        <tr><th scope="row"><code>BICS Rd, Rn, Operand2</code></th><td>Bit clear (AND com NOT) + flags</td></tr>
-        <tr><th scope="row"><code>MVN Rd, Operand2</code></th><td>Move NOT (complemento)</td></tr>
-        <tr><th scope="row"><code>TST Rn, Operand2</code></th><td>Testa bits (AND sem resultado)</td></tr>
-        <tr><th scope="row"><code>LSLS/LSRS/ASRS</code></th><td>Shifts lógico/direita/aritmético (16-bit Thumb)</td></tr>
-        <tr><th scope="row"><code>ROR Rd, Rm, #n</code></th><td>Rotação (ARM standalone / Thumb via MOVS)</td></tr>
-        <tr><th scope="row"><code>BFI Rd, Rn, #lsb, #width</code></th><td>Insere campo de bits (ARMv6T2+)</td></tr>
-        <tr><th scope="row"><code>BFC Rd, #lsb, #width</code></th><td>Limpa campo de bits (ARMv6T2+)</td></tr>
-        <tr><th scope="row"><code>UBFX Rd, Rn, #lsb, #width</code></th><td>Extrai campo sem sinal (ARMv6T2+)</td></tr>
-        <tr><th scope="row"><code>RRX</code></th><td>Rotação à direita de 1 bit passando pelo carry (o carry entra no bit 31)</td></tr>
-        <tr><th scope="row">Barrel shifter</th><td>Circuito que desloca ou rotaciona vários bits de uma vez</td></tr>
-        <tr><th scope="row">Flags N Z C V</th><td>Bits do registrador de status: resultado negativo, zero, carry (vai-um) e overflow (estouro com sinal)</td></tr>
-        <tr><th scope="row">Bloco <code>IT</code></th><td>Prefixo Thumb-2 que torna até 4 instruções seguintes condicionais; dentro dele as instruções de 16 bits não atualizam as flags</td></tr>
-        <tr><th scope="row">Modified immediate</th><td>Imediato que cabe em poucos bits da instrução e se expande por regra fixa (rotação no ARM; <code>i:imm3:imm8</code> no Thumb-2)</td></tr>
-        <tr><th scope="row">Read-modify-write</th><td>Ler o registrador, alterar só os bits desejados e gravar de volta</td></tr>
-        <tr><th scope="row">UAL</th><td>Sintaxe unificada de assembly (<em>Unified Assembler Language</em>) comum a ARM e Thumb</td></tr>
-        <tr><th scope="row">ARMv6T2 / ARMv7-M</th><td>Versões da arquitetura: a primeira trouxe o Thumb-2 e as instruções de campo de bits; a segunda é a dos Cortex-M3/M4/M7 (só Thumb)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ANDS Rd, Rn, Operand2</code></th><td role="cell" data-label="O que faz">AND lógico + flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ORRS Rd, Rn, Operand2</code></th><td role="cell" data-label="O que faz">OR lógico + flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>EORS Rd, Rn, Operand2</code></th><td role="cell" data-label="O que faz">XOR lógico + flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BICS Rd, Rn, Operand2</code></th><td role="cell" data-label="O que faz">Bit clear (AND com NOT) + flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>MVN Rd, Operand2</code></th><td role="cell" data-label="O que faz">Move NOT (complemento)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>TST Rn, Operand2</code></th><td role="cell" data-label="O que faz">Testa bits (AND sem resultado)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>LSLS/LSRS/ASRS</code></th><td role="cell" data-label="O que faz">Shifts lógico/direita/aritmético (16-bit Thumb)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>ROR Rd, Rm, #n</code></th><td role="cell" data-label="O que faz">Rotação (ARM standalone / Thumb via MOVS)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BFI Rd, Rn, #lsb, #width</code></th><td role="cell" data-label="O que faz">Insere campo de bits (ARMv6T2+)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>BFC Rd, #lsb, #width</code></th><td role="cell" data-label="O que faz">Limpa campo de bits (ARMv6T2+)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>UBFX Rd, Rn, #lsb, #width</code></th><td role="cell" data-label="O que faz">Extrai campo sem sinal (ARMv6T2+)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução"><code>RRX</code></th><td role="cell" data-label="O que faz">Rotação à direita de 1 bit passando pelo carry (o carry entra no bit 31)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">Barrel shifter</th><td role="cell" data-label="O que faz">Circuito que desloca ou rotaciona vários bits de uma vez</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">Flags N Z C V</th><td role="cell" data-label="O que faz">Bits do registrador de status: resultado negativo, zero, carry (vai-um) e overflow (estouro com sinal)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">Bloco <code>IT</code></th><td role="cell" data-label="O que faz">Prefixo Thumb-2 que torna até 4 instruções seguintes condicionais; dentro dele as instruções de 16 bits não atualizam as flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">Modified immediate</th><td role="cell" data-label="O que faz">Imediato que cabe em poucos bits da instrução e se expande por regra fixa (rotação no ARM; <code>i:imm3:imm8</code> no Thumb-2)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">Read-modify-write</th><td role="cell" data-label="O que faz">Ler o registrador, alterar só os bits desejados e gravar de volta</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">UAL</th><td role="cell" data-label="O que faz">Sintaxe unificada de assembly (<em>Unified Assembler Language</em>) comum a ARM e Thumb</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução">ARMv6T2 / ARMv7-M</th><td role="cell" data-label="O que faz">Versões da arquitetura: a primeira trouxe o Thumb-2 e as instruções de campo de bits; a segunda é a dos Cortex-M3/M4/M7 (só Thumb)</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Comandos e opções usados</caption>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>-mcpu=cortex-m3</code></th><td>Seleciona o Cortex-M3 (ARMv7-M, Thumb-2); gera Thumb com <code>.thumb</code></td></tr>
-        <tr><th scope="row"><code>-mcpu=arm1176jzf-s</code></th><td>Seleciona o processador ARM1176 (ARMv6K, só ARM/Thumb-1); sem <code>BFI</code>/<code>BFC</code>/<code>UBFX</code></td></tr>
-        <tr><th scope="row"><code>.syntax unified</code></th><td>Seleciona a sintaxe unificada (UAL), que serve tanto a ARM quanto a Thumb; o modo é escolhido por <code>.thumb</code> / <code>.arm</code></td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-as -mcpu=cortex-m3 -o x.o x.s</code></th><td>Monta o assembly em um objeto</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td>Monta para ARMv7-A (com <code>.arm</code> no fonte, gera ARM mode)</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objcopy -O binary x.o x.bin</code></th><td>Extrai os bytes crus do objeto, sem cabeçalho</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d x.o</code></th><td>Mostra bytes e instruções</td></tr>
-        <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar ManipulacaoBitsThumb.java</code></th><td>Compila o programa hospedeiro</td></tr>
-        <tr><th scope="row"><code>java -cp &quot;arm-jitter-1.4.0.jar;.&quot; ManipulacaoBitsThumb manipulacao-bits-thumb.bin</code></th><td>Roda o hospedeiro (no Linux/macOS o separador é <code>:</code>)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>-mcpu=cortex-m3</code></th><td role="cell" data-label="O que faz">Seleciona o Cortex-M3 (ARMv7-M, Thumb-2); gera Thumb com <code>.thumb</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>-mcpu=arm1176jzf-s</code></th><td role="cell" data-label="O que faz">Seleciona o processador ARM1176 (ARMv6K, só ARM/Thumb-1); sem <code>BFI</code>/<code>BFC</code>/<code>UBFX</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>.syntax unified</code></th><td role="cell" data-label="O que faz">Seleciona a sintaxe unificada (UAL), que serve tanto a ARM quanto a Thumb; o modo é escolhido por <code>.thumb</code> / <code>.arm</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -mcpu=cortex-m3 -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta o assembly em um objeto</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta para ARMv7-A (com <code>.arm</code> no fonte, gera ARM mode)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objcopy -O binary x.o x.bin</code></th><td role="cell" data-label="O que faz">Extrai os bytes crus do objeto, sem cabeçalho</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.o</code></th><td role="cell" data-label="O que faz">Mostra bytes e instruções</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.4.0.jar ManipulacaoBitsThumb.java</code></th><td role="cell" data-label="O que faz">Compila o programa hospedeiro</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp &quot;arm-jitter-1.4.0.jar;.&quot; ManipulacaoBitsThumb manipulacao-bits-thumb.bin</code></th><td role="cell" data-label="O que faz">Roda o hospedeiro (no Linux/macOS o separador é <code>:</code>)</td></tr>
       </tbody>
     </table></div>
 

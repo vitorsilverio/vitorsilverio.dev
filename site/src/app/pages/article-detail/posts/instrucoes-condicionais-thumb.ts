@@ -179,28 +179,28 @@ import { Nota } from '../../../shared/nota/nota';
         O <code>firstcond</code> (bits 7..4) é o código da condição do
         <strong>primeiro</strong> bloco (THEN). Para <code>LT</code>, é
         <code>1011</code>.
-        <div class="scroll-x"><table>
+        <div class="scroll-x"><table class="tabela-lista" role="table">
           <caption>Tabela de Condições</caption>
-          <thead>
-            <tr><th scope="col">Código</th><th scope="col">Condição</th></tr>
+          <thead role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Código</th><th scope="col" role="columnheader">Condição</th></tr>
           </thead>
-          <tbody>
-            <tr><td>0000</td><td>EQ (Equal)</td></tr>
-            <tr><td>0001</td><td>NE (Not Equal)</td></tr>
-            <tr><td>0010</td><td>CS / HS (Carry Set / Unsigned Higher or Same)</td></tr>
-            <tr><td>0011</td><td>CC / LO (Carry Clear / Unsigned Lower)</td></tr>
-            <tr><td>0100</td><td>MI (Minus / Negative)</td></tr>
-            <tr><td>0101</td><td>PL (Plus / Positive or Zero)</td></tr>
-            <tr><td>0110</td><td>VS (Overflow)</td></tr>
-            <tr><td>0111</td><td>VC (No Overflow)</td></tr>
-            <tr><td>1000</td><td>HI (Unsigned Higher)</td></tr>
-            <tr><td>1001</td><td>LS (Unsigned Lower or Same)</td></tr>
-            <tr><td>1010</td><td>GE (Signed Greater than or Equal)</td></tr>
-            <tr><td>1011</td><td>LT (Signed Less Than)</td></tr>
-            <tr><td>1100</td><td>GT (Signed Greater Than)</td></tr>
-            <tr><td>1101</td><td>LE (Signed Less than or Equal)</td></tr>
-            <tr><td>1110</td><td>AL (Always / Unconditional)</td></tr>
-            <tr><td>1111</td><td>Reserved / Unpredictable</td></tr>
+          <tbody role="rowgroup">
+            <tr role="row"><td role="cell" data-label="Código">0000</td><td role="cell" data-label="Condição">EQ (Equal)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0001</td><td role="cell" data-label="Condição">NE (Not Equal)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0010</td><td role="cell" data-label="Condição">CS / HS (Carry Set / Unsigned Higher or Same)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0011</td><td role="cell" data-label="Condição">CC / LO (Carry Clear / Unsigned Lower)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0100</td><td role="cell" data-label="Condição">MI (Minus / Negative)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0101</td><td role="cell" data-label="Condição">PL (Plus / Positive or Zero)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0110</td><td role="cell" data-label="Condição">VS (Overflow)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0111</td><td role="cell" data-label="Condição">VC (No Overflow)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1000</td><td role="cell" data-label="Condição">HI (Unsigned Higher)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1001</td><td role="cell" data-label="Condição">LS (Unsigned Lower or Same)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1010</td><td role="cell" data-label="Condição">GE (Signed Greater than or Equal)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1011</td><td role="cell" data-label="Condição">LT (Signed Less Than)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1100</td><td role="cell" data-label="Condição">GT (Signed Greater Than)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1101</td><td role="cell" data-label="Condição">LE (Signed Less than or Equal)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1110</td><td role="cell" data-label="Condição">AL (Always / Unconditional)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1111</td><td role="cell" data-label="Condição">Reserved / Unpredictable</td></tr>
           </tbody>
         </table></div>
       </li>
@@ -217,27 +217,27 @@ import { Nota } from '../../../shared/nota/nota';
       </ol>
       Portanto, a sequência final une o THEN obrigatório da primeira instrução com o ELSE calculado da segunda: <strong><code>ITE</code></strong>.
 
-      <div class="scroll-x"><table>
+      <div class="scroll-x"><table class="tabela-lista" role="table">
         <caption>Tabela de máscaras possíveis e como elas se traduzem em instruções THEN/ELSE dependendo do valor de firstcond[0]</caption>
-        <thead>
-          <tr><th scope="col">mask</th><th scope="col">Terminador</th><th scope="col">Qtd. de Instruções</th><th scope="col">Se firstcond[0] == 0</th><th scope="col">Se firstcond[0] == 1</th></tr>
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">mask</th><th scope="col" role="columnheader">Terminador</th><th scope="col" role="columnheader">Qtd. de Instruções</th><th scope="col" role="columnheader">Se firstcond[0] == 0</th><th scope="col" role="columnheader">Se firstcond[0] == 1</th></tr>
         </thead>
-        <tbody>
-          <tr><td>1000</td><td>Bit 3</td><td>1</td><td>IT</td><td>IT</td></tr>
-          <tr><td>0100</td><td>Bit 2</td><td>2</td><td>ITT</td><td>ITE</td></tr>
-          <tr><td>1100</td><td>Bit 2</td><td>2</td><td>ITE</td><td>ITT</td></tr>
-          <tr><td>0010</td><td>Bit 1</td><td>3</td><td>ITTT</td><td>ITEE</td></tr>
-          <tr><td>0110</td><td>Bit 1</td><td>3</td><td>ITTE</td><td>ITET</td></tr>
-          <tr><td>1010</td><td>Bit 1</td><td>3</td><td>ITET</td><td>ITTE</td></tr>
-          <tr><td>1110</td><td>Bit 1</td><td>3</td><td>ITEE</td><td>ITTT</td></tr>
-          <tr><td>0001</td><td>Bit 0</td><td>4</td><td>ITTTT</td><td>ITEEE</td></tr>
-          <tr><td>0011</td><td>Bit 0</td><td>4</td><td>ITTTE</td><td>ITEET</td></tr>
-          <tr><td>0101</td><td>Bit 0</td><td>4</td><td>ITTET</td><td>ITETE</td></tr>
-          <tr><td>0111</td><td>Bit 0</td><td>4</td><td>ITTEE</td><td>ITETT</td></tr>
-          <tr><td>1001</td><td>Bit 0</td><td>4</td><td>ITETT</td><td>ITTEE</td></tr>
-          <tr><td>1011</td><td>Bit 0</td><td>4</td><td>ITETE</td><td>ITTET</td></tr>
-          <tr><td>1101</td><td>Bit 0</td><td>4</td><td>ITEET</td><td>ITTTE</td></tr>
-          <tr><td>1111</td><td>Bit 0</td><td>4</td><td>ITEEE</td><td>ITTTT</td></tr>
+        <tbody role="rowgroup">
+          <tr role="row"><td role="cell" data-label="mask">1000</td><td role="cell" data-label="Terminador">Bit 3</td><td role="cell" data-label="Qtd. de Instruções">1</td><td role="cell" data-label="Se firstcond[0] == 0">IT</td><td role="cell" data-label="Se firstcond[0] == 1">IT</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0100</td><td role="cell" data-label="Terminador">Bit 2</td><td role="cell" data-label="Qtd. de Instruções">2</td><td role="cell" data-label="Se firstcond[0] == 0">ITT</td><td role="cell" data-label="Se firstcond[0] == 1">ITE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1100</td><td role="cell" data-label="Terminador">Bit 2</td><td role="cell" data-label="Qtd. de Instruções">2</td><td role="cell" data-label="Se firstcond[0] == 0">ITE</td><td role="cell" data-label="Se firstcond[0] == 1">ITT</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0010</td><td role="cell" data-label="Terminador">Bit 1</td><td role="cell" data-label="Qtd. de Instruções">3</td><td role="cell" data-label="Se firstcond[0] == 0">ITTT</td><td role="cell" data-label="Se firstcond[0] == 1">ITEE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0110</td><td role="cell" data-label="Terminador">Bit 1</td><td role="cell" data-label="Qtd. de Instruções">3</td><td role="cell" data-label="Se firstcond[0] == 0">ITTE</td><td role="cell" data-label="Se firstcond[0] == 1">ITET</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1010</td><td role="cell" data-label="Terminador">Bit 1</td><td role="cell" data-label="Qtd. de Instruções">3</td><td role="cell" data-label="Se firstcond[0] == 0">ITET</td><td role="cell" data-label="Se firstcond[0] == 1">ITTE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1110</td><td role="cell" data-label="Terminador">Bit 1</td><td role="cell" data-label="Qtd. de Instruções">3</td><td role="cell" data-label="Se firstcond[0] == 0">ITEE</td><td role="cell" data-label="Se firstcond[0] == 1">ITTT</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0001</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITTTT</td><td role="cell" data-label="Se firstcond[0] == 1">ITEEE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0011</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITTTE</td><td role="cell" data-label="Se firstcond[0] == 1">ITEET</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0101</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITTET</td><td role="cell" data-label="Se firstcond[0] == 1">ITETE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">0111</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITTEE</td><td role="cell" data-label="Se firstcond[0] == 1">ITETT</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1001</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITETT</td><td role="cell" data-label="Se firstcond[0] == 1">ITTEE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1011</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITETE</td><td role="cell" data-label="Se firstcond[0] == 1">ITTET</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1101</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITEET</td><td role="cell" data-label="Se firstcond[0] == 1">ITTTE</td></tr>
+          <tr role="row"><td role="cell" data-label="mask">1111</td><td role="cell" data-label="Terminador">Bit 0</td><td role="cell" data-label="Qtd. de Instruções">4</td><td role="cell" data-label="Se firstcond[0] == 0">ITEEE</td><td role="cell" data-label="Se firstcond[0] == 1">ITTTT</td></tr>
       </tbody>
       </table></div>
     </li>
@@ -355,48 +355,48 @@ import { Nota } from '../../../shared/nota/nota';
     </p>
 
     <h2>Glossário</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Termos usados neste artigo</caption>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">ARM / Thumb / Thumb-2</th><td>Conjuntos de instruções de processadores ARM: ARM (32 bits), Thumb (16 bits, mais compacto) e Thumb-2 (mistura de 16 e 32 bits no mesmo estado)</td></tr>
-        <tr><th scope="row">Flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code></th><td>Bits de condição no <code>CPSR</code>: negativo, zero, carry (vai-um/sem empréstimo) e overflow (estouro com sinal)</td></tr>
-        <tr><th scope="row"><code>CPSR</code> / <code>APSR</code></th><td>Registrador de estado do programa; o <code>APSR</code> é a visão dele com as flags no topo (bits 31..28)</td></tr>
-        <tr><th scope="row">Condição (<code>EQ</code>, <code>LT</code>, <code>GE</code>...)</th><td>Código de 4 bits que testa uma combinação das flags, como <code>LT</code> (<code>N != V</code>) e <code>GE</code> (<code>N == V</code>)</td></tr>
-        <tr><th scope="row"><code>IT</code> / bloco <code>IT</code></th><td>Instrução Thumb-2 de 16 bits (If-Then) que torna condicionais as 1 a 4 instruções seguintes</td></tr>
-        <tr><th scope="row">THEN / ELSE</th><td>Em um bloco <code>IT</code>, instrução executada quando a condição é verdadeira (T) ou falsa (E)</td></tr>
-        <tr><th scope="row"><code>firstcond</code></th><td>Campo do <code>IT</code> com a condição da primeira instrução (bits 7..4)</td></tr>
-        <tr><th scope="row"><code>mask</code></th><td>Campo do <code>IT</code> (bits 3..0) que codifica quantas instruções o bloco cobre e quais são T ou E</td></tr>
-        <tr><th scope="row"><code>ITSTATE</code></th><td>Estado interno (8 bits, dentro do <code>CPSR</code>) que acompanha o bloco <code>IT</code> em andamento</td></tr>
-        <tr><th scope="row">Branch prediction</th><td>Técnica do processador de adivinhar o destino de um desvio para não esperar pelo resultado da comparação</td></tr>
-        <tr><th scope="row"><code>MOVS</code> / <code>ADDS</code>...</th><td>Instruções de dados cujo sufixo <code>S</code> manda atualizar as flags</td></tr>
-        <tr><th scope="row"><code>MRS</code></th><td>Instrução que copia o <code>CPSR</code>/<code>APSR</code> para um registrador comum</td></tr>
-        <tr><th scope="row"><em>Exit code</em></th><td>Valor de retorno do programa (aqui, <code>r0</code> na syscall <code>exit</code>), lido com <code>echo $?</code></td></tr>
-        <tr><th scope="row">ELF</th><td>Formato de executável de Linux/ARM carregado pelo <code>arm-box</code></td></tr>
-        <tr><th scope="row"><code>arm-box</code></th><td>Executor de linha de comando que roda binários ARM Linux num PC, usando o <code>arm-jitter</code></td></tr>
-        <tr><th scope="row"><code>arm-jitter</code></th><td>Biblioteca Java que emula processadores ARM (decodificador, interpretador e compilador JIT)</td></tr>
-        <tr><th scope="row">IR (representação intermediária)</th><td>Formato interno para o qual o <code>arm-jitter</code> traduz blocos de instruções antes de executá-los</td></tr>
-        <tr><th scope="row">JIT</th><td>Compilação em tempo de execução: o <code>arm-jitter</code> gera bytecode Java a partir da IR</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ARM / Thumb / Thumb-2</th><td role="cell" data-label="O que é">Conjuntos de instruções de processadores ARM: ARM (32 bits), Thumb (16 bits, mais compacto) e Thumb-2 (mistura de 16 e 32 bits no mesmo estado)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code></th><td role="cell" data-label="O que é">Bits de condição no <code>CPSR</code>: negativo, zero, carry (vai-um/sem empréstimo) e overflow (estouro com sinal)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code> / <code>APSR</code></th><td role="cell" data-label="O que é">Registrador de estado do programa; o <code>APSR</code> é a visão dele com as flags no topo (bits 31..28)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Condição (<code>EQ</code>, <code>LT</code>, <code>GE</code>...)</th><td role="cell" data-label="O que é">Código de 4 bits que testa uma combinação das flags, como <code>LT</code> (<code>N != V</code>) e <code>GE</code> (<code>N == V</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>IT</code> / bloco <code>IT</code></th><td role="cell" data-label="O que é">Instrução Thumb-2 de 16 bits (If-Then) que torna condicionais as 1 a 4 instruções seguintes</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">THEN / ELSE</th><td role="cell" data-label="O que é">Em um bloco <code>IT</code>, instrução executada quando a condição é verdadeira (T) ou falsa (E)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>firstcond</code></th><td role="cell" data-label="O que é">Campo do <code>IT</code> com a condição da primeira instrução (bits 7..4)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>mask</code></th><td role="cell" data-label="O que é">Campo do <code>IT</code> (bits 3..0) que codifica quantas instruções o bloco cobre e quais são T ou E</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ITSTATE</code></th><td role="cell" data-label="O que é">Estado interno (8 bits, dentro do <code>CPSR</code>) que acompanha o bloco <code>IT</code> em andamento</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Branch prediction</th><td role="cell" data-label="O que é">Técnica do processador de adivinhar o destino de um desvio para não esperar pelo resultado da comparação</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MOVS</code> / <code>ADDS</code>...</th><td role="cell" data-label="O que é">Instruções de dados cujo sufixo <code>S</code> manda atualizar as flags</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MRS</code></th><td role="cell" data-label="O que é">Instrução que copia o <code>CPSR</code>/<code>APSR</code> para um registrador comum</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">Valor de retorno do programa (aqui, <code>r0</code> na syscall <code>exit</code>), lido com <code>echo $?</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">Formato de executável de Linux/ARM carregado pelo <code>arm-box</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">Executor de linha de comando que roda binários ARM Linux num PC, usando o <code>arm-jitter</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">Biblioteca Java que emula processadores ARM (decodificador, interpretador e compilador JIT)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IR (representação intermediária)</th><td role="cell" data-label="O que é">Formato interno para o qual o <code>arm-jitter</code> traduz blocos de instruções antes de executá-los</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">JIT</th><td role="cell" data-label="O que é">Compilação em tempo de execução: o <code>arm-jitter</code> gera bytecode Java a partir da IR</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Comandos usados neste artigo</caption>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -mthumb -o x.o x.s</code></th><td>Monta o fonte em Thumb-2 (com blocos <code>IT</code>)</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x8000 -o x.elf x.o</code></th><td>Liga o objeto com o código em <code>0x8000</code>, gerando o <code>.elf</code></td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>Desmonta o executável (bytes e mnemônicos)</td></tr>
-        <tr><th scope="row"><code>java -jar armbox.jar --arch=thumb2 x.elf</code></th><td>Roda no <code>arm-box</code> com Thumb-2 ligado (backend JIT)</td></tr>
-        <tr><th scope="row"><code>... --interp</code></th><td>Mesmo programa no interpretador, sem JIT</td></tr>
-        <tr><th scope="row"><code>... --check</code></th><td>Roda JIT e interpretador e compara os resultados</td></tr>
-        <tr><th scope="row"><code>echo $?</code></th><td>Mostra o <em>exit code</em> do último comando (no Windows PowerShell: <code>$LASTEXITCODE</code>; no <code>cmd</code>: <code>echo %ERRORLEVEL%</code>)</td></tr>
-        <tr><th scope="row"><code>mvn package</code></th><td>Compila o <code>arm-box</code> e gera o <code>target/armbox.jar</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -mthumb -o x.o x.s</code></th><td role="cell" data-label="O que faz">Monta o fonte em Thumb-2 (com blocos <code>IT</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x8000 -o x.elf x.o</code></th><td role="cell" data-label="O que faz">Liga o objeto com o código em <code>0x8000</code>, gerando o <code>.elf</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">Desmonta o executável (bytes e mnemônicos)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=thumb2 x.elf</code></th><td role="cell" data-label="O que faz">Roda no <code>arm-box</code> com Thumb-2 ligado (backend JIT)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>... --interp</code></th><td role="cell" data-label="O que faz">Mesmo programa no interpretador, sem JIT</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>... --check</code></th><td role="cell" data-label="O que faz">Roda JIT e interpretador e compara os resultados</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>echo $?</code></th><td role="cell" data-label="O que faz">Mostra o <em>exit code</em> do último comando (no Windows PowerShell: <code>$LASTEXITCODE</code>; no <code>cmd</code>: <code>echo %ERRORLEVEL%</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>mvn package</code></th><td role="cell" data-label="O que faz">Compila o <code>arm-box</code> e gera o <code>target/armbox.jar</code></td></tr>
       </tbody>
     </table></div>
 

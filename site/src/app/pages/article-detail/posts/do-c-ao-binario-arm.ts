@@ -107,17 +107,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
   4 .ARM.attributes 0000002a  00000000  00000000  0000007d  2**0
                   CONTENTS, READONLY</code></pre>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Seção</th><th scope="col">O que guarda</th><th scope="col">No arquivo?</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Seção</th><th scope="col" role="columnheader">O que guarda</th><th scope="col" role="columnheader">No arquivo?</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>.text</code></th><td>código executável</td><td>sim</td></tr>
-      <tr><th scope="row"><code>.rodata</code></th><td>constantes só-leitura (strings, tabelas <code>const</code>)</td><td>sim</td></tr>
-      <tr><th scope="row"><code>.data</code></th><td>variáveis globais <strong>inicializadas</strong> com valor ≠ 0</td><td>sim</td></tr>
-      <tr><th scope="row"><code>.bss</code></th><td>variáveis globais zeradas (ou <code>= 0</code>)</td><td><strong>não</strong> — só o tamanho; o loader zera</td></tr>
-      <tr><th scope="row"><code>.comment</code></th><td>metadados do compilador; descartável</td><td>sim, mas não carrega</td></tr>
-      <tr><th scope="row"><code>.ARM.attributes</code></th><td>atributos da arquitetura alvo (versão da ISA, suporte a Thumb etc.) que o ligador confere</td><td>sim, mas não carrega</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.text</code></th><td role="cell" data-label="O que guarda">código executável</td><td role="cell" data-label="No arquivo?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.rodata</code></th><td role="cell" data-label="O que guarda">constantes só-leitura (strings, tabelas <code>const</code>)</td><td role="cell" data-label="No arquivo?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.data</code></th><td role="cell" data-label="O que guarda">variáveis globais <strong>inicializadas</strong> com valor ≠ 0</td><td role="cell" data-label="No arquivo?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.bss</code></th><td role="cell" data-label="O que guarda">variáveis globais zeradas (ou <code>= 0</code>)</td><td role="cell" data-label="No arquivo?"><strong>não</strong> — só o tamanho; o loader zera</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.comment</code></th><td role="cell" data-label="O que guarda">metadados do compilador; descartável</td><td role="cell" data-label="No arquivo?">sim, mas não carrega</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Seção"><code>.ARM.attributes</code></th><td role="cell" data-label="O que guarda">atributos da arquitetura alvo (versão da ISA, suporte a Thumb etc.) que o ligador confere</td><td role="cell" data-label="No arquivo?">sim, mas não carrega</td></tr>
     </tbody>
   </table>
 </div>
@@ -128,39 +128,39 @@ Idx Name          Size      VMA       LMA       File off  Algn
 <p><code>T</code> = símbolo em <code>.text</code>, global (maiúscula). <code>nm</code> minúsculo (<code>t</code>, <code>d</code>, <code>b</code>) seria local. Um <code>U</code> seria um símbolo <strong>indefinido</strong> — uma função que este objeto usa mas não define, a ser resolvida na ligação.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Objeto (<code>.o</code>)</th><td>código compilado mas ainda não ligado; endereços relativos</td></tr>
-      <tr><th scope="row"><code>-O0</code> / <code>-O2</code></th><td>nível de otimização: literal / agressivo</td></tr>
-      <tr><th scope="row">Prólogo / epílogo</th><td>as instruções que abrem/fecham o <em>stack frame</em> de uma função</td></tr>
-      <tr><th scope="row">Frame pointer (<code>fp</code>, r11)</th><td>âncora fixa para acessar variáveis locais e argumentos na pilha</td></tr>
-      <tr><th scope="row"><code>.bss</code></th><td>dados zerados — ocupam RAM mas não espaço no arquivo</td></tr>
-      <tr><th scope="row">VMA</th><td>endereço onde a seção vai rodar (definido na ligação)</td></tr>
-      <tr><th scope="row">ARMv4T</th><td>versão da arquitetura ARM (usada no ARM7TDMI do Game Boy Advance); <code>-march=armv4t</code> restringe o <code>gcc</code> às instruções dela</td></tr>
-      <tr><th scope="row">AAPCS</th><td><em>Procedure Call Standard for the Arm Architecture</em>: a convenção que diz em quais registradores vão argumentos e retorno e quem preserva o quê</td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato dos objetos e executáveis, organizado em seções e símbolos</td></tr>
-      <tr><th scope="row">Símbolo</th><td>nome (de função ou variável) ligado a um endereço dentro de uma seção</td></tr>
-      <tr><th scope="row">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td>bits do registrador de status que instruções como <code>subs</code> e <code>cmp</code> atualizam e que desvios condicionais (<code>ble</code>, <code>bne</code>) consultam</td></tr>
-      <tr><th scope="row"><code>arm-jitter</code> / <code>arm-box</code></th><td>biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Objeto (<code>.o</code>)</th><td role="cell" data-label="O que é">código compilado mas ainda não ligado; endereços relativos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>-O0</code> / <code>-O2</code></th><td role="cell" data-label="O que é">nível de otimização: literal / agressivo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Prólogo / epílogo</th><td role="cell" data-label="O que é">as instruções que abrem/fecham o <em>stack frame</em> de uma função</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Frame pointer (<code>fp</code>, r11)</th><td role="cell" data-label="O que é">âncora fixa para acessar variáveis locais e argumentos na pilha</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>.bss</code></th><td role="cell" data-label="O que é">dados zerados — ocupam RAM mas não espaço no arquivo</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">VMA</th><td role="cell" data-label="O que é">endereço onde a seção vai rodar (definido na ligação)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ARMv4T</th><td role="cell" data-label="O que é">versão da arquitetura ARM (usada no ARM7TDMI do Game Boy Advance); <code>-march=armv4t</code> restringe o <code>gcc</code> às instruções dela</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em>Procedure Call Standard for the Arm Architecture</em>: a convenção que diz em quais registradores vão argumentos e retorno e quem preserva o quê</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato dos objetos e executáveis, organizado em seções e símbolos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Símbolo</th><td role="cell" data-label="O que é">nome (de função ou variável) ligado a um endereço dentro de uma seção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td role="cell" data-label="O que é">bits do registrador de status que instruções como <code>subs</code> e <code>cmp</code> atualizam e que desvios condicionais (<code>ble</code>, <code>bne</code>) consultam</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -c -Ox -march=armv4t soma.c</code></th><td>compila para objeto sem ligar</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -S soma.c</code></th><td>para no assembly (<code>soma.s</code>), sem montar</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.o</code></th><td>desmonta <code>.text</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -h x.o</code></th><td>lista as seções e seus tamanhos</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-nm x.o</code></th><td>lista os símbolos (T/t/D/U/...)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-readelf -a x.elf</code></th><td>tudo sobre o ELF (headers, seções, símbolos); também funciona em <code>.o</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -c -Ox -march=armv4t soma.c</code></th><td role="cell" data-label="O que faz">compila para objeto sem ligar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -S soma.c</code></th><td role="cell" data-label="O que faz">para no assembly (<code>soma.s</code>), sem montar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.o</code></th><td role="cell" data-label="O que faz">desmonta <code>.text</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -h x.o</code></th><td role="cell" data-label="O que faz">lista as seções e seus tamanhos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-nm x.o</code></th><td role="cell" data-label="O que faz">lista os símbolos (T/t/D/U/...)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-readelf -a x.elf</code></th><td role="cell" data-label="O que faz">tudo sobre o ELF (headers, seções, símbolos); também funciona em <code>.o</code></td></tr>
     </tbody>
   </table>
 </div>

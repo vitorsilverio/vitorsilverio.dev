@@ -8,6 +8,7 @@ import { ehObjdump, pareceBitField } from './lib/blocos.mjs';
 import { dimensoes, parseFiguras } from './lib/imagem.mjs';
 import { tagNota } from './lib/nota.mjs';
 import { tagFormula } from './lib/formula.mjs';
+import { marcarMatriz, marcarTabela } from './lib/tabela-lista.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -299,9 +300,12 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   // Captions: "Tabela: X" (ou "Table: X") imediatamente antes de uma tabela.
   const captions = [];
   src = src.replace(
-    /^(?:Tabela|Table):[ \t]*(.+)\r?\n(?=\s*\|)/gim,
-    (_, c) => {
-      captions.push(c.trim());
+    /^(?:Tabela|Table)(\s*\(matriz\))?:[ \t]*(.*)\r?\n(?=\s*\|)/gim,
+    (todo, matriz, c) => {
+      // "Tabela (matriz): legenda" = opt-out da apresentação em lista (ver lib/tabela-lista.mjs).
+      // Sem o marcador, a legenda continua obrigatória (linha "Tabela:" vazia não é legenda).
+      if (!matriz && !c.trim()) return todo;
+      captions.push({ texto: c.trim(), matriz: !!matriz });
       return '';
     },
   );
@@ -392,7 +396,7 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   };
 
   renderer.table = (token) => {
-    const cap = captions.shift();
+    const { texto: cap, matriz } = captions.shift() ?? { texto: '', matriz: false };
     const caption = cap ? `<caption>${escapeHtml(cap)}</caption>` : '';
     // Nome acessível: legenda explícita; senão o título da seção; senão genérico.
     const rotulo = cap
@@ -415,11 +419,16 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
         return `      <tr>${cells}</tr>`;
       })
       .join('\n');
+    const tabela =
+      `<table>\n    ${caption}` +
+      `<thead>\n      <tr>${head}</tr>\n    </thead>\n` +
+      `    <tbody>\n${rows}\n    </tbody>\n  </table>`;
+    // Padrão: em tela estreita a tabela se apresenta como lista de definição (roles ARIA +
+    // data-label; ver lib/tabela-lista.mjs). "Tabela (matriz):" mantém a tabela com rolagem.
+    const marcada = matriz ? marcarMatriz(tabela) : marcarTabela(tabela).html;
     return (
       // Tabela larga rola dentro do contêiner: precisa de foco por teclado (WCAG 2.1.1).
-      `<div class="scroll-x" tabindex="0" role="group" aria-label="${escAttr(rotulo)}">\n  <table>\n    ${caption}` +
-      `<thead>\n      <tr>${head}</tr>\n    </thead>\n` +
-      `    <tbody>\n${rows}\n    </tbody>\n  </table>\n</div>\n`
+      `<div class="scroll-x" tabindex="0" role="group" aria-label="${escAttr(rotulo)}">\n  ${marcada}\n</div>\n`
     );
   };
 

@@ -240,18 +240,18 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
       contrato que C, assembly e o <code>arm-box</code> respeitam para
       conversarem. Resumo:
     </p>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Papéis dos registradores na chamada (AAPCS)</caption>
-      <thead>
-        <tr><th scope="col">Registrador</th><th scope="col">Papel</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Registrador</th><th scope="col" role="columnheader">Papel</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>r0–r3</code></th><td>Argumentos de entrada (e <code>r0</code> leva o valor de retorno). Chegam em registrador, sem usar a pilha; são <em>scratch</em>: a função pode sobrescrevê-los.</td></tr>
-        <tr><th scope="row"><code>r4–r11</code></th><td>Callee-saved: a função pode usar, mas precisa restaurar antes de voltar (via pilha). A exceção é o <code>r9</code>, cujo papel depende da plataforma.</td></tr>
-        <tr><th scope="row"><code>r12</code></th><td><code>ip</code> — temporário intra-procedimento (pode ser mexido).</td></tr>
-        <tr><th scope="row"><code>r13</code></th><td><code>sp</code> — ponteiro da pilha.</td></tr>
-        <tr><th scope="row"><code>r14</code></th><td><code>lr</code> — link register (retorno do <code>BL</code>).</td></tr>
-        <tr><th scope="row"><code>r15</code></th><td><code>pc</code> — program counter.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r0–r3</code></th><td role="cell" data-label="Papel">Argumentos de entrada (e <code>r0</code> leva o valor de retorno). Chegam em registrador, sem usar a pilha; são <em>scratch</em>: a função pode sobrescrevê-los.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r4–r11</code></th><td role="cell" data-label="Papel">Callee-saved: a função pode usar, mas precisa restaurar antes de voltar (via pilha). A exceção é o <code>r9</code>, cujo papel depende da plataforma.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r12</code></th><td role="cell" data-label="Papel"><code>ip</code> — temporário intra-procedimento (pode ser mexido).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r13</code></th><td role="cell" data-label="Papel"><code>sp</code> — ponteiro da pilha.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r14</code></th><td role="cell" data-label="Papel"><code>lr</code> — link register (retorno do <code>BL</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r15</code></th><td role="cell" data-label="Papel"><code>pc</code> — program counter.</td></tr>
       </tbody>
     </table></div>
     <p>
@@ -261,18 +261,18 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
     </p>
 
     <h2>Glossário: instruções de chamada</h2>
-    <div class="scroll-x"><table>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
       <caption>Comandos e instruções de sub-rotina</caption>
-      <thead>
-        <tr><th scope="col">Instrução / Comando</th><th scope="col">O que faz</th></tr>
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Instrução / Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>bl alvo</code></th><td>Desvia e salva o retorno em <code>lr</code> (chamada de função).</td></tr>
-        <tr><th scope="row"><code>bx reg</code></th><td>Copia <code>reg</code> para <code>pc</code>; bit 0 escolhe ARM/Thumb (retorno).</td></tr>
-        <tr><th scope="row"><code>push &#123;regs&#125;</code></th><td>Empilha registradores (alias de <code>stmdb sp!</code>).</td></tr>
-        <tr><th scope="row"><code>pop &#123;regs&#125;</code></th><td>Desempilha (alias de <code>ldmia sp!</code>).</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d f.elf</code></th><td>Mostra os bytes das chamadas para decodificar.</td></tr>
-        <tr><th scope="row"><code>info registers lr</code></th><td>No GDB: inspecta o endereço de retorno salvo.</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>bl alvo</code></th><td role="cell" data-label="O que faz">Desvia e salva o retorno em <code>lr</code> (chamada de função).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>bx reg</code></th><td role="cell" data-label="O que faz">Copia <code>reg</code> para <code>pc</code>; bit 0 escolhe ARM/Thumb (retorno).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>push &#123;regs&#125;</code></th><td role="cell" data-label="O que faz">Empilha registradores (alias de <code>stmdb sp!</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>pop &#123;regs&#125;</code></th><td role="cell" data-label="O que faz">Desempilha (alias de <code>ldmia sp!</code>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>arm-none-eabi-objdump -d f.elf</code></th><td role="cell" data-label="O que faz">Mostra os bytes das chamadas para decodificar.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Instrução / Comando"><code>info registers lr</code></th><td role="cell" data-label="O que faz">No GDB: inspecta o endereço de retorno salvo.</td></tr>
       </tbody>
     </table></div>
 
@@ -289,43 +289,43 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
     </p>
 
     <h2>Glossário geral</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row">Sub-rotina / função</th><td>trecho de código que é chamado, executa e devolve o controle a quem chamou</td></tr>
-        <tr><th scope="row"><code>LR</code> (r14)</th><td><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
-        <tr><th scope="row"><code>SP</code> (r13)</th><td><em>stack pointer</em>: aponta para o topo da pilha</td></tr>
-        <tr><th scope="row"><code>PC</code> (r15)</th><td><em>program counter</em>: endereço da instrução em execução (lê-se como endereço + 8 em ARM)</td></tr>
-        <tr><th scope="row">Pilha</th><td>região de memória usada como pilha LIFO; no ARM cresce para endereços menores</td></tr>
-        <tr><th scope="row">Callee-saved</th><td>registrador que a função chamada deve devolver intacto (<code>r4</code>–<code>r11</code>, com ressalva do <code>r9</code>)</td></tr>
-        <tr><th scope="row"><em>Scratch</em></th><td>registrador que a função pode sobrescrever sem salvar (<code>r0</code>–<code>r3</code>, <code>r12</code>)</td></tr>
-        <tr><th scope="row">Folha (<em>leaf</em>)</th><td>função que não chama outra e por isso não precisa salvar o <code>lr</code></td></tr>
-        <tr><th scope="row">Interworking</th><td>troca entre ARM e Thumb por <code>bx</code>, usando o bit 0 do endereço</td></tr>
-        <tr><th scope="row"><em>Writeback</em></th><td>o <code>!</code>: grava o endereço calculado de volta no registrador base</td></tr>
-        <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
-        <tr><th scope="row"><em>Exit code</em></th><td>número que o processo devolve ao sistema ao terminar</td></tr>
-        <tr><th scope="row"><code>arm-box</code> / <code>arm-jitter</code></th><td>executor Java de ELFs ARM de 32 bits / biblioteca Java que emula o processador</td></tr>
-        <tr><th scope="row">Stub GDB</th><td>servidor do protocolo remoto do GDB embutido no <code>arm-box</code> (<code>--gdb=PORT</code>)</td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Sub-rotina / função</th><td role="cell" data-label="O que é">trecho de código que é chamado, executa e devolve o controle a quem chamou</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>LR</code> (r14)</th><td role="cell" data-label="O que é"><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SP</code> (r13)</th><td role="cell" data-label="O que é"><em>stack pointer</em>: aponta para o topo da pilha</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>PC</code> (r15)</th><td role="cell" data-label="O que é"><em>program counter</em>: endereço da instrução em execução (lê-se como endereço + 8 em ARM)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pilha</th><td role="cell" data-label="O que é">região de memória usada como pilha LIFO; no ARM cresce para endereços menores</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Callee-saved</th><td role="cell" data-label="O que é">registrador que a função chamada deve devolver intacto (<code>r4</code>–<code>r11</code>, com ressalva do <code>r9</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Scratch</em></th><td role="cell" data-label="O que é">registrador que a função pode sobrescrever sem salvar (<code>r0</code>–<code>r3</code>, <code>r12</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em>leaf</em>)</th><td role="cell" data-label="O que é">função que não chama outra e por isso não precisa salvar o <code>lr</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interworking</th><td role="cell" data-label="O que é">troca entre ARM e Thumb por <code>bx</code>, usando o bit 0 do endereço</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Writeback</em></th><td role="cell" data-label="O que é">o <code>!</code>: grava o endereço calculado de volta no registrador base</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao sistema ao terminar</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code> / <code>arm-jitter</code></th><td role="cell" data-label="O que é">executor Java de ELFs ARM de 32 bits / biblioteca Java que emula o processador</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Stub GDB</th><td role="cell" data-label="O que é">servidor do protocolo remoto do GDB embutido no <code>arm-box</code> (<code>--gdb=PORT</code>)</td></tr>
       </tbody>
     </table></div>
 
     <h2>Comandos</h2>
-    <div class="scroll-x"><table>
-      <thead>
-        <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+    <div class="scroll-x"><table class="tabela-lista" role="table">
+      <thead role="rowgroup">
+        <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
       </thead>
-      <tbody>
-        <tr><th scope="row"><code>arm-none-eabi-as -march=armv5te -o add2.o add2.s</code></th><td>monta o fonte</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-ld -o add2.elf add2.o</code></th><td>liga (código em <code>0x8000</code>, o padrão do devkitARM)</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-objdump -d add2.elf</code></th><td>desmonta o ELF</td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar add2.elf ; echo $?</code></th><td>roda no <code>arm-box</code> e mostra o <em>exit code</em></td></tr>
-        <tr><th scope="row"><code>java -jar target/armbox.jar --gdb=3406 add2.elf</code></th><td>sobe o stub GDB na porta 3406</td></tr>
-        <tr><th scope="row"><code>arm-none-eabi-gdb -q -batch add2.elf -ex "target remote :3406" -ex ...</code></th><td>conecta e executa comandos em lote</td></tr>
-        <tr><th scope="row"><code>break *ADDR</code> / <code>continue</code> / <code>stepi</code> (GDB)</th><td>breakpoint num endereço / executa até ele / executa uma instrução</td></tr>
-        <tr><th scope="row"><code>info registers sp lr pc</code> (GDB)</th><td>mostra os registradores listados</td></tr>
-        <tr><th scope="row"><code>x/2xw $sp</code> (GDB)</th><td>mostra 2 palavras em hexadecimal a partir do <code>sp</code></td></tr>
+      <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv5te -o add2.o add2.s</code></th><td role="cell" data-label="O que faz">monta o fonte</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -o add2.elf add2.o</code></th><td role="cell" data-label="O que faz">liga (código em <code>0x8000</code>, o padrão do devkitARM)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d add2.elf</code></th><td role="cell" data-label="O que faz">desmonta o ELF</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar add2.elf ; echo $?</code></th><td role="cell" data-label="O que faz">roda no <code>arm-box</code> e mostra o <em>exit code</em></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar target/armbox.jar --gdb=3406 add2.elf</code></th><td role="cell" data-label="O que faz">sobe o stub GDB na porta 3406</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gdb -q -batch add2.elf -ex "target remote :3406" -ex ...</code></th><td role="cell" data-label="O que faz">conecta e executa comandos em lote</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>break *ADDR</code> / <code>continue</code> / <code>stepi</code> (GDB)</th><td role="cell" data-label="O que faz">breakpoint num endereço / executa até ele / executa uma instrução</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>info registers sp lr pc</code> (GDB)</th><td role="cell" data-label="O que faz">mostra os registradores listados</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>x/2xw $sp</code> (GDB)</th><td role="cell" data-label="O que faz">mostra 2 palavras em hexadecimal a partir do <code>sp</code></td></tr>
       </tbody>
     </table></div>
 

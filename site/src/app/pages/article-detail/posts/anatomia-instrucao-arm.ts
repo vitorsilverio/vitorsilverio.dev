@@ -58,35 +58,35 @@ import { Nota } from '../../../shared/nota/nota';
     />
 <h3><code>e0810002</code> = <code>add r0, r1, r2</code></h3>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Campo</th><th scope="col">Bits</th><th scope="col">Valor</th><th scope="col">Leitura</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Campo</th><th scope="col" role="columnheader">Bits</th><th scope="col" role="columnheader">Valor</th><th scope="col" role="columnheader">Leitura</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">cond</th><td><code>1110</code></td><td>AL</td><td>incondicional</td></tr>
-      <tr><th scope="row">classe</th><td><code>00</code></td><td>—</td><td>data processing</td></tr>
-      <tr><th scope="row">I</th><td><code>0</code></td><td>—</td><td>Operand2 é registrador</td></tr>
-      <tr><th scope="row">opcode</th><td><code>0100</code></td><td>ADD</td><td></td></tr>
-      <tr><th scope="row">S</th><td><code>0</code></td><td>—</td><td>não mexe nas flags</td></tr>
-      <tr><th scope="row">Rn</th><td><code>0001</code></td><td>r1</td><td></td></tr>
-      <tr><th scope="row">Rd</th><td><code>0000</code></td><td>r0</td><td></td></tr>
-      <tr><th scope="row">Operand2</th><td><code>0000 0000 0010</code></td><td>r2</td><td>Rm = r2, sem shift</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">cond</th><td role="cell" data-label="Bits"><code>1110</code></td><td role="cell" data-label="Valor">AL</td><td role="cell" data-label="Leitura">incondicional</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">classe</th><td role="cell" data-label="Bits"><code>00</code></td><td role="cell" data-label="Valor">—</td><td role="cell" data-label="Leitura">data processing</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">I</th><td role="cell" data-label="Bits"><code>0</code></td><td role="cell" data-label="Valor">—</td><td role="cell" data-label="Leitura">Operand2 é registrador</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">opcode</th><td role="cell" data-label="Bits"><code>0100</code></td><td role="cell" data-label="Valor">ADD</td><td role="cell" data-label="Leitura"></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">S</th><td role="cell" data-label="Bits"><code>0</code></td><td role="cell" data-label="Valor">—</td><td role="cell" data-label="Leitura">não mexe nas flags</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">Rn</th><td role="cell" data-label="Bits"><code>0001</code></td><td role="cell" data-label="Valor">r1</td><td role="cell" data-label="Leitura"></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">Rd</th><td role="cell" data-label="Bits"><code>0000</code></td><td role="cell" data-label="Valor">r0</td><td role="cell" data-label="Leitura"></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Campo">Operand2</th><td role="cell" data-label="Bits"><code>0000 0000 0010</code></td><td role="cell" data-label="Valor">r2</td><td role="cell" data-label="Leitura">Rm = r2, sem shift</td></tr>
     </tbody>
   </table>
 </div>
 <p>Junte os nibbles: <code>1110 0000 1000 0001 0000 0000 0000 0010</code> = <code>0xE0810002</code>. Confere.</p>
 <h3>O que muda em cada variante</h3>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Encoding</th><th scope="col">Instrução</th><th scope="col">Bit(s) que mudou</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Encoding</th><th scope="col" role="columnheader">Instrução</th><th scope="col" role="columnheader">Bit(s) que mudou</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>e28100ff</code></th><td><code>add r0, r1, #255</code></td><td><strong>I = 1</strong>; Operand2 = <code>0x0FF</code> (rotate 0, imm8 <code>0xFF</code>)</td></tr>
-      <tr><th scope="row"><code>e2810c3f</code></th><td><code>add r0, r1, #0x3F00</code></td><td>I = 1; Operand2 = <code>0xC3F</code> → imm8 <code>0x3F</code> <strong>rotacionado à direita</strong> por <code>2×12 = 24</code> bits</td></tr>
-      <tr><th scope="row"><code>e0810182</code></th><td><code>add r0, r1, r2, lsl #3</code></td><td>Operand2 = <code>0x182</code> → shift amount <code>00011</code> (3), tipo <code>00</code> (LSL), Rm <code>0010</code> (r2)</td></tr>
-      <tr><th scope="row"><code>00810002</code></th><td><code>addeq r0, r1, r2</code></td><td><strong>cond = <code>0000</code></strong> (EQ) — só o primeiro nibble</td></tr>
-      <tr><th scope="row"><code>e0910002</code></th><td><code>adds r0, r1, r2</code></td><td><strong>S = 1</strong> → bit 20 liga, o nibble vira <code>9</code></td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Encoding"><code>e28100ff</code></th><td role="cell" data-label="Instrução"><code>add r0, r1, #255</code></td><td role="cell" data-label="Bit(s) que mudou"><strong>I = 1</strong>; Operand2 = <code>0x0FF</code> (rotate 0, imm8 <code>0xFF</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Encoding"><code>e2810c3f</code></th><td role="cell" data-label="Instrução"><code>add r0, r1, #0x3F00</code></td><td role="cell" data-label="Bit(s) que mudou">I = 1; Operand2 = <code>0xC3F</code> → imm8 <code>0x3F</code> <strong>rotacionado à direita</strong> por <code>2×12 = 24</code> bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Encoding"><code>e0810182</code></th><td role="cell" data-label="Instrução"><code>add r0, r1, r2, lsl #3</code></td><td role="cell" data-label="Bit(s) que mudou">Operand2 = <code>0x182</code> → shift amount <code>00011</code> (3), tipo <code>00</code> (LSL), Rm <code>0010</code> (r2)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Encoding"><code>00810002</code></th><td role="cell" data-label="Instrução"><code>addeq r0, r1, r2</code></td><td role="cell" data-label="Bit(s) que mudou"><strong>cond = <code>0000</code></strong> (EQ) — só o primeiro nibble</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Encoding"><code>e0910002</code></th><td role="cell" data-label="Instrução"><code>adds r0, r1, r2</code></td><td role="cell" data-label="Bit(s) que mudou"><strong>S = 1</strong> → bit 20 liga, o nibble vira <code>9</code></td></tr>
     </tbody>
   </table>
 </div>
@@ -98,16 +98,16 @@ import { Nota } from '../../../shared/nota/nota';
 </app-nota>
 <p><strong>Registrador deslocado (I = 0):</strong> <code>shift[11:4]</code> + <code>Rm[3:0]</code>. O <code>shift</code> pode ser por imediato (<code>Rm, LSL #3</code>) ou por outro registrador (<code>Rm, LSL r4</code>). Os tipos:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Tipo</th><th scope="col">Bits [6:5]</th><th scope="col">Efeito</th><th scope="col">Afeta C (com S)?</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Tipo</th><th scope="col" role="columnheader">Bits [6:5]</th><th scope="col" role="columnheader">Efeito</th><th scope="col" role="columnheader">Afeta C (com S)?</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>LSL</code></th><td><code>00</code></td><td>desloca à esquerda, entra 0</td><td>sim (último bit que sai)</td></tr>
-      <tr><th scope="row"><code>LSR</code></th><td><code>01</code></td><td>desloca à direita lógico, entra 0</td><td>sim</td></tr>
-      <tr><th scope="row"><code>ASR</code></th><td><code>10</code></td><td>desloca à direita aritmético, replica o sinal</td><td>sim</td></tr>
-      <tr><th scope="row"><code>ROR</code></th><td><code>11</code></td><td>rotaciona à direita</td><td>sim</td></tr>
-      <tr><th scope="row"><code>RRX</code></th><td><code>11</code> + amount 0</td><td>rotaciona 1 bit à direita <strong>através do C</strong></td><td>sim</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Tipo"><code>LSL</code></th><td role="cell" data-label="Bits [6:5]"><code>00</code></td><td role="cell" data-label="Efeito">desloca à esquerda, entra 0</td><td role="cell" data-label="Afeta C (com S)?">sim (último bit que sai)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Tipo"><code>LSR</code></th><td role="cell" data-label="Bits [6:5]"><code>01</code></td><td role="cell" data-label="Efeito">desloca à direita lógico, entra 0</td><td role="cell" data-label="Afeta C (com S)?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Tipo"><code>ASR</code></th><td role="cell" data-label="Bits [6:5]"><code>10</code></td><td role="cell" data-label="Efeito">desloca à direita aritmético, replica o sinal</td><td role="cell" data-label="Afeta C (com S)?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Tipo"><code>ROR</code></th><td role="cell" data-label="Bits [6:5]"><code>11</code></td><td role="cell" data-label="Efeito">rotaciona à direita</td><td role="cell" data-label="Afeta C (com S)?">sim</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Tipo"><code>RRX</code></th><td role="cell" data-label="Bits [6:5]"><code>11</code> + amount 0</td><td role="cell" data-label="Efeito">rotaciona 1 bit à direita <strong>através do C</strong></td><td role="cell" data-label="Afeta C (com S)?">sim</td></tr>
     </tbody>
   </table>
 </div>
@@ -133,29 +133,29 @@ import { Nota } from '../../../shared/nota/nota';
 />
 
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Bit</th><th scope="col">Nome</th><th scope="col">1 significa</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Bit</th><th scope="col" role="columnheader">Nome</th><th scope="col" role="columnheader">1 significa</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">P</th><td>pre/post</td><td>offset aplicado <strong>antes</strong> do acesso (pre/offset)</td></tr>
-      <tr><th scope="row">U</th><td>up/down</td><td>offset <strong>somado</strong> ao base (senão subtraído)</td></tr>
-      <tr><th scope="row">B</th><td>byte</td><td>acesso de <strong>1 byte</strong> (senão palavra)</td></tr>
-      <tr><th scope="row">W</th><td>writeback</td><td>grava o endereço calculado de volta em <code>Rn</code></td></tr>
-      <tr><th scope="row">L</th><td>load/store</td><td><strong>carrega</strong> (senão armazena)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bit">P</th><td role="cell" data-label="Nome">pre/post</td><td role="cell" data-label="1 significa">offset aplicado <strong>antes</strong> do acesso (pre/offset)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bit">U</th><td role="cell" data-label="Nome">up/down</td><td role="cell" data-label="1 significa">offset <strong>somado</strong> ao base (senão subtraído)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bit">B</th><td role="cell" data-label="Nome">byte</td><td role="cell" data-label="1 significa">acesso de <strong>1 byte</strong> (senão palavra)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bit">W</th><td role="cell" data-label="Nome">writeback</td><td role="cell" data-label="1 significa">grava o endereço calculado de volta em <code>Rn</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bit">L</th><td role="cell" data-label="Nome">load/store</td><td role="cell" data-label="1 significa"><strong>carrega</strong> (senão armazena)</td></tr>
     </tbody>
   </table>
 </div>
 <p>As três formas do assembly:</p>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Assembly</th><th scope="col">P</th><th scope="col">W</th><th scope="col">Efeito</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Assembly</th><th scope="col" role="columnheader">P</th><th scope="col" role="columnheader">W</th><th scope="col" role="columnheader">Efeito</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>ldr r0, [r1, #4]</code> (<code>e5910004</code>)</th><td>1</td><td>0</td><td>lê de <code>r1+4</code>; <code>r1</code> inalterado</td></tr>
-      <tr><th scope="row"><code>ldr r0, [r1, #4]!</code> (<code>e5b10004</code>)</th><td>1</td><td>1</td><td>lê de <code>r1+4</code>; <strong><code>r1 ← r1+4</code></strong></td></tr>
-      <tr><th scope="row"><code>ldr r0, [r1], #4</code> (<code>e4910004</code>)</th><td>0</td><td>—</td><td>lê de <code>r1</code>; <strong><code>r1 ← r1+4</code></strong> depois</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Assembly"><code>ldr r0, [r1, #4]</code> (<code>e5910004</code>)</th><td role="cell" data-label="P">1</td><td role="cell" data-label="W">0</td><td role="cell" data-label="Efeito">lê de <code>r1+4</code>; <code>r1</code> inalterado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Assembly"><code>ldr r0, [r1, #4]!</code> (<code>e5b10004</code>)</th><td role="cell" data-label="P">1</td><td role="cell" data-label="W">1</td><td role="cell" data-label="Efeito">lê de <code>r1+4</code>; <strong><code>r1 ← r1+4</code></strong></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Assembly"><code>ldr r0, [r1], #4</code> (<code>e4910004</code>)</th><td role="cell" data-label="P">0</td><td role="cell" data-label="W">—</td><td role="cell" data-label="Efeito">lê de <code>r1</code>; <strong><code>r1 ← r1+4</code></strong> depois</td></tr>
     </tbody>
   </table>
 </div>
@@ -206,39 +206,39 @@ e4910004  cond=AL kind=LOAD         rd= 0 rn= 1 rm=-1 imm=0x4    immOp=true  S=f
 <p>O que a saída confirma: <code>0x00810002</code> difere de <code>0xe0810002</code> só no <code>cond</code> (<code>EQ</code> em vez de <code>AL</code>); <code>0xe0910002</code> liga <code>S</code>; <code>0xe2810c3f</code> vira <code>imm=0x3f00</code>, o <code>imm8</code> <code>0x3f</code> já rotacionado; e as duas formas com writeback do <code>LDR</code> só se distinguem por <code>post</code>.</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Instrução de processamento de dados</th><td>a família <code>ADD</code>, <code>SUB</code>, <code>MOV</code>, <code>CMP</code>, <code>AND</code>... que opera em registradores</td></tr>
-      <tr><th scope="row"><code>cond</code> / <code>AL</code></th><td>campo de 4 bits (31–28) com a condição de execução; <code>AL</code> (<em>always</em>, <code>1110</code>) = sempre executa</td></tr>
-      <tr><th scope="row"><code>Rn</code>, <code>Rd</code>, <code>Rm</code></th><td>primeiro operando, registrador destino e registrador do segundo operando</td></tr>
-      <tr><th scope="row"><code>S</code></th><td>bit 20: se 1, a instrução atualiza as flags N, Z, C e V do CPSR (sufixo <code>S</code> no assembly)</td></tr>
-      <tr><th scope="row"><code>Operand2</code></th><td>o campo de 12 bits do segundo operando em data processing</td></tr>
-      <tr><th scope="row">Barrel shifter</th><td>circuito que aplica LSL/LSR/ASR/ROR ao operando dentro da própria instrução</td></tr>
-      <tr><th scope="row">Imediato rotacionado</th><td><code>imm8</code> ror <code>2×rotate</code> — como o ARM cabe constantes de 32 bits em 12 bits</td></tr>
-      <tr><th scope="row">Pre-index / post-index</th><td>offset aplicado antes / depois do acesso de memória</td></tr>
-      <tr><th scope="row">Writeback</th><td>gravar o endereço calculado de volta no registrador base</td></tr>
-      <tr><th scope="row">Espaço incondicional</th><td><code>cond == 1111</code>: encodings próprios, não uma condição</td></tr>
-      <tr><th scope="row">Nibble</th><td>grupo de 4 bits, um dígito hexadecimal</td></tr>
-      <tr><th scope="row">ELF</th><td>formato de arquivo executável do Linux; o <code>objdump</code> lê o <code>.elf</code> dos exemplos</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Instrução de processamento de dados</th><td role="cell" data-label="O que é">a família <code>ADD</code>, <code>SUB</code>, <code>MOV</code>, <code>CMP</code>, <code>AND</code>... que opera em registradores</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cond</code> / <code>AL</code></th><td role="cell" data-label="O que é">campo de 4 bits (31–28) com a condição de execução; <code>AL</code> (<em>always</em>, <code>1110</code>) = sempre executa</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>Rn</code>, <code>Rd</code>, <code>Rm</code></th><td role="cell" data-label="O que é">primeiro operando, registrador destino e registrador do segundo operando</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>S</code></th><td role="cell" data-label="O que é">bit 20: se 1, a instrução atualiza as flags N, Z, C e V do CPSR (sufixo <code>S</code> no assembly)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>Operand2</code></th><td role="cell" data-label="O que é">o campo de 12 bits do segundo operando em data processing</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Barrel shifter</th><td role="cell" data-label="O que é">circuito que aplica LSL/LSR/ASR/ROR ao operando dentro da própria instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Imediato rotacionado</th><td role="cell" data-label="O que é"><code>imm8</code> ror <code>2×rotate</code> — como o ARM cabe constantes de 32 bits em 12 bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pre-index / post-index</th><td role="cell" data-label="O que é">offset aplicado antes / depois do acesso de memória</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Writeback</th><td role="cell" data-label="O que é">gravar o endereço calculado de volta no registrador base</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Espaço incondicional</th><td role="cell" data-label="O que é"><code>cond == 1111</code>: encodings próprios, não uma condição</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Nibble</th><td role="cell" data-label="O que é">grupo de 4 bits, um dígito hexadecimal</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">formato de arquivo executável do Linux; o <code>objdump</code> lê o <code>.elf</code> dos exemplos</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-as -march=armv7-a -o anat.o anat.s</code></th><td>monta o assembly</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-ld -Ttext=0x10000 -o anat.elf anat.o</code></th><td>liga, com o código em <code>0x10000</code></td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d x.elf</code></th><td>desmonta (endereço, bytes, mnemônico)</td></tr>
-      <tr><th scope="row"><code>printf '%x\\n' $(( (0xE0810002 &gt;&gt; 21) &amp; 0xF ))</code></th><td>isola um campo na mão (bits 24–21, o opcode): imprime <code>4</code>, ou seja, <code>ADD</code></td></tr>
-      <tr><th scope="row"><code>javac -cp arm-jitter-1.4.0.jar AnatomiaDecoder.java</code></th><td>compila o exemplo Java</td></tr>
-      <tr><th scope="row"><code>java -cp "arm-jitter-1.4.0.jar;." AnatomiaDecoder</code></th><td>roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-as -march=armv7-a -o anat.o anat.s</code></th><td role="cell" data-label="O que faz">monta o assembly</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-ld -Ttext=0x10000 -o anat.elf anat.o</code></th><td role="cell" data-label="O que faz">liga, com o código em <code>0x10000</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d x.elf</code></th><td role="cell" data-label="O que faz">desmonta (endereço, bytes, mnemônico)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>printf '%x\\n' $(( (0xE0810002 &gt;&gt; 21) &amp; 0xF ))</code></th><td role="cell" data-label="O que faz">isola um campo na mão (bits 24–21, o opcode): imprime <code>4</code>, ou seja, <code>ADD</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>javac -cp arm-jitter-1.4.0.jar AnatomiaDecoder.java</code></th><td role="cell" data-label="O que faz">compila o exemplo Java</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -cp "arm-jitter-1.4.0.jar;." AnatomiaDecoder</code></th><td role="cell" data-label="O que faz">roda o exemplo (no Linux/macOS, <code>:</code> no lugar de <code>;</code>)</td></tr>
     </tbody>
   </table>
 </div>

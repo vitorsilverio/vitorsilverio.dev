@@ -248,19 +248,19 @@ ghidra-mcp <span class="token parameter variable">--headless</span> <span class=
 <p><strong>Como foi rodado.</strong> Uma sessão de um modelo (<code>claude-sonnet-5-5</code>, informado por ele mesmo), em 21/10/2026, executada como subagente do Claude Code, usando o cliente <code>mcp_call.py</code> via linha de comando (somente ferramentas de leitura). Não é o mesmo que ligar o servidor ao Claude Desktop ou a outro cliente interativo; o resultado de uma sessão assim pode ser diferente. O texto integral da resposta está em <a href="/curso-arm/exemplos/ghidra-llm/avaliacao/execucao-1-com-simbolos.md"><code>avaliacao/execucao-1-com-simbolos.md</code></a>.</p>
 <h3>Execução 1: <code>cofre-O2.elf</code> (com símbolos)</h3>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">#</th><th scope="col">Pergunta</th><th scope="col">Resultado</th><th scope="col">Observação</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">#</th><th scope="col" role="columnheader">Pergunta</th><th scope="col" role="columnheader">Resultado</th><th scope="col" role="columnheader">Observação</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">1</th><td>Fluxo geral</td><td><strong>Acertou</strong></td><td>Descreveu <code>_start</code>, <code>c_start</code>, as duas mensagens (14 e 16 bytes), os wrappers de <code>write</code> e <code>exit</code>; notou que <code>mistura</code> foi embutida no <code>-O2</code> e <code>soma_ate</code> é código morto; reconheceu o &quot;lixo&quot; depois de <code>sai(0)</code> como dados decodificados como código.</td></tr>
-      <tr><th scope="row">2</th><td><code>chave_ok</code></td><td><strong>Acertou, com uma imprecisão</strong></td><td>Tamanho 8 e hash conferidos; notou que o teste usa o valor antes da última multiplicação. Listou &quot;o ponteiro não é nulo&quot; como condição, mas o código não testa isso: é pré-condição, e um ponteiro nulo travaria o programa.</td></tr>
-      <tr><th scope="row">3</th><td><code>mistura</code> e a constante</td><td><strong>Acertou, com um exagero</strong></td><td>Algoritmo e semente (<code>0x1505</code> = 5381, como no djb2) corretos; <code>-0x61c8864f</code> = <code>0x9e3779b1</code> corretos. Mas afirmou que é &quot;o inteiro de 32 bits mais próximo de 2³²/φ&quot;: errado. A constante clássica é <code>0x9e3779b9</code>; a deste programa é uma variante com o último dígito alterado (conferi: <code>round(2^32/φ)</code> é <code>0x9e3779b9</code>).</td></tr>
-      <tr><th scope="row">4</th><td><code>0xc003375e</code> é o do fonte?</td><td><strong>Acertou</strong></td><td>Inferiu a transformação do compilador, calculou <code>0xc003375e * 0x9e3779b1 mod 2^32 = 0x3096b5fe</code> por script e reconheceu que <strong>não podia provar</strong> que o fonte tinha esse valor. Bateu com <code>ALVO</code>.</td></tr>
-      <tr><th scope="row">5</th><td>Qual a chave?</td><td><strong>Acertou ao dizer que não dá</strong></td><td>Disse que o hash de 32 bits tem colisões e deu três candidatos (<code>v738aaak</code>, <code>34q8ad55</code>, <code>ejraalis</code>). <strong>Conferi no arm-box: os três liberam o cofre.</strong> Não achou <code>ARM-2026</code>, e não tinha como.</td></tr>
-      <tr><th scope="row">6</th><td><code>svc 0</code></td><td><strong>Acertou</strong></td><td><code>r7=4</code> = <code>write(1, buf, n)</code>, <code>r7=1</code> = <code>exit(status)</code>; apontou que o <code>CONCAT44</code> é ruído do decompilador.</td></tr>
-      <tr><th scope="row">7</th><td>Nomes</td><td><strong>Razoável</strong></td><td><code>sys_write_stdout</code>, <code>sys_exit</code>, <code>verifica_senha</code>, <code>hash_rotxor_mul</code>, <code>soma_1_ate_n</code>. Equivalentes aos originais.</td></tr>
-      <tr><th scope="row">8</th><td>Bugs</td><td><strong>Acertou</strong></td><td>Nenhum erro de memória; fraqueza de projeto (hash curto, sem sal); <code>soma_ate</code> estoura <code>int</code> para <code>n &gt;= 65536</code>, mas ninguém a chama. Nenhum falso alarme.</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">1</th><td role="cell" data-label="Pergunta">Fluxo geral</td><td role="cell" data-label="Resultado"><strong>Acertou</strong></td><td role="cell" data-label="Observação">Descreveu <code>_start</code>, <code>c_start</code>, as duas mensagens (14 e 16 bytes), os wrappers de <code>write</code> e <code>exit</code>; notou que <code>mistura</code> foi embutida no <code>-O2</code> e <code>soma_ate</code> é código morto; reconheceu o &quot;lixo&quot; depois de <code>sai(0)</code> como dados decodificados como código.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">2</th><td role="cell" data-label="Pergunta"><code>chave_ok</code></td><td role="cell" data-label="Resultado"><strong>Acertou, com uma imprecisão</strong></td><td role="cell" data-label="Observação">Tamanho 8 e hash conferidos; notou que o teste usa o valor antes da última multiplicação. Listou &quot;o ponteiro não é nulo&quot; como condição, mas o código não testa isso: é pré-condição, e um ponteiro nulo travaria o programa.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">3</th><td role="cell" data-label="Pergunta"><code>mistura</code> e a constante</td><td role="cell" data-label="Resultado"><strong>Acertou, com um exagero</strong></td><td role="cell" data-label="Observação">Algoritmo e semente (<code>0x1505</code> = 5381, como no djb2) corretos; <code>-0x61c8864f</code> = <code>0x9e3779b1</code> corretos. Mas afirmou que é &quot;o inteiro de 32 bits mais próximo de 2³²/φ&quot;: errado. A constante clássica é <code>0x9e3779b9</code>; a deste programa é uma variante com o último dígito alterado (conferi: <code>round(2^32/φ)</code> é <code>0x9e3779b9</code>).</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">4</th><td role="cell" data-label="Pergunta"><code>0xc003375e</code> é o do fonte?</td><td role="cell" data-label="Resultado"><strong>Acertou</strong></td><td role="cell" data-label="Observação">Inferiu a transformação do compilador, calculou <code>0xc003375e * 0x9e3779b1 mod 2^32 = 0x3096b5fe</code> por script e reconheceu que <strong>não podia provar</strong> que o fonte tinha esse valor. Bateu com <code>ALVO</code>.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">5</th><td role="cell" data-label="Pergunta">Qual a chave?</td><td role="cell" data-label="Resultado"><strong>Acertou ao dizer que não dá</strong></td><td role="cell" data-label="Observação">Disse que o hash de 32 bits tem colisões e deu três candidatos (<code>v738aaak</code>, <code>34q8ad55</code>, <code>ejraalis</code>). <strong>Conferi no arm-box: os três liberam o cofre.</strong> Não achou <code>ARM-2026</code>, e não tinha como.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">6</th><td role="cell" data-label="Pergunta"><code>svc 0</code></td><td role="cell" data-label="Resultado"><strong>Acertou</strong></td><td role="cell" data-label="Observação"><code>r7=4</code> = <code>write(1, buf, n)</code>, <code>r7=1</code> = <code>exit(status)</code>; apontou que o <code>CONCAT44</code> é ruído do decompilador.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">7</th><td role="cell" data-label="Pergunta">Nomes</td><td role="cell" data-label="Resultado"><strong>Razoável</strong></td><td role="cell" data-label="Observação"><code>sys_write_stdout</code>, <code>sys_exit</code>, <code>verifica_senha</code>, <code>hash_rotxor_mul</code>, <code>soma_1_ate_n</code>. Equivalentes aos originais.</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="#">8</th><td role="cell" data-label="Pergunta">Bugs</td><td role="cell" data-label="Resultado"><strong>Acertou</strong></td><td role="cell" data-label="Observação">Nenhum erro de memória; fraqueza de projeto (hash curto, sem sal); <code>soma_ate</code> estoura <code>int</code> para <code>n &gt;= 65536</code>, mas ninguém a chama. Nenhum falso alarme.</td></tr>
     </tbody>
   </table>
 </div>
@@ -298,52 +298,52 @@ ghidra-mcp <span class="token parameter variable">--headless</span> <span class=
 <p>Se você tem outra ferramenta, o OGhidra (projeto do LLNL) liga o Ghidra a modelos locais via Ollama ou a modelos de nuvem, num laço em que o modelo coleta mais informação antes de responder. O README dele não faz afirmações sobre acurácia, então o seu protocolo de verificação continua necessário.</p>
 <h2>Glossário</h2>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">Termo</th><th scope="col">O que é</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row">Ghidra</th><td><em>Framework</em> de engenharia reversa da NSA, código aberto: desmonta, decompila, analisa e é extensível por scripts</td></tr>
-      <tr><th scope="row">Decompilador</th><td>Parte do Ghidra que reconstrói um pseudocódigo em C a partir das instruções de máquina; não recupera nomes nem comentários</td></tr>
-      <tr><th scope="row">Desmontagem (<em>disassembly</em>)</th><td>Tradução dos bytes de código em instruções legíveis (<code>ldrb</code>, <code>cmp</code>, <code>bne</code>)</td></tr>
-      <tr><th scope="row">ELF</th><td><em>Executable and Linkable Format</em>: formato de executável com código, dados, símbolos e ponto de entrada</td></tr>
-      <tr><th scope="row">Símbolos / <code>strip</code></th><td>Tabela de nomes (funções, variáveis) dentro do ELF; <code>strip</code> a remove</td></tr>
-      <tr><th scope="row">Thumb / Thumb-2</th><td>Conjunto de instruções compacto do ARM (16 bits; Thumb-2 mistura 16 e 32 bits)</td></tr>
-      <tr><th scope="row"><code>TMode</code></th><td>Registrador do Ghidra que indica &quot;decodificar como Thumb&quot; (1) ou como ARM (0)</td></tr>
-      <tr><th scope="row">Bit 0 do endereço</th><td>Convenção ARM: endereço de código com bit 0 ligado (ex. <code>0x10017</code>) significa Thumb; o código real fica no endereço par</td></tr>
-      <tr><th scope="row"><code>svc 0</code></th><td>Chamada de sistema (<em>supervisor call</em>); no Linux ARM EABI o número da chamada vai em <code>r7</code></td></tr>
-      <tr><th scope="row"><code>r7</code>, <code>r0</code>–<code>r2</code></th><td>Registradores: <code>r7</code> carrega o número da chamada de sistema; <code>r0</code>–<code>r3</code> levam os primeiros argumentos de função e <code>r0</code> o resultado</td></tr>
-      <tr><th scope="row">LLM</th><td><em>Large Language Model</em>: modelo de linguagem usado como assistente</td></tr>
-      <tr><th scope="row">MCP</th><td><em>Model Context Protocol</em>: protocolo aberto para um aplicativo de IA descobrir e chamar ferramentas de um servidor</td></tr>
-      <tr><th scope="row">Cliente / servidor MCP</th><td>Quem usa as ferramentas (o aplicativo de IA) e quem as oferece (aqui, o GhidraMCP)</td></tr>
-      <tr><th scope="row">GhidraMCP</th><td>Servidor MCP para o Ghidra: um <em>plugin</em> (HTTP local) e um <em>bridge</em> Python (<code>ghidra-mcp</code>)</td></tr>
-      <tr><th scope="row"><em>Headless</em></th><td>Modo sem interface gráfica (<code>analyzeHeadless</code>, <code>ghidra-mcp --headless</code>)</td></tr>
-      <tr><th scope="row"><em>Hash</em></th><td>Função que resume dados num número de tamanho fixo; aqui, 32 bits</td></tr>
-      <tr><th scope="row">Colisão</th><td>Duas entradas diferentes com o mesmo hash</td></tr>
-      <tr><th scope="row">Inverso multiplicativo (mod 2³²)</th><td>Número que, multiplicado pelo original módulo 2³², dá 1; existe para todo ímpar</td></tr>
-      <tr><th scope="row">Alucinação</th><td>Afirmação fluente e plausível do modelo que não corresponde aos fatos</td></tr>
-      <tr><th scope="row">arm-box / arm-jitter</th><td>Executor de binários ARM Linux e emulador ARM com JIT em Java (projetos meus)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Ghidra</th><td role="cell" data-label="O que é"><em>Framework</em> de engenharia reversa da NSA, código aberto: desmonta, decompila, analisa e é extensível por scripts</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Decompilador</th><td role="cell" data-label="O que é">Parte do Ghidra que reconstrói um pseudocódigo em C a partir das instruções de máquina; não recupera nomes nem comentários</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Desmontagem (<em>disassembly</em>)</th><td role="cell" data-label="O que é">Tradução dos bytes de código em instruções legíveis (<code>ldrb</code>, <code>cmp</code>, <code>bne</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável com código, dados, símbolos e ponto de entrada</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Símbolos / <code>strip</code></th><td role="cell" data-label="O que é">Tabela de nomes (funções, variáveis) dentro do ELF; <code>strip</code> a remove</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / Thumb-2</th><td role="cell" data-label="O que é">Conjunto de instruções compacto do ARM (16 bits; Thumb-2 mistura 16 e 32 bits)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>TMode</code></th><td role="cell" data-label="O que é">Registrador do Ghidra que indica &quot;decodificar como Thumb&quot; (1) ou como ARM (0)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bit 0 do endereço</th><td role="cell" data-label="O que é">Convenção ARM: endereço de código com bit 0 ligado (ex. <code>0x10017</code>) significa Thumb; o código real fica no endereço par</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc 0</code></th><td role="cell" data-label="O que é">Chamada de sistema (<em>supervisor call</em>); no Linux ARM EABI o número da chamada vai em <code>r7</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>r7</code>, <code>r0</code>–<code>r2</code></th><td role="cell" data-label="O que é">Registradores: <code>r7</code> carrega o número da chamada de sistema; <code>r0</code>–<code>r3</code> levam os primeiros argumentos de função e <code>r0</code> o resultado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">LLM</th><td role="cell" data-label="O que é"><em>Large Language Model</em>: modelo de linguagem usado como assistente</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">MCP</th><td role="cell" data-label="O que é"><em>Model Context Protocol</em>: protocolo aberto para um aplicativo de IA descobrir e chamar ferramentas de um servidor</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Cliente / servidor MCP</th><td role="cell" data-label="O que é">Quem usa as ferramentas (o aplicativo de IA) e quem as oferece (aqui, o GhidraMCP)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">GhidraMCP</th><td role="cell" data-label="O que é">Servidor MCP para o Ghidra: um <em>plugin</em> (HTTP local) e um <em>bridge</em> Python (<code>ghidra-mcp</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Headless</em></th><td role="cell" data-label="O que é">Modo sem interface gráfica (<code>analyzeHeadless</code>, <code>ghidra-mcp --headless</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Hash</em></th><td role="cell" data-label="O que é">Função que resume dados num número de tamanho fixo; aqui, 32 bits</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Colisão</th><td role="cell" data-label="O que é">Duas entradas diferentes com o mesmo hash</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Inverso multiplicativo (mod 2³²)</th><td role="cell" data-label="O que é">Número que, multiplicado pelo original módulo 2³², dá 1; existe para todo ímpar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Alucinação</th><td role="cell" data-label="O que é">Afirmação fluente e plausível do modelo que não corresponde aos fatos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">arm-box / arm-jitter</th><td role="cell" data-label="O que é">Executor de binários ARM Linux e emulador ARM com JIT em Java (projetos meus)</td></tr>
     </tbody>
   </table>
 </div>
 <h2>Comandos</h2>
 <div class="scroll-x" tabindex="0" role="group" aria-label="Tabela (rolável)">
-  <table>
-    <thead>
-      <tr><th scope="col">Comando</th><th scope="col">O que faz</th></tr>
+  <table class="tabela-lista" role="table">
+    <thead role="rowgroup">
+      <tr role="row"><th scope="col" role="columnheader">Comando</th><th scope="col" role="columnheader">O que faz</th></tr>
     </thead>
-    <tbody>
-      <tr><th scope="row"><code>arm-none-eabi-gcc -O2 -mcpu=cortex-a8 -mthumb -nostdlib -static -ffreestanding -fno-tree-loop-distribute-patterns -T user.ld cofre.c -o cofre-O2.elf</code></th><td>Compila <code>cofre.c</code> para Thumb-2, sem libc, no endereço do <code>user.ld</code> (trocar <code>-O2</code> por <code>-O0</code> para a versão literal)</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-strip -s -o cofre-O2-strip.elf cofre-O2.elf</code></th><td>Remove os símbolos</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-objdump -d cofre-O2.elf</code></th><td>Desmonta o código</td></tr>
-      <tr><th scope="row"><code>arm-none-eabi-readelf -h cofre-O2.elf</code></th><td>Mostra o cabeçalho do ELF (inclui o endereço de entrada)</td></tr>
-      <tr><th scope="row"><code>java -jar armbox.jar --arch=armv7a cofre-O2.elf ARM-2026</code></th><td>Executa o binário no arm-box; o código de saída é o do <code>exit</code> do programa</td></tr>
-      <tr><th scope="row"><code>analyzeHeadless &lt;pasta&gt; &lt;projeto&gt; -import x.elf -overwrite -scriptPath scripts -postScript DecompilaTudo.java</code></th><td>Importa, analisa e roda o script do Ghidra sem interface (no Linux/macOS, <code>analyzeHeadless</code> sem <code>.bat</code>)</td></tr>
-      <tr><th scope="row"><code>python -m venv venv-ghidramcp</code></th><td>Cria um ambiente virtual do Python para o <em>bridge</em></td></tr>
-      <tr><th scope="row"><code>pip install &quot;ghidra_mcp-2.0.0-py3-none-any.whl[headless]&quot;</code></th><td>Instala o <em>bridge</em> com o suporte a PyGhidra</td></tr>
-      <tr><th scope="row"><code>ghidra-mcp --headless --binary x.elf --project p --transport streamable-http --mcp-port 18081</code></th><td>Sobe o servidor MCP sobre um binário, sem interface (use outra porta se a 8081 estiver ocupada)</td></tr>
-      <tr><th scope="row"><code>python mcp_call.py decompile_function &#39;&#123;&quot;name&quot;:&quot;chave_ok&quot;&#125;&#39;</code></th><td>Chama uma ferramenta de leitura do servidor MCP (cliente mínimo deste artigo)</td></tr>
-      <tr><th scope="row"><code>sha256sum arquivo.zip</code></th><td>Confere o <em>checksum</em> de um download (<code>certutil -hashfile arquivo.zip SHA256</code> no Windows)</td></tr>
+    <tbody role="rowgroup">
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-gcc -O2 -mcpu=cortex-a8 -mthumb -nostdlib -static -ffreestanding -fno-tree-loop-distribute-patterns -T user.ld cofre.c -o cofre-O2.elf</code></th><td role="cell" data-label="O que faz">Compila <code>cofre.c</code> para Thumb-2, sem libc, no endereço do <code>user.ld</code> (trocar <code>-O2</code> por <code>-O0</code> para a versão literal)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-strip -s -o cofre-O2-strip.elf cofre-O2.elf</code></th><td role="cell" data-label="O que faz">Remove os símbolos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-objdump -d cofre-O2.elf</code></th><td role="cell" data-label="O que faz">Desmonta o código</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>arm-none-eabi-readelf -h cofre-O2.elf</code></th><td role="cell" data-label="O que faz">Mostra o cabeçalho do ELF (inclui o endereço de entrada)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>java -jar armbox.jar --arch=armv7a cofre-O2.elf ARM-2026</code></th><td role="cell" data-label="O que faz">Executa o binário no arm-box; o código de saída é o do <code>exit</code> do programa</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>analyzeHeadless &lt;pasta&gt; &lt;projeto&gt; -import x.elf -overwrite -scriptPath scripts -postScript DecompilaTudo.java</code></th><td role="cell" data-label="O que faz">Importa, analisa e roda o script do Ghidra sem interface (no Linux/macOS, <code>analyzeHeadless</code> sem <code>.bat</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>python -m venv venv-ghidramcp</code></th><td role="cell" data-label="O que faz">Cria um ambiente virtual do Python para o <em>bridge</em></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>pip install &quot;ghidra_mcp-2.0.0-py3-none-any.whl[headless]&quot;</code></th><td role="cell" data-label="O que faz">Instala o <em>bridge</em> com o suporte a PyGhidra</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>ghidra-mcp --headless --binary x.elf --project p --transport streamable-http --mcp-port 18081</code></th><td role="cell" data-label="O que faz">Sobe o servidor MCP sobre um binário, sem interface (use outra porta se a 8081 estiver ocupada)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>python mcp_call.py decompile_function &#39;&#123;&quot;name&quot;:&quot;chave_ok&quot;&#125;&#39;</code></th><td role="cell" data-label="O que faz">Chama uma ferramenta de leitura do servidor MCP (cliente mínimo deste artigo)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Comando"><code>sha256sum arquivo.zip</code></th><td role="cell" data-label="O que faz">Confere o <em>checksum</em> de um download (<code>certutil -hashfile arquivo.zip SHA256</code> no Windows)</td></tr>
     </tbody>
   </table>
 </div>
