@@ -215,6 +215,34 @@ A *pegadinha*: no `arm-box` o `r15` lê como PC + 8. Veja [o artigo](/artigos/sl
 mão **só ao editar um post já publicado**, com o número à mão (o rótulo "Nota N" precisa existir no HTML
 pré-renderizado). Em post publicado, renumere manualmente se inserir uma nota no meio.
 
+**Fórmula** (`app-formula`, `src/app/shared/formula/`): fórmula matemática **essencial ao entendimento**,
+em destaque e centralizada, com a explicação logo abaixo (legenda de cada símbolo e um parágrafo com o
+raciocínio). Não use para notação trivial: `n - 1`, `2³⁸⁴` ou `d·G` no meio de uma frase continuam
+`<code>`/texto. O LaTeX vira **MathML em build** (Temml, versão fixa no `package.json`): zero JS de
+matemática no navegador, funciona no pré-render e leitores de tela leem o MathML. Em tela estreita o
+painel da fórmula rola na horizontal (focável por teclado); a página nunca rola.
+
+No **rascunho** use a cerca `formula`; o resto da linha de abertura é o título (opcional). Três
+seções separadas por uma linha só com `---`: LaTeX; legenda `símbolo em LaTeX: significado` (uma por
+linha, opcional); parágrafos de explicação em Markdown inline (opcional). LaTeX inválido ou legenda
+sem `: ` é ignorado com aviso; o gerador acrescenta o import `Formula`.
+
+````markdown
+```formula Chave pública a partir da chave privada
+Q = d \cdot G
+---
+d: a **chave privada**, um número inteiro
+G: o **ponto gerador**, fixo e público
+Q: a **chave pública**, um ponto da curva
+---
+Calcular `Q` a partir de `d` é rápido; o caminho inverso é inviável.
+```
+````
+
+Coloque a fórmula **depois** do parágrafo que a introduz. Evite várias seguidas. Em post publicado,
+rode o gerador com o rascunho (slug temporário, `--dry-run --print`) e cole o bloco `<app-formula>`;
+não escreva MathML à mão.
+
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
 vira um termo clicável com a definição da própria tabela (no máximo 8 por artigo; termos genéricos em

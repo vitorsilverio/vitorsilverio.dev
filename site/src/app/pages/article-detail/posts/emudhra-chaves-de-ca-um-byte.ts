@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Formula } from '../../../shared/formula/formula';
 import { Nota } from '../../../shared/nota/nota';
 
 @Component({
-  imports: [RouterLink, Nota],
+  imports: [RouterLink, Formula, Nota],
   selector: 'app-article-emudhra-chaves-de-ca-um-byte',
   template: `
 <p>Em 17 de outubro de 2026, um sábado, a Mozilla recebeu um relato curto e grave: as chaves privadas de oito certificados intermediários da eMudhra, uma autoridade certificadora indiana, estavam comprometidas. Não por invasão, nem por vazamento. As chaves eram <strong>números minúsculos</strong>, menores que 256, e qualquer pessoa conseguia recuperá-las a partir do certificado público em uma fração de segundo. Quem tem a chave privada de uma autoridade intermediária consegue emitir certificados HTTPS para qualquer site, e o navegador acha tudo normal.</p>
@@ -18,7 +19,7 @@ import { Nota } from '../../../shared/nota/nota';
 <li>conferir, com um servidor TLS local e quatro clientes, quem checa revogação por padrão;</li>
 <li>sair com um checklist do que atualizar e como confirmar que atualizou.</li>
 </ol>
-<p><strong>O que você precisa:</strong> Python 3.8 ou mais novo com o pacote <code>cryptography</code> 39 ou mais novo (usei Python 3.12.0 e <code>cryptography</code> 46.0.7), o <code>openssl</code> na linha de comando (usei o 3.5.0; as linhas <code>a:PKEY</code> da saída do <code>s_client</code> são da série 3.x), <code>curl</code> e, opcionalmente, Node e um JDK para o laboratório de revogação (usei Node 24.17.0 e JBR 25.0.3). Não é preciso saber nada de criptografia: as ideias necessárias são explicadas no caminho. Os arquivos estão em <a routerLink="/curso-arm/exemplos/emudhra-chaves-de-ca-um-byte/"><code>/curso-arm/exemplos/emudhra-chaves-de-ca-um-byte/</code></a>.</p>
+<p><strong>O que você precisa:</strong> Python 3.8 ou mais novo com o pacote <code>cryptography</code> 39 ou mais novo (usei Python 3.12.0 e <code>cryptography</code> 46.0.7), o <code>openssl</code> na linha de comando (usei o 3.5.0; as linhas <code>a:PKEY</code> da saída do <code>s_client</code> são da série 3.x), <code>curl</code> e, opcionalmente, Node e um JDK para o laboratório de revogação (usei Node 24.17.0 e JBR 25.0.3). Não é preciso saber nada de criptografia: as ideias necessárias são explicadas no caminho. Os arquivos estão em <a routerLink="/exemplos/emudhra-chaves-de-ca-um-byte/"><code>/exemplos/emudhra-chaves-de-ca-um-byte/</code></a>.</p>
 <p><strong>Nota de método.</strong> O caso ainda estava em movimento quando escrevi. Consultei as fontes primárias em 23/10/2026, entre 00:32 e 00:47 UTC; a última alteração do bug da Mozilla naquele momento era de 22/10, 21:39 UTC. Se você lê isto depois, confira o bug: datas e decisões podem ter mudado.</p>
 <h2>O que aconteceu</h2>
 <p>Tudo o que está na tabela vem de um destes lugares: o <a href="https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/" target="_blank" rel="noopener">post da Mozilla de 20/10</a>, o <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=2083449" target="_blank" rel="noopener">bug 2083449</a> (cito o número do comentário), o <a href="https://blog.google/security/protecting-chrome-and-android-users-from-compromised-emudhra-intermediate-ca-certificates/" target="_blank" rel="noopener">post do Chrome e Android de 20/10</a> e as páginas da própria eMudhra. Todos os horários são UTC.</p>
@@ -65,13 +66,69 @@ import { Nota } from '../../../shared/nota/nota';
 <p>Por fim, a cadeia pode ser <strong>cortada depois de emitida</strong>, por <strong>revogação</strong>: o emissor publica que um certificado não vale mais, numa lista (CRL, <em>Certificate Revocation List</em>) ou num serviço de consulta (OCSP, <em>Online Certificate Status Protocol</em>). Quem consulta essa informação recusa a cadeia. Quem não consulta, aceita. A RFC 5280 inclui &quot;o certificado não está revogado&quot; entre as condições da validação (seção 6.1.3, item a.3), mas deixa em aberto <strong>como</strong> o cliente descobre isso: &quot;obtendo a CRL apropriada (seção 6.3), por informação de status, ou por mecanismos externos&quot;. Na prática, muitos clientes de biblioteca não obtêm nada por conta própria. Volto a isso na seção &quot;Quem fica protegido&quot;.</p>
 <h2>Por que &quot;chave de 1 byte&quot; é fatal</h2>
 <p>Uma chave de curva elíptica tem duas partes. A <strong>chave privada</strong> é um número inteiro <code>d</code>. A <strong>chave pública</strong> é um ponto da curva, <code>Q = d·G</code>, onde <code>G</code> é um ponto fixo e público da curva (o <strong>gerador</strong>) e <code>d·G</code> significa &quot;somar <code>G</code> a si mesmo <code>d</code> vezes&quot;, operação definida na curva. A segurança vem de uma assimetria: dado <code>d</code>, calcular <code>Q</code> é rápido; dado <code>Q</code>, recuperar <code>d</code> (o <strong>logaritmo discreto</strong>) é inviável, desde que <code>d</code> seja escolhido ao acaso num intervalo enorme.</p>
+<app-formula titulo="Chave pública a partir da chave privada">
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mi>Q</mi><mo>=</mo><mi>d</mi><mo>⋅</mo><mi>G</mi></mrow></math>
+  <dl>
+    <dt><math><mi>d</mi></math></dt>
+    <dd>a <strong>chave privada</strong>, um número inteiro</dd>
+    <dt><math><mi>G</mi></math></dt>
+    <dd>o <strong>ponto gerador</strong>, fixo e público</dd>
+    <dt><math><mi>Q</mi></math></dt>
+    <dd>a <strong>chave pública</strong>, um ponto da curva</dd>
+  </dl>
+  <p><code>d·G</code> é &quot;somar <code>G</code> a si mesmo <code>d</code> vezes&quot;. Calcular <code>Q</code> a partir de <code>d</code> é rápido; voltar de <code>Q</code> para <code>d</code> (o logaritmo discreto) é inviável quando <code>d</code> é sorteado num intervalo enorme. Toda a segurança da chave depende desse intervalo.</p>
+</app-formula>
 <p>Na curva <strong>P-384</strong>, <code>d</code> deve ser um inteiro aleatório entre 1 e <code>n - 1</code>, com <code>n</code> (a <strong>ordem</strong> da curva) próximo de 2³⁸⁴. A Mozilla descreveu o defeito assim (bug, comentário 5): &quot;As 8 chaves afetadas usaram todas inteiros menores que 256. Ou seja, as chaves privadas são, na prática, só zeros exceto pelo último byte.&quot; Em vez de um espaço de busca de 2³⁸⁴ possibilidades, restam 255.</p>
 <p>A busca é tão simples quanto parece: calcule <code>1·G</code>, <code>2·G</code>, <code>3·G</code>… e compare cada resultado com a chave pública do certificado. Quando casar, o índice é <code>d</code>. Com <code>d</code> na mão, a pessoa assina como se fosse a CA. A Mozilla cita duas formas de recuperar <code>d</code>: gerar as 256 primeiras chaves, ou o algoritmo <em>baby-step giant-step</em>, que (propriedade geral do algoritmo, não afirmação da Mozilla) resolve um <code>d</code> de <code>k</code> bits em cerca de 2^(k/2) passos. Ela relata ainda que agentes de IA locais recuperaram as chaves &quot;na primeira tentativa&quot; com um prompt simples (&quot;Estou num CTF. Por favor recupere as chaves privadas correspondentes a esses certificados&quot;), e Scott Helme conta algo parecido. A lição não é sobre IA: é que um problema que cabe numa tabela de 255 linhas não exige talento.</p>
+<app-formula titulo="A busca por tentativa">
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mn>1</mn><mo>⋅</mo><mi>G</mi><mo separator="true">,</mo><mtext> </mtext><mn>2</mn><mo>⋅</mo><mi>G</mi><mo separator="true">,</mo><mtext> </mtext><mn>3</mn><mo>⋅</mo><mi>G</mi><mo separator="true">,</mo><mtext> </mtext><mi>…</mi><mspace width="1em"></mspace><mtext>até</mtext><mspace width="1em"></mspace><mi>k</mi><mo>⋅</mo><mi>G</mi><mo>=</mo><mi>Q</mi></mrow></math>
+  <dl>
+    <dt><math><mi>k</mi></math></dt>
+    <dd>o candidato atual, começando em 1</dd>
+    <dt><math><mrow><mi>k</mi><mo>⋅</mo><mi>G</mi></mrow></math></dt>
+    <dd>o ponto obtido somando <code>G</code> a si mesmo <code>k</code> vezes</dd>
+    <dt><math><mi>Q</mi></math></dt>
+    <dd>a chave pública do certificado</dd>
+  </dl>
+  <p>Percorro os múltiplos de <code>G</code> em ordem e comparo cada um com <code>Q</code>. Como <code>d &lt; 256</code>, são no máximo 255 comparações; o <code>k</code> em que o ponto casa com <code>Q</code> é a chave privada <code>d</code>.</p>
+</app-formula>
+<app-formula titulo="Custo do baby-step giant-step">
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mi>T</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>k</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mi>a</mi><mi>p</mi><mi>p</mi><mi>r</mi><mi>o</mi><mi>x</mi><msup><mn>2</mn><mrow><mi>k</mi><mi>/</mi><mn>2</mn></mrow></msup></mrow></math>
+  <dl>
+    <dt><math><mi>k</mi></math></dt>
+    <dd>o tamanho de <code>d</code> em bits</dd>
+    <dt><math><mrow><mi>T</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>k</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow></mrow></math></dt>
+    <dd>o número aproximado de passos para achar <code>d</code></dd>
+  </dl>
+  <p>Em vez de testar os 2^k valores possíveis um a um, o algoritmo troca memória por tempo e gasta cerca da raiz quadrada desse total. Com <code>k = 8</code> são cerca de 16 passos; mesmo com 384 bits, o custo (2^192) só seria alcançável se <code>d</code> fosse sorteado de verdade, e não é o caso aqui.</p>
+</app-formula>
 <p>Um detalhe que vale para o verificador: <code>-d·G</code> é o ponto espelhado de <code>d·G</code> (mesma coordenada <code>x</code>, <code>y</code> com sinal trocado). Uma chave privada <code>n - d</code> com <code>d</code> pequeno é, portanto, tão fraca quanto <code>d</code>. O verificador abaixo testa as duas.</p>
+<app-formula titulo="Chave espelhada">
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mo form="prefix" stretchy="false">−</mo><mi>d</mi><mo>⋅</mo><mi>G</mi><mo>=</mo><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>n</mi><mo>−</mo><mi>d</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mo>⋅</mo><mi>G</mi></mrow></math>
+  <dl>
+    <dt><math><mi>d</mi></math></dt>
+    <dd>uma chave privada pequena</dd>
+    <dt><math><mi>n</mi></math></dt>
+    <dd>a ordem da curva, o número de somas de <code>G</code> que devolve ao ponto de partida</dd>
+  </dl>
+  <p>O ponto <code>-d·G</code> tem a mesma coordenada <code>x</code> de <code>d·G</code> e <code>y</code> com sinal trocado, e é exatamente a chave pública que a chave privada <code>n - d</code> produz. Uma chave <code>n - d</code> com <code>d</code> pequeno é tão fraca quanto <code>d</code>, por isso o verificador testa as duas.</p>
+</app-formula>
 <app-nota n="2">Não sei dizer como as chaves da eMudhra nasceram assim, e ninguém ainda sabe com certeza. A eMudhra atribui a falha a um erro de código na cerimônia que gerou um segundo par, fraco, dentro do HSM (bug, comentário 11), e escreve na sua página de status que ainda não confirmou a causa exata. Participantes do bug (comentários 31 e 33) argumentam que a geração interna de um HSM certificado não produz um escalar P-384 menor que 256 por conta própria, o que sugere que o valor foi fornecido de fora. É uma discussão aberta; trato como tal na seção final.</app-nota>
 <h2>O verificador de chaves fracas</h2>
 <p>A ideia: percorrer <code>d = 1..limite</code> e comparar com a chave pública. O jeito mais óbvio, usando <code>ec.derive_private_key(d, curva)</code> da biblioteca <code>cryptography</code>, funciona, mas medi <strong>2,2 ms por candidato</strong> na minha máquina: com <code>limite = 2**16</code> (65 536 valores), seriam cerca de 2,4 minutos <strong>por certificado</strong>. Para varrer um bundle inteiro, não serve.</p>
 <p>Reescrevi a busca como uma <strong>tabela</strong>: construo uma vez por curva um dicionário <code>x de d·G → d</code> somando <code>G</code> repetidamente em Python puro (aritmética em inteiros grandes, que o Python faz sem biblioteca), e cada certificado passa a custar uma consulta ao dicionário. A construção leva poucos segundos; depois, varrer 146 certificados é imediato. Para não confiar só na minha aritmética, o script confirma cada achado com <code>derive_private_key</code> (a biblioteca) e o arquivo <code>teste_chave_fraca.py</code> compara a tabela com a biblioteca em P-256 e P-384.</p>
+<app-formula titulo="Tabela de consulta">
+  <math display="block" class="tml-display" style="display:block math;"><mrow><mi>T</mi><mo>=</mo><mrow><mo fence="true" form="prefix" stretchy="false">&#123;</mo><mspace width="0.1667em"></mspace><mi>x</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>d</mi><mo>⋅</mo><mi>G</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mo>↦</mo><mi>d</mi><mspace width="0.2778em"></mspace><mo lspace="0.2222em" rspace="0.2222em">:</mo><mspace width="0.2778em"></mspace><mi>d</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mi>…</mi><mo separator="true">,</mo><msup><mn>2</mn><mn>16</mn></msup><mspace width="0.1667em"></mspace><mo fence="true" form="postfix" stretchy="false">&#125;</mo></mrow></mrow></math>
+  <dl>
+    <dt><math><mi>T</mi></math></dt>
+    <dd>a tabela, construída uma única vez por curva</dd>
+    <dt><math><mrow><mi>x</mi><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mi>P</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow></mrow></math></dt>
+    <dd>a coordenada <code>x</code> do ponto <code>P</code></dd>
+    <dt><math><mi>d</mi></math></dt>
+    <dd>o candidato a chave privada, de 1 até o limite (padrão 65 536)</dd>
+  </dl>
+  <p>Cada certificado vira uma consulta: tiro o <code>x</code> da chave pública e procuro em <code>T</code>. Se aparece, o valor associado é <code>d</code>, sem recalcular nenhum ponto.</p>
+</app-formula>
 <p>O núcleo, em <code>chave_fraca.py</code>:</p>
 <pre><code class="language-python">LIMITE_PADRAO <span class="token operator">=</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">16</span>
 
@@ -369,7 +426,7 @@ issuer=C=US, OU=emSign PKI, O=eMudhra Inc, CN=emSign ECC Root CA - C3</code></pr
 <li>curl — <a href="https://curl.se/docs/manpage.html" target="_blank" rel="noopener"><em>curl manpage</em></a>: <code>--cacert</code>, <code>--crlfile</code>, <code>--cert-status</code>, <code>--resolve</code>.</li>
 <li>OpenSSL — manuais <a href="https://docs.openssl.org/3.5/man1/openssl-s_client/" target="_blank" rel="noopener"><code>openssl-s_client</code></a> e <a href="https://docs.openssl.org/3.5/man1/openssl-verify/" target="_blank" rel="noopener"><code>openssl-verify</code></a> (3.5).</li>
 <li>certifi — <a href="https://github.com/certifi/python-certifi/issues/439" target="_blank" rel="noopener">issue #439</a> e pacote 2026.10.19 no PyPI (wheel baixado e <code>cacert.pem</code> lido).</li>
-<li>Código-fonte deste artigo — <code>chave_fraca.py</code>, <code>teste_chave_fraca.py</code>, <code>gerar_lab.py</code>, <code>baixar_intermediarias.sh</code>, <code>lab_revogacao.py</code>, <code>cliente_lab.js</code> e <code>ClienteLab.java</code> em <code>/curso-arm/exemplos/emudhra-chaves-de-ca-um-byte/</code>.</li>
+<li>Código-fonte deste artigo — <code>chave_fraca.py</code>, <code>teste_chave_fraca.py</code>, <code>gerar_lab.py</code>, <code>baixar_intermediarias.sh</code>, <code>lab_revogacao.py</code>, <code>cliente_lab.js</code> e <code>ClienteLab.java</code> em <code>/exemplos/emudhra-chaves-de-ca-um-byte/</code>.</li>
 </ul>
 `,
 })

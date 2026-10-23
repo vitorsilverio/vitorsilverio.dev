@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  margin: 1.5rem 0;
+}
+
+.caixa {
+  padding: 0.75rem 1rem 1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 10px;
+}
+
+.titulo {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+/* A fórmula rola dentro do painel; a página nunca rola na horizontal. */
+.eq {
+  max-width: 100%;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.25rem;
+  overflow-x: auto;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.eq:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.explicacao {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* O conteúdo projetado pertence ao post, não a este componente: precisa de ::ng-deep. */
+:host ::ng-deep .eq > math {
+  display: block math;
+  width: max-content;
+  min-width: 100%;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+:host ::ng-deep .explicacao dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 0.9rem;
+  align-items: baseline;
+  margin: 0 0 0.75rem;
+}
+
+:host ::ng-deep .explicacao dt {
+  font-size: 1.1rem;
+  text-align: right;
+}
+
+:host ::ng-deep .explicacao dd {
+  margin: 0;
+}
+
+:host ::ng-deep .explicacao > :last-child {
+  margin-bottom: 0;
+}
