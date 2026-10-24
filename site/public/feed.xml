@@ -6,7 +6,20 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Fri, 23 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 24 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Dentro do emulador: o Core</title>
+      <link>https://vitorsilverio.dev/artigos/dentro-do-emulador-o-core/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/dentro-do-emulador-o-core/</guid>
+      <pubDate>Sat, 24 Oct 2026 11:00:00 GMT</pubDate>
+      <description>O ArmCore do arm-jitter guarda todo o estado do processador emulado: registradores em banco por modo, CPSR/SPSR e a máquina de exceções que desvia o PC para um vetor. Este artigo abre o Core e dispara uma exceção SVC de verdade para ver a troca de modo acontecer.</description>
+      <category>ARM</category>
+      <category>Emulação</category>
+      <category>arm-jitter</category>
+      <category>ArmCore</category>
+      <category>Exceções</category>
+      <category>Tutorial</category>
+    </item>
     <item>
       <title>Chaves de CA com um byte: o que a falha da eMudhra ensina sobre confiança em certificados</title>
       <link>https://vitorsilverio.dev/artigos/emudhra-chaves-de-ca-um-byte/</link>

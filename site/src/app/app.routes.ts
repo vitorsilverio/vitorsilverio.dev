@@ -64,6 +64,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/php2shell-anatomia-rce-php').then((m) => m.ArticlePhp2shellAnatomiaRcePhp),
   'emudhra-chaves-de-ca-um-byte': () =>
     import('./pages/article-detail/posts/emudhra-chaves-de-ca-um-byte').then((m) => m.ArticleEmudhraChavesDeCaUmByte),
+  'dentro-do-emulador-o-core': () =>
+    import('./pages/article-detail/posts/dentro-do-emulador-o-core').then((m) => m.ArticleDentroDoEmuladorOCore),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

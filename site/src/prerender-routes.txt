@@ -33,18 +33,20 @@
 /artigos/ghidra-llm-binario-arm
 /artigos/php2shell-anatomia-rce-php
 /artigos/emudhra-chaves-de-ca-um-byte
+/artigos/dentro-do-emulador-o-core
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
 /tags/assembly
 /tags/armbox
+/tags/emulacao
 /tags/thumb
 /tags/decodificacao
-/tags/emulacao
 /tags/objdump
 /tags/thumb-2
 /tags/toolchain
 /tags/arm-box
+/tags/armcore
 /tags/arquitetura
 /tags/compilador
 /tags/condicionais
@@ -56,7 +58,6 @@
 /tags/and
 /tags/angular
 /tags/api
-/tags/armcore
 /tags/barrel-shifter
 /tags/bfc
 /tags/bfi
@@ -74,6 +75,7 @@
 /tags/emudhra
 /tags/engenharia-reversa
 /tags/eor
+/tags/excecoes
 /tags/flags
 /tags/frontend
 /tags/gcc

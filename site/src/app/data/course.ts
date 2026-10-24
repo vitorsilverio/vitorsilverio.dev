@@ -199,7 +199,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M4.1',
         title: 'Dentro do emulador: o Core',
         slug: 'dentro-do-emulador-o-core',
-        status: 'planned',
+        status: 'published',
         blurb: 'ArmCore: bancos, CPSR/SPSR, modos e "pular a BIOS".',
       },
       {
