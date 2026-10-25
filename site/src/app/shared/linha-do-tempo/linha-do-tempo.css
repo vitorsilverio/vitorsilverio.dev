@@ -1,0 +1,118 @@
+:host {
+  display: block;
+  margin: 1.5rem 0;
+}
+
+.caixa {
+  padding: 0.9rem 1rem 0.4rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.titulo {
+  margin: 0 0 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+/* O conteúdo projetado pertence ao post, não a este componente: precisa de ::ng-deep. */
+:host ::ng-deep ol {
+  --lt-marcador: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:host ::ng-deep ol > li {
+  position: relative;
+  margin: 0;
+  padding: 0 0 1.25rem 1.75rem;
+  overflow-wrap: anywhere;
+}
+
+/* Linha vertical: liga o marcador de cada evento ao do próximo. */
+:host ::ng-deep ol > li::before {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  bottom: -0.4rem;
+  left: calc(var(--lt-marcador) / 2 - 1px);
+  width: 2px;
+  background: var(--border);
+}
+
+:host ::ng-deep ol > li:last-child::before {
+  display: none;
+}
+
+/* Marcador: anel com o fundo da caixa, para a linha não aparecer por dentro. */
+:host ::ng-deep ol > li::after {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  left: 0;
+  width: var(--lt-marcador);
+  height: var(--lt-marcador);
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+}
+
+:host ::ng-deep .lt-data {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--accent-strong);
+}
+
+:host ::ng-deep .lt-titulo {
+  display: block;
+  margin: 0.1rem 0 0.25rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+:host ::ng-deep .lt-desc {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+:host ::ng-deep .lt-fonte {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+:host ::ng-deep .lt-fonte::after {
+  content: '↗' / '';
+}
+
+:host ::ng-deep .lt-fonte:hover {
+  color: var(--accent-strong);
+}
+
+:host ::ng-deep .lt-fonte:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (min-width: 48em) {
+  .caixa {
+    padding: 1.1rem 1.4rem 0.5rem;
+  }
+}

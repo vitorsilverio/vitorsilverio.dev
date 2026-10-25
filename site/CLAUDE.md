@@ -243,6 +243,28 @@ Coloque a fórmula **depois** do parágrafo que a introduz. Evite várias seguid
 rode o gerador com o rascunho (slug temporário, `--dry-run --print`) e cole o bloco `<app-formula>`;
 não escreva MathML à mão.
 
+**Linha do tempo** (`app-linha-do-tempo`, `src/app/shared/linha-do-tempo/`): sequência de eventos datados
+(lançamentos, versões, incidentes). Linha vertical com marcadores, data em destaque, título, descrição e
+link "fonte" opcional (nova aba, com aviso para leitor de tela). O gerador escreve o `<ol>` (um `<li>` com
+`<time datetime>` por evento) e o componente só projeta e estiliza: funciona sem JS, nos dois temas e a
+página nunca rola na horizontal. O conteúdo fica fora do glossário inline (`data-glossario="nao"`).
+
+No **rascunho** use a cerca `linha-do-tempo`; o resto da linha de abertura é o título (opcional). Uma
+linha por evento: `data | título | descrição | link`. Data em `AAAA`, `AAAA-MM` ou `AAAA-MM-DD` (exibida
+em pt-BR: "2025", "set. 2026", "16 set. 2026"). Título e descrição aceitam Markdown inline; o link
+(http/https) e a descrição são opcionais (termine a linha com ` |` para só omitir o link). A ordem é a
+do texto (escreva em ordem cronológica; fora de ordem gera aviso, sem reordenar). Linha malformada ou
+cerca sem eventos é ignorada com aviso; o gerador acrescenta o import `LinhaDoTempo`.
+
+````markdown
+```linha-do-tempo Versões do Java
+2025-11 | Título curto | Descrição com **Markdown** inline e `código`. | https://fonte.exemplo/post
+2026-09-16 | Outro evento | Descrição sem link. |
+```
+````
+
+Em post publicado, rode o gerador com o rascunho (`--dry-run --print`) e cole o bloco gerado.
+
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
 vira um termo clicável com a definição da própria tabela (no máximo 8 por artigo; termos genéricos em
