@@ -47,7 +47,7 @@ Dê nota de 0 a 3 para cada critério e some:
 
 ## Confidencialidade
 
-O repositório é **público**. A pauta é salva em `DOCS/pauta/PAUTA-AAAA-MM-DD.md`, que está no `.gitignore`. Nunca versione pauta, ranking ou ficha de artigo futuro, nem os cite em mensagem de commit. Rotina do autor: pauta todo dia; a série ARM fica para o fim de semana.
+O repositório é **público**. A pauta é salva em `DOCS/pauta/PAUTA-AAAA-MM-DD.md`, que está no `.gitignore`. Nunca versione pauta, ranking ou ficha de artigo futuro, nem os cite em mensagem de commit. Rotina do autor: pauta todo dia para os dias úteis; sábado é a lição da série ARM (uma por semana) e domingo é o mega artigo especial, longo e aprofundado. Se a pauta do dia só tiver temas fracos, diga isso no relatório: nesse caso o dia útil volta ao curso ARM. Tema forte com fôlego para um especial pode ser sugerido para domingo.
 
 Ao terminar a rodada, **atualize `DOCS/pauta/HISTORICO-TOP5.md`**: acrescente o top 5 do dia no topo e mantenha só os **últimos 7 dias** (remova os mais antigos). Esse arquivo também está no `.gitignore`.
 

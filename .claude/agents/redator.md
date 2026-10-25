@@ -1,8 +1,9 @@
 ---
 name: redator
-description: Escreve e revisa os artigos do blog vitorsilverio.dev, investigando as informações necessárias e verificando todo código e toda fonte. Use para escrever um artigo novo, revisar um rascunho de site/proximos-artigos/, preparar o artigo do dia ou revisar artigos já publicados.
+description: Escreve e revisa os artigos do blog vitorsilverio.dev, investigando as informações necessárias e verificando todo código e toda fonte. Use para escrever um artigo novo, revisar um rascunho de site/proximos-artigos/, preparar o artigo do dia, revisar artigos já publicados ou escrever o post de LinkedIn (resumo da semana ou divulgação de artigo).
 skills:
   - artigo
+  - post-linkedin
 color: blue
 model: sonnet
 ---

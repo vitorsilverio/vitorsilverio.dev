@@ -70,6 +70,10 @@ O GA4 lê `utm_*` sozinho (nenhum código no site). Para medir uma divulgação,
 
 Abrir qualquer página com `?interno=1` marca o navegador do autor (localStorage) e todo evento passa a levar `traffic_type=internal`; `?interno=0` desfaz. Só tem efeito depois de o filtro "Internal traffic" estar **ativo** no GA4 (passo a passo no relatório da entrega); dados anteriores ao filtro não são corrigidos.
 
+## Validar a rotina de publicação (em teste desde 2026-10-24)
+
+A rotina é: dias úteis = temas da pauta; sábado = uma lição da série ARM; domingo = mega artigo especial, longo. O autor vai mantê-la até os dados validarem (ou não) a estratégia. Em toda rodada de análise, compare os três grupos (especiais de domingo, lições de sábado, artigos de pauta) em visualizações, tempo ativo, marcos de leitura e origem do tráfego, e conclua uma de três coisas: **valida**, **contradiz** ou **ainda sem dados suficientes** (diga quantos artigos e dias cada grupo tem). Com poucas semanas, a resposta honesta é a terceira; não force conclusão.
+
 ## Limitações conhecidas
 
 - Os eventos de leitura (`leitura_*`) só existem depois do deploy da medição e só para quem aceitou cookies. Marcos de rolagem medem o conteúdo (`.prose`) chegando à tela, não leitura garantida: quem pula para o fim (tecla End) dispara todos os marcos. Artigos curtos que cabem na tela disparam todos de imediato. O tempo ativo (aba visível e interação nos últimos 30s) pode somar mais de um evento por visualização (aba escondida e voltada); a ferramenta divide a soma por visualizações, então a média continua correta.
