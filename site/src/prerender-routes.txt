@@ -34,6 +34,7 @@
 /artigos/php2shell-anatomia-rce-php
 /artigos/emudhra-chaves-de-ca-um-byte
 /artigos/dentro-do-emulador-o-core
+/artigos/llms-exploits-emuladores-recomps
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -43,6 +44,7 @@
 /tags/thumb
 /tags/decodificacao
 /tags/objdump
+/tags/seguranca
 /tags/thumb-2
 /tags/toolchain
 /tags/arm-box
@@ -52,8 +54,9 @@
 /tags/condicionais
 /tags/cpsr
 /tags/debug
+/tags/engenharia-reversa
+/tags/ia
 /tags/registradores
-/tags/seguranca
 /tags/trilha
 /tags/and
 /tags/angular
@@ -68,12 +71,13 @@
 /tags/carreira
 /tags/certificados
 /tags/chamada
+/tags/consoles
 /tags/criptografia
 /tags/cve
+/tags/decompilacao
 /tags/defesa
 /tags/elf
 /tags/emudhra
-/tags/engenharia-reversa
 /tags/eor
 /tags/excecoes
 /tags/flags
@@ -81,12 +85,12 @@
 /tags/gcc
 /tags/gdb
 /tags/ghidra
-/tags/ia
 /tags/instruction-set
 /tags/ir
 /tags/it
 /tags/java
 /tags/linker
+/tags/llm
 /tags/load-store
 /tags/mcp
 /tags/mod-php
@@ -99,9 +103,11 @@
 /tags/pipeline
 /tags/pki
 /tags/predicacao
+/tags/ps5
 /tags/python
 /tags/rce
 /tags/semihosting
 /tags/signals
 /tags/sub-rotinas
+/tags/switch-2
 /tags/tls

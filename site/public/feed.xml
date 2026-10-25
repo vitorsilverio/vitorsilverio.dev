@@ -6,7 +6,23 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Sat, 24 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 25 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>LLMs aceleram exploits de consoles e recompilações de jogos: a linha do tempo, com ressalvas</title>
+      <link>https://vitorsilverio.dev/artigos/llms-exploits-emuladores-recomps/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/llms-exploits-emuladores-recomps/</guid>
+      <pubDate>Sun, 25 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Entre setembro e outubro de 2026, o PS5 perdeu o projeto de Linux mais famoso da cena e o Switch 2 ganhou o primeiro jailbreak, ambos com LLMs no meio da história. Conto os acontecimentos em linhas do tempo (exploits, decompilações e recompilações, emuladores), com fonte em cada evento e as ressalvas que a empolgação costuma deixar de fora.</description>
+      <category>IA</category>
+      <category>LLM</category>
+      <category>Segurança</category>
+      <category>Emulação</category>
+      <category>Engenharia Reversa</category>
+      <category>Consoles</category>
+      <category>Decompilação</category>
+      <category>PS5</category>
+      <category>Switch 2</category>
+    </item>
     <item>
       <title>Dentro do emulador: o Core</title>
       <link>https://vitorsilverio.dev/artigos/dentro-do-emulador-o-core/</link>

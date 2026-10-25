@@ -250,4 +250,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'O ArmCore do arm-jitter guarda todo o estado do processador emulado: registradores em banco por modo, CPSR/SPSR e a máquina de exceções que desvia o PC para um vetor. Este artigo abre o Core e dispara uma exceção SVC de verdade para ver a troca de modo acontecer.',
     tags: ['ARM', 'Emulação', 'arm-jitter', 'ArmCore', 'Exceções', 'Tutorial'],
   },
+  {
+    slug: 'llms-exploits-emuladores-recomps',
+    title: 'LLMs aceleram exploits de consoles e recompilações de jogos: a linha do tempo, com ressalvas',
+    date: '2026-10-25',
+    readingTime: '30 min',
+    excerpt: 'Entre setembro e outubro de 2026, o PS5 perdeu o projeto de Linux mais famoso da cena e o Switch 2 ganhou o primeiro jailbreak, ambos com LLMs no meio da história. Conto os acontecimentos em linhas do tempo (exploits, decompilações e recompilações, emuladores), com fonte em cada evento e as ressalvas que a empolgação costuma deixar de fora.',
+    tags: ['IA', 'LLM', 'Segurança', 'Emulação', 'Engenharia Reversa', 'Consoles', 'Decompilação', 'PS5', 'Switch 2'],
+  },
 ];
