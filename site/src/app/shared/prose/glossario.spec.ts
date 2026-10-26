@@ -38,14 +38,14 @@ const MODELO = `
 })
 class Hospedeiro {}
 
-async function montar() {
+async function montar(modelo = MODELO) {
   const fixture = TestBed.createComponent(Hospedeiro);
   fixture.detectChanges();
   await fixture.whenStable();
   const el = fixture.nativeElement as HTMLElement;
   document.body.append(el);
   // O conteúdo chega depois, como o post lazy dentro do router-outlet.
-  el.querySelector('.prose')!.insertAdjacentHTML('afterbegin', MODELO);
+  el.querySelector('.prose')!.insertAdjacentHTML('afterbegin', modelo);
   await Promise.resolve();
   await Promise.resolve();
   const termos = () => [...el.querySelectorAll<HTMLElement>('.glos-termo')];
@@ -92,6 +92,22 @@ describe('Glossario', () => {
     const { el } = await montar();
     expect(el.querySelector('h2 .glos-termo, code .glos-termo, a .glos-termo')).toBeNull();
     expect(el.querySelector('table .glos-termo, #p4 .glos-termo')).toBeNull();
+  });
+
+  it('marca o termo dentro de <span lang="en">, mas não dentro de uma tradução', async () => {
+    const { el, termos } = await montar(`
+      <p>Veja <span lang="en">the breakpoint is set</span> e
+        <app-traducao><span lang="en">a watchpoint</span><span data-traducao>um ponto</span></app-traducao>.
+        Depois o watchpoint de novo.</p>
+      <h2>Glossário</h2>
+      <table><tbody>
+        <tr><th scope="row">Breakpoint</th><td>ponto de parada.</td></tr>
+        <tr><th scope="row">Watchpoint</th><td>ponto de observação.</td></tr>
+      </tbody></table>`);
+    const marcados = termos();
+    expect(marcados.map((t) => t.textContent)).toEqual(['breakpoint', 'watchpoint']);
+    expect(marcados[0].closest('[lang=en]')).not.toBeNull();
+    expect(marcados[1].closest('app-traducao')).toBeNull();
   });
 
   it('para no h2 Glossário: Referências e o resto ficam de fora', async () => {
@@ -189,6 +205,22 @@ describe('Glossario', () => {
     esc();
     expect(b.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(b);
+  });
+
+  it('apertar e arrastar no balão (selecionar o texto) não fecha', async () => {
+    const { termos, el } = await montar();
+    const t = termos()[0];
+    t.click();
+    const balao = el.querySelector<HTMLElement>(`#${t.getAttribute('aria-controls')}`)!;
+    const fora = el.querySelector<HTMLElement>('#fora')!;
+    // Apertar no texto do balão manda o foco para um ancestral focável (<main tabindex="-1">).
+    balao.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    t.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: fora }));
+    expect(t.getAttribute('aria-expanded')).toBe('true');
+    document.dispatchEvent(new Event('pointerup', { bubbles: true }));
+    // Depois de soltar, o foco saindo de verdade fecha.
+    t.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: fora }));
+    expect(t.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('toque ou clique fora fecha', async () => {

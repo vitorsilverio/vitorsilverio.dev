@@ -15,6 +15,10 @@ Teste prático: leia o artigo fingindo ter caído nele pelo Google. Toda vez que
 
 **Voz: primeira pessoa, como o autor.** O blog é do Vítor e ele revisa e publica tudo o que é escrito, então o texto fala por ele: "meus projetos", "compilei", "conferi no arm-box". Nunca "o autor deste blog", "o autor" ou "do autor do blog". Instruções ao leitor continuam em "você". Transcrições literais (respostas de um modelo, saídas de ferramenta) ficam como estão.
 
+**Bastidor da pesquisa não entra no texto.** Frases como "não consegui abrir a fonte", "uma busca que fiz indica", "deixei de fora X porque não achei a fonte primária" ou "a data vem do índice do blog" são relatório para o autor, não conteúdo para o leitor: vão no relatório final. No artigo, o que não foi confirmado simplesmente não aparece, e a referência leva só o dado conferido. Transparência que serve ao leitor continua valendo ("segundo o próprio autor", "versões conflitantes", "sem confirmação da empresa").
+
+**Outro artigo se cita pelo título, com link.** Nunca por apelido interno da rotina ("especial de domingo", "lição de sábado") nem por data relativa ("no domingo", "na semana passada", "o último artigo"): quem ler no futuro, isolado, não sabe que domingo foi. Escreva o título como texto do link, `[Título do artigo](/artigos/<slug>)`, em toda menção, inclusive no "Para ir além". A rotina de publicação é estratégia interna e não aparece no blog.
+
 Isso vale **mesmo quando já existe um rascunho pronto**. Rascunhos da fila foram escritos em sequência e costumam supor contexto dos anteriores. Sempre revise contra a estrutura abaixo antes de publicar.
 
 ## Estrutura obrigatória
@@ -41,6 +45,8 @@ Na ordem, com estes papéis (os títulos das seções podem variar, a função n
 8. Rodapé da trilha (`*Trilha: ... · Módulo X, lição Y.*`) quando for artigo de curso.
 
 **Fórmulas.** Quando uma fórmula é essencial ao entendimento (a relação que o artigo inteiro usa, a conta que justifica uma conclusão), não a deixe só em `código` no meio da frase: use a cerca `formula` (LaTeX, `---`, legenda `símbolo: significado`, `---`, parágrafo com o raciocínio; formato em `site/CLAUDE.md`). O gerador converte em MathML e importa `Formula`. A explicação abaixo é obrigatória no espírito: diga o que cada símbolo é e por que a fórmula vale. Notação trivial (`n - 1`, uma potência citada de passagem) continua inline. Poucas por artigo, nunca em sequência, sempre depois do parágrafo que a introduz.
+
+**Inglês no texto.** Todo trecho em inglês fica marcado com `lang="en"` (WCAG 3.1.2). Se o leitor precisa entender o que diz (citação, fala, trecho de fonte), escreva `:en[original]{tradução}`: o original ganha ícone de tradução e a **sua tradução, em primeira pessoa**, abre num balão. Inglês que não precisa de tradução (título de referência, citação curta) é só `:en[texto]`. **Não marque** nomes próprios e de produto (Photoshop, Claude, GitHub), termos técnicos consagrados no português (exploit, commit, SaaS) nem código (`code`/`pre`). Sintaxe completa em `site/CLAUDE.md`.
 
 **Linhas do tempo.** Para sequência de eventos datados (lançamentos, versões, incidentes) use a cerca `linha-do-tempo` (`data | título | descrição | link`, uma linha por evento, em ordem cronológica; data `AAAA`, `AAAA-MM` ou `AAAA-MM-DD`; formato em `site/CLAUDE.md`). Cada evento com fonte verificada; o gerador importa `LinhaDoTempo`.
 

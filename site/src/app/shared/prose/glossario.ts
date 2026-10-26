@@ -21,7 +21,7 @@ import { slugificar } from './prose.util';
 /** Onde um termo NÃO é marcado: títulos, código, tabelas, links, botões e componentes de conteúdo. */
 const IGNORAR =
   'h1, h2, h3, h4, h5, h6, code, pre, kbd, samp, a, button, table, figure, summary, app-nota, ' +
-  'app-objdump, app-bit-field, app-fluxo, .code-block, .glos-balao, .glos-termo, .visually-hidden, ' +
+  'app-objdump, app-bit-field, app-fluxo, app-traducao, .code-block, .glos-balao, .glos-termo, .visually-hidden, ' +
   '[data-glossario="nao"]';
 const BLOCOS = 'p, li, blockquote, td, th, dd, figcaption, div';
 
@@ -95,6 +95,8 @@ export class Glossario implements OnDestroy {
   private aberto: HTMLElement | null = null;
   /** Aberto por clique/teclado/toque: não fecha ao tirar o ponteiro de cima. */
   private fixado = false;
+  /** Botão do mouse apertado no termo ou no balão (ex.: selecionando o texto da definição). */
+  private pressionado = false;
   private timerAbrir?: ReturnType<typeof setTimeout>;
   private timerFechar?: ReturnType<typeof setTimeout>;
   private frame = 0;
@@ -303,6 +305,11 @@ export class Glossario implements OnDestroy {
     balao.hidden = true;
     balao.setAttribute('role', 'group');
     balao.setAttribute('aria-label', `Definição de ${texto}`);
+    // Mesmo cabeçalho do balão de tradução: ícone + rótulo, só visual (o balão já tem aria-label).
+    const rotulo = this.doc.createElement('span');
+    rotulo.className = 'glos-rotulo';
+    rotulo.setAttribute('aria-hidden', 'true');
+    rotulo.textContent = 'Glossário';
     const corpo = this.doc.createElement('span');
     corpo.className = 'glos-def';
     termo.definicao.childNodes.forEach((c) => corpo.append(c.cloneNode(true)));
@@ -315,7 +322,7 @@ export class Glossario implements OnDestroy {
       this.fechar(false);
       this.irParaLinha(termo.linha);
     });
-    balao.append(corpo, link);
+    balao.append(rotulo, corpo, link);
     return { controle, balao };
   }
 
@@ -430,11 +437,21 @@ export class Glossario implements OnDestroy {
       if (!this.aberto) return;
       const alvo = e.target as Node;
       const marca = this.marcas.get(this.aberto);
-      if (alvo === this.aberto || this.aberto.contains(alvo) || marca?.balao.contains(alvo)) return;
+      if (alvo === this.aberto || this.aberto.contains(alvo) || marca?.balao.contains(alvo)) {
+        // Quem aperta dentro está interagindo: fixa, para não fechar ao arrastar para fora.
+        this.pressionado = true;
+        if (marca?.balao.contains(alvo)) this.fixado = true;
+        return;
+      }
       this.fechar(false);
     });
+    const soltou = () => (this.pressionado = false);
+    on(this.doc, 'pointerup', soltou);
+    on(this.doc, 'pointercancel', soltou);
     on(this.el, 'focusout', (e) => {
-      if (!this.aberto) return;
+      // Clicar no texto do balão (que não é focável) manda o foco para o <main tabindex="-1">:
+      // não é o leitor saindo do balão.
+      if (!this.aberto || this.pressionado) return;
       const para = (e as FocusEvent).relatedTarget as Node | null;
       if (!para) return;
       const marca = this.marcas.get(this.aberto);

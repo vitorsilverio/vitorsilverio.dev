@@ -265,6 +265,31 @@ cerca sem eventos é ignorada com aviso; o gerador acrescenta o import `LinhaDoT
 
 Em post publicado, rode o gerador com o rascunho (`--dry-run --print`) e cole o bloco gerado.
 
+**Inglês no texto e tradução inline** (`app-traducao`, `src/app/shared/traducao/`): todo texto em inglês deve
+ficar dentro de um elemento com `lang="en"` (WCAG 3.1.2, o `<html>` é `pt-BR`). Duas formas, aparentadas, no meio
+de uma frase do Markdown:
+
+- `:en[original]{tradução}`: o original vira um controle (`role="button"`) com **ícone de tradução** (Lucide
+  `languages`) e a tradução do autor abre num balão (mouse, teclado, toque; Esc fecha e devolve o foco; mesmo
+  comportamento do glossário inline). HTML gerado:
+  `<app-traducao><span lang="en">original</span><span data-traducao>tradução</span></app-traducao>`.
+- `:en[original]`: só `<span lang="en">original</span>`, sem ícone e sem balão (título de referência em inglês,
+  citação curta que não precisa de tradução).
+
+Original e tradução aceitam Markdown inline (código, *itálico*, **negrito**, links), aspas e pontuação; para um `]`
+ou `}` literal dentro da parte, escreva `\]` e `\}`. Não usa `|` (funciona em célula de tabela) e não colide com
+links (`[a](b)`) nem com o glossário. Dois trechos vizinhos separados só por espaço recebem `&ngsp;` do gerador (o
+Angular descarta espaço entre tags). A tradução é escrita em primeira pessoa, como o resto do blog. **Não marque**:
+nomes próprios e de produto (Photoshop, Claude, GitHub), termos técnicos consagrados no português (exploit, commit,
+SaaS) e código. O gerador acrescenta o import `Traducao` só quando há tradução. Código em `scripts/lib/traducao.mjs`
+(extensão do `marked`, com teste). Posts publicados antes disso não foram migrados.
+
+O **glossário inline** não confunde os dois: o termo do glossário tem o ícone de livro aberto (Lucide `book-open`);
+dentro de `<span lang="en">` o termo continua marcado, e dentro de `app-traducao` ele é excluído de propósito
+(controle dentro de controle). **Ícones**: SVG do Lucide (licença ISC, trechos do Feather em MIT) embutidos em
+`src/styles.css` como `--icone-traducao` e `--icone-glossario` e aplicados com `mask` CSS: sem fonte de ícones, sem
+requisição, sem flash do nome do ícone, funcionam no pré-render e nos dois temas (a cor é `--accent-strong`).
+
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
 vira um termo clicável com a definição da própria tabela (no máximo 8 por artigo; termos genéricos em

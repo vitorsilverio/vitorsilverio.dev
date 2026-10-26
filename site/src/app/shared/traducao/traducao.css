@@ -1,0 +1,99 @@
+:host {
+  display: inline;
+}
+
+/* Ícone de tradução (Lucide "languages", --icone-traducao em styles.css) antes do original.
+   Decorativo: vem de CSS, não entra no texto copiado nem na árvore de acessibilidade. */
+.trad-controle {
+  cursor: pointer;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  text-decoration: underline dashed;
+  text-decoration-color: var(--accent-strong);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+}
+
+.trad-controle::before,
+.trad-rotulo::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.25em;
+  vertical-align: -0.15em;
+  background-color: var(--accent-strong);
+  -webkit-mask: var(--icone-traducao) center / contain no-repeat;
+  mask: var(--icone-traducao) center / contain no-repeat;
+}
+
+.trad-controle:hover,
+.trad-controle[aria-expanded='true'] {
+  background: var(--surface-2);
+}
+
+.trad-balao {
+  position: fixed;
+  z-index: 60;
+  display: block;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(24rem, calc(100% - 1rem));
+  padding: 0.75rem 0.9rem;
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.55;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.trad-balao[hidden] {
+  display: none;
+}
+
+.trad-rotulo {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.trad-rotulo::before {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+.trad-texto {
+  display: block;
+}
+
+@media (forced-colors: active) {
+  .trad-controle::before,
+  .trad-rotulo::before {
+    background-color: CanvasText;
+  }
+}
+
+@media print {
+  .trad-balao {
+    display: none;
+  }
+
+  .trad-controle {
+    text-decoration: none;
+  }
+
+  .trad-controle::before {
+    display: none;
+  }
+}

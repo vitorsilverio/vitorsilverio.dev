@@ -9,6 +9,7 @@ import { dimensoes, parseFiguras } from './lib/imagem.mjs';
 import { tagNota } from './lib/nota.mjs';
 import { tagLinhaDoTempo } from './lib/linha-do-tempo.mjs';
 import { tagFormula } from './lib/formula.mjs';
+import { extensaoTraducao, preservarEspacos, usaTraducao } from './lib/traducao.mjs';
 import { marcarMatriz, marcarTabela } from './lib/tabela-lista.mjs';
 
 const SITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -47,7 +48,7 @@ const USAGE =
 // --------------------------------------------------------------------------
 let mdMeta = null;
 let mdTemplate = null;
-let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false };
+let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
 
 if (opts.from) {
   const mdPath = resolve(SITE_ROOT, opts.from);
@@ -262,7 +263,7 @@ function escAttr(s) {
  *   "Artigos relacionados" que o próprio article-detail já renderiza)
  */
 function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
-  const usa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false };
+  const usa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
   const deadLinks = [];
   const candidatosBf = [];
   let autoObjdump = 0;
@@ -467,7 +468,10 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   };
 
   marked.setOptions({ gfm: true, breaks: false });
+  marked.use({ extensions: [extensaoTraducao()] });
   let html = marked.parse(src, { renderer, async: false });
+  html = preservarEspacos(html);
+  usa.traducao = usaTraducao(html);
 
   // Os .md de proximos-artigos usam `---` como divisória entre quase todas as
   // seções; no site o padrão é sem <hr>. Remove as réguas temáticas.
@@ -531,7 +535,7 @@ function buildPostComponent() {
   const safe = bodyHtml.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '$\\{');
 
   // O stub (sem `--from`) já vem com um link, então importa RouterLink.
-  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false };
+  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
 
   const nomes = [];
   const linhas = [];
@@ -558,6 +562,10 @@ function buildPostComponent() {
   if (usa.linhaDoTempo) {
     nomes.push('LinhaDoTempo');
     linhas.push("import { LinhaDoTempo } from '../../../shared/linha-do-tempo/linha-do-tempo';");
+  }
+  if (usa.traducao) {
+    nomes.push('Traducao');
+    linhas.push("import { Traducao } from '../../../shared/traducao/traducao';");
   }
   if (usa.objdump) {
     nomes.push('Objdump');

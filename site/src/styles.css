@@ -623,6 +623,14 @@ button.tag:hover {
   }
 }
 
+/* ---- Ícones (SVG do Lucide, https://lucide.dev, licença ISC; trechos derivados do Feather, MIT;
+   Copyright (c) Cole Bemis 2013-2022 e Lucide Contributors 2022). Usados como máscara CSS,
+   sem fonte de ícones e sem requisição: "languages" (tradução) e "book-open" (glossário). ---- */
+:root {
+  --icone-traducao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 6 6'/%3E%3Cpath d='m4 14 6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='m22 22-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E");
+  --icone-glossario: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 7v14'/%3E%3Cpath d='M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z'/%3E%3C/svg%3E");
+}
+
 /* ---- Glossário inline (diretiva appGlossario, criada em runtime): termo em botão
    discreto + balão com a definição. Os elementos nascem fora do template do Angular,
    por isso o estilo é global. ---- */
@@ -635,6 +643,26 @@ button.tag:hover {
   text-decoration-color: var(--accent-strong);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.22em;
+}
+
+.glos-termo::before,
+.glos-rotulo::before {
+  content: '';
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.25em;
+  vertical-align: -0.1em;
+  background-color: var(--accent-strong);
+  -webkit-mask: var(--icone-glossario) center / contain no-repeat;
+  mask: var(--icone-glossario) center / contain no-repeat;
+}
+
+@media (forced-colors: active) {
+  .glos-termo::before,
+  .glos-rotulo::before {
+    background-color: CanvasText;
+  }
 }
 
 .glos-termo:hover,
@@ -668,6 +696,19 @@ button.tag:hover {
   display: none;
 }
 
+.glos-rotulo {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.glos-rotulo::before {
+  width: 0.95em;
+  height: 0.95em;
+}
+
 .glos-def {
   display: block;
 }
@@ -696,5 +737,9 @@ button.tag:hover {
 
   .glos-termo {
     text-decoration: none;
+  }
+
+  .glos-termo::before {
+    display: none;
   }
 }
