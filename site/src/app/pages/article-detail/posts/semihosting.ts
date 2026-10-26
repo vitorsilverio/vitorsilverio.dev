@@ -6,7 +6,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
   imports: [RouterLink, Objdump],
   selector: 'app-article-semihosting',
   template: `
-<p>Um programa que roda direto no hardware (<em>bare-metal</em>, sem sistema operacional) não tem <code>printf</code>, não tem arquivos e não tem como dizer "terminei". Num microcontrolador real, quem ajuda é o depurador conectado à placa; num emulador, é o próprio emulador. O mecanismo que padroniza esse pedido de ajuda se chama <strong>semihosting</strong>: o programa executa uma instrução especial, o <em>host</em> (o depurador ou o emulador) percebe, faz o serviço pedido no computador e devolve o controle.</p>
+<p>Um programa que roda direto no hardware (<em lang="en">bare-metal</em>, sem sistema operacional) não tem <code>printf</code>, não tem arquivos e não tem como dizer "terminei". Num microcontrolador real, quem ajuda é o depurador conectado à placa; num emulador, é o próprio emulador. O mecanismo que padroniza esse pedido de ajuda se chama <strong>semihosting</strong>: o programa executa uma instrução especial, o <em>host</em> (o depurador ou o emulador) percebe, faz o serviço pedido no computador e devolve o controle.</p>
 <p>O <code>arm-box</code> é o programa de linha de comando desta trilha que executa binários ARM (<code>.elf</code>) no seu computador; por baixo dele, a biblioteca Java <code>arm-jitter</code> decodifica e executa as instruções. Um dos modos do <code>arm-box</code> emula um microcontrolador <strong>Cortex-M</strong> sem sistema operacional, e é nesse modo que o semihosting funciona. Neste artigo você vai:</p>
 <ol>
 <li>entender o protocolo: qual instrução dispara a chamada, o que vai em <code>R0</code> e em <code>R1</code> e quais são os números das operações;</li>
@@ -24,7 +24,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
 <li>abrir, escrever e fechar arquivos no host;</li>
 <li>informar que o programa terminou.</li>
 </ul>
-<p>Em vez de cada fabricante inventar um jeito, a Arm definiu uma interface única, a <em>Semihosting for AArch32 and AArch64</em>. O programa coloca o <strong>número da operação</strong> em <code>R0</code>, um <strong>parâmetro</strong> em <code>R1</code> e executa uma <strong>instrução de captura</strong> (<em>trap</em>). O host reconhece a instrução, executa a operação e, se houver resultado, devolve-o em <code>R0</code>. Quando uma operação não retorna nada, a especificação manda tratar <code>R0</code> como corrompido.</p>
+<p>Em vez de cada fabricante inventar um jeito, a Arm definiu uma interface única, a <em lang="en">Semihosting for AArch32 and AArch64</em>. O programa coloca o <strong>número da operação</strong> em <code>R0</code>, um <strong>parâmetro</strong> em <code>R1</code> e executa uma <strong>instrução de captura</strong> (<em lang="en">trap</em>). O host reconhece a instrução, executa a operação e, se houver resultado, devolve-o em <code>R0</code>. Quando uma operação não retorna nada, a especificação manda tratar <code>R0</code> como corrompido.</p>
 
 <h2>A instrução de captura depende do perfil</h2>
 <p>Não existe uma única instrução de semihosting. Ela muda conforme o perfil do processador e o conjunto de instruções (<code>A32</code> é o modo ARM de 32 bits, <code>T32</code> é o Thumb, <code>A64</code> é o AArch64). A tabela abaixo é a da especificação da Arm:</p>
@@ -142,7 +142,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> semihosti
 <p>Isso é uma escolha do emulador, não do protocolo: vale conhecê-la antes de reaproveitar código entre o <code>arm-box</code> e outro host de semihosting.</p>
 
 <h2>Semihosting não é syscall do Linux</h2>
-<p>Um erro comum é misturar semihosting com as chamadas de sistema do Linux ARM (a <strong>EABI</strong>, <em>Embedded Application Binary Interface</em>). Elas se parecem, pois ambas pedem um serviço ao ambiente, mas diferem em tudo o que importa:</p>
+<p>Um erro comum é misturar semihosting com as chamadas de sistema do Linux ARM (a <strong>EABI</strong>, <em lang="en">Embedded Application Binary Interface</em>). Elas se parecem, pois ambas pedem um serviço ao ambiente, mas diferem em tudo o que importa:</p>
 <div class="scroll-x">
   <table class="tabela-lista" role="table">
     <caption>Semihosting x chamadas de sistema Linux (EABI)</caption>
@@ -173,10 +173,10 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> semihosti
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Cortex-M</th><td role="cell" data-label="O que é">Família de processadores ARM para microcontroladores; só executa Thumb</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / T32</th><td role="cell" data-label="O que é">Conjunto de instruções compacto da ARM (16 e 32 bits)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BKPT</code></th><td role="cell" data-label="O que é">Instrução de ponto de parada (<em>breakpoint</em>); com imediato <code>0xAB</code> é a captura do semihosting no perfil M</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SVC</code></th><td role="cell" data-label="O que é">Chamada ao supervisor (<em>Supervisor Call</em>); usada em semihosting nos perfis A/R e nas chamadas de sistema Linux</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>HLT</code></th><td role="cell" data-label="O que é">Instrução de parada (<em>halt</em>); captura do semihosting no AArch64 (<code>HLT #0xF000</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SVC</code></th><td role="cell" data-label="O que é">Chamada ao supervisor (<em lang="en">Supervisor Call</em>); usada em semihosting nos perfis A/R e nas chamadas de sistema Linux</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>HLT</code></th><td role="cell" data-label="O que é">Instrução de parada (<em lang="en">halt</em>); captura do semihosting no AArch64 (<code>HLT #0xF000</code>)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Tabela de vetores</th><td role="cell" data-label="O que é">Tabela no início da memória de um Cortex-M: valor inicial do <code>SP</code> e endereços dos tratadores de exceção, incluindo o de reset</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MSP</code></th><td role="cell" data-label="O que é">Ponteiro de pilha principal (<em>Main Stack Pointer</em>) do Cortex-M</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>MSP</code></th><td role="cell" data-label="O que é">Ponteiro de pilha principal (<em lang="en">Main Stack Pointer</em>) do Cortex-M</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_WRITE0</code></th><td role="cell" data-label="O que é">Operação <code>0x04</code>: escreve uma string terminada em NUL</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_WRITEC</code></th><td role="cell" data-label="O que é">Operação <code>0x03</code>: escreve um caractere (o parâmetro é o endereço do byte)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SYS_EXIT</code></th><td role="cell" data-label="O que é">Operação <code>0x18</code>: informa o fim do programa; no AArch32 o parâmetro é um código de motivo</td></tr>
@@ -218,10 +218,10 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> semihosti
 
 <h2>Referências</h2>
 <ul>
-<li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/semihosting/semihosting.rst" target="_blank" rel="noopener"><em>Semihosting for AArch32 and AArch64</em></a> (Arm ABI, edição 2025Q4, 23 jan 2026). Tabela de instruções de captura por perfil, convenção de registradores (<code>R0</code> operação, <code>R1</code> parâmetro), números das operações, <code>SYS_WRITE0</code>, <code>SYS_WRITEC</code> e <code>SYS_EXIT</code> (código de motivo <code>0x20026</code>).</li>
+<li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/semihosting/semihosting.rst" target="_blank" rel="noopener"><em lang="en">Semihosting for AArch32 and AArch64</em></a> (Arm ABI, edição 2025Q4, 23 jan 2026). Tabela de instruções de captura por perfil, convenção de registradores (<code>R0</code> operação, <code>R1</code> parâmetro), números das operações, <code>SYS_WRITE0</code>, <code>SYS_WRITEC</code> e <code>SYS_EXIT</code> (código de motivo <code>0x20026</code>).</li>
 <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte do <code>arm-box</code></a> (GitHub): <code>baremetal/CortexMMachine.java</code> (tratador de semihosting, operações implementadas) e <code>testdata/hello-cortexm.c</code> (exemplo em C com <code>SYS_WRITE0</code> e <code>SYS_EXIT</code>).</li>
-<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0403/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-M</em></a> (DDI 0403). Tabela de vetores e codificação Thumb do <code>BKPT</code> no perfil M.</li>
-<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Machine Directives&quot;</a> (GNU Binutils). Diretivas <code>.syntax</code>, <code>.thumb</code>, <code>.thumb_func</code>, <code>.cpu</code> e <code>.ltorg</code> usadas no exemplo.</li>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0403/latest/" target="_blank" rel="noopener"><em lang="en">ARM Architecture Reference Manual, ARMv7-M</em></a> (DDI 0403). Tabela de vetores e codificação Thumb do <code>BKPT</code> no perfil M.</li>
+<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener"><em lang="en">Using as</em>, seção &quot;<span lang="en">ARM Machine Directives</span>&quot;</a> (GNU Binutils). Diretivas <code>.syntax</code>, <code>.thumb</code>, <code>.thumb_func</code>, <code>.cpu</code> e <code>.ltorg</code> usadas no exemplo.</li>
 </ul>
 <p><em>Exemplo verificado com devkitARM (<code>arm-none-eabi-as</code> / <code>-ld</code> / <code>-objdump</code>) e com o <code>arm-box</code> em <code>--arch=armv7m --machine=cortex-m</code>.</em></p>
 `,

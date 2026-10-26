@@ -62,7 +62,7 @@ import { BitField } from '../../../shared/bit-field/bit-field';
       nenhuma execução condicional) mas ganhando <strong>densidade de
       código</strong>: a Arm cita, no manual do ARM7TDMI, código Thumb com cerca
       de 65% do tamanho do código ARM equivalente. O número varia com o
-      programa. Em cache, menos bytes significa menos faltas (<em>misses</em>).
+      programa. Em cache, menos bytes significa menos faltas (<em lang="en">misses</em>).
     </p>
 
     <h2>Thumb-1 vs Thumb-2</h2>
@@ -84,7 +84,7 @@ import { BitField } from '../../../shared/bit-field/bit-field';
 
     <h2>Como o processador sabe qual modo</h2>
     <p>
-      O bit <strong>T</strong> (bit 5) do <strong>CPSR</strong> (<em>Current
+      O bit <strong>T</strong> (bit 5) do <strong>CPSR</strong> (<em lang="en">Current
       Program Status Register</em>, o registrador de estado) indica o estado de
       execução:
     </p>
@@ -94,7 +94,7 @@ import { BitField } from '../../../shared/bit-field/bit-field';
     <p>
       O estado inicial depende do sistema (num processador Cortex-M, por
       exemplo, o bit 0 do vetor de reset define o T; num Linux, o bit 0 do ponto
-      de entrada do ELF). A partir daí, o <code>BX</code> (<em>branch and
+      de entrada do ELF). A partir daí, o <code>BX</code> (<em lang="en">branch and
       exchange</em>) é quem troca: se o bit 0 do endereço-alvo é 1, entra em
       Thumb (T=1); se é 0, entra em ARM (T=0). Esse bit 0 não é parte do
       endereço (instruções são alinhadas), serve só de sinalizador. Misturar ARM
@@ -153,7 +153,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
       <strong>2 bytes cada</strong> (<code>0x2003</code>, <code>0x2104</code>,
       <code>0x2701</code>, <code>0xdf00</code>), enquanto as do ARM ocupam 4
       bytes. A exceção é o <code>BL</code>, que em Thumb-2 é uma instrução de
-      <strong>32 bits</strong> (dois <em>halfwords</em>, palavras de 16 bits:
+      <strong>32 bits</strong> (dois <em lang="en">halfwords</em>, palavras de 16 bits:
       <code>0xf000</code> + <code>0xf802</code>). Os dois programas terminam com o
       mesmo código de saída, que você confere no arm-box:
     </p>
@@ -246,7 +246,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
 
     <h2>A instrução de 32 bits: BL em Thumb-2</h2>
     <p>
-      O <code>BL</code> (<em>branch with link</em>: desvia e guarda o retorno em
+      O <code>BL</code> (<em lang="en">branch with link</em>: desvia e guarda o retorno em
       <code>lr</code>) não cabe em 16 bits porque precisa de um deslocamento
       grande. No Thumb-2 ele ocupa <strong>dois halfwords</strong> (4 bytes), com
       o deslocamento espalhado em vários campos:
@@ -311,7 +311,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
     <p>
       No ARM de 32 bits, quase toda instrução tem um campo de condição de 4
       bits. Na codificação de 16 bits não há espaço para isso. O Thumb-2 resolve
-      com a instrução <code>IT</code> (<em>If-Then</em>): ela torna condicionais
+      com a instrução <code>IT</code> (<em lang="en">If-Then</em>): ela torna condicionais
       as até quatro instruções seguintes (o "bloco IT"), e o estado do bloco
       fica em <code>IT[7:0]</code> no CPSR. Uma consequência arquitetural
       importante: dentro de um bloco <code>IT</code>, as instruções de
@@ -335,7 +335,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR e bit T</th><td role="cell" data-label="O que é">registrador de estado do programa; o bit 5 (T) diz se a CPU executa Thumb (1) ou ARM (0).</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interworking</th><td role="cell" data-label="O que é">misturar código ARM e Thumb no mesmo binário, trocando de estado com <code>BX</code>/<code>BLX</code>.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BX</code></th><td role="cell" data-label="O que é">desvia para o endereço de um registrador; o bit 0 do alvo escolhe o estado (1 = Thumb, 0 = ARM).</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BL</code></th><td role="cell" data-label="O que é">desvia e grava o endereço de retorno em <code>lr</code> (R14, <em>link register</em>).</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>BL</code></th><td role="cell" data-label="O que é">desvia e grava o endereço de retorno em <code>lr</code> (R14, <em lang="en">link register</em>).</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Bloco <code>IT</code></th><td role="cell" data-label="O que é">instrução Thumb-2 que torna condicionais até 4 instruções seguintes.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é">formato de arquivo executável do Linux; o arm-box carrega ELFs.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>.thumb</code> / <code>.thumb_func</code></th><td role="cell" data-label="O que é">diretivas do montador: gerar Thumb daqui em diante / marcar o símbolo seguinte como função Thumb (bit 0 = 1).</td></tr>
@@ -393,9 +393,9 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> thumb-e-t
 
     <h2>Referências</h2>
     <ul>
-      <li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): codificação das instruções Thumb (16/32 bits e a regra dos 5 bits altos), descrições de <code>BL</code>/<code>BLX</code> (imediato), <code>BX</code>, <code>ADD</code> (registrador) e <code>IT</code>, e os bits <code>T</code> e <code>IT</code> do CPSR. <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
-      <li>Arm — <em>ARM7TDMI Data Sheet</em> (DDI 0029): estado Thumb e a relação de tamanho entre código Thumb e ARM (cerca de 65%, segundo o manual).</li>
-      <li>GNU Binutils — <em>Using as</em>, ARM Directives (<code>.thumb</code>, <code>.arm</code>, <code>.thumb_func</code>, <code>.syntax</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
+      <li>Arm — <em lang="en">ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): codificação das instruções Thumb (16/32 bits e a regra dos 5 bits altos), descrições de <code>BL</code>/<code>BLX</code> (imediato), <code>BX</code>, <code>ADD</code> (registrador) e <code>IT</code>, e os bits <code>T</code> e <code>IT</code> do CPSR. <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+      <li>Arm — <em lang="en">ARM7TDMI Data Sheet</em> (DDI 0029): estado Thumb e a relação de tamanho entre código Thumb e ARM (cerca de 65%, segundo o manual).</li>
+      <li>GNU Binutils — <em lang="en">Using as</em>, ARM Directives (<code>.thumb</code>, <code>.arm</code>, <code>.thumb_func</code>, <code>.syntax</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
       <li>arm-jitter 1.4.0, <code>decoder/ThumbDecoder.java</code> (<code>decode</code> e <code>isThumb32Candidate</code>). <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">github.com/vitorsilverio/arm-jitter</a></li>
       <li>arm-box, <code>Main.java</code> (opções <code>--arch</code>) e <code>Armbox.java</code> (estado inicial Thumb pelo bit 0 do ponto de entrada). <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">github.com/vitorsilverio/armbox</a></li>
     </ul>

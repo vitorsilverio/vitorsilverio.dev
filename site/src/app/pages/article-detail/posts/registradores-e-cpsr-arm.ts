@@ -7,7 +7,7 @@ import { Nota } from '../../../shared/nota/nota';
   imports: [RouterLink, Objdump, Nota],
   selector: 'app-article-registradores-e-cpsr-arm',
   template: `
-<p>Abra o dump de registradores de um depurador ARM e aparecem <code>r0</code> a <code>r15</code>, <code>sp</code>, <code>lr</code>, <code>pc</code> e um <code>cpsr</code> com um valor hexadecimal como <code>0x600000df</code>. Para ler isso você precisa saber duas coisas que o ARM faz de um jeito próprio: o <strong>CPSR</strong> (<em>Current Program Status Register</em>) empacota flags, máscaras de interrupção e o modo de execução numa única palavra de 32 bits, e alguns registradores existem em <strong>várias cópias</strong>, uma por modo (<em>register banking</em>). Este artigo decodifica o CPSR bit a bit, explica os modos e o SPSR, e mostra como o emulador <code>arm-jitter</code> modela tudo isso.</p>
+<p>Abra o dump de registradores de um depurador ARM e aparecem <code>r0</code> a <code>r15</code>, <code>sp</code>, <code>lr</code>, <code>pc</code> e um <code>cpsr</code> com um valor hexadecimal como <code>0x600000df</code>. Para ler isso você precisa saber duas coisas que o ARM faz de um jeito próprio: o <strong>CPSR</strong> (<em lang="en">Current Program Status Register</em>) empacota flags, máscaras de interrupção e o modo de execução numa única palavra de 32 bits, e alguns registradores existem em <strong>várias cópias</strong>, uma por modo (<em lang="en">register banking</em>). Este artigo decodifica o CPSR bit a bit, explica os modos e o SPSR, e mostra como o emulador <code>arm-jitter</code> modela tudo isso.</p>
 <p>Contexto, para quem chegou agora: o <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">arm-jitter</a> é uma biblioteca Java que decodifica e executa instruções ARM (um emulador); o <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">arm-box</a> é um executor de linha de comando construído sobre ele, que carrega um programa ARM de 32 bits para Linux (arquivo ELF) e o roda, e que tem um servidor GDB embutido. Até o fim você vai:</p>
 <ol>
 <li>saber o papel de R0–R15 e o que cada bit do CPSR significa;</li>
@@ -25,11 +25,11 @@ import { Nota } from '../../../shared/nota/nota';
     </thead>
     <tbody role="rowgroup">
       <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R0–R3</th><td role="cell" data-label="Apelido">—</td><td role="cell" data-label="Papel">argumentos / retorno de função (AAPCS)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R4–R11</th><td role="cell" data-label="Apelido">—</td><td role="cell" data-label="Papel">variáveis locais; <em>callee-saved</em></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R4–R11</th><td role="cell" data-label="Apelido">—</td><td role="cell" data-label="Papel">variáveis locais; <em lang="en">callee-saved</em></td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R12</th><td role="cell" data-label="Apelido"><code>ip</code></td><td role="cell" data-label="Papel">intra-procedimento</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R13</th><td role="cell" data-label="Apelido"><code>sp</code></td><td role="cell" data-label="Papel">ponteiro de pilha</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R14</th><td role="cell" data-label="Apelido"><code>lr</code></td><td role="cell" data-label="Papel"><em>link register</em> — endereço de retorno gravado por <code>BL</code>/<code>BLX</code></td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R15</th><td role="cell" data-label="Apelido"><code>pc</code></td><td role="cell" data-label="Papel"><em>program counter</em></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R14</th><td role="cell" data-label="Apelido"><code>lr</code></td><td role="cell" data-label="Papel"><em lang="en">link register</em> — endereço de retorno gravado por <code>BL</code>/<code>BLX</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Registrador">R15</th><td role="cell" data-label="Apelido"><code>pc</code></td><td role="cell" data-label="Papel"><em lang="en">program counter</em></td></tr>
     </tbody>
   </table>
 </div>
@@ -40,7 +40,7 @@ import { Nota } from '../../../shared/nota/nota';
   No AArch64 não há essa herança: o <code>pc</code> não é um dos registradores numerados e não serve de operando comum. O <code>aarch64-none-elf-as</code> recusa <code>mov x0, pc</code>; para obter o endereço atual você usa <code>adr x0, .</code>, e o valor é o da própria instrução, sem o <code>+ 8</code> (o <code>objdump</code> mostrou <code>adr x0, 0</code>, deslocamento zero).
 </app-nota>
 <h2>O CPSR, bit a bit</h2>
-<p>O <em>Current Program Status Register</em> carrega o estado de execução. Os campos que importam nesta trilha:</p>
+<p>O <em lang="en">Current Program Status Register</em> carrega o estado de execução. Os campos que importam nesta trilha:</p>
 <div class="scroll-x">
   <table class="tabela-lista tabela-matriz" role="table">
     <thead role="rowgroup">
@@ -49,14 +49,14 @@ import { Nota } from '../../../shared/nota/nota';
     <tbody role="rowgroup">
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">31</th><td role="cell" data-label="Campo"><strong>N</strong></td><td role="cell" data-label="Significado">resultado negativo (bit 31 do resultado)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">30</th><td role="cell" data-label="Campo"><strong>Z</strong></td><td role="cell" data-label="Significado">resultado zero</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">29</th><td role="cell" data-label="Campo"><strong>C</strong></td><td role="cell" data-label="Significado"><em>carry</em> / <em>borrow</em> / último bit deslocado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">29</th><td role="cell" data-label="Campo"><strong>C</strong></td><td role="cell" data-label="Significado"><em lang="en">carry</em> / <em lang="en">borrow</em> / último bit deslocado</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">28</th><td role="cell" data-label="Campo"><strong>V</strong></td><td role="cell" data-label="Significado"><em>overflow</em> aritmético com sinal</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">27</th><td role="cell" data-label="Campo"><strong>Q</strong></td><td role="cell" data-label="Significado">saturação &quot;pegajosa&quot; (DSP/saturating); só limpa com <code>MSR</code></td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">26–25, 15–10</th><td role="cell" data-label="Campo"><strong>IT[7:0]</strong></td><td role="cell" data-label="Significado">estado do bloco <code>IT</code> (Thumb-2) — dividido em dois pedaços</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">24</th><td role="cell" data-label="Campo"><strong>J</strong></td><td role="cell" data-label="Significado">estado Jazelle (juntamente com T, define o estado de execução; fora do escopo desta trilha)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">19–16</th><td role="cell" data-label="Campo"><strong>GE[3:0]</strong></td><td role="cell" data-label="Significado"><em>greater-or-equal</em> por lane (SIMD paralelo do ARMv6)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">9</th><td role="cell" data-label="Campo"><strong>E</strong></td><td role="cell" data-label="Significado"><em>endianness</em> de dados (0 = little)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">8</th><td role="cell" data-label="Campo"><strong>A</strong></td><td role="cell" data-label="Significado">mascara <em>aborts</em> assíncronos</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">19–16</th><td role="cell" data-label="Campo"><strong>GE[3:0]</strong></td><td role="cell" data-label="Significado"><em lang="en">greater-or-equal</em> por lane (SIMD paralelo do ARMv6)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">9</th><td role="cell" data-label="Campo"><strong>E</strong></td><td role="cell" data-label="Significado"><em lang="en">endianness</em> de dados (0 = little)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Bits">8</th><td role="cell" data-label="Campo"><strong>A</strong></td><td role="cell" data-label="Significado">mascara <em lang="en">aborts</em> assíncronos</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">7</th><td role="cell" data-label="Campo"><strong>I</strong></td><td role="cell" data-label="Significado">mascara IRQ</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">6</th><td role="cell" data-label="Campo"><strong>F</strong></td><td role="cell" data-label="Significado">mascara FIQ</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Bits">5</th><td role="cell" data-label="Campo"><strong>T</strong></td><td role="cell" data-label="Significado">estado Thumb (1) ou ARM (0)</td></tr>
@@ -87,7 +87,7 @@ import { Nota } from '../../../shared/nota/nota';
 </div>
 <p><strong>R0–R7 e R15 (PC) nunca são bancados.</strong> É por isso que o handler de exceção pode ler os argumentos que estavam em R0–R3 sem mais cerimônia, mas precisa cuidar de R13/R14.</p>
 <h2>O SPSR</h2>
-<p>Ao entrar num modo de exceção, o hardware copia o CPSR de origem para o <strong>SPSR</strong> (<em>Saved PSR</em>) daquele modo, ajusta o CPSR (novo modo, mascara IRQ, etc.) e grava o endereço de retorno em R14. Para voltar, o handler restaura o CPSR a partir do SPSR e o PC a partir de R14 — tipicamente com <code>SUBS pc, lr, #offset</code> ou <code>RFE</code>. Os modos User e System <strong>não têm SPSR</strong> (não são alvos de exceção).</p>
+<p>Ao entrar num modo de exceção, o hardware copia o CPSR de origem para o <strong>SPSR</strong> (<em lang="en">Saved PSR</em>) daquele modo, ajusta o CPSR (novo modo, mascara IRQ, etc.) e grava o endereço de retorno em R14. Para voltar, o handler restaura o CPSR a partir do SPSR e o PC a partir de R14 — tipicamente com <code>SUBS pc, lr, #offset</code> ou <code>RFE</code>. Os modos User e System <strong>não têm SPSR</strong> (não são alvos de exceção).</p>
 <h2>Como o arm-jitter modela isso</h2>
 <p>O núcleo (<code>dev.vitorsilverio.armjitter.core</code>) tem uma classe para cada peça:</p>
 <p>Os trechos de Java abaixo foram conferidos contra o <code>arm-jitter</code> <strong>1.4.0</strong>. Os modos <code>HYP</code> e <code>MONITOR</code> do enum não existem na 1.3.0 (que tem só os sete modos clássicos).</p>
@@ -232,7 +232,7 @@ $4 = 10000000000000000000000011011111</code></pre>
 <p>Dois detalhes que esse trace revela sobre o <strong>emulador</strong>, não só sobre o ARM:</p>
 <ul>
 <li><strong>O CPSR inicial é <code>0xdf</code>.</strong> O byte baixo <code>11011111</code> é <code>I=1</code>, <code>F=1</code>, <code>M[4:0]=11111</code>: o <code>arm-box</code> monta o guest em <strong>modo System</strong> com IRQ e FIQ mascarados. Faz sentido para um runner user-mode — não há controlador de interrupção nem tabela de vetores. É o <code>ArmCore</code> sendo posto nesse estado antes do primeiro <code>step()</code>.</li>
-<li><strong>As flags são exatamente as esperadas.</strong> <code>movs r1, #0</code> liga só <strong>Z</strong> (<code>0x40000000</code>). <code>subs r3, r1, #1</code> faz <code>0 - 1 = 0xFFFFFFFF</code>: liga <strong>N</strong> (<code>0x80000000</code>), apaga Z, e — detalhe do ARM — na subtração <code>C</code> é o <em>NOT borrow</em>, então <code>0 - 1</code> deixa <strong>C = 0</strong>. É essa álgebra que o <code>evalCond</code> do <code>arm-jitter</code> consulta quando um <code>BGE</code>/<code>BLT</code> aparece logo depois.</li>
+<li><strong>As flags são exatamente as esperadas.</strong> <code>movs r1, #0</code> liga só <strong>Z</strong> (<code>0x40000000</code>). <code>subs r3, r1, #1</code> faz <code>0 - 1 = 0xFFFFFFFF</code>: liga <strong>N</strong> (<code>0x80000000</code>), apaga Z, e — detalhe do ARM — na subtração <code>C</code> é o <em lang="en">NOT borrow</em>, então <code>0 - 1</code> deixa <strong>C = 0</strong>. É essa álgebra que o <code>evalCond</code> do <code>arm-jitter</code> consulta quando um <code>BGE</code>/<code>BLT</code> aparece logo depois.</li>
 </ul>
 <h2>Glossário</h2>
 <div class="scroll-x">
@@ -242,10 +242,10 @@ $4 = 10000000000000000000000011011111</code></pre>
     </thead>
     <tbody role="rowgroup">
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">R0–R15</th><td role="cell" data-label="O que é">os 16 registradores de 32 bits visíveis ao programa; R13 = SP (pilha), R14 = LR (retorno), R15 = PC (contador de programa)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em>Procedure Call Standard for the Arm Architecture</em>: a convenção de chamada (R0–R3 para argumentos, R4–R11 preservados pela função chamada)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em>Current Program Status Register</em> — flags + modo + máscaras de interrupção</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SPSR</th><td role="cell" data-label="O que é"><em>Saved PSR</em> — cópia do CPSR feita ao entrar num modo de exceção</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (para subtração, ausência de empréstimo) e <em>overflow</em> com sinal</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em lang="en">Procedure Call Standard for the Arm Architecture</em>: a convenção de chamada (R0–R3 para argumentos, R4–R11 preservados pela função chamada)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em lang="en">Current Program Status Register</em> — flags + modo + máscaras de interrupção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SPSR</th><td role="cell" data-label="O que é"><em lang="en">Saved PSR</em> — cópia do CPSR feita ao entrar num modo de exceção</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em lang="en">carry</em> (para subtração, ausência de empréstimo) e <em>overflow</em> com sinal</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Banking</th><td role="cell" data-label="O que é">ter cópias físicas de um registrador, uma por modo</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo</th><td role="cell" data-label="O que é">estado privilegiado da CPU; cada exceção entra em um</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Exceção</th><td role="cell" data-label="O que é">evento (interrupção, chamada de sistema, falha de memória, instrução indefinida) que desvia a CPU para um tratador</td></tr>
@@ -291,11 +291,11 @@ $4 = 10000000000000000000000011011111</code></pre>
 </ul>
 <h2>Referências</h2>
 <ul>
-<li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo B1 (<em>System Level Programmers' Model</em>), seções sobre modos de processador, registradores do núcleo e registradores de status (CPSR/SPSR). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
-<li>Arm — <em>Procedure Call Standard for the Arm Architecture</em> (AAPCS32), seção 6.1.1 <em>Core registers</em>. <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">github.com/ARM-software/abi-aa</a></li>
+<li>Arm — <em lang="en">ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo B1 (<em lang="en">System Level Programmers' Model</em>), seções sobre modos de processador, registradores do núcleo e registradores de status (CPSR/SPSR). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+<li>Arm — <em lang="en">Procedure Call Standard for the Arm Architecture</em> (AAPCS32), seção 6.1.1 <em lang="en">Core registers</em>. <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">github.com/ARM-software/abi-aa</a></li>
 <li>arm-jitter 1.4.0, código-fonte: <code>core/CpuMode.java</code>, <code>core/CpsrRegister.java</code>, <code>core/ArmCore.java</code> (<code>register</code>, <code>bankedRegister</code>, <code>switchMode</code>, <code>spsr</code>) e <code>codegen/executor/IrAluExecutor.java</code> (uso de <code>evalCond</code>). <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">github.com/vitorsilverio/arm-jitter</a></li>
 <li>arm-box, <code>Armbox.java</code> (estado inicial do guest: modo System, IRQ e FIQ mascarados). <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">github.com/vitorsilverio/armbox</a></li>
-<li>GDB — <em>Continuing and Stepping</em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
+<li>GDB — <em lang="en">Continuing and Stepping</em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1, lição 1. Ver também: <a routerLink="/artigos/fundamentos-arm">Fundamentos da arquitetura ARM</a>, <a routerLink="/artigos/flags-e-desvios-condicionais">Flags e desvios condicionais</a>.</em></p>
 `,
