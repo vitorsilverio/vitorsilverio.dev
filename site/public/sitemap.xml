@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -57,6 +57,14 @@
   <url>
     <loc>https://vitorsilverio.dev/tags/decodificacao/</loc>
     <lastmod>2026-09-11</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/engenharia-reversa/</loc>
+    <lastmod>2026-10-26</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/ia/</loc>
+    <lastmod>2026-10-26</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/objdump/</loc>
@@ -103,12 +111,8 @@
     <lastmod>2026-09-03</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/engenharia-reversa/</loc>
-    <lastmod>2026-10-25</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/ia/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <loc>https://vitorsilverio.dev/tags/llm/</loc>
+    <lastmod>2026-10-26</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/registradores/</loc>
@@ -267,5 +271,10 @@
     <loc>https://vitorsilverio.dev/artigos/llms-exploits-emuladores-recomps/</loc>
     <lastmod>2026-10-25</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/llms-exploits-emuladores-recomps.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/llms-sala-limpa-artcraft/</loc>
+    <lastmod>2026-10-26</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/llms-sala-limpa-artcraft.png</image:loc></image:image>
   </url>
 </urlset>

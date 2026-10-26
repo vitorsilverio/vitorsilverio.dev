@@ -68,6 +68,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/dentro-do-emulador-o-core').then((m) => m.ArticleDentroDoEmuladorOCore),
   'llms-exploits-emuladores-recomps': () =>
     import('./pages/article-detail/posts/llms-exploits-emuladores-recomps').then((m) => m.ArticleLlmsExploitsEmuladoresRecomps),
+  'llms-sala-limpa-artcraft': () =>
+    import('./pages/article-detail/posts/llms-sala-limpa-artcraft').then((m) => m.ArticleLlmsSalaLimpaArtcraft),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

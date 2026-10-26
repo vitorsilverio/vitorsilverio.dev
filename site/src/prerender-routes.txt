@@ -35,6 +35,7 @@
 /artigos/emudhra-chaves-de-ca-um-byte
 /artigos/dentro-do-emulador-o-core
 /artigos/llms-exploits-emuladores-recomps
+/artigos/llms-sala-limpa-artcraft
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -43,6 +44,8 @@
 /tags/emulacao
 /tags/thumb
 /tags/decodificacao
+/tags/engenharia-reversa
+/tags/ia
 /tags/objdump
 /tags/seguranca
 /tags/thumb-2
@@ -54,13 +57,13 @@
 /tags/condicionais
 /tags/cpsr
 /tags/debug
-/tags/engenharia-reversa
-/tags/ia
+/tags/llm
 /tags/registradores
 /tags/trilha
 /tags/and
 /tags/angular
 /tags/api
+/tags/artcraft
 /tags/barrel-shifter
 /tags/bfc
 /tags/bfi
@@ -71,6 +74,7 @@
 /tags/carreira
 /tags/certificados
 /tags/chamada
+/tags/codigo-aberto
 /tags/consoles
 /tags/criptografia
 /tags/cve
@@ -90,7 +94,6 @@
 /tags/it
 /tags/java
 /tags/linker
-/tags/llm
 /tags/load-store
 /tags/mcp
 /tags/mod-php
@@ -106,8 +109,10 @@
 /tags/ps5
 /tags/python
 /tags/rce
+/tags/sala-limpa
 /tags/semihosting
 /tags/signals
+/tags/software
 /tags/sub-rotinas
 /tags/switch-2
 /tags/tls

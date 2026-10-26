@@ -258,4 +258,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Entre setembro e outubro de 2026, o PS5 perdeu o projeto de Linux mais famoso da cena e o Switch 2 ganhou o primeiro jailbreak, ambos com LLMs no meio da história. Conto os acontecimentos em linhas do tempo (exploits, decompilações e recompilações, emuladores), com fonte em cada evento e as ressalvas que a empolgação costuma deixar de fora.',
     tags: ['IA', 'LLM', 'Segurança', 'Emulação', 'Engenharia Reversa', 'Consoles', 'Decompilação', 'PS5', 'Switch 2'],
   },
+  {
+    slug: 'llms-sala-limpa-artcraft',
+    title: 'LLMs, engenharia reversa e sala limpa: o caso ArtCraft e para onde vai o valor do software',
+    date: '2026-10-26',
+    readingTime: '25 min',
+    excerpt: 'No início de outubro de 2026, um projeto chamado ArtCraft publicou como código aberto clones em Rust de ferramentas como o Photoshop, dizendo ter usado um LLM e uma "sala limpa". Reúno os fatos e as falas, separo o que é dado do que é opinião e defendo uma tese: se isso continuar, o software perde valor como produto, e o valor muda de lugar.',
+    tags: ['IA', 'LLM', 'Engenharia Reversa', 'Código Aberto', 'Sala Limpa', 'ArtCraft', 'Software'],
+  },
 ];
