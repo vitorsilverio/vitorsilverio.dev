@@ -84,7 +84,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       pedaço mais importante é o <em>topo</em>: os 4 bits mais significativos
       (o primeiro nibble) são o campo <strong>cond</strong> — a condição de
       execução. <code>1110</code> (hex <code>E</code>) significa
-      <em>always</em> (executa sempre). É por isso que quase toda instrução
+      <em><span lang="en">always</span></em> (executa sempre). É por isso que quase toda instrução
       começa com <code>e…</code>.
     </p>
     <app-nota n="1">
@@ -305,7 +305,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
         Curiosidade: o <code>ldr r0, =nums</code> do início virou
         <code>e59f0034</code> (<code>ldr r0, [pc, #52]</code>) — como o
         endereço não cabe no imediato de 8 bits do <code>mov</code>, o
-        assembler o guardou numa <em>literal pool</em> e fez leitura relativa ao
+        assembler o guardou numa <em><span lang="en">literal pool</span></em> e fez leitura relativa ao
         PC. Daí a importância de separar "valor" de "endereço".
       </li>
     </ul>
@@ -355,14 +355,14 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
       <tbody role="rowgroup">
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">ferramenta do GNU binutils que desmonta um binário: mostra endereço, bytes e mnemônico de cada instrução.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Mnemônico</th><td role="cell" data-label="O que é">nome simbólico da instrução (<code>add</code>, <code>cmp</code>, <code>bge</code>).</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato do executável que o ligador gera.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em><span lang="en">Executable and Linkable Format</span></em>: formato do executável que o ligador gera.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Little-endian</th><td role="cell" data-label="O que é">ordem de bytes em que o menos significativo vem primeiro na memória.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Nibble</th><td role="cell" data-label="O que é">grupo de 4 bits, um dígito hexadecimal.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cond</code></th><td role="cell" data-label="O que é">campo de 4 bits do topo da instrução ARM com a condição de execução.</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: registrador de status, com as flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em><span lang="en">Current Program Status Register</span></em>: registrador de status, com as flags <code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Imediato</th><td role="cell" data-label="O que é">constante embutida na própria instrução.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pós-indexado</th><td role="cell" data-label="O que é">modo de <code>ldr</code>/<code>str</code> que usa o endereço da base e só depois soma o deslocamento a ela (<code>[r0], #4</code>).</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Literal pool</em></th><td role="cell" data-label="O que é">área de constantes ao lado do código, lida com <code>ldr rX, [pc, #n]</code>.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em><span lang="en">Literal pool</span></em></th><td role="cell" data-label="O que é">área de constantes ao lado do código, lida com <code>ldr rX, [pc, #n]</code>.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
       </tbody>
     </table></div>
@@ -390,8 +390,8 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> sum.elf</
     </p>
     <h2>Referências</h2>
     <ul>
-      <li>Arm — <em>Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C), capítulo "ARM Instruction Set Encoding" (codificação do campo <code>cond</code>, de processamento de dados, load/store e desvios). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
-      <li>GNU Binutils — <em>objdump (GNU Binary Utilities)</em>, opções <code>-d</code> e <code>-s</code>. <a href="https://sourceware.org/binutils/docs/binutils/objdump.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/binutils/objdump.html</a></li>
+      <li>Arm — <em><span lang="en">Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</span></em> (DDI 0406C), capítulo "<span lang="en">ARM Instruction Set Encoding</span>" (codificação do campo <code>cond</code>, de processamento de dados, load/store e desvios). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
+      <li>GNU Binutils — <em><span lang="en">objdump (GNU Binary Utilities)</span></em>, opções <code>-d</code> e <code>-s</code>. <a href="https://sourceware.org/binutils/docs/binutils/objdump.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/binutils/objdump.html</a></li>
       <li>Código-fonte do <code>arm-jitter</code> v1.3.0 — <code>core/src/main/java/dev/vitorsilverio/armjitter/decoder/ArmDecoder.java</code> (método <code>decode</code>).</li>
     </ul>
   `,

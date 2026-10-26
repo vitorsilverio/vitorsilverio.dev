@@ -11,8 +11,8 @@ import { Nota } from '../../../shared/nota/nota';
       Um laço <code>while</code> ou um <code>if</code> em C vira, em assembly
       ARM, uma comparação seguida de um desvio condicional. Mas como o
       processador <strong>decide</strong> se o desvio acontece? A resposta
-      está nos 4 bits do topo do <strong>CPSR</strong> (<em>Current Program
-      Status Register</em>, o registrador de status): <code>N, Z, C, V</code>,
+      está nos 4 bits do topo do <strong>CPSR</strong> (<em><span lang="en">Current Program
+      Status Register</span></em>, o registrador de status): <code>N, Z, C, V</code>,
       as <em>flags</em>. Cada <code>CMP</code> atualiza essas flags, e cada
       desvio condicional (<code>bge</code>, <code>blt</code>,
       <code>bne</code>…) consulta exatamente elas.
@@ -339,12 +339,12 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
         <tr role="row"><th scope="col" role="columnheader">Termo</th><th scope="col" role="columnheader">O que é</th></tr>
       </thead>
       <tbody role="rowgroup">
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: registrador de status de 32 bits; guarda as flags, o modo do processador e outros bits de controle.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CPSR</code></th><td role="cell" data-label="O que é"><em><span lang="en">Current Program Status Register</span></em>: registrador de status de 32 bits; guarda as flags, o modo do processador e outros bits de controle.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flag</th><td role="cell" data-label="O que é">bit de status escrito por instruções com <code>S = 1</code> e lido por instruções condicionais.</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>N</code> / <code>Z</code> / <code>C</code> / <code>V</code></th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (vai-um; na subtração, o inverso do <em>borrow</em>) e <em>overflow</em> com sinal.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>N</code> / <code>Z</code> / <code>C</code> / <code>V</code></th><td role="cell" data-label="O que é">negativo, zero, <em><span lang="en">carry</span></em> (vai-um; na subtração, o inverso do <em><span lang="en">borrow</span></em>) e <em><span lang="en">overflow</span></em> com sinal.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>CMP</code></th><td role="cell" data-label="O que é">compara dois valores: subtrai, descarta o resultado e mantém só as flags.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Complemento de dois</th><td role="cell" data-label="O que é">representação de inteiros com sinal em que o bit 31 indica o sinal.</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Borrow</em></th><td role="cell" data-label="O que é">&quot;empréstimo&quot; de uma subtração sem sinal quando o minuendo é menor que o subtraendo.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em><span lang="en">Borrow</span></em></th><td role="cell" data-label="O que é">&quot;empréstimo&quot; de uma subtração sem sinal quando o minuendo é menor que o subtraendo.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Desvio condicional</th><td role="cell" data-label="O que é">instrução de salto (<code>beq</code>, <code>bne</code>, <code>bge</code>, <code>blt</code>…) que só desvia se a condição sobre as flags for verdadeira.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cond</code></th><td role="cell" data-label="O que é">campo de 4 bits do topo da instrução ARM que escolhe a condição.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code> / <code>arm-box</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM / programa de linha de comando que a usa para rodar executáveis ARM.</td></tr>
@@ -371,7 +371,7 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
     <p>
       O <code>CPSR</code> guarda quatro flags: <code>N</code> (sinal do
       resultado), <code>Z</code> (resultado zero), <code>C</code> (vai-um, ou
-      o inverso do <em>borrow</em> na subtração) e <code>V</code> (estouro com
+      o inverso do <em><span lang="en">borrow</span></em> na subtração) e <code>V</code> (estouro com
       sinal). O <code>CMP</code> é uma subtração que só escreve essas flags, e
       cada desvio condicional é uma expressão lógica sobre elas:
       <code>bge</code> é <code>N == V</code>, <code>bne</code> é
@@ -389,8 +389,8 @@ cmp r0=7, r1=3 -&gt; N=0 Z=0 C=1 V=0 | GE=true LT=false HS=true LO=false</code><
     </ul>
     <h2>Referências</h2>
     <ul>
-      <li>Arm — <em>Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): tabela de condições (<code>cond</code>) e definição de <code>CMP</code>/<code>SUB</code>, incluindo o cálculo de <code>C</code> e <code>V</code> (pseudocódigo <code>AddWithCarry</code>). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
-      <li>Martin Korth — <em>GBATEK</em>, seção "ARM CPU Flags &amp; Condition Field (cond)". <a href="https://problemkaputt.de/gbatek.htm" target="_blank" rel="noopener">problemkaputt.de/gbatek.htm</a></li>
+      <li>Arm — <em><span lang="en">Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</span></em> (DDI 0406C): tabela de condições (<code>cond</code>) e definição de <code>CMP</code>/<code>SUB</code>, incluindo o cálculo de <code>C</code> e <code>V</code> (pseudocódigo <code>AddWithCarry</code>). <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
+      <li>Martin Korth — <em>GBATEK</em>, seção "<span lang="en">ARM CPU Flags &amp; Condition Field (cond)</span>". <a href="https://problemkaputt.de/gbatek.htm" target="_blank" rel="noopener">problemkaputt.de/gbatek.htm</a></li>
       <li>Código-fonte do <code>arm-jitter</code> v1.3.0 — <code>core/src/main/java/dev/vitorsilverio/armjitter/core/CpsrRegister.java</code> e <code>Condition.java</code>.</li>
     </ul>
   `,
