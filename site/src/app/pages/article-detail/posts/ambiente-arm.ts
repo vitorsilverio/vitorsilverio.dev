@@ -222,7 +222,7 @@ arm-none-eabi-ld <span class="token parameter variable">-Ttext</span><span class
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Maven Central</th><td role="cell" data-label="O que é">Repositório público de onde o Maven baixa bibliotecas, como o <code>arm-jitter</code></td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>~/.m2</code></th><td role="cell" data-label="O que é">Repositório local do Maven, na sua máquina</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Uber-jar</em></th><td role="cell" data-label="O que é">Arquivo <code>.jar</code> executável que contém também todas as dependências</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato dos executáveis Linux</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em lang="en">Executable and Linkable Format</em>: formato dos executáveis Linux</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>objdump</code></th><td role="cell" data-label="O que é">Ferramenta que desmonta um executável, mostrando endereço, bytes e mnemônico de cada instrução</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">devkitARM</th><td role="cell" data-label="O que é">Toolchain ARM do projeto devkitPro, voltado a consoles; inclui as ferramentas <code>arm-none-eabi-*</code></td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>PATH</code></th><td role="cell" data-label="O que é">Variável de ambiente com as pastas onde o shell procura comandos</td></tr>
@@ -283,13 +283,13 @@ arm-none-eabi-ld <span class="token parameter variable">-Ttext</span><span class
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>armbox</code></a>. Uso (<code>mvn package</code>, <code>java -jar target/armbox.jar</code>), uber-jar e <code>testdata/hello.elf</code>/<code>hello.s</code>.</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte e README do <code>arm-jitter</code></a>. Requisito de Java 25 e build com Maven.</li>
       <li><a href="https://central.sonatype.com/artifact/dev.vitorsilverio/arm-jitter/1.4.0" target="_blank" rel="noopener"><code>dev.vitorsilverio:arm-jitter:1.4.0</code> no Maven Central</a>. A versão da qual o <code>armbox</code> depende.</li>
-      <li>Apache Maven — <a href="https://maven.apache.org/install.html" target="_blank" rel="noopener"><em>Installing Apache Maven</em></a>.</li>
-      <li>SDKMAN! — <a href="https://sdkman.io/jdks/" target="_blank" rel="noopener"><em>Java Distributions</em></a>. Distribuições de JDK instaláveis, incluindo o JetBrains.</li>
+      <li>Apache Maven — <a href="https://maven.apache.org/install.html" target="_blank" rel="noopener"><em lang="en">Installing Apache Maven</em></a>.</li>
+      <li>SDKMAN! — <a href="https://sdkman.io/jdks/" target="_blank" rel="noopener"><em lang="en">Java Distributions</em></a>. Distribuições de JDK instaláveis, incluindo o JetBrains.</li>
       <li>Homebrew — fórmulas <a href="https://formulae.brew.sh/formula/openjdk@25" target="_blank" rel="noopener"><code>openjdk&#64;25</code></a> e <a href="https://formulae.brew.sh/formula/arm-none-eabi-gcc" target="_blank" rel="noopener"><code>arm-none-eabi-gcc</code></a>.</li>
       <li>Debian — pacotes <a href="https://packages.debian.org/stable/gcc-arm-none-eabi" target="_blank" rel="noopener"><code>gcc-arm-none-eabi</code></a>, <a href="https://packages.debian.org/stable/binutils-arm-none-eabi" target="_blank" rel="noopener"><code>binutils-arm-none-eabi</code></a> e <a href="https://packages.debian.org/stable/gdb-multiarch" target="_blank" rel="noopener"><code>gdb-multiarch</code></a>.</li>
       <li>MSYS2 — <a href="https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-arm-none-eabi-gcc" target="_blank" rel="noopener">pacote <code>mingw-w64-ucrt-x86_64-arm-none-eabi-gcc</code></a>.</li>
       <li>Scoop — <a href="https://github.com/ScoopInstaller/Java" target="_blank" rel="noopener">bucket <code>java</code></a>, que contém o pacote <code>openjdk25</code>.</li>
-      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/" target="_blank" rel="noopener"><em>Using as</em></a> (GNU Binutils). O montador <code>arm-none-eabi-as</code>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/" target="_blank" rel="noopener"><em lang="en">Using as</em></a> (GNU Binutils). O montador <code>arm-none-eabi-as</code>.</li>
     </ul>
     <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 0, lição 2.</em></p>
   `,

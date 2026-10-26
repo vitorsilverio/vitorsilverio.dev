@@ -208,17 +208,17 @@ depois do set, sem ler: 1
     <h2>Referências</h2>
     <ul>
       <li>
-        Angular — <a href="https://angular.dev/guide/signals" target="_blank" rel="noopener"><em>Signals</em></a> (angular.dev). Leitura e escrita de signals, <code>computed</code> preguiçoso, memoizado e somente leitura, e quando usar <code>effect</code>.
+        Angular — <a href="https://angular.dev/guide/signals" target="_blank" rel="noopener"><em lang="en">Signals</em></a> (angular.dev). Leitura e escrita de signals, <code>computed</code> preguiçoso, memoizado e somente leitura, e quando usar <code>effect</code>.
       </li>
       <li>
         Angular — <a href="https://angular.dev/api/core/computed" target="_blank" rel="noopener"><code>computed</code></a> e
         <a href="https://angular.dev/api/core/effect" target="_blank" rel="noopener"><code>effect</code></a>, referência da API (angular.dev). O <code>effect</code> está marcado como estável desde a v20.0.
       </li>
       <li>
-        Angular — <a href="https://angular.dev/guide/zoneless" target="_blank" rel="noopener"><em>Angular without ZoneJS (Zoneless)</em></a> (angular.dev). Zoneless como padrão a partir do Angular 21 e o papel dos signals na detecção de mudanças.
+        Angular — <a href="https://angular.dev/guide/zoneless" target="_blank" rel="noopener"><em lang="en">Angular without ZoneJS (Zoneless)</em></a> (angular.dev). Zoneless como padrão a partir do Angular 21 e o papel dos signals na detecção de mudanças.
       </li>
       <li>
-        Angular — <a href="https://angular.dev/guide/signals/linked-signal" target="_blank" rel="noopener"><em>Dependent state with linkedSignal</em></a> (angular.dev).
+        Angular — <a href="https://angular.dev/guide/signals/linked-signal" target="_blank" rel="noopener"><em lang="en">Dependent state with linkedSignal</em></a> (angular.dev).
       </li>
     </ul>
   `,
