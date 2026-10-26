@@ -236,7 +236,7 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
 
     <h2>Glossário: papéis dos registradores (AAPCS)</h2>
     <p>
-      A <strong>AAPCS</strong> (<em>Procedure Call Standard for the Arm Architecture</em>) é o
+      A <strong>AAPCS</strong> (<em lang="en">Procedure Call Standard for the Arm Architecture</em>) é o
       contrato que C, assembly e o <code>arm-box</code> respeitam para
       conversarem. Resumo:
     </p>
@@ -246,7 +246,7 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
         <tr role="row"><th scope="col" role="columnheader">Registrador</th><th scope="col" role="columnheader">Papel</th></tr>
       </thead>
       <tbody role="rowgroup">
-        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r0–r3</code></th><td role="cell" data-label="Papel">Argumentos de entrada (e <code>r0</code> leva o valor de retorno). Chegam em registrador, sem usar a pilha; são <em>scratch</em>: a função pode sobrescrevê-los.</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r0–r3</code></th><td role="cell" data-label="Papel">Argumentos de entrada (e <code>r0</code> leva o valor de retorno). Chegam em registrador, sem usar a pilha; são <em lang="en">scratch</em>: a função pode sobrescrevê-los.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r4–r11</code></th><td role="cell" data-label="Papel">Callee-saved: a função pode usar, mas precisa restaurar antes de voltar (via pilha). A exceção é o <code>r9</code>, cujo papel depende da plataforma.</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r12</code></th><td role="cell" data-label="Papel"><code>ip</code> — temporário intra-procedimento (pode ser mexido).</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Registrador"><code>r13</code></th><td role="cell" data-label="Papel"><code>sp</code> — ponteiro da pilha.</td></tr>
@@ -295,17 +295,17 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
       </thead>
       <tbody role="rowgroup">
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Sub-rotina / função</th><td role="cell" data-label="O que é">trecho de código que é chamado, executa e devolve o controle a quem chamou</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>LR</code> (r14)</th><td role="cell" data-label="O que é"><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SP</code> (r13)</th><td role="cell" data-label="O que é"><em>stack pointer</em>: aponta para o topo da pilha</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>PC</code> (r15)</th><td role="cell" data-label="O que é"><em>program counter</em>: endereço da instrução em execução (lê-se como endereço + 8 em ARM)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>LR</code> (r14)</th><td role="cell" data-label="O que é"><em lang="en">link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>SP</code> (r13)</th><td role="cell" data-label="O que é"><em lang="en">stack pointer</em>: aponta para o topo da pilha</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>PC</code> (r15)</th><td role="cell" data-label="O que é"><em lang="en">program counter</em>: endereço da instrução em execução (lê-se como endereço + 8 em ARM)</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pilha</th><td role="cell" data-label="O que é">região de memória usada como pilha LIFO; no ARM cresce para endereços menores</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Callee-saved</th><td role="cell" data-label="O que é">registrador que a função chamada deve devolver intacto (<code>r4</code>–<code>r11</code>, com ressalva do <code>r9</code>)</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Scratch</em></th><td role="cell" data-label="O que é">registrador que a função pode sobrescrever sem salvar (<code>r0</code>–<code>r3</code>, <code>r12</code>)</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em>leaf</em>)</th><td role="cell" data-label="O que é">função que não chama outra e por isso não precisa salvar o <code>lr</code></td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em lang="en">Scratch</em></th><td role="cell" data-label="O que é">registrador que a função pode sobrescrever sem salvar (<code>r0</code>–<code>r3</code>, <code>r12</code>)</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em lang="en">leaf</em>)</th><td role="cell" data-label="O que é">função que não chama outra e por isso não precisa salvar o <code>lr</code></td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Interworking</th><td role="cell" data-label="O que é">troca entre ARM e Thumb por <code>bx</code>, usando o bit 0 do endereço</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Writeback</em></th><td role="cell" data-label="O que é">o <code>!</code>: grava o endereço calculado de volta no registrador base</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
-        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao sistema ao terminar</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em lang="en">Writeback</em></th><td role="cell" data-label="O que é">o <code>!</code>: grava o endereço calculado de volta no registrador base</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em lang="en">Executable and Linkable Format</em>: formato de executável do toolchain GNU e do Linux</td></tr>
+        <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em lang="en">Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao sistema ao terminar</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code> / <code>arm-jitter</code></th><td role="cell" data-label="O que é">executor Java de ELFs ARM de 32 bits / biblioteca Java que emula o processador</td></tr>
         <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Stub GDB</th><td role="cell" data-label="O que é">servidor do protocolo remoto do GDB embutido no <code>arm-box</code> (<code>--gdb=PORT</code>)</td></tr>
       </tbody>
@@ -355,9 +355,9 @@ pc             0x8024              0x8024 &lt;_start+12&gt;</code></pre>
 
     <h2>Referências</h2>
     <ul>
-      <li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener"><em>Procedure Call Standard for the Arm Architecture</em></a> (AAPCS32): seção 6.1.1 <em>Core registers</em> (papéis de <code>r0</code>–<code>r15</code>, <code>r4</code>–<code>r8</code>/<code>r10</code>/<code>r11</code> preservados, <code>r9</code> dependente da plataforma) e seção 6.2.1.2 <em>Stack constraints at a public interface</em> (<code>SP</code> alinhado a 8 bytes).</li>
-      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C), capítulo A8: descrições de <code>B</code>/<code>BL</code>, <code>BX</code>, <code>STM</code>/<code>LDM</code> (e os apelidos <code>PUSH</code>/<code>POP</code>) e a codificação dos campos <code>cond</code>, <code>P</code>, <code>U</code>, <code>W</code>, <code>L</code>.</li>
-      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils).</li>
+      <li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener"><em lang="en">Procedure Call Standard for the Arm Architecture</em></a> (AAPCS32): seção 6.1.1 <em lang="en">Core registers</em> (papéis de <code>r0</code>–<code>r15</code>, <code>r4</code>–<code>r8</code>/<code>r10</code>/<code>r11</code> preservados, <code>r9</code> dependente da plataforma) e seção 6.2.1.2 <em lang="en">Stack constraints at a public interface</em> (<code>SP</code> alinhado a 8 bytes).</li>
+      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em lang="en">ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C), capítulo A8: descrições de <code>B</code>/<code>BL</code>, <code>BX</code>, <code>STM</code>/<code>LDM</code> (e os apelidos <code>PUSH</code>/<code>POP</code>) e a codificação dos campos <code>cond</code>, <code>P</code>, <code>U</code>, <code>W</code>, <code>L</code>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em lang="en">Using as</em>, seção &quot;<span lang="en">ARM Opcodes</span>&quot;</a> (GNU Binutils).</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>arm-box</code></a> (GitHub): opção <code>--gdb=PORT</code> e a lista de binários de teste, incluindo o <code>busybox</code> estático.</li>
     </ul>
   `,
