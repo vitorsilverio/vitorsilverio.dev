@@ -185,22 +185,22 @@ import { Nota } from '../../../shared/nota/nota';
             <tr role="row"><th scope="col" role="columnheader">Código</th><th scope="col" role="columnheader">Condição</th></tr>
           </thead>
           <tbody role="rowgroup">
-            <tr role="row"><td role="cell" data-label="Código">0000</td><td role="cell" data-label="Condição">EQ (Equal)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0001</td><td role="cell" data-label="Condição">NE (Not Equal)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0010</td><td role="cell" data-label="Condição">CS / HS (Carry Set / Unsigned Higher or Same)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0011</td><td role="cell" data-label="Condição">CC / LO (Carry Clear / Unsigned Lower)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0100</td><td role="cell" data-label="Condição">MI (Minus / Negative)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0101</td><td role="cell" data-label="Condição">PL (Plus / Positive or Zero)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0110</td><td role="cell" data-label="Condição">VS (Overflow)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">0111</td><td role="cell" data-label="Condição">VC (No Overflow)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1000</td><td role="cell" data-label="Condição">HI (Unsigned Higher)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1001</td><td role="cell" data-label="Condição">LS (Unsigned Lower or Same)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1010</td><td role="cell" data-label="Condição">GE (Signed Greater than or Equal)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1011</td><td role="cell" data-label="Condição">LT (Signed Less Than)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1100</td><td role="cell" data-label="Condição">GT (Signed Greater Than)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1101</td><td role="cell" data-label="Condição">LE (Signed Less than or Equal)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1110</td><td role="cell" data-label="Condição">AL (Always / Unconditional)</td></tr>
-            <tr role="row"><td role="cell" data-label="Código">1111</td><td role="cell" data-label="Condição">Reserved / Unpredictable</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0000</td><td role="cell" data-label="Condição">EQ (<span lang="en">Equal</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0001</td><td role="cell" data-label="Condição">NE (<span lang="en">Not Equal</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0010</td><td role="cell" data-label="Condição">CS / HS (<span lang="en">Carry Set / Unsigned Higher or Same</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0011</td><td role="cell" data-label="Condição">CC / LO (<span lang="en">Carry Clear / Unsigned Lower</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0100</td><td role="cell" data-label="Condição">MI (<span lang="en">Minus / Negative</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0101</td><td role="cell" data-label="Condição">PL (<span lang="en">Plus / Positive or Zero</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0110</td><td role="cell" data-label="Condição">VS (<span lang="en">Overflow</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">0111</td><td role="cell" data-label="Condição">VC (<span lang="en">No Overflow</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1000</td><td role="cell" data-label="Condição">HI (<span lang="en">Unsigned Higher</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1001</td><td role="cell" data-label="Condição">LS (<span lang="en">Unsigned Lower or Same</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1010</td><td role="cell" data-label="Condição">GE (<span lang="en">Signed Greater than or Equal</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1011</td><td role="cell" data-label="Condição">LT (<span lang="en">Signed Less Than</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1100</td><td role="cell" data-label="Condição">GT (<span lang="en">Signed Greater Than</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1101</td><td role="cell" data-label="Condição">LE (<span lang="en">Signed Less than or Equal</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1110</td><td role="cell" data-label="Condição">AL (<span lang="en">Always / Unconditional</span>)</td></tr>
+            <tr role="row"><td role="cell" data-label="Código">1111</td><td role="cell" data-label="Condição"><span lang="en">Reserved / Unpredictable</span></td></tr>
           </tbody>
         </table></div>
       </li>
@@ -425,10 +425,10 @@ import { Nota } from '../../../shared/nota/nota';
 
     <h2>Referências</h2>
     <ul>
-      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C). A instrução <code>IT</code> (codificação T1, <code>firstcond</code> e <code>mask</code>), o <code>ITSTATE</code> com o pseudocódigo <code>ITAdvance()</code>, e a regra <code>setflags = !InITBlock()</code> das codificações Thumb de 16 bits.</li>
-      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Options.html" target="_blank" rel="noopener"><em>Using as</em>, "ARM Options"</a> (GNU Binutils). As opções <code>-march</code>, <code>-mthumb</code> e <code>-mimplicit-it</code>.</li>
+      <li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em><span lang="en">ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</span></em></a> (DDI 0406C). A instrução <code>IT</code> (codificação T1, <code>firstcond</code> e <code>mask</code>), o <code>ITSTATE</code> com o pseudocódigo <code>ITAdvance()</code>, e a regra <code>setflags = !InITBlock()</code> das codificações Thumb de 16 bits.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Options.html" target="_blank" rel="noopener"><em><span lang="en">Using as</span></em>, "<span lang="en">ARM Options</span>"</a> (GNU Binutils). As opções <code>-march</code>, <code>-mthumb</code> e <code>-mimplicit-it</code>.</li>
       <li>Vítor Silvério — <code>arm-jitter</code> 1.5.0: <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/ir/StandardIrBlockLifter.java" target="_blank" rel="noopener"><code>StandardIrBlockLifter.java</code></a> (tradução do bloco <code>IT</code> para IR), <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/core/ItState.java" target="_blank" rel="noopener"><code>ItState.java</code></a> (expansão e avanço do <code>ITSTATE</code>) e <a href="https://github.com/vitorsilverio/arm-jitter/blob/v1.5.0/core/src/main/java/dev/vitorsilverio/armjitter/decoder/DecodedInstruction.java" target="_blank" rel="noopener"><code>DecodedInstruction.java</code></a> (<code>withItContext</code>).</li>
-      <li>Free Software Foundation — <a href="https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html" target="_blank" rel="noopener"><em>Using the GNU Compiler Collection</em>, &quot;ARM Options&quot;</a>. A opção <code>-mrestrict-it</code>.</li>
+      <li>Free Software Foundation — <a href="https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html" target="_blank" rel="noopener"><em><span lang="en">Using the GNU Compiler Collection</span></em>, &quot;<span lang="en">ARM Options</span>&quot;</a>. A opção <code>-mrestrict-it</code>.</li>
     </ul>
     <p><em>Bytes e saídas conferidos com devkitARM (<code>arm-none-eabi-as</code> 2.46, <code>-ld</code>, <code>-objdump</code>) e <code>arm-box</code> com <code>arm-jitter</code> 1.5.0, nos três backends.</em></p>
   `,
