@@ -70,6 +70,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/llms-exploits-emuladores-recomps').then((m) => m.ArticleLlmsExploitsEmuladoresRecomps),
   'llms-sala-limpa-artcraft': () =>
     import('./pages/article-detail/posts/llms-sala-limpa-artcraft').then((m) => m.ArticleLlmsSalaLimpaArtcraft),
+  'node2shell-brotli-node-python': () =>
+    import('./pages/article-detail/posts/node2shell-brotli-node-python').then((m) => m.ArticleNode2shellBrotliNodePython),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

@@ -36,6 +36,7 @@
 /artigos/dentro-do-emulador-o-core
 /artigos/llms-exploits-emuladores-recomps
 /artigos/llms-sala-limpa-artcraft
+/artigos/node2shell-brotli-node-python
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -44,10 +45,10 @@
 /tags/emulacao
 /tags/thumb
 /tags/decodificacao
+/tags/seguranca
 /tags/engenharia-reversa
 /tags/ia
 /tags/objdump
-/tags/seguranca
 /tags/thumb-2
 /tags/toolchain
 /tags/arm-box
@@ -56,8 +57,12 @@
 /tags/compilador
 /tags/condicionais
 /tags/cpsr
+/tags/cve
 /tags/debug
+/tags/defesa
 /tags/llm
+/tags/python
+/tags/rce
 /tags/registradores
 /tags/trilha
 /tags/and
@@ -70,6 +75,7 @@
 /tags/bic
 /tags/binario
 /tags/bits
+/tags/brotli
 /tags/c
 /tags/carreira
 /tags/certificados
@@ -77,9 +83,7 @@
 /tags/codigo-aberto
 /tags/consoles
 /tags/criptografia
-/tags/cve
 /tags/decompilacao
-/tags/defesa
 /tags/elf
 /tags/emudhra
 /tags/eor
@@ -98,6 +102,7 @@
 /tags/mcp
 /tags/mod-php
 /tags/modos
+/tags/node-js
 /tags/openssl
 /tags/orr
 /tags/pessoal
@@ -107,12 +112,11 @@
 /tags/pki
 /tags/predicacao
 /tags/ps5
-/tags/python
-/tags/rce
 /tags/sala-limpa
 /tags/semihosting
 /tags/signals
 /tags/software
 /tags/sub-rotinas
+/tags/supply-chain
 /tags/switch-2
 /tags/tls

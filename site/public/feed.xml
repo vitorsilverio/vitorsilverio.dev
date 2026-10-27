@@ -6,7 +6,22 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Mon, 26 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Node2Shell: a falha de Brotli que atinge Node.js e Python, e como saber se você está exposto</title>
+      <link>https://vitorsilverio.dev/artigos/node2shell-brotli-node-python/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/node2shell-brotli-node-python/</guid>
+      <pubDate>Tue, 27 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Em 27 de outubro de 2026 a CISA incluiu o CVE-2026-111497, a falha do decodificador Brotli apelidada de Node2Shell, no catálogo de vulnerabilidades exploradas. Explico por que um erro permanente tratado como &quot;preciso de mais dados&quot; vira escrita fora dos limites, por que os números de severidade divergem (9,2, High e 8,1), quem descomprime Brotli sem você pedir e como conferir Node, Python e imagens de contêiner, com um teste que validei em quatro versões do Node.</description>
+      <category>Segurança</category>
+      <category>CVE</category>
+      <category>RCE</category>
+      <category>Node.js</category>
+      <category>Python</category>
+      <category>Brotli</category>
+      <category>Defesa</category>
+      <category>Supply chain</category>
+    </item>
     <item>
       <title>LLMs, engenharia reversa e sala limpa: o caso ArtCraft e para onde vai o valor do software</title>
       <link>https://vitorsilverio.dev/artigos/llms-sala-limpa-artcraft/</link>

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -59,6 +59,10 @@
     <lastmod>2026-09-11</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
+    <lastmod>2026-10-27</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/engenharia-reversa/</loc>
     <lastmod>2026-10-26</lastmod>
   </url>
@@ -69,10 +73,6 @@
   <url>
     <loc>https://vitorsilverio.dev/tags/objdump/</loc>
     <lastmod>2026-09-09</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
-    <lastmod>2026-10-25</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/thumb-2/</loc>
@@ -107,12 +107,28 @@
     <lastmod>2026-09-06</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/cve/</loc>
+    <lastmod>2026-10-27</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/debug/</loc>
     <lastmod>2026-09-03</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/defesa/</loc>
+    <lastmod>2026-10-27</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/llm/</loc>
     <lastmod>2026-10-26</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/python/</loc>
+    <lastmod>2026-10-27</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/rce/</loc>
+    <lastmod>2026-10-27</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/registradores/</loc>
@@ -276,5 +292,10 @@
     <loc>https://vitorsilverio.dev/artigos/llms-sala-limpa-artcraft/</loc>
     <lastmod>2026-10-26</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/llms-sala-limpa-artcraft.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/node2shell-brotli-node-python/</loc>
+    <lastmod>2026-10-27</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/node2shell-brotli-node-python.png</image:loc></image:image>
   </url>
 </urlset>

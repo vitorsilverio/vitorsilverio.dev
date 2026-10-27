@@ -266,4 +266,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'No início de outubro de 2026, um projeto chamado ArtCraft publicou como código aberto clones em Rust de ferramentas como o Photoshop, dizendo ter usado um LLM e uma "sala limpa". Reúno os fatos e as falas, separo o que é dado do que é opinião e defendo uma tese: se isso continuar, o software perde valor como produto, e o valor muda de lugar.',
     tags: ['IA', 'LLM', 'Engenharia Reversa', 'Código Aberto', 'Sala Limpa', 'ArtCraft', 'Software'],
   },
+  {
+    slug: 'node2shell-brotli-node-python',
+    title: 'Node2Shell: a falha de Brotli que atinge Node.js e Python, e como saber se você está exposto',
+    date: '2026-10-27',
+    readingTime: '25 min',
+    excerpt: 'Em 27 de outubro de 2026 a CISA incluiu o CVE-2026-111497, a falha do decodificador Brotli apelidada de Node2Shell, no catálogo de vulnerabilidades exploradas. Explico por que um erro permanente tratado como "preciso de mais dados" vira escrita fora dos limites, por que os números de severidade divergem (9,2, High e 8,1), quem descomprime Brotli sem você pedir e como conferir Node, Python e imagens de contêiner, com um teste que validei em quatro versões do Node.',
+    tags: ['Segurança', 'CVE', 'RCE', 'Node.js', 'Python', 'Brotli', 'Defesa', 'Supply chain'],
+  },
 ];
