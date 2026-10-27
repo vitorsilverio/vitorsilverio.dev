@@ -30,7 +30,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
 N        [fetch]  [decode] [execute]
 N+1               [fetch]  [decode] [execute]
 N+2                        [fetch]  [decode] [execute]</code></pre>
-<p>Consequência que vaza para o programador: o PC (que vive no estágio de <em>fetch</em>) está sempre <strong>duas instruções à frente</strong> da que executa. Ler R15 em estado ARM devolve <code>endereço_da_instrução + 8</code>; em Thumb, <code>+ 4</code>. Não é bug, é contrato de arquitetura — código que faz <code>add r0, pc, #x</code> conta com isso.</p>
+<p>Consequência que vaza para o programador: o PC (que vive no estágio de <em><span lang="en">fetch</span></em>) está sempre <strong>duas instruções à frente</strong> da que executa. Ler R15 em estado ARM devolve <code>endereço_da_instrução + 8</code>; em Thumb, <code>+ 4</code>. Não é bug, é contrato de arquitetura — código que faz <code>add r0, pc, #x</code> conta com isso.</p>
 <h3>Provando no arm-box</h3>
 <p>O programa <a href="/curso-arm/exemplos/pcoffset.s"><code>pcoffset.s</code></a> (<a href="/curso-arm/exemplos/pcoffset.elf"><code>.elf</code></a>):</p>
 <pre><code class="language-armasm">_start:
@@ -113,7 +113,7 @@ $5 = 0x4</code></pre>
 </div>
 <p><code>step()</code> devolve a <code>DecodedInstruction</code> que acabou de rodar; <code>step(int n)</code> é só um <code>for</code> chamando <code>step()</code>. É o <strong>caminho frio</strong>: sem JIT, sem cache de bloco, uma instrução de cada vez. É de propósito — esse caminho é o <strong>oráculo de semântica</strong> (invariante G1 do projeto): todo backend compilado tem que produzir exatamente o mesmo estado que ele.</p>
 <h2>O interpretador é a referência</h2>
-<p><code>interpreter.stepWithResult(this)</code> (classe <code>ArmInterpreter</code>) faz o <em>decode</em> (via <code>ArmDecoder</code>, assunto do <a routerLink="/artigos/anatomia-instrucao-arm">artigo de anatomia</a>), converte a instrução decodificada numa representação intermediária (IR) e a executa com o <code>InterpretedCodeEmitter</code>: escreve <code>Rd</code>, atualiza NZCV se <code>S</code>, mexe no PC se for branch. Nada de otimização, nada de tradução para bytecode: é a definição executável do que cada instrução significa.</p>
+<p><code>interpreter.stepWithResult(this)</code> (classe <code>ArmInterpreter</code>) faz o <em><span lang="en">decode</span></em> (via <code>ArmDecoder</code>, assunto do <a routerLink="/artigos/anatomia-instrucao-arm">artigo de anatomia</a>), converte a instrução decodificada numa representação intermediária (IR) e a executa com o <code>InterpretedCodeEmitter</code>: escreve <code>Rd</code>, atualiza NZCV se <code>S</code>, mexe no PC se for branch. Nada de otimização, nada de tradução para bytecode: é a definição executável do que cada instrução significa.</p>
 <p>O JIT (compilação em tempo de execução) entra por outro método, <code>runBlock(JitRuntime)</code>, que executa um <strong>bloco inteiro</strong> de instruções compilado de uma vez. É mais rápido, mas atômico: o <code>runBlock</code> chama só os ganchos <code>beforeBlock</code>/<code>afterBlock</code>; <code>beforeInstruction</code>/<code>afterInstruction</code> <strong>não disparam</strong> dentro de um bloco. Por isso o servidor GDB do arm-box usa <code>step()</code> (uma instrução por vez) no modo <code>--gdb</code>, enquanto a execução normal usa <code>runBlocks</code> com o JIT: fidelidade instrução a instrução só existe no caminho frio.</p>
 <h2>Observando de fora: <code>ArmTraceListener</code></h2>
 <p>Para inspecionar sem acoplar o núcleo a logging, existe a interface <code>ArmTraceListener</code>. Todos os métodos têm implementação vazia (<code>default</code>), então você só sobrescreve o que quer:</p>
@@ -126,7 +126,7 @@ $5 = 0x4</code></pre>
     <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">onMemoryAbort</span><span class="token punctuation">(</span><span class="token class-name">ArmCore</span> core<span class="token punctuation">,</span> <span class="token keyword">int</span> instructionAddress<span class="token punctuation">,</span> <span class="token class-name">MemoryTranslationException</span> fault<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
     <span class="token comment">// + sobrecargas de onMemoryAbort para falhas do MPU (PmsaAccessException, Pmsav8AccessException)</span>
 <span class="token punctuation">&#125;</span></code></pre>
-<p>Com <code>core.setTraceListener(...)</code> você recebe um <em>callback</em> com o <code>pc</code> antes e a <code>DecodedInstruction</code> depois de cada passo. O arquivo <a href="/curso-arm/exemplos/java/FetchDecodeExecuteTrace.java"><code>FetchDecodeExecuteTrace.java</code></a> roda as três instruções de <code>pcoffset.s</code> direto no <code>ArmCore</code>, sem o arm-box, e imprime o PC antes e depois de cada passo:</p>
+<p>Com <code>core.setTraceListener(...)</code> você recebe um <em><span lang="en">callback</span></em> com o <code>pc</code> antes e a <code>DecodedInstruction</code> depois de cada passo. O arquivo <a href="/curso-arm/exemplos/java/FetchDecodeExecuteTrace.java"><code>FetchDecodeExecuteTrace.java</code></a> roda as três instruções de <code>pcoffset.s</code> direto no <code>ArmCore</code>, sem o arm-box, e imprime o PC antes e depois de cada passo:</p>
 <pre><code class="language-bash">javac <span class="token parameter variable">-cp</span> arm-jitter-1.4.0.jar FetchDecodeExecuteTrace.java
 <span class="token function">java</span>  <span class="token parameter variable">-cp</span> <span class="token string">"arm-jitter-1.4.0.jar;."</span> FetchDecodeExecuteTrace   <span class="token comment"># Linux/macOS: use ":" no lugar de ";"</span></code></pre>
 <pre><code class="language-text">antes : pc=10000 (ARM)
@@ -135,7 +135,7 @@ antes : pc=10004 (ARM)
 depois: pc=10008  MOV raw=e1a0100f  r0=10008 r1=1000c r2=0
 antes : pc=10008 (ARM)
 depois: pc=1000c  SUB raw=e0412000  r0=10008 r1=1000c r2=4</code></pre>
-<p>É o mesmo resultado do GDB: o <code>pc</code> avança de 4 em 4 (passo "avança" do ciclo), enquanto o <code>mov rX, pc</code> grava o endereço da própria instrução + 8. O <code>kind</code> e o <code>raw</code> vêm do <em>decode</em>. A base para escrever seu próprio tracer de registradores é essa interface (o <a routerLink="/artigos/arm-jitter-api-java">artigo sobre a API Java</a> usa a mesma ideia).</p>
+<p>É o mesmo resultado do GDB: o <code>pc</code> avança de 4 em 4 (passo "avança" do ciclo), enquanto o <code>mov rX, pc</code> grava o endereço da própria instrução + 8. O <code>kind</code> e o <code>raw</code> vêm do <em><span lang="en">decode</span></em>. A base para escrever seu próprio tracer de registradores é essa interface (o <a routerLink="/artigos/arm-jitter-api-java">artigo sobre a API Java</a> usa a mesma ideia).</p>
 <h2>Glossário</h2>
 <div class="scroll-x">
   <table class="tabela-lista" role="table">
@@ -144,7 +144,7 @@ depois: pc=1000c  SUB raw=e0412000  r0=10008 r1=1000c r2=4</code></pre>
     </thead>
     <tbody role="rowgroup">
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Fetch–decode–execute</th><td role="cell" data-label="O que é">o ciclo de três passos que todo núcleo repete: buscar, decodificar, executar</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC (R15)</th><td role="cell" data-label="O que é"><em>program counter</em>: registrador com o endereço de onde a CPU busca a próxima instrução</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC (R15)</th><td role="cell" data-label="O que é"><em><span lang="en">program counter</span></em>: registrador com o endereço de onde a CPU busca a próxima instrução</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pipeline</th><td role="cell" data-label="O que é">estágios sobrepostos; no ARM7TDMI são 3 (fetch/decode/execute), então três instruções estão em andamento ao mesmo tempo</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">PC +8 / +4</th><td role="cell" data-label="O que é">valor arquitetural de R15 ao ser lido: instrução + 8 (ARM) ou + 4 (Thumb)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ArmCore</code></th><td role="cell" data-label="O que é">classe do arm-jitter com o estado da CPU emulada e o método <code>step()</code></td></tr>
@@ -154,7 +154,7 @@ depois: pc=1000c  SUB raw=e0412000  r0=10008 r1=1000c r2=4</code></pre>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">IR</th><td role="cell" data-label="O que é">representação intermediária: formato neutro para onde a instrução decodificada é convertida antes de executar</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ArmTraceListener</code></th><td role="cell" data-label="O que é">gancho de observação por instrução / por bloco</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">WFI / WFE</th><td role="cell" data-label="O que é">instruções que põem a CPU em espera até uma interrupção ou evento</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">MMU / MPU</th><td role="cell" data-label="O que é">unidades de gerência / proteção de memória; uma falta delas vira uma exceção (<em>abort</em>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">MMU / MPU</th><td role="cell" data-label="O que é">unidades de gerência / proteção de memória; uma falta delas vira uma exceção (<em><span lang="en">abort</span></em>)</td></tr>
     </tbody>
   </table>
 </div>
@@ -187,11 +187,11 @@ depois: pc=1000c  SUB raw=e0412000  r0=10008 r1=1000c r2=4</code></pre>
 </ul>
 <h2>Referências</h2>
 <ul>
-<li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): leitura do PC (valor da instrução + 8 em ARM e + 4 em Thumb) e o modelo de execução de instruções. <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
-<li>Arm — <em>ARM7TDMI Data Sheet</em> (DDI 0029): pipeline de três estágios (fetch, decode, execute).</li>
+<li>Arm — <em><span lang="en">ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</span></em> (DDI 0406C): leitura do PC (valor da instrução + 8 em ARM e + 4 em Thumb) e o modelo de execução de instruções. <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+<li>Arm — <em><span lang="en">ARM7TDMI Data Sheet</span></em> (DDI 0029): pipeline de três estágios (fetch, decode, execute).</li>
 <li>arm-jitter 1.4.0, código-fonte: <code>core/ArmCore.java</code> (<code>step</code>, <code>executeSingleInstruction</code>, <code>runBlock</code>), <code>core/ArmTraceListener.java</code>, <code>core/ArmInterpreter.java</code> e <code>tasks/README.md</code> (invariante G1). <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">github.com/vitorsilverio/arm-jitter</a></li>
 <li>arm-box, <code>Armbox.java</code> (modo <code>--gdb</code> usa <code>core.step()</code>; execução normal usa <code>runBlocks</code>). <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">github.com/vitorsilverio/armbox</a></li>
-<li>GDB — <em>Continuing and Stepping</em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
+<li>GDB — <em><span lang="en">Continuing and Stepping</span></em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1, lição 4. Ver também: <a routerLink="/artigos/anatomia-instrucao-arm">Anatomia de uma instrução ARM</a>, <a routerLink="/artigos/gdb-no-armbox">Depurando ARM com GDB no arm-box</a>.</em></p>
 `,

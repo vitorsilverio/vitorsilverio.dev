@@ -86,14 +86,14 @@ import { Objdump } from '../../../shared/objdump/objdump';
       <dt>R4–R11</dt>
       <dd>
         registradores de propósito geral para variáveis locais; por convenção,
-        a função chamada deve preservá-los (<em>callee-saved</em>). Em algumas
+        a função chamada deve preservá-los (<em><span lang="en">callee-saved</span></em>). Em algumas
         variantes da convenção, o R9 tem papel especial (base estática ou
         registrador de thread).
       </dd>
       <dt>R12 (IP)</dt>
       <dd>
-        <em>intra-procedure</em> — usado como scratch por alguns
-        <em>calling conventions</em>.
+        <em><span lang="en">intra-procedure</span></em> — usado como scratch por alguns
+        <em><span lang="en">calling conventions</span></em>.
       </dd>
       <dt>R13 (SP)</dt>
       <dd>o <strong>stack pointer</strong>; aponta para o topo da pilha.</dd>
@@ -122,7 +122,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
 
     <h2>O CPSR e as flags de status</h2>
     <p>
-      O <strong>CPSR</strong> (<em>Current Program Status Register</em>) guarda,
+      O <strong>CPSR</strong> (<em><span lang="en">Current Program Status Register</span></em>) guarda,
       além do modo atual e das máscaras de interrupção, as
       <strong>flags de condição</strong> que todas as instruções de
       processamento podem atualizar. As quatro principais:
@@ -155,7 +155,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
       O ARMv7-A tem sete modos clássicos (mais o <em>Monitor</em>, das Security
       Extensions/TrustZone, e o <em>Hyp</em>, da extensão de virtualização). O
       <strong>User</strong> é o único sem privilégios; todos os outros são
-      privilegiados e existem para tratar <em>exceptions</em> (interrupções,
+      privilegiados e existem para tratar <em><span lang="en">exceptions</span></em> (interrupções,
       erros, chamadas de sistema):
     </p>
     <ul>
@@ -269,7 +269,7 @@ arm-none-eabi-objdump <span class="token parameter variable">-d</span> fundament
       Repare no <code>S</code> em <code>adds</code>/<code>subs</code>: sem ele,
       nenhuma flag mudaria e a execução condicional deixaria de fazer sentido. Na
       subtração, o <strong>C</strong> funciona ao contrário do que muita gente
-      espera: ele vale 1 quando <em>não</em> houve empréstimo (<em>borrow</em>).
+      espera: ele vale 1 quando <em>não</em> houve empréstimo (<em><span lang="en">borrow</span></em>).
       Por isso <code>3 − 3</code> deixa C=1 e <code>10 − 20</code> deixa C=0.
     </p>
 
@@ -347,11 +347,11 @@ cpsr           0x800000df          2147483871</code></pre>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ARM</th><td role="cell" data-label="O que é">família de arquiteturas de processador RISC; também o nome do conjunto de instruções de 32 bits dela.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">RISC load/store</th><td role="cell" data-label="O que é">arquitetura em que a aritmética só opera em registradores e só instruções específicas (<code>LDR</code>/<code>STR</code>) acessam a memória.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador</th><td role="cell" data-label="O que é">posição de armazenamento dentro da CPU; no ARM de 32 bits, 16 visíveis (R0–R15), cada um com 32 bits.</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SP, LR, PC</th><td role="cell" data-label="O que é">R13 (ponteiro de pilha), R14 (<em>link register</em>, endereço de retorno) e R15 (contador de programa).</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em>Current Program Status Register</em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em>carry</em> (vai-um) e <em>overflow</em> (estouro com sinal).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">SP, LR, PC</th><td role="cell" data-label="O que é">R13 (ponteiro de pilha), R14 (<em><span lang="en">link register</span></em>, endereço de retorno) e R15 (contador de programa).</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em><span lang="en">Current Program Status Register</span></em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em><span lang="en">carry</span></em> (vai-um) e <em><span lang="en">overflow</span></em> (estouro com sinal).</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo de execução</th><td role="cell" data-label="O que é">estado de privilégio e contexto da CPU (User, Supervisor, IRQ, FIQ, Abort, Undefined, System).</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco (<em>banked</em>)</th><td role="cell" data-label="O que é">registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco (<em><span lang="en">banked</span></em>)</th><td role="cell" data-label="O que é">registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / Thumb-2</th><td role="cell" data-label="O que é">conjuntos de instruções compactos: 16 bits (Thumb) e mistura de 16 e 32 bits (Thumb-2).</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Execução condicional</th><td role="cell" data-label="O que é">sufixo de condição (<code>eq</code>, <code>ne</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pré/pós-indexado</th><td role="cell" data-label="O que é">modos de endereçamento em que o registrador base é atualizado antes (<code>!</code>) ou depois do acesso à memória.</td></tr>
@@ -402,10 +402,10 @@ cpsr           0x800000df          2147483871</code></pre>
 
     <h2>Referências</h2>
     <ul>
-      <li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo A2 (<em>Application Level Programmers' Model</em>: registradores, flags, execução condicional) e capítulo B1 (<em>System Level Programmers' Model</em>: modos de processador e registradores em banco). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
-      <li>Arm — <em>Procedure Call Standard for the Arm Architecture</em> (AAPCS32), seção 6.1.1 <em>Core registers</em>: papel de R0–R15 (R9 e R11 têm papéis dependentes de plataforma/variante). <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">github.com/ARM-software/abi-aa</a></li>
-      <li>GNU Binutils — <em>Using as</em>, ARM Directives (<code>.arm</code>, <code>.thumb</code>, <code>.syntax</code>, <code>.arch</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
-      <li>GDB — <em>Continuing and Stepping</em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
+      <li>Arm — <em><span lang="en">ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</span></em> (DDI 0406C): capítulo A2 (<em><span lang="en">Application Level Programmers' Model</span></em>: registradores, flags, execução condicional) e capítulo B1 (<em><span lang="en">System Level Programmers' Model</span></em>: modos de processador e registradores em banco). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+      <li>Arm — <em><span lang="en">Procedure Call Standard for the Arm Architecture</span></em> (AAPCS32), seção 6.1.1 <em><span lang="en">Core registers</span></em>: papel de R0–R15 (R9 e R11 têm papéis dependentes de plataforma/variante). <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">github.com/ARM-software/abi-aa</a></li>
+      <li>GNU Binutils — <em><span lang="en">Using as</span></em>, ARM Directives (<code>.arm</code>, <code>.thumb</code>, <code>.syntax</code>, <code>.arch</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
+      <li>GDB — <em><span lang="en">Continuing and Stepping</span></em> (<code>stepi</code>). <a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html" target="_blank" rel="noopener">sourceware.org/gdb/current/onlinedocs/gdb.html/Continuing-and-Stepping.html</a></li>
       <li>Código-fonte e README do <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">arm-jitter</a> (tabela de arquiteturas suportadas) e do <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">arm-box</a> (opções <code>--arch</code> e <code>--gdb</code>; <code>Main.java</code> e <code>Armbox.java</code>).</li>
     </ul>
     <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1 (M1.0).</em></p>

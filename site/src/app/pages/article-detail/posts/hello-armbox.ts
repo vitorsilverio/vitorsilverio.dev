@@ -254,12 +254,12 @@ arm-none-eabi-ld <span class="token parameter variable">-static</span> <span cla
     <h2>Referências</h2>
     <ul>
       <li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenções ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>) e OABI (<code>swi NR</code>, com o número na própria instrução).</li>
-      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em>Using as</em>, seção &quot;ARM Opcodes&quot;</a> (GNU Binutils): a forma <code>ldr Rd, =expressão</code> e a <em>literal pool</em>.</li>
-      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/ld/Entry-Point.html" target="_blank" rel="noopener"><em>GNU ld</em>, seção 3.4.1 &quot;Setting the Entry Point&quot;</a>: como o ponto de entrada é escolhido.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/ARM-Opcodes.html" target="_blank" rel="noopener"><em><span lang="en">Using as</span></em>, seção &quot;<span lang="en">ARM Opcodes</span>&quot;</a> (GNU Binutils): a forma <code>ldr Rd, =expressão</code> e a <em>literal pool</em>.</li>
+      <li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/ld/Entry-Point.html" target="_blank" rel="noopener"><em>GNU ld</em>, seção 3.4.1 &quot;<span lang="en">Setting the Entry Point</span>&quot;</a>: como o ponto de entrada é escolhido.</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte e README do <code>arm-box</code></a> (GitHub): opções de linha de comando, pilha ABI, <em>kuser helpers</em> e syscalls suportadas.</li>
       <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">código-fonte do <code>arm-jitter</code></a> (GitHub): decodificador, interpretador de IR e backend JIT.</li>
-      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/kernel_user_helpers.html" target="_blank" rel="noopener"><em>Kernel-provided User Helpers</em></a>: endereços fixos dos <em>kuser helpers</em> no Linux ARM.</li>
-      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/memory.html" target="_blank" rel="noopener"><em>Kernel Memory Layout on ARM Linux</em></a>: a página de vetores em <code>0xffff0000</code>–<code>0xffff0fff</code>.</li>
+      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/kernel_user_helpers.html" target="_blank" rel="noopener"><em><span lang="en">Kernel-provided User Helpers</span></em></a>: endereços fixos dos <em>kuser helpers</em> no Linux ARM.</li>
+      <li>The Linux Kernel documentation — <a href="https://docs.kernel.org/arch/arm/memory.html" target="_blank" rel="noopener"><em><span lang="en">Kernel Memory Layout on ARM Linux</span></em></a>: a página de vetores em <code>0xffff0000</code>–<code>0xffff0fff</code>.</li>
     </ul>
   `,
 })

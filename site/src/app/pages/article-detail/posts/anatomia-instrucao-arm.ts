@@ -252,9 +252,9 @@ e4910004  cond=AL kind=LOAD         rd= 0 rn= 1 rm=-1 imm=0x4    immOp=true  S=f
 </ul>
 <h2>Referências</h2>
 <ul>
-<li>Arm — <em>ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo A5 (<em>ARM Instruction Set Encoding</em>: codificação de data processing, <code>Operand2</code>, load/store e espaço <code>cond = 1111</code>) e a descrição do deslocamento por imediato (<code>LSR #32</code>, <code>RRX</code>). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
+<li>Arm — <em lang="en">ARM Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): capítulo A5 (<em lang="en">ARM Instruction Set Encoding</em>: codificação de data processing, <code>Operand2</code>, load/store e espaço <code>cond = 1111</code>) e a descrição do deslocamento por imediato (<code>LSR #32</code>, <code>RRX</code>). <a href="https://developer.arm.com/documentation/ddi0406/c" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406/c</a></li>
 <li>arm-jitter 1.4.0, <code>decoder/ArmDecoder.java</code> (<code>decode</code>, tratamento de <code>cond == 0xF</code>) e <code>decoder/DecodedInstruction.java</code>. <a href="https://github.com/vitorsilverio/arm-jitter" target="_blank" rel="noopener">github.com/vitorsilverio/arm-jitter</a></li>
-<li>GNU Binutils — <em>Using as</em>, ARM Directives (<code>.syntax</code>, <code>.arch</code>, <code>.arm</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
+<li>GNU Binutils — <em lang="en">Using as</em>, ARM Directives (<code>.syntax</code>, <code>.arch</code>, <code>.arm</code>). <a href="https://sourceware.org/binutils/docs/as/ARM-Directives.html" target="_blank" rel="noopener">sourceware.org/binutils/docs/as/ARM-Directives.html</a></li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 1, lição 3. Ver também: <a routerLink="/artigos/decodificando-instrucoes-arm-objdump">Decodificando instruções ARM à mão</a>.</em></p>
 `,

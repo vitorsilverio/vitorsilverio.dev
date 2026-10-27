@@ -37,7 +37,7 @@ Os arquivos completos estão linkados em cada seção.</p>
 <code>r12</code> são registradores que a função pode sobrescrever à vontade; quem chama não espera encontrá-los
 intactos depois do retorno (veja a seção 6.1.1 da AAPCS, nas referências).</p>
 <p>Para provar o resultado sem <code>printf</code>, os exemplos usam o <em>exit code</em>: <code>mov r7, #1</code> + <code>svc #0</code> é o <code>exit(r0)</code> do Linux ARM EABI: o número da chamada de
-sistema vai em <code>r7</code>, o argumento em <code>r0</code> e <code>svc</code> (<em>supervisor call</em>) entrega o
+sistema vai em <code>r7</code>, o argumento em <code>r0</code> e <code>svc</code> (<em lang="en">supervisor call</em>) entrega o
 controle ao sistema operacional. O <code>arm-box</code> propaga o <code>r0</code> do <em>guest</em> (o programa ARM
 emulado) como código de saída do processo.</p>
 <h2>fibonacci(n)</h2>
@@ -91,7 +91,7 @@ instrução e o mnemônico que o <code>arm-none-eabi-as</code> gerou a partir do
 <ul>
 <li><strong><code>bxle lr</code> é condicional, não um <code>if</code> escondido.</strong> <code>BX</code> aceita o mesmo sufixo de
 condição de qualquer instrução ARM (o <a routerLink="/artigos/anatomia-instrucao-arm">campo <code>cond</code></a>
-(tabela de condições na seção A8.3 do manual da arquitetura) que ocupa os 4 bits mais altos da palavra). Um <em>nibble</em> é meio byte — 4 bits, exatamente
+(tabela de condições na seção A8.3 do manual da arquitetura) que ocupa os 4 bits mais altos da palavra). Um <em lang="en">nibble</em> é meio byte — 4 bits, exatamente
 o tamanho de um dígito hexadecimal — então dá pra ler o campo <code>cond</code> direto no primeiro
 dígito hex da instrução, sem converter nada pra binário: em <code>d12fff1e</code>, o primeiro
 dígito, <code>d</code>, é o <code>cond</code> e codifica <code>LE</code>. Ou seja: essa linha só desvia quando a
@@ -104,9 +104,9 @@ o bug do exercício mais abaixo.</li>
 <li><strong><code>1b</code></strong> no fonte é um <em>rótulo numérico local</em>: &quot;o <code>1:</code> mais próximo para trás&quot; (por
 isso o disassembly mostra o endereço real, <code>10024</code>, no lugar do <code>1b</code> simbólico).
 Útil em laços curtos sem precisar inventar um nome só para eles.</li>
-<li><strong>r12 (<code>ip</code>)</strong> é, na AAPCS, o <em>intra-procedure-call scratch register</em>: pode ser
+<li><strong>r12 (<code>ip</code>)</strong> é, na AAPCS, o <em lang="en">intra-procedure-call scratch register</em>: pode ser
 sobrescrito sem salvar. Aqui guarda <code>a + b</code> temporariamente. (<code>r0</code>–<code>r3</code> também
-são <em>scratch</em>, mas já estão ocupados com <code>n</code>, <code>a</code>, <code>b</code> e o contador.)
+são <em lang="en">scratch</em>, mas já estão ocupados com <code>n</code>, <code>a</code>, <code>b</code> e o contador.)
 O <code>objdump</code> mostra <code>r12</code> pelo apelido <code>ip</code>.</li>
 </ul>
 <h2>max(a, b) — sem um único desvio</h2>
@@ -166,20 +166,20 @@ embutido nela. Essa é a predicação da qual o <a routerLink="/artigos/flags-e-
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Assembly</th><td role="cell" data-label="O que é">linguagem de máquina em texto: cada linha é uma instrução do processador</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-box</code></th><td role="cell" data-label="O que é">programa Java que carrega um ELF ARM de 32 bits e o executa como um Linux faria, traduzindo as chamadas de sistema para o hospedeiro</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>arm-jitter</code></th><td role="cell" data-label="O que é">biblioteca Java que decodifica e executa instruções ARM; é o motor do <code>arm-box</code></td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em>Executable and Linkable Format</em>: formato de executável usado pelo Linux e pelo toolchain GNU</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em>Procedure Call Standard for the Arm Architecture</em>: convenção de chamada (argumentos em <code>r0</code>–<code>r3</code>, resultado em <code>r0</code>)</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em>leaf</em>)</th><td role="cell" data-label="O que é">função que não chama nenhuma outra; não precisa salvar <code>lr</code></td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>lr</code> (r14)</th><td role="cell" data-label="O que é"><em>link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">ELF</th><td role="cell" data-label="O que é"><em lang="en">Executable and Linkable Format</em>: formato de executável usado pelo Linux e pelo toolchain GNU</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">AAPCS</th><td role="cell" data-label="O que é"><em lang="en">Procedure Call Standard for the Arm Architecture</em>: convenção de chamada (argumentos em <code>r0</code>–<code>r3</code>, resultado em <code>r0</code>)</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Folha (<em lang="en">leaf</em>)</th><td role="cell" data-label="O que é">função que não chama nenhuma outra; não precisa salvar <code>lr</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>lr</code> (r14)</th><td role="cell" data-label="O que é"><em lang="en">link register</em>: guarda o endereço de retorno gravado pelo <code>bl</code></td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>bl</code> / <code>bx lr</code></th><td role="cell" data-label="O que é">chamar (grava o retorno em <code>lr</code> e salta) / voltar</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é"><em>supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code></td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao terminar; no Linux só os 8 bits baixos chegam ao shell</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td role="cell" data-label="O que é">bits do registrador de estado (<code>CPSR</code>) que registram negativo, zero, <em>carry</em> e <em>overflow</em> do último resultado</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>svc</code></th><td role="cell" data-label="O que é"><em lang="en">supervisor call</em>: pede um serviço ao sistema operacional; o número da chamada vai em <code>r7</code></td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em lang="en">Exit code</em></th><td role="cell" data-label="O que é">número que o processo devolve ao terminar; no Linux só os 8 bits baixos chegam ao shell</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags (<code>N</code>, <code>Z</code>, <code>C</code>, <code>V</code>)</th><td role="cell" data-label="O que é">bits do registrador de estado (<code>CPSR</code>) que registram negativo, zero, <em lang="en">carry</em> e <em>overflow</em> do último resultado</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>cmp</code> / <code>subs</code></th><td role="cell" data-label="O que é">comparam/subtraem e atualizam as flags (o <code>s</code> pede a atualização); <code>cmp</code> descarta o resultado</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Campo <code>cond</code></th><td role="cell" data-label="O que é">os 4 bits mais altos da instrução ARM; dizem sob quais flags ela executa (<code>LE</code>, <code>LT</code>, <code>NE</code>...)</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Predicação</th><td role="cell" data-label="O que é">executar (ou não) uma instrução conforme as flags, sem desviar</td></tr>
       <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Rótulo numérico local</th><td role="cell" data-label="O que é"><code>1:</code> … <code>1b</code> (para trás) / <code>1f</code> (para a frente): alvo anônimo reutilizável</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ip</code> (r12)</th><td role="cell" data-label="O que é">registrador <em>scratch</em> da AAPCS: pode ser sobrescrito sem salvar</td></tr>
-      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em>Nibble</em></th><td role="cell" data-label="O que é">meio byte, 4 bits; um dígito hexadecimal</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><code>ip</code> (r12)</th><td role="cell" data-label="O que é">registrador <em lang="en">scratch</em> da AAPCS: pode ser sobrescrito sem salvar</td></tr>
+      <tr role="row"><th scope="row" role="rowheader" data-label="Termo"><em lang="en">Nibble</em></th><td role="cell" data-label="O que é">meio byte, 4 bits; um dígito hexadecimal</td></tr>
     </tbody>
   </table>
 </div>
@@ -215,10 +215,10 @@ programa ARM pequeno que você queira entender.</p>
 </ul>
 <h2>Referências</h2>
 <ul>
-<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em>ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C), seção A8.3 <em>Conditional execution</em>: campo <code>cond</code> e tabela de condições (<code>LT</code> = <code>1011</code>, <code>LE</code> = <code>1101</code>).</li>
-<li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener"><em>Procedure Call Standard for the Arm Architecture</em></a> (AAPCS32), seção 6.1.1 <em>Core registers</em>: <code>r0</code>–<code>r3</code> para argumentos, resultado e <em>scratch</em>; <code>r12</code> (<code>IP</code>) como <em>intra-procedure-call scratch register</em>.</li>
-<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/Symbol-Names.html" target="_blank" rel="noopener"><em>Using as</em>, seção "Symbol Names", subseção <em>Numeric Local Labels</em></a> (GNU Binutils): rótulos <code>1:</code>, <code>1b</code>, <code>1f</code>.</li>
-<li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em>syscall(2)</em></a>, Linux man-pages: convenção ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>).</li>
+<li>Arm Ltd. — <a href="https://developer.arm.com/documentation/ddi0406/latest/" target="_blank" rel="noopener"><em lang="en">ARM Architecture Reference Manual, ARMv7-A and ARMv7-R edition</em></a> (DDI 0406C), seção A8.3 <em lang="en">Conditional execution</em>: campo <code>cond</code> e tabela de condições (<code>LT</code> = <code>1011</code>, <code>LE</code> = <code>1101</code>).</li>
+<li>Arm Ltd. — <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener"><em lang="en">Procedure Call Standard for the Arm Architecture</em></a> (AAPCS32), seção 6.1.1 <em lang="en">Core registers</em>: <code>r0</code>–<code>r3</code> para argumentos, resultado e <em lang="en">scratch</em>; <code>r12</code> (<code>IP</code>) como <em lang="en">intra-procedure-call scratch register</em>.</li>
+<li>Free Software Foundation — <a href="https://sourceware.org/binutils/docs/as/Symbol-Names.html" target="_blank" rel="noopener"><em lang="en">Using as</em>, seção "Symbol Names", subseção <em lang="en">Numeric Local Labels</em></a> (GNU Binutils): rótulos <code>1:</code>, <code>1b</code>, <code>1f</code>.</li>
+<li>Michael Kerrisk — <a href="https://man7.org/linux/man-pages/man2/syscall.2.html" target="_blank" rel="noopener"><em lang="en">syscall(2)</em></a>, Linux man-pages: convenção ARM EABI (número da chamada em <code>r7</code>, instrução <code>swi 0x0</code>, retorno em <code>r0</code>).</li>
 <li>Vítor Silvério — <a href="https://github.com/vitorsilverio/armbox" target="_blank" rel="noopener">código-fonte do <code>arm-box</code></a> (GitHub): README, opções de linha de comando e propagação do <em>exit code</em> do guest.</li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 3, lição 1. Ver também: <a routerLink="/artigos/carga-e-armazenamento-arm">Carga e armazenamento no ARM</a>, <a routerLink="/artigos/sub-rotinas-arm-bl-bx-pilha">Sub-rotinas em ARM</a>.</em></p>

@@ -188,8 +188,8 @@ depois do FlagMergePass:
 <h2>Referências</h2>
 <ul>
 <li>Código-fonte do <code>arm-jitter</code> v1.3.0 (<code>core/src/main/java/dev/vitorsilverio/armjitter/</code>): <code>decoder/ArmDecoder.java</code>, <code>decoder/DecodedInstruction.java</code>, <code>ir/IrOp.java</code>, <code>ir/IrOperand.java</code>, <code>ir/IrBlock.java</code>, <code>ir/StandardIrBlockLifter.java</code>, <code>ir/StandardIrBuilder.java</code>, <code>ir/opt/ConstantFoldPass.java</code>, <code>ir/opt/DeadCodeEliminationPass.java</code>, <code>ir/opt/FlagMergePass.java</code>, <code>ir/opt/StandardIrOptimizer.java</code>.</li>
-<li>Wikipedia — <em>Intermediate representation</em>. <a href="https://en.wikipedia.org/wiki/Intermediate_representation" target="_blank" rel="noopener">en.wikipedia.org/wiki/Intermediate_representation</a></li>
-<li>Arm — <em>Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): leitura do PC como endereço da instrução + 8 em modo ARM. <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
+<li>Wikipedia — <em lang="en">Intermediate representation</em>. <a href="https://en.wikipedia.org/wiki/Intermediate_representation" target="_blank" rel="noopener">en.wikipedia.org/wiki/Intermediate_representation</a></li>
+<li>Arm — <em lang="en">Arm Architecture Reference Manual ARMv7-A and ARMv7-R edition</em> (DDI 0406C): leitura do PC como endereço da instrução + 8 em modo ARM. <a href="https://developer.arm.com/documentation/ddi0406/c/" target="_blank" rel="noopener">developer.arm.com/documentation/ddi0406</a></li>
 </ul>
 <p><em>Trilha: <a routerLink="/curso-arm">Curso de Arquitetura ARM</a> · Módulo 2, lição 5. Ver também: <a routerLink="/artigos/anatomia-instrucao-arm">Anatomia de uma instrução ARM</a>, <a routerLink="/artigos/fetch-decode-execute-armcore">Fetch–decode–execute e o ArmCore.step()</a>.</em></p>
 `,
