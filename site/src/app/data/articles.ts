@@ -231,7 +231,7 @@ export const articles: readonly ArticleMeta[] = [
     title: 'php2shell: como funcionam as duas falhas de RCE do PHP e como se defender',
     date: '2026-10-22',
     readingTime: '13 min',
-    excerpt: 'Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo em nível conceitual, sem exploit, e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.',
+    excerpt: 'Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.',
     tags: ['PHP', 'Segurança', 'CVE', 'RCE', 'PHP-FPM', 'mod_php', 'Defesa'],
   },
   {

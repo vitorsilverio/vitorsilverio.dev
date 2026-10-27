@@ -71,7 +71,7 @@
       <link>https://vitorsilverio.dev/artigos/php2shell-anatomia-rce-php/</link>
       <guid isPermaLink="true">https://vitorsilverio.dev/artigos/php2shell-anatomia-rce-php/</guid>
       <pubDate>Thu, 22 Oct 2026 11:00:00 GMT</pubDate>
-      <description>Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo em nível conceitual, sem exploit, e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.</description>
+      <description>Em 21 de outubro de 2026 o PHP corrigiu duas falhas críticas de execução remota de código sem autenticação (CVE-2026-109618 e CVE-2026-109619), apelidadas de php2shell. Explico o mecanismo e mostro como saber se você está exposto, atualizar, mitigar o que não dá para atualizar já e procurar sinais de tentativa nos logs.</description>
       <category>PHP</category>
       <category>Segurança</category>
       <category>CVE</category>
