@@ -23,6 +23,7 @@ loadLanguages([
   'powershell',
   'sql',
   'diff',
+  'docker',
   // Sessão de terminal: linhas com `$ `/`# ` são comando (bash), o resto é saída.
   'shell-session',
 ]);
@@ -50,6 +51,7 @@ const LANG_ALIAS = {
   console: 'shell-session',
   terminal: 'shell-session',
   'sh-session': 'shell-session',
+  dockerfile: 'docker',
 };
 
 const NAMED = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
