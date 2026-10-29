@@ -37,6 +37,7 @@
 /artigos/llms-exploits-emuladores-recomps
 /artigos/llms-sala-limpa-artcraft
 /artigos/node2shell-brotli-node-python
+/artigos/python-jit-removido-pep-836
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -49,6 +50,7 @@
 /tags/engenharia-reversa
 /tags/ia
 /tags/objdump
+/tags/python
 /tags/thumb-2
 /tags/toolchain
 /tags/arm-box
@@ -61,7 +63,6 @@
 /tags/debug
 /tags/defesa
 /tags/llm
-/tags/python
 /tags/rce
 /tags/registradores
 /tags/trilha
@@ -81,7 +82,9 @@
 /tags/certificados
 /tags/chamada
 /tags/codigo-aberto
+/tags/compiladores
 /tags/consoles
+/tags/cpython
 /tags/criptografia
 /tags/decompilacao
 /tags/elf
@@ -97,6 +100,8 @@
 /tags/ir
 /tags/it
 /tags/java
+/tags/jit
+/tags/jvm
 /tags/linker
 /tags/load-store
 /tags/mcp
@@ -105,6 +110,7 @@
 /tags/node-js
 /tags/openssl
 /tags/orr
+/tags/pep-836
 /tags/pessoal
 /tags/php
 /tags/php-fpm

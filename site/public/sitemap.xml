@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -36,7 +36,7 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/arm-jitter/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-28</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/assembly/</loc>
@@ -73,6 +73,10 @@
   <url>
     <loc>https://vitorsilverio.dev/tags/objdump/</loc>
     <lastmod>2026-09-09</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/python/</loc>
+    <lastmod>2026-10-28</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/thumb-2/</loc>
@@ -121,10 +125,6 @@
   <url>
     <loc>https://vitorsilverio.dev/tags/llm/</loc>
     <lastmod>2026-10-26</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/python/</loc>
-    <lastmod>2026-10-27</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/rce/</loc>
@@ -297,5 +297,10 @@
     <loc>https://vitorsilverio.dev/artigos/node2shell-brotli-node-python/</loc>
     <lastmod>2026-10-27</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/node2shell-brotli-node-python.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/python-jit-removido-pep-836/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/python-jit-removido-pep-836.png</image:loc></image:image>
   </url>
 </urlset>

@@ -274,4 +274,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Em 27 de outubro de 2026 a CISA incluiu o CVE-2026-111497, a falha do decodificador Brotli apelidada de Node2Shell, no catálogo de vulnerabilidades exploradas. Explico por que um erro permanente tratado como "preciso de mais dados" vira escrita fora dos limites, por que os números de severidade divergem (9,2, High e 8,1), quem descomprime Brotli sem você pedir e como conferir Node, Python e imagens de contêiner, com um teste que validei em quatro versões do Node.',
     tags: ['Segurança', 'CVE', 'RCE', 'Node.js', 'Python', 'Brotli', 'Defesa', 'Supply chain'],
   },
+  {
+    slug: 'python-jit-removido-pep-836',
+    title: 'O JIT do CPython sai da árvore: o que o PEP 836 retirado ensina a quem escreve um JIT',
+    date: '2026-10-28',
+    readingTime: '35 min',
+    excerpt: 'Em 19 de outubro de 2026 os autores retiraram o PEP 836, e o JIT experimental do CPython deve sair da árvore principal no ciclo do Python 3.16. Conto a história com datas e fontes, explico como esse JIT funcionava (micro-operações, copy-and-patch, LLVM) e comparo as três preocupações centrais da discussão com as decisões que tomei no arm-jitter: o interpretador como oráculo de testes, o bytecode JVM no lugar de código de máquina por plataforma e a invalidação do cache de blocos.',
+    tags: ['Python', 'CPython', 'JIT', 'PEP 836', 'arm-jitter', 'JVM', 'Compiladores'],
+  },
 ];

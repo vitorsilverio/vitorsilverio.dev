@@ -72,6 +72,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/llms-sala-limpa-artcraft').then((m) => m.ArticleLlmsSalaLimpaArtcraft),
   'node2shell-brotli-node-python': () =>
     import('./pages/article-detail/posts/node2shell-brotli-node-python').then((m) => m.ArticleNode2shellBrotliNodePython),
+  'python-jit-removido-pep-836': () =>
+    import('./pages/article-detail/posts/python-jit-removido-pep-836').then((m) => m.ArticlePythonJitRemovidoPep836),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

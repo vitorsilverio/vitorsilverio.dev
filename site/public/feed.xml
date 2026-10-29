@@ -6,7 +6,21 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Tue, 27 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>O JIT do CPython sai da árvore: o que o PEP 836 retirado ensina a quem escreve um JIT</title>
+      <link>https://vitorsilverio.dev/artigos/python-jit-removido-pep-836/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/python-jit-removido-pep-836/</guid>
+      <pubDate>Wed, 28 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Em 19 de outubro de 2026 os autores retiraram o PEP 836, e o JIT experimental do CPython deve sair da árvore principal no ciclo do Python 3.16. Conto a história com datas e fontes, explico como esse JIT funcionava (micro-operações, copy-and-patch, LLVM) e comparo as três preocupações centrais da discussão com as decisões que tomei no arm-jitter: o interpretador como oráculo de testes, o bytecode JVM no lugar de código de máquina por plataforma e a invalidação do cache de blocos.</description>
+      <category>Python</category>
+      <category>CPython</category>
+      <category>JIT</category>
+      <category>PEP 836</category>
+      <category>arm-jitter</category>
+      <category>JVM</category>
+      <category>Compiladores</category>
+    </item>
     <item>
       <title>Node2Shell: a falha de Brotli que atinge Node.js e Python, e como saber se você está exposto</title>
       <link>https://vitorsilverio.dev/artigos/node2shell-brotli-node-python/</link>
