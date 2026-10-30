@@ -293,11 +293,22 @@ requisição, sem flash do nome do ícone, funcionam no pré-render e nos dois t
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
 vira um termo clicável com a definição da própria tabela. Regras (em `glossario.util.ts`):
-- **Cabeçalho com parênteses**: `AddressSanitizer (ASan)` marca o nome e a sigla (as duas formas valem pela
-  mesma linha), desde que os dois lados sejam texto simples; cabeçalho de comando (`x/i $pc (GDB)`) fica inteiro.
-- **Teto proporcional** de primeiras marcas: `max(8, ceil(palavras antes do Glossário / 500))`, com preferência
-  a siglas e a termos em `código`. Termos genéricos (`TERMOS_GENERICOS`) ficam de fora e a ocorrência já
-  explicada entre parênteses é pulada.
+- **Cabeçalho com parênteses**: `X (Y)` marca as duas formas (valem pela mesma linha) só quando Y é nome
+  ou expansão de X e os dois lados são texto simples (`ehNomeAlternativo`): `AddressSanitizer (ASan)`,
+  `JIT (just-in-time)`, `TLV (Tag-Length-Value)`, `CA (autoridade certificadora)`, `lr (r14)`. Qualificador
+  (`Agente (de IA)`, `Estrelas (GitHub)`, `stepi (ou si)`, `continue (no GDB)`) não vira variante: vale só o
+  nome. Tradução entre parênteses (`Ligar (link)`, `Folha (leaf)`) também fica de fora; se o texto usa a
+  forma em inglês, escreva as duas no cabeçalho separadas por ` / `. Cabeçalho de comando
+  (`x/i $pc (GDB)`) fica inteiro. A expansão colada ao próprio termo (`JIT (just-in-time, ...)`) não ganha marca.
+- **Teto proporcional** de primeiras marcas: `max(8, ceil(palavras / 500))`, com preferência a siglas e a
+  termos em `código`. `palavras` são todas as palavras dos nós de texto antes do Glossário, **incluindo**
+  código, tabelas e títulos (só o texto dos balões fica de fora), não só a prosa; por isso um artigo cheio de
+  listagens ganha mais vagas do que a prosa sozinha daria. Termos genéricos (`TERMOS_GENERICOS`) ficam de
+  fora e a ocorrência já explicada entre parênteses é pulada.
+- **Custo**: `varrer()` só roda quando o artigo muda. O `MutationObserver` ignora o status e os balões (que
+  mudam a cada abrir e fechar) e descarta o que a própria diretiva insere (`takeRecords`).
+- **Banner de cookies**: enquanto `.consent-banner`/`.consent-bar` está na tela, o balão só usa o espaço acima
+  dele (`posicionar()`), para o link "Ver no glossário" não ficar coberto.
 - **Reaparição**: o termo ganha nova marca quando volta 2500 palavras ou mais depois da última marca dele.
   Não conta no teto; vale no máximo 1 por seção `##` e 6 por artigo. A decisão sai só das posições das
   ocorrências (`planejarReaparicoes`), então `varrer()` pode rodar de novo sem mudar nada. A marca de

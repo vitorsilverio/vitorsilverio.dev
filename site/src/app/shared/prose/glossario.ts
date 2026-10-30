@@ -10,12 +10,14 @@ import {
 import {
   Aparicao,
   ehGenerico,
+  LACUNA_REAPARICAO,
   maximoDeTermos,
   ocorrencias,
   planejarReaparicoes,
   prioridadeDoTermo,
   regexDoTermo,
   seguidoDeDefinicao,
+  terminaEmVariante,
   variantesDoTermo,
 } from './glossario.util';
 import { slugificar } from './prose.util';
@@ -37,6 +39,8 @@ interface Termo {
   readonly nome: string;
   readonly regex: RegExp;
   readonly linha: HTMLElement;
+  /** Todas as formas da linha (o nome e a sigla): uma não é marcada colada à outra. */
+  readonly variantes: readonly string[];
   readonly definicao: HTMLElement;
   readonly prioridade: number;
 }
@@ -123,7 +127,9 @@ export class Glossario implements OnDestroy {
     afterNextRender(() => {
       this.criarStatus();
       this.ouvir();
-      this.mutation = new MutationObserver(() => this.agendar());
+      this.mutation = new MutationObserver((registros) => {
+        if (registros.some((r) => this.relevante(r))) this.agendar();
+      });
       this.mutation.observe(this.el, { childList: true, subtree: true });
       this.varrer();
     });
@@ -151,6 +157,17 @@ export class Glossario implements OnDestroy {
     return this.marcas.size;
   }
 
+  /**
+   * Só muda o que varrer() enxerga se o artigo mudou. A região de status e o balão mudam a cada
+   * abrir e fechar; o que a própria diretiva insere é descartado em `varrer()` (takeRecords).
+   */
+  private relevante(r: MutationRecord): boolean {
+    const alvo = r.target as Node;
+    if (alvo === this.status) return false;
+    const pai = alvo.nodeType === Node.ELEMENT_NODE ? (alvo as Element) : alvo.parentElement;
+    return !pai?.closest('.glos-balao');
+  }
+
   private agendar(): void {
     if (this.agendado) return;
     this.agendado = true;
@@ -174,14 +191,23 @@ export class Glossario implements OnDestroy {
       const usados = new Set(
         [...this.marcas.values()].filter((m) => !m.reaparicao).map((m) => m.termo.linha.id),
       );
-      const vagas = maximoDeTermos(this.mapaDoTexto().palavras) - usados.size;
+      let mapa = this.mapaDoTexto();
+      const vagas = maximoDeTermos(mapa.palavras) - usados.size;
       if (vagas > 0) {
-        const candidatos = this.candidatos(this.termos.filter((t) => !usados.has(t.linha.id)));
-        this.marcar(this.escolher(candidatos, vagas), false);
+        const pendentes = this.termos.filter((t) => !usados.has(t.linha.id));
+        const escolhidos = this.escolher(this.candidatos(pendentes, mapa.trechos), vagas);
+        if (escolhidos.length > 0) {
+          this.marcar(escolhidos, false);
+          mapa = this.mapaDoTexto(); // os nós foram divididos
+        }
       }
-      this.reaparecer();
+      // Sem 2500 palavras de texto não há como o termo reaparecer: poupa a segunda varredura.
+      if (mapa.palavras > LACUNA_REAPARICAO) this.reaparecer(mapa.trechos);
     } catch {
       /* degrada: sem glossário inline */
+    } finally {
+      // O que a própria varredura inseriu não é mudança do artigo: não agenda outra varredura.
+      this.mutation?.takeRecords();
     }
   }
 
@@ -221,6 +247,7 @@ export class Glossario implements OnDestroy {
           nome: (cab.textContent ?? '').replace(/\s+/g, ' ').trim(),
           regex,
           linha,
+          variantes: nomes,
           definicao: def,
           prioridade: prioridadeDoTermo(nome, codigo),
         });
@@ -237,54 +264,56 @@ export class Glossario implements OnDestroy {
    */
   private mapaDoTexto(): { palavras: number; trechos: TrechoDeTexto[] } {
     const limite = this.limite!;
-    const antes = (n: Node) =>
-      !!(limite.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING);
-    const titulos = [...this.el.querySelectorAll('h2')].filter((h) => h !== limite && antes(h));
-    const walker = this.doc.createTreeWalker(this.el, NodeFilter.SHOW_TEXT, {
-      acceptNode: (n) => {
-        const pai = n.parentElement;
-        if (!pai || !n.nodeValue?.trim() || !antes(n)) return NodeFilter.FILTER_REJECT;
-        return pai.closest('.glos-balao') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
-      },
-    });
+    // Uma passada só, em ordem de documento, parando no h2 "Glossário": nada de
+    // compareDocumentPosition por nó. Cada h2 anterior abre uma seção.
+    // Sem callback de filtro (uma chamada de JS por nó custa caro em artigos longos).
+    const walker = this.doc.createTreeWalker(
+      this.el,
+      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+    );
+    const elegivelPorPai = new Map<Element, boolean>();
     const trechos: TrechoDeTexto[] = [];
     let palavras = 0;
     let secao = 0;
-    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-      const no = n as Text;
-      while (
-        secao < titulos.length &&
-        titulos[secao].compareDocumentPosition(no) & Node.DOCUMENT_POSITION_FOLLOWING
-      ) {
-        secao++;
+    let n: Node | null = walker.nextNode();
+    while (n && n !== limite) {
+      if (n.nodeType === Node.ELEMENT_NODE) {
+        const e = n as Element;
+        if (e.tagName === 'H2') secao++;
+        if (e.classList.contains('glos-balao')) {
+          // o texto do balão não conta: pula a subárvore inteira
+          n = walker.nextSibling();
+          while (!n && walker.parentNode()) n = walker.nextSibling();
+        } else {
+          n = walker.nextNode();
+        }
+        continue;
       }
-      trechos.push({
-        no,
-        posicao: palavras,
-        secao,
-        elegivel: !no.parentElement!.closest(IGNORAR),
-      });
-      palavras += no.data.match(/\S+/g)?.length ?? 0;
+      const no = n as Text;
+      const pai = no.parentElement;
+      if (pai && no.data.trim()) {
+        let elegivel = elegivelPorPai.get(pai);
+        if (elegivel === undefined) {
+          elegivel = !pai.closest(IGNORAR);
+          elegivelPorPai.set(pai, elegivel);
+        }
+        trechos.push({ no, posicao: palavras, secao, elegivel });
+        palavras += no.data.match(/\S+/g)?.length ?? 0;
+      }
+      n = walker.nextNode();
     }
     return { palavras, trechos };
   }
 
-  /** Só texto corrido que vem antes do h2 "Glossário". */
-  private textosElegiveis(): Text[] {
-    return this.mapaDoTexto()
-      .trechos.filter((t) => t.elegivel)
-      .map((t) => t.no);
-  }
-
   /** Primeira ocorrência elegível de cada linha da tabela (variantes contam como um só termo). */
-  private candidatos(pendentes: Termo[]): Candidato[] {
-    const textos = this.textosElegiveis();
+  private candidatos(pendentes: Termo[], trechos: readonly TrechoDeTexto[]): Candidato[] {
+    const textos = trechos.filter((t) => t.elegivel).map((t) => t.no);
     const porLinha = new Map<HTMLElement, Candidato>();
     for (const termo of pendentes) {
       for (let ordem = 0; ordem < textos.length; ordem++) {
         const no = textos[ordem];
         const achado = ocorrencias(no.data, termo.regex).find(
-          (o) => !this.jaExplicado(no, o.indice + o.tamanho),
+          (o) => !this.dispensada(no, o.indice, o.tamanho, termo),
         );
         if (!achado) continue;
         const atual = porLinha.get(termo.linha);
@@ -299,6 +328,25 @@ export class Glossario implements OnDestroy {
       }
     }
     return [...porLinha.values()];
+  }
+
+  /** A ocorrência não ganha marca: já vem explicada, ou é a expansão colada ao próprio termo. */
+  private dispensada(no: Text, indice: number, tamanho: number, termo: Termo): boolean {
+    return this.jaExplicado(no, indice + tamanho) || this.coladaAoTermo(no, indice, tamanho, termo);
+  }
+
+  /** `JIT (just-in-time, ...)`: a forma entre parênteses logo depois de outra da mesma linha. */
+  private coladaAoTermo(no: Text, indice: number, tamanho: number, termo: Termo): boolean {
+    if (termo.variantes.length < 2) return false;
+    const antes = no.data.slice(0, indice);
+    if (terminaEmVariante(antes, termo.variantes)) return true;
+    if (!/^\s*\(\s*$/.test(antes)) return false;
+    // o parêntese abre o nó: a forma anterior já virou marca (termo + balão) ou é o nó vizinho
+    let ant = no.previousSibling;
+    while (ant && (ant as Element).classList?.contains('glos-balao')) ant = ant.previousSibling;
+    const nome = (ant?.textContent ?? '').trim().toLowerCase();
+    const esta = no.data.slice(indice, indice + tamanho).toLowerCase();
+    return nome !== esta && termo.variantes.some((v) => v.toLowerCase() === nome);
   }
 
   /** O termo é seguido, ali mesmo, de uma definição entre parênteses. */
@@ -345,8 +393,7 @@ export class Glossario implements OnDestroy {
    * posições (ver `planejarReaparicoes`), com as marcas existentes entrando na conta: rodar
    * outra vez não muda nada.
    */
-  private reaparecer(): void {
-    const { trechos } = this.mapaDoTexto();
+  private reaparecer(trechos: readonly TrechoDeTexto[]): void {
     const porNo = new Map<Node, TrechoDeTexto>(trechos.map((t) => [t.no, t]));
     const aparicoes: Aparicao[] = [];
     const candidatos = new Map<Aparicao, Candidato>();
@@ -367,7 +414,7 @@ export class Glossario implements OnDestroy {
       if (!comMarca.has(termo.linha.id)) continue;
       elegiveis.forEach((t, ordem) => {
         for (const o of ocorrencias(t.no.data, termo.regex)) {
-          if (this.jaExplicado(t.no, o.indice + o.tamanho)) continue;
+          if (this.dispensada(t.no, o.indice, o.tamanho, termo)) continue;
           const antesDoTermo = t.no.data.slice(0, o.indice).match(/\S+/g)?.length ?? 0;
           const a: Aparicao = {
             linha: termo.linha.id,
@@ -628,7 +675,11 @@ export class Glossario implements OnDestroy {
     if (!marca || !view) return;
     const balao = marca.balao;
     const largura = this.doc.documentElement.clientWidth;
-    const altura = view.innerHeight;
+    // O banner de cookies é fixo no pé da tela e fica por cima do balão (z-index maior): o
+    // balão só usa o que está acima dele, para o link "Ver no glossário" não ficar coberto.
+    const faixa = this.doc.querySelector('.consent-banner, .consent-bar');
+    const topoFaixa = faixa ? faixa.getBoundingClientRect().top : view.innerHeight;
+    const altura = Math.min(view.innerHeight, Math.max(topoFaixa, 0));
     balao.style.left = '0px';
     balao.style.top = '0px';
     const w = balao.offsetWidth;

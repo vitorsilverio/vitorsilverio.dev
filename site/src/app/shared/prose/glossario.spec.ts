@@ -459,3 +459,92 @@ describe('Glossario em artigos longos', () => {
     expect(el.querySelector('#outro')!.textContent).toBe('');
   });
 });
+
+describe('Glossario: custo da varredura, expansão colada e banner de cookies', () => {
+  beforeEach(() => TestBed.configureTestingModule({ imports: [Hospedeiro] }));
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.body.replaceChildren();
+  });
+
+  const tabela = (...linhas: [string, string][]) =>
+    `<h2>Glossário</h2><table><tbody>${linhas
+      .map(([t, d]) => `<tr><th scope="row">${t}</th><td>${d}</td></tr>`)
+      .join('')}</tbody></table>`;
+  const depois = () => new Promise((r) => setTimeout(r));
+
+  it('abrir e fechar o balão (que muda o status) não dispara outra varredura', async () => {
+    const { fixture, termos } = await montar();
+    const g = fixture.debugElement.children[0].injector.get(Glossario);
+    const varrer = vi.spyOn(g, 'varrer');
+    termos()[0].click();
+    esc();
+    termos()[1].click();
+    await depois();
+    expect(varrer).not.toHaveBeenCalled();
+  });
+
+  it('o que a própria diretiva insere não agenda outra varredura', async () => {
+    const varrer = vi.spyOn(Glossario.prototype, 'varrer');
+    const { termos } = await montar();
+    await depois();
+    expect(termos().length).toBe(5);
+    // 1 na hidratação (afterNextRender) e 1 pelo conteúdo que chegou; as marcas não contam
+    expect(varrer.mock.calls.length).toBeLessThanOrEqual(2);
+  });
+
+  it('uma mudança real do artigo ainda dispara a varredura', async () => {
+    const { el, termos } = await montar();
+    expect(termos().map((t) => t.textContent)).not.toContain('watchpoint');
+    el.querySelector('.prose')!.insertAdjacentHTML('afterbegin', '<p>um watchpoint aqui</p>');
+    el.querySelector('table tbody')!.insertAdjacentHTML(
+      'beforeend',
+      '<tr><th scope="row">Watchpoint</th><td>ponto de observação.</td></tr>',
+    );
+    await depois();
+    expect(termos().map((t) => t.textContent)).toContain('watchpoint');
+  });
+
+  it('não marca a expansão colada ao próprio termo: JIT (just-in-time, ...)', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2>
+      <p>O JIT (just-in-time, a compilação em tempo de execução) é rápido.</p>
+      <p>Depois o JIT volta.</p>
+      ${tabela(['JIT (just-in-time)', 'compilação em tempo de execução.'])}`);
+    expect(termos().map((t) => t.textContent)).toEqual(['JIT']);
+    expect(termos()[0].closest('p')!.textContent).toContain('volta');
+  });
+
+  it('uma forma da linha longe da outra continua marcada', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2><p>A compilação just-in-time acelera.</p>
+      ${tabela(['JIT (just-in-time)', 'compilação em tempo de execução.'])}`);
+    expect(termos().map((t) => t.textContent)).toEqual(['just-in-time']);
+  });
+
+  it('qualificador no cabeçalho não vira variante: Estrelas (GitHub)', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2><p>Os repositórios apareceram no GitHub com muitas visitas.</p>
+      ${tabela(['Estrelas (GitHub)', 'marcações de interesse.'])}`);
+    expect(termos()).toEqual([]);
+  });
+
+  it('com o banner de cookies, o balão fica acima dele e o link não é coberto', async () => {
+    const { el, termos, balaoDe } = await montar(`
+      <h2>Um</h2><p>O breakpoint fica perto do fim da tela.</p>
+      ${tabela(['Breakpoint', 'ponto de parada.'])}`);
+    const banner = document.createElement('div');
+    banner.className = 'consent-banner';
+    el.append(banner);
+    vi.spyOn(banner, 'getBoundingClientRect').mockReturnValue({ top: 500 } as DOMRect);
+    const termo = termos()[0];
+    vi.spyOn(termo, 'getClientRects').mockReturnValue([
+      { top: 440, bottom: 460, left: 10, right: 80 },
+    ] as unknown as DOMRectList);
+    Object.defineProperty(balaoDe(termo), 'offsetHeight', { value: 120 });
+    termo.click();
+    const topo = parseInt(balaoDe(termo).style.top, 10);
+    // acima do termo (440 - 4 - 120), não abaixo (464), que invadiria o banner a partir de 500
+    expect(topo + 120).toBeLessThanOrEqual(500);
+  });
+});

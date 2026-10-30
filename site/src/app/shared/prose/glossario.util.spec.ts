@@ -7,6 +7,7 @@ import {
   prioridadeDoTermo,
   regexDoTermo,
   seguidoDeDefinicao,
+  terminaEmVariante,
   variantesDoTermo,
 } from './glossario.util';
 
@@ -186,5 +187,43 @@ describe('planejarReaparicoes', () => {
     const chave = (l: Aparicao[]) => l.map((a) => `${a.linha}@${a.posicao}`);
     expect(chave(planejarReaparicoes(embaralhadas))).toEqual(chave(planejarReaparicoes(todas)));
     expect(chave(planejarReaparicoes(todas))).toEqual(['a@2600', 'a@5300', 'b@5400']);
+  });
+});
+
+describe('variantesDoTermo: só nome ou expansão vira variante, qualificador não', () => {
+  it.each([
+    ['AddressSanitizer (ASan)', ['AddressSanitizer', 'ASan']],
+    ['JIT (just-in-time)', ['JIT', 'just-in-time']],
+    ['LLM (Large Language Model)', ['LLM', 'Large Language Model']],
+    ['TLV (Tag-Length-Value)', ['TLV', 'Tag-Length-Value']],
+    ['CA (autoridade certificadora)', ['autoridade certificadora']],
+    ['Código automodificável (SMC)', ['Código automodificável', 'SMC']],
+    ['lr (r14)', ['r14']],
+  ])('%s', (cabecalho, esperado) => {
+    expect(variantesDoTermo(cabecalho)).toEqual(esperado);
+  });
+
+  it.each([
+    ['Estrelas (GitHub)', ['Estrelas']],
+    ['Agente (de IA)', ['Agente']],
+    ['Agente (de programação)', ['Agente']],
+    ['Oráculo (de testes)', ['Oráculo']],
+    ['Endianness (bit E)', ['Endianness']],
+    ['stepi (ou si)', ['stepi']],
+    ['continue (no GDB)', ['continue']],
+    ['delete N (GDB)', ['delete N']],
+  ])('%s fica só com o nome', (cabecalho, esperado) => {
+    expect(variantesDoTermo(cabecalho)).toEqual(esperado);
+  });
+});
+
+describe('terminaEmVariante', () => {
+  it('reconhece a forma da linha seguida de abre-parêntese', () => {
+    const v = ['JIT', 'just-in-time'];
+    expect(terminaEmVariante('O JIT (', v)).toBe(true);
+    expect(terminaEmVariante('o jit  (', v)).toBe(true);
+    expect(terminaEmVariante('O JIT ', v)).toBe(false);
+    expect(terminaEmVariante('O XJIT (', v)).toBe(false);
+    expect(terminaEmVariante('a compilação (', v)).toBe(false);
   });
 });
