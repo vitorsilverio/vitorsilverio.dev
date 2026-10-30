@@ -1,0 +1,203 @@
+<figure class="grafico" [attr.aria-labelledby]="titulo() ? idTitulo : null">
+  @if (titulo()) {
+    <figcaption class="titulo" [id]="idTitulo">{{ titulo() }}</figcaption>
+  }
+  <p class="resumo" [id]="idResumo">{{ resumo() }}</p>
+
+  @if (modelo(); as m) {
+    <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        @for (t of texturas; track t) {
+          <pattern
+            [id]="idTextura + t"
+            patternUnits="userSpaceOnUse"
+            width="5"
+            height="5"
+            [attr.patternTransform]="t === 1 ? 'rotate(-45)' : t === 3 ? 'rotate(45)' : null"
+          >
+            @switch (t) {
+              @case (2) {
+                <circle cx="2.5" cy="2.5" r="1" class="tx" />
+              }
+              @case (4) {
+                <rect width="1.5" height="5" class="tx" />
+              }
+              @default {
+                <rect width="5" height="1.5" class="tx" />
+              }
+            }
+          </pattern>
+        }
+      </defs>
+    </svg>
+
+    <ul class="legenda" role="list" aria-label="Séries do gráfico">
+      @for (i of indices(); track i) {
+        <li>
+          @if (interativo()) {
+            <button
+              type="button"
+              class="item"
+              [attr.aria-pressed]="!oculta(m.series[i].nome)"
+              [class.oculta]="oculta(m.series[i].nome)"
+              (click)="alternar(m.series[i].nome)"
+            >
+              <ng-container *ngTemplateOutlet="amostra; context: { i: i }" />
+              <span class="nome">{{ m.series[i].nome }}</span>
+            </button>
+          } @else {
+            <span class="item">
+              <ng-container *ngTemplateOutlet="amostra; context: { i: i }" />
+              <span class="nome">{{ m.series[i].nome }}</span>
+            </span>
+          }
+        </li>
+      }
+    </ul>
+
+    @if (interativo() && temZoom()) {
+      <div class="zoom" role="group" aria-label="Zoom do gráfico">
+        <button type="button" [disabled]="!podeAmpliar()" (click)="ampliarJanela()">Ampliar</button>
+        <button type="button" [disabled]="!podeReduzir()" (click)="reduzirJanela()">Reduzir</button>
+        <button
+          type="button"
+          aria-label="Mover para a esquerda"
+          [disabled]="!podeEsquerda()"
+          (click)="moverJanela(-1)"
+        >
+          <span aria-hidden="true">&larr;</span>
+        </button>
+        <button
+          type="button"
+          aria-label="Mover para a direita"
+          [disabled]="!podeDireita()"
+          (click)="moverJanela(1)"
+        >
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+        <button type="button" [disabled]="!podeReduzir()" (click)="redefinirJanela()">
+          Redefinir
+        </button>
+      </div>
+    }
+
+    <div
+      #area
+      class="area"
+      role="group"
+      [attr.aria-label]="rotuloArea()"
+      [attr.aria-describedby]="interativo() ? idResumo + ' ' + idDica : idResumo"
+      [attr.tabindex]="interativo() ? 0 : null"
+      (keydown)="aoTeclar($event)"
+      (blur)="aoSairDoGrafico()"
+    >
+      <div class="visual" [class.pronto]="pronto()" aria-hidden="true">
+        @if (svgs(); as s) {
+          <div class="estaticos">
+            <div class="tam-pequeno">
+              <div class="claro" [innerHTML]="html(s.pequeno.light)"></div>
+              <div class="escuro" [innerHTML]="html(s.pequeno.dark)"></div>
+            </div>
+            <div class="tam-medio">
+              <div class="claro" [innerHTML]="html(s.medio.light)"></div>
+              <div class="escuro" [innerHTML]="html(s.medio.dark)"></div>
+            </div>
+            <div class="tam-largo">
+              <div class="claro" [innerHTML]="html(s.largo.light)"></div>
+              <div class="escuro" [innerHTML]="html(s.largo.dark)"></div>
+            </div>
+          </div>
+        }
+        <div #vivo class="vivo"></div>
+      </div>
+    </div>
+
+    @if (interativo()) {
+      <p class="dica" [id]="idDica">
+        Com o gráfico em foco: setas esquerda e direita percorrem as categorias, setas para cima e
+        para baixo trocam a série, Home e End vão às pontas e Esc fecha o valor. Ctrl com a roda do
+        mouse amplia.
+      </p>
+    }
+
+    <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+      {{ anuncio() }}
+    </div>
+
+    <details class="dados">
+      <summary>Ver os dados em tabela</summary>
+      <div class="scroll-x">
+        <table class="tabela-matriz">
+          <caption>
+            {{
+              titulo() || 'Dados do gráfico'
+            }}{{
+              unidade() ? ' (' + unidade() + ')' : ''
+            }}
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ colunaCategoria() }}</th>
+              @for (s of m.series; track $index) {
+                <th scope="col">{{ s.nome }}</th>
+              }
+              @if (empilhado() && m.series.length > 1) {
+                <th scope="col">Total</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of m.categorias; track $index; let i = $index) {
+              <tr>
+                <th scope="row">{{ c }}</th>
+                @for (s of m.series; track $index) {
+                  <td>{{ numero(s.valores[i]) }}</td>
+                }
+                @if (empilhado() && m.series.length > 1) {
+                  <td>{{ numero(total(i)) }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <ng-template #amostra let-i="i">
+      <svg
+        class="amostra"
+        viewBox="0 0 12 12"
+        width="16"
+        height="16"
+        aria-hidden="true"
+        focusable="false"
+      >
+        @if (tipo() === 'linhas') {
+          <line
+            x1="0"
+            x2="12"
+            y1="6"
+            y2="6"
+            stroke-width="2"
+            [style.stroke]="'var(--gc-' + (i + 1) + ')'"
+          />
+          <path
+            [attr.d]="formas[i]"
+            transform="translate(1 1)"
+            [style.fill]="'var(--gc-' + (i + 1) + ')'"
+            class="contorno"
+          />
+        } @else {
+          <rect width="12" height="12" rx="2" [style.fill]="'var(--gc-' + (i + 1) + ')'" />
+          @if (i > 0) {
+            <rect width="12" height="12" rx="2" [attr.fill]="'url(#' + idTextura + i + ')'" />
+          }
+        }
+      </svg>
+    </ng-template>
+  }
+
+  @if (fonte()) {
+    <p class="fonte">Fonte: {{ fonte() }}</p>
+  }
+</figure>

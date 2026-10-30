@@ -1,0 +1,255 @@
+:host {
+  display: block;
+  margin: 1.5rem 0;
+  /* Cores por série e tema; os valores vêm de TOKENS (grafico-modelo.ts) como --gc-l1..6/--gc-d1..6. */
+  --gc-1: var(--gc-l1);
+  --gc-2: var(--gc-l2);
+  --gc-3: var(--gc-l3);
+  --gc-4: var(--gc-l4);
+  --gc-5: var(--gc-l5);
+  --gc-6: var(--gc-l6);
+  --gc-t: var(--gc-lt);
+}
+
+:host-context([data-theme='dark']) {
+  --gc-1: var(--gc-d1);
+  --gc-2: var(--gc-d2);
+  --gc-3: var(--gc-d3);
+  --gc-4: var(--gc-d4);
+  --gc-5: var(--gc-d5);
+  --gc-6: var(--gc-d6);
+  --gc-t: var(--gc-dt);
+}
+
+.grafico {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.titulo {
+  margin: 0 0 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.resumo,
+.fonte,
+.dica {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.dica,
+.fonte {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.tx {
+  fill: var(--gc-t);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.4rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--text);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+
+button.item {
+  min-height: 2.25rem;
+  padding-inline: 0.6rem;
+  cursor: pointer;
+  border-color: var(--border);
+  background: var(--surface-2);
+}
+
+button.item.oculta .nome {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+button.item.oculta .amostra {
+  opacity: 0.35;
+}
+
+.amostra {
+  flex: none;
+  overflow: visible;
+}
+
+.amostra .contorno {
+  stroke: var(--surface);
+  stroke-width: 1;
+}
+
+.zoom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.5rem;
+}
+
+.zoom button {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0.2rem 0.7rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.zoom button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+button:focus-visible,
+.area:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  button.item,
+  .zoom button {
+    min-height: 2.75rem;
+  }
+}
+
+/* A largura do próprio contêiner decide qual SVG estático aparece e a proporção reservada. */
+.area {
+  container-type: inline-size;
+  border-radius: 8px;
+}
+
+.visual {
+  position: relative;
+  aspect-ratio: 300 / 300;
+}
+
+/* O SVG entra por innerHTML, sem o atributo de escopo do componente: precisa de ::ng-deep. */
+:host ::ng-deep .estaticos svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tam-medio,
+.tam-largo,
+.escuro {
+  display: none;
+}
+
+:host-context([data-theme='dark']) .claro {
+  display: none;
+}
+
+:host-context([data-theme='dark']) .escuro {
+  display: block;
+}
+
+@container (min-width: 22rem) {
+  .visual {
+    aspect-ratio: 440 / 340;
+  }
+
+  .tam-pequeno {
+    display: none;
+  }
+
+  .tam-medio {
+    display: block;
+  }
+}
+
+@container (min-width: 34rem) {
+  .visual {
+    aspect-ratio: 640 / 380;
+  }
+
+  .tam-medio {
+    display: none;
+  }
+
+  .tam-largo {
+    display: block;
+  }
+}
+
+.vivo {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  /* A página rola na vertical; arrastar na horizontal move o zoom. */
+  touch-action: pan-y pinch-zoom;
+}
+
+.pronto .vivo {
+  visibility: visible;
+}
+
+.pronto .estaticos {
+  visibility: hidden;
+}
+
+.dados {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.dados summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+.dados .scroll-x {
+  margin-top: 0.5rem;
+}
+
+.dados table {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.dados td {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
