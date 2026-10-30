@@ -282,4 +282,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Em 19 de outubro de 2026 os autores retiraram o PEP 836, e o JIT experimental do CPython deve sair da árvore principal no ciclo do Python 3.16. Conto a história com datas e fontes, explico como esse JIT funcionava (micro-operações, copy-and-patch, LLVM) e comparo as três preocupações centrais da discussão com as decisões que tomei no arm-jitter: o interpretador como oráculo de testes, o bytecode JVM no lugar de código de máquina por plataforma e a invalidação do cache de blocos.',
     tags: ['Python', 'CPython', 'JIT', 'PEP 836', 'arm-jitter', 'JVM', 'Compiladores'],
   },
+  {
+    slug: 'fuzzer-ou-llm-fuzzilli-bigsleep-v8',
+    title: 'Fuzzer ou LLM: o que o Project Zero mediu ao comparar Fuzzilli e BigSleep no V8',
+    date: '2026-10-29',
+    readingTime: '25 min',
+    excerpt: 'Em 27 de outubro de 2026, o Project Zero publicou a primeira comparação em números entre um fuzzer (Fuzzilli) e um agente de IA (BigSleep) caçando bugs no V8. Leio os gráficos do post, separo as medidas que não se misturam e mostro, com um laboratório de brinquedo em Docker, por que fuzzer e revisor têm pontos cegos diferentes.',
+    tags: ['Segurança', 'Fuzzing', 'IA', 'LLM', 'V8', 'Docker'],
+  },
 ];

@@ -6,7 +6,20 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Wed, 28 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Fuzzer ou LLM: o que o Project Zero mediu ao comparar Fuzzilli e BigSleep no V8</title>
+      <link>https://vitorsilverio.dev/artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8/</guid>
+      <pubDate>Thu, 29 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Em 27 de outubro de 2026, o Project Zero publicou a primeira comparação em números entre um fuzzer (Fuzzilli) e um agente de IA (BigSleep) caçando bugs no V8. Leio os gráficos do post, separo as medidas que não se misturam e mostro, com um laboratório de brinquedo em Docker, por que fuzzer e revisor têm pontos cegos diferentes.</description>
+      <category>Segurança</category>
+      <category>Fuzzing</category>
+      <category>IA</category>
+      <category>LLM</category>
+      <category>V8</category>
+      <category>Docker</category>
+    </item>
     <item>
       <title>O JIT do CPython sai da árvore: o que o PEP 836 retirado ensina a quem escreve um JIT</title>
       <link>https://vitorsilverio.dev/artigos/python-jit-removido-pep-836/</link>
