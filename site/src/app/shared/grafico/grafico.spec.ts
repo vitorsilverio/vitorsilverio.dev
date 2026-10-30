@@ -475,6 +475,33 @@ describe('Grafico', () => {
     });
   });
 
+  describe('roda do mouse', () => {
+    // O zrender (ECharts) escuta a roda num elemento dentro de .vivo e a consome com
+    // preventDefault; este elemento faz o papel dele.
+    async function comOuvinteDoMotor() {
+      const f = await montar();
+      const recebidos: WheelEvent[] = [];
+      const dentro = document.createElement('div');
+      dentro.addEventListener('wheel', (e) => recebidos.push(e));
+      q(f, '.vivo').append(dentro);
+      return { dentro, recebidos };
+    }
+
+    it('a roda sem Ctrl não chega ao motor, para a página continuar rolando', async () => {
+      const { dentro, recebidos } = await comOuvinteDoMotor();
+      dentro.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, bubbles: true, cancelable: true }));
+      expect(recebidos).toHaveLength(0);
+    });
+
+    it('a roda com Ctrl chega ao motor, que amplia o gráfico', async () => {
+      const { dentro, recebidos } = await comOuvinteDoMotor();
+      dentro.dispatchEvent(
+        new WheelEvent('wheel', { deltaY: -100, ctrlKey: true, bubbles: true, cancelable: true }),
+      );
+      expect(recebidos).toHaveLength(1);
+    });
+  });
+
   describe('acessibilidade (axe)', () => {
     const regras = { 'color-contrast': { enabled: false } };
 

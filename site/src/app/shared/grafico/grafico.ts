@@ -296,6 +296,14 @@ export class Grafico implements OnInit {
     this.semMovimento =
       typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.compacto = this.ehCompacto(area);
+    // O ECharts consome toda roda sobre o gráfico (preventDefault) mesmo com o zoom restrito a
+    // Ctrl (`zoomOnMouseWheel: 'ctrl'` só decide se amplia). Sem este filtro, em captura, o
+    // ponteiro sobre o gráfico prenderia a rolagem da página; a roda com Ctrl segue para o zoom.
+    const soComCtrl = (e: WheelEvent) => {
+      if (!e.ctrlKey) e.stopPropagation();
+    };
+    vivo.addEventListener('wheel', soComCtrl, { capture: true, passive: true });
+    this.destroyRef.onDestroy(() => vivo.removeEventListener('wheel', soComCtrl, { capture: true }));
     const chart = motor.criar(vivo, { renderer: 'svg' });
     this.chart = chart;
     chart.setOption(this.opcao());
