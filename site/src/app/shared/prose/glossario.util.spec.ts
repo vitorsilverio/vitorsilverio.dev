@@ -1,6 +1,9 @@
 import {
+  Aparicao,
   ehGenerico,
+  maximoDeTermos,
   ocorrencias,
+  planejarReaparicoes,
   prioridadeDoTermo,
   regexDoTermo,
   seguidoDeDefinicao,
@@ -77,5 +80,111 @@ describe('termos genéricos e prioridade', () => {
     expect(prioridadeDoTermo('r13', false)).toBe(2);
     expect(prioridadeDoTermo('breakpoint', true)).toBe(2);
     expect(prioridadeDoTermo('breakpoint', false)).toBe(1);
+  });
+});
+
+describe('variantesDoTermo com parênteses no cabeçalho', () => {
+  it('"X (Y)" gera o nome e a sigla', () => {
+    expect(variantesDoTermo('AddressSanitizer (ASan)')).toEqual(['AddressSanitizer', 'ASan']);
+    expect(variantesDoTermo('JIT (just-in-time)')).toEqual(['JIT', 'just-in-time']);
+    expect(variantesDoTermo('LLM (Large Language Model)')).toEqual(['LLM', 'Large Language Model']);
+  });
+
+  it('combina com " / " e continua descartando termos curtos', () => {
+    expect(variantesDoTermo('arm-box (ABX) / arm-jitter')).toEqual([
+      'arm-box',
+      'ABX',
+      'arm-jitter',
+    ]);
+    expect(variantesDoTermo('Registrador (R)')).toEqual(['Registrador']);
+  });
+
+  it('cabeçalho de comando fica inteiro, sem separar o parêntese', () => {
+    expect(variantesDoTermo('x/i $pc (GDB)')).toEqual(['x/i $pc (GDB)']);
+    expect(variantesDoTermo('mov r0, #1 (ARM)')).toEqual(['mov r0, #1 (ARM)']);
+  });
+});
+
+describe('maximoDeTermos', () => {
+  it('é 8 até 4000 palavras e cresce uma vaga a cada 500', () => {
+    expect(maximoDeTermos(0)).toBe(8);
+    expect(maximoDeTermos(2000)).toBe(8);
+    expect(maximoDeTermos(4000)).toBe(8);
+    expect(maximoDeTermos(4001)).toBe(9);
+    expect(maximoDeTermos(4500)).toBe(9);
+    expect(maximoDeTermos(4501)).toBe(10);
+    expect(maximoDeTermos(7744)).toBe(16);
+  });
+});
+
+describe('planejarReaparicoes', () => {
+  const marca = (linha: string, posicao: number, secao = 0): Aparicao => ({
+    linha,
+    posicao,
+    secao,
+    marcada: true,
+  });
+  const ocorre = (linha: string, posicao: number, secao = 0): Aparicao => ({
+    linha,
+    posicao,
+    secao,
+    marcada: false,
+  });
+
+  it('só marca a partir de 2500 palavras depois da última marca', () => {
+    expect(planejarReaparicoes([marca('a', 100), ocorre('a', 2599, 1)])).toEqual([]);
+    expect(planejarReaparicoes([marca('a', 100), ocorre('a', 2600, 1)])).toHaveLength(1);
+  });
+
+  it('conta a lacuna desde a última marca, inclusive a de reaparição', () => {
+    const plano = planejarReaparicoes([
+      marca('a', 0),
+      ocorre('a', 2500, 1),
+      ocorre('a', 4000, 2),
+      ocorre('a', 5000, 3),
+    ]);
+    expect(plano.map((a) => a.posicao)).toEqual([2500, 5000]);
+  });
+
+  it('ignora ocorrência de termo sem marca principal', () => {
+    expect(planejarReaparicoes([ocorre('a', 9000, 3)])).toEqual([]);
+  });
+
+  it('aceita no máximo uma reaparição por seção', () => {
+    const plano = planejarReaparicoes([
+      marca('a', 0),
+      marca('b', 0),
+      ocorre('a', 3000, 1),
+      ocorre('b', 3100, 1),
+      ocorre('b', 3200, 2),
+    ]);
+    expect(plano.map((a) => [a.linha, a.posicao])).toEqual([
+      ['a', 3000],
+      ['b', 3200],
+    ]);
+  });
+
+  it('aceita no máximo 6 por artigo, contando as marcas que já existem', () => {
+    const todas = [marca('a', 0)];
+    for (let i = 1; i <= 9; i++) todas.push(ocorre('a', i * 2600, i));
+    expect(planejarReaparicoes(todas)).toHaveLength(6);
+    const jaMarcadas = [marca('a', 0), marca('a', 2600, 1), marca('a', 5200, 2)];
+    for (let i = 3; i <= 9; i++) jaMarcadas.push(ocorre('a', i * 2600, i));
+    expect(planejarReaparicoes(jaMarcadas)).toHaveLength(4);
+  });
+
+  it('é estável: não depende da ordem em que as ocorrências chegam', () => {
+    const todas = [
+      marca('a', 0),
+      marca('b', 50),
+      ocorre('a', 2600, 1),
+      ocorre('b', 2700, 1),
+      ocorre('a', 5300, 2),
+      ocorre('b', 5400, 3),
+    ];
+    const embaralhadas = [todas[5], todas[2], todas[0], todas[4], todas[1], todas[3]];
+    const chave = (l: Aparicao[]) => l.map((a) => `${a.linha}@${a.posicao}`);
+    expect(chave(planejarReaparicoes(embaralhadas))).toEqual(chave(planejarReaparicoes(todas)));
+    expect(chave(planejarReaparicoes(todas))).toEqual(['a@2600', 'a@5300', 'b@5400']);
   });
 });

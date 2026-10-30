@@ -8,19 +8,33 @@ export function escaparRegex(texto: string): string {
   return texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/** Texto simples: letras, números e poucos separadores. Exclui comandos (`x/i $pc`), caminhos e símbolos. */
+function ehTextoSimples(texto: string): boolean {
+  return /^[\p{L}\p{N}][\p{L}\p{N} _.+#-]*$/u.test(texto);
+}
+
 /**
  * Separa o cabeçalho de uma linha do glossário em variantes. `arm-jitter / arm-box`
- * vira dois termos; termos curtos demais ficam de fora.
+ * vira dois termos; `AddressSanitizer (ASan)` também (o nome e a sigla), desde que os dois
+ * lados sejam texto simples: um cabeçalho de comando como `x/i $pc (GDB)` fica inteiro.
+ * Termos curtos demais ficam de fora.
  */
 export function variantesDoTermo(cabecalho: string): string[] {
   return cabecalho
     .split(/\s+\/\s+/)
-    .map((t) =>
-      t
+    .flatMap((t) => {
+      const limpo = t
         .replace(/\s+/g, ' ')
         .replace(/^["“”']+|["“”']+$/g, '')
-        .trim(),
-    )
+        .trim();
+      const m = /^(.+?)\s*\(([^()]+)\)$/.exec(limpo);
+      if (m) {
+        const nome = m[1].trim();
+        const sigla = m[2].trim();
+        if (ehTextoSimples(nome) && ehTextoSimples(sigla)) return [nome, sigla];
+      }
+      return [limpo];
+    })
     .filter((t) => t.length >= TAMANHO_MINIMO_TERMO);
 }
 
@@ -44,8 +58,76 @@ export const TERMOS_GENERICOS: ReadonlySet<string> = new Set([
   'blocos',
 ]);
 
-/** Quantos termos, no máximo, um artigo marca: cada um é uma parada de Tab a mais. */
-export const MAXIMO_TERMOS = 8;
+/** Piso do teto de termos por artigo: cada termo marcado é uma parada de Tab a mais. */
+export const MINIMO_DE_TERMOS = 8;
+
+/** Uma vaga de teto a mais a cada tantas palavras do texto antes do Glossário. */
+export const PALAVRAS_POR_TERMO = 500;
+
+/**
+ * Quantos termos, no máximo, um artigo marca pela primeira vez: o teto cresce com o texto,
+ * `max(8, ceil(palavras / 500))` (até 4000 palavras: 8; com 4500: 9). Reaparições não entram
+ * nessa conta (ver `planejarReaparicoes`).
+ */
+export function maximoDeTermos(palavras: number): number {
+  return Math.max(MINIMO_DE_TERMOS, Math.ceil(palavras / PALAVRAS_POR_TERMO));
+}
+
+/** Palavras que precisam passar desde a última marca de um termo para ele ser marcado de novo. */
+export const LACUNA_REAPARICAO = 2500;
+/** No máximo uma reaparição por seção `##`... */
+export const MAXIMO_REAPARICOES_POR_SECAO = 1;
+/** ...e seis por artigo. */
+export const MAXIMO_REAPARICOES = 6;
+
+/** Uma ocorrência elegível (ou já marcada) de um termo, localizada pela posição no texto. */
+export interface Aparicao {
+  /** Identifica a linha do glossário (as variantes de uma linha contam como um só termo). */
+  readonly linha: string;
+  /** Palavras de texto desde o começo do artigo. */
+  readonly posicao: number;
+  /** Índice da seção `##` em que a ocorrência está. */
+  readonly secao: number;
+  /** Já é uma marca no DOM (a primeira da linha é a marca principal; as demais, reaparições). */
+  readonly marcada: boolean;
+}
+
+/**
+ * Decide quais ocorrências ganham uma marca de reaparição. É função só das posições, varrendo
+ * o texto em ordem: não depende da ordem em que as marcas foram inseridas, então rodar de novo
+ * (o `varrer()` roda a cada mutação) devolve o mesmo plano. Uma ocorrência é marcada se vier
+ * `LACUNA_REAPARICAO` palavras ou mais depois da última marca da mesma linha e se a seção e o
+ * artigo ainda tiverem vaga. Marcas que já existem entram na conta como estão.
+ */
+export function planejarReaparicoes(aparicoes: readonly Aparicao[]): Aparicao[] {
+  const ordenadas = aparicoes
+    .map((a, i) => ({ a, i }))
+    .sort((x, y) => x.a.posicao - y.a.posicao || x.i - y.i)
+    .map((x) => x.a);
+  const ultima = new Map<string, number>();
+  const porSecao = new Map<number, number>();
+  let total = 0;
+  const aceitas: Aparicao[] = [];
+  for (const a of ordenadas) {
+    const anterior = ultima.get(a.linha);
+    if (a.marcada) {
+      if (anterior !== undefined) {
+        porSecao.set(a.secao, (porSecao.get(a.secao) ?? 0) + 1);
+        total++;
+      }
+      ultima.set(a.linha, a.posicao);
+      continue;
+    }
+    if (anterior === undefined || a.posicao - anterior < LACUNA_REAPARICAO) continue;
+    if (total >= MAXIMO_REAPARICOES) continue;
+    if ((porSecao.get(a.secao) ?? 0) >= MAXIMO_REAPARICOES_POR_SECAO) continue;
+    ultima.set(a.linha, a.posicao);
+    porSecao.set(a.secao, (porSecao.get(a.secao) ?? 0) + 1);
+    total++;
+    aceitas.push(a);
+  }
+  return aceitas;
+}
 
 export function ehGenerico(termo: string): boolean {
   return TERMOS_GENERICOS.has(termo.toLowerCase());

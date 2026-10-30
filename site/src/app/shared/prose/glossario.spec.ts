@@ -323,3 +323,139 @@ describe('Glossario', () => {
     expect(g.quantidade).toBe(5);
   });
 });
+
+describe('Glossario em artigos longos', () => {
+  beforeEach(() => TestBed.configureTestingModule({ imports: [Hospedeiro] }));
+  afterEach(() => document.body.replaceChildren());
+
+  const palavras = (n: number) => Array.from({ length: n }, () => 'lorem').join(' ');
+  const tabela = (...linhas: [string, string][]) =>
+    `<h2>Glossário</h2><table><tbody>${linhas
+      .map(([cab, def]) => `<tr><th scope="row">${cab}</th><td>${def}</td></tr>`)
+      .join('')}</tbody></table><h2>Referências</h2><p>fim</p>`;
+  const marcas = (termos: HTMLElement[]) =>
+    termos.map((t) => t.textContent + (t.dataset['reaparicao'] ? '*' : ''));
+
+  it('marca a reaparição depois de 2500 palavras, e não antes', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2>
+      <p>O CPSR aparece aqui. ${palavras(1500)} CPSR de novo, cedo demais.</p>
+      <h2>Dois</h2>
+      <p>${palavras(1500)} e o CPSR volta, longe o bastante.</p>
+      ${tabela(['<code>CPSR</code>', 'registrador de status.'])}`);
+    expect(marcas(termos())).toEqual(['CPSR', 'CPSR*']);
+    expect(termos()[1].closest('p')!.textContent).toContain('volta');
+  });
+
+  it('limita a 1 reaparição por seção', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2>
+      <p>CPSR ${palavras(2600)} CPSR ${palavras(2600)} CPSR ${palavras(10)}</p>
+      ${tabela(['<code>CPSR</code>', 'registrador de status.'])}`);
+    expect(marcas(termos())).toEqual(['CPSR', 'CPSR*']);
+  });
+
+  it('limita a 6 reaparições por artigo', async () => {
+    const secoes = Array.from(
+      { length: 9 },
+      (_, i) => `<h2>Seção ${i}</h2><p>CPSR ${palavras(2600)}</p>`,
+    ).join('');
+    const { termos } = await montar(
+      secoes + tabela(['<code>CPSR</code>', 'registrador de status.']),
+    );
+    expect(termos().length).toBe(7);
+    expect(termos().filter((t) => t.dataset['reaparicao']).length).toBe(6);
+  });
+
+  it('as reaparições ficam fora do teto proporcional de termos', async () => {
+    const nomes = ['alfa', 'bravo', 'charlie', 'delta', 'eco', 'foxtrot', 'golfe', 'hotel'];
+    const { termos } = await montar(`
+      <h2>Um</h2><p>${nomes.join(' ')} ${palavras(2600)}</p>
+      <h2>Dois</h2><p>${nomes.join(' ')} ${palavras(100)}</p>
+      ${tabela(...nomes.map((n): [string, string] => [n, `definição de ${n}.`]))}`);
+    expect(termos().filter((t) => !t.dataset['reaparicao']).length).toBe(8);
+    expect(termos().filter((t) => t.dataset['reaparicao']).length).toBe(1);
+  });
+
+  it('o teto cresce com o tamanho do texto (artigo de ~5100 palavras marca 11 termos)', async () => {
+    const nomes = 'alfa bravo charlie delta eco foxtrot golfe hotel india juliet kilo lima'.split(
+      ' ',
+    );
+    const html = (n: number) => `
+      <h2>Um</h2><p>${nomes.join(' ')} ${palavras(n)}</p>
+      ${tabela(...nomes.map((nome): [string, string] => [nome, `definição de ${nome}.`]))}`;
+    expect((await montar(html(5100))).termos().length).toBe(11);
+    document.body.replaceChildren();
+    expect((await montar(html(500))).termos().length).toBe(8);
+  });
+
+  it('marca o termo pela sigla quando o cabeçalho é "Nome (Sigla)"', async () => {
+    const { termos, balaoDe } = await montar(`
+      <h2>Um</h2><p>O ASan acusa o estouro de buffer.</p>
+      ${tabela(['AddressSanitizer (ASan)', 'detector de erros de memória.'])}`);
+    expect(termos().map((t) => t.textContent)).toEqual(['ASan']);
+    expect(balaoDe(termos()[0]).textContent).toContain('detector de erros de memória');
+  });
+
+  it('cabeçalho de comando continua sem marcar nada', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2><p>Use x/i $pc (GDB) para ver a instrução.</p>
+      ${tabela(['<code>x/i $pc (GDB)</code>', 'mostra a instrução.'])}`);
+    expect(termos().map((t) => t.textContent)).toEqual(['x/i $pc (GDB)']);
+  });
+
+  it('artigo curto não ganha reaparições', async () => {
+    const { termos } = await montar();
+    expect(termos().some((t) => t.dataset['reaparicao'])).toBe(false);
+    expect(termos().length).toBe(5);
+  });
+
+  it('cada balão tem id único e o aria-controls do termo aponta para ele', async () => {
+    const { el, termos, balaoDe } = await montar(`
+      <h2>Um</h2><p>CPSR ${palavras(2600)} CPSR</p>
+      <h2>Dois</h2><p>${palavras(2600)} CPSR</p>
+      ${tabela(['<code>CPSR</code>', 'registrador de status.'])}`);
+    const ids = [...el.querySelectorAll('.glos-balao')].map((b) => b.id);
+    expect(termos().length).toBe(3);
+    expect(ids.length).toBe(termos().length);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const t of termos()) expect(balaoDe(t).classList.contains('glos-balao')).toBe(true);
+  });
+
+  it('é estável: varrer de novo não muda nem o número nem a posição das marcas', async () => {
+    const { fixture, termos } = await montar(`
+      <h2>Um</h2><p>CPSR ${palavras(2600)} CPSR ${palavras(2600)} CPSR</p>
+      <h2>Dois</h2><p>${palavras(2600)} CPSR</p>
+      ${tabela(['<code>CPSR</code>', 'registrador de status.'])}`);
+    const g = fixture.debugElement.children[0].injector.get(Glossario);
+    const antes = marcas(termos());
+    g.varrer();
+    g.varrer();
+    expect(marcas(termos())).toEqual(antes);
+    expect(antes).toEqual(['CPSR', 'CPSR*', 'CPSR*']);
+  });
+
+  it('sem órfãos: quando o texto do Angular some, somem as marcas, os balões e o resto', async () => {
+    const { el, termos } = await montar(`
+      <h2>Um</h2><p id="longo">CPSR ${palavras(2600)} CPSR ${palavras(20)}</p>
+      <h2>Dois</h2><p id="outro">${palavras(2600)} CPSR fim</p>
+      ${tabela(['<code>CPSR</code>', 'registrador de status.'])}`);
+    expect(termos().length).toBe(3);
+    const doAngular: Text[] = [];
+    for (const id of ['#longo', '#outro']) {
+      const p = el.querySelector(id)!;
+      const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, {
+        acceptNode: (n) =>
+          n.parentElement?.closest('.glos-balao, .glos-termo')
+            ? NodeFilter.FILTER_REJECT
+            : NodeFilter.FILTER_ACCEPT,
+      });
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) doAngular.push(n as Text);
+    }
+    doAngular.forEach((n) => n.remove());
+    await new Promise((r) => setTimeout(r));
+    expect(el.querySelectorAll('.glos-termo, .glos-balao').length).toBe(0);
+    expect(el.querySelector('#longo')!.textContent).toBe('');
+    expect(el.querySelector('#outro')!.textContent).toBe('');
+  });
+});

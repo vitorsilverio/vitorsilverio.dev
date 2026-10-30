@@ -292,8 +292,18 @@ requisição, sem flash do nome do ícone, funcionam no pré-render e nos dois t
 
 **Glossário inline** (`appGlossario`, `src/app/shared/prose/glossario.ts`): automático em todo artigo
 que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto **antes** do Glossário
-vira um termo clicável com a definição da própria tabela (no máximo 8 por artigo; termos genéricos em
-`TERMOS_GENERICOS` ficam de fora; ocorrência já explicada entre parênteses é pulada). Controle por
+vira um termo clicável com a definição da própria tabela. Regras (em `glossario.util.ts`):
+- **Cabeçalho com parênteses**: `AddressSanitizer (ASan)` marca o nome e a sigla (as duas formas valem pela
+  mesma linha), desde que os dois lados sejam texto simples; cabeçalho de comando (`x/i $pc (GDB)`) fica inteiro.
+- **Teto proporcional** de primeiras marcas: `max(8, ceil(palavras antes do Glossário / 500))`, com preferência
+  a siglas e a termos em `código`. Termos genéricos (`TERMOS_GENERICOS`) ficam de fora e a ocorrência já
+  explicada entre parênteses é pulada.
+- **Reaparição**: o termo ganha nova marca quando volta 2500 palavras ou mais depois da última marca dele.
+  Não conta no teto; vale no máximo 1 por seção `##` e 6 por artigo. A decisão sai só das posições das
+  ocorrências (`planejarReaparicoes`), então `varrer()` pode rodar de novo sem mudar nada. A marca de
+  reaparição leva `data-reaparicao="true"`.
+
+Controle por
 artigo: `data-glossario="nao"` numa `<tr>` da tabela tira o termo, `data-glossario="sim"` força um
 termo genérico, e `data-glossario="nao"` em qualquer elemento do texto exclui o que está dentro dele.
 

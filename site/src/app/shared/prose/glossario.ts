@@ -8,9 +8,11 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import {
+  Aparicao,
   ehGenerico,
-  MAXIMO_TERMOS,
+  maximoDeTermos,
   ocorrencias,
+  planejarReaparicoes,
   prioridadeDoTermo,
   regexDoTermo,
   seguidoDeDefinicao,
@@ -44,6 +46,16 @@ interface Marca {
   readonly depois: Text;
   readonly balao: HTMLElement;
   readonly termo: Termo;
+  /** Marca de reaparição (o termo já tinha uma marca bem antes); fora do teto de termos. */
+  readonly reaparicao: boolean;
+}
+
+/** Um nó de texto do artigo (antes do Glossário) com sua posição em palavras e sua seção `##`. */
+interface TrechoDeTexto {
+  readonly no: Text;
+  readonly posicao: number;
+  readonly secao: number;
+  readonly elegivel: boolean;
 }
 
 interface Candidato {
@@ -63,8 +75,13 @@ interface Candidato {
  * - só o texto ANTES do h2 "Glossário" (Referências e o resto ficam de fora);
  * - nunca em títulos, código, tabelas, links, nem dentro de `[data-glossario="nao"]`;
  * - termos genéricos (`TERMOS_GENERICOS`) só com `data-glossario="sim"` na linha da tabela;
- *   `data-glossario="nao"` na linha tira o termo; no máximo `MAXIMO_TERMOS` por artigo,
- *   dando preferência a siglas e a termos em `código`;
+ *   `data-glossario="nao"` na linha tira o termo;
+ * - cabeçalho `X (Y)` vale pelas duas formas: o nome e a sigla (se os dois forem texto simples);
+ * - teto proporcional de primeiras marcas, `maximoDeTermos(palavras)` = max(8, palavras / 500
+ *   arredondado para cima), dando preferência a siglas e a termos em `código`;
+ * - reaparição: o termo volta a ser marcado quando reaparece 2500 palavras depois da última
+ *   marca dele; fica fora do teto, com no máximo 1 por seção `##` e 6 por artigo (decidido pela
+ *   posição das ocorrências, não pela ordem de inserção: `varrer()` roda a cada mutação);
  * - a ocorrência seguida de definição entre parênteses é pulada (a próxima serve).
  *
  * Só roda no navegador, depois da hidratação: o HTML pré-renderizado fica com texto normal.
@@ -153,11 +170,16 @@ export class Glossario implements OnDestroy {
       this.removerOrfaos();
       this.lerTermos();
       if (this.termos.length === 0 || !this.limite) return;
-      const usados = new Set([...this.marcas.values()].map((m) => m.termo.linha.id));
-      const vagas = MAXIMO_TERMOS - usados.size;
-      if (vagas <= 0) return;
-      const candidatos = this.candidatos(this.termos.filter((t) => !usados.has(t.linha.id)));
-      this.marcar(this.escolher(candidatos, vagas));
+      // Um termo conta uma vez no teto, não importa quantas reaparições tenha.
+      const usados = new Set(
+        [...this.marcas.values()].filter((m) => !m.reaparicao).map((m) => m.termo.linha.id),
+      );
+      const vagas = maximoDeTermos(this.mapaDoTexto().palavras) - usados.size;
+      if (vagas > 0) {
+        const candidatos = this.candidatos(this.termos.filter((t) => !usados.has(t.linha.id)));
+        this.marcar(this.escolher(candidatos, vagas), false);
+      }
+      this.reaparecer();
     } catch {
       /* degrada: sem glossário inline */
     }
@@ -207,22 +229,51 @@ export class Glossario implements OnDestroy {
     this.termos = novos;
   }
 
-  /** Só texto corrido que vem antes do h2 "Glossário". */
-  private textosElegiveis(): Text[] {
+  /**
+   * Todo o texto antes do h2 "Glossário", em ordem, com a posição de cada nó em palavras e a
+   * seção `##` em que está (o texto dos balões não conta). `elegivel` diz se o nó aceita marca.
+   * As marcas já inseridas aparecem aqui como nós não elegíveis, então as posições não mudam
+   * quando um nó é dividido.
+   */
+  private mapaDoTexto(): { palavras: number; trechos: TrechoDeTexto[] } {
     const limite = this.limite!;
+    const antes = (n: Node) =>
+      !!(limite.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING);
+    const titulos = [...this.el.querySelectorAll('h2')].filter((h) => h !== limite && antes(h));
     const walker = this.doc.createTreeWalker(this.el, NodeFilter.SHOW_TEXT, {
       acceptNode: (n) => {
         const pai = n.parentElement;
-        if (!pai || !n.nodeValue?.trim()) return NodeFilter.FILTER_REJECT;
-        if (!(limite.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING)) {
-          return NodeFilter.FILTER_REJECT;
-        }
-        return pai.closest(IGNORAR) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+        if (!pai || !n.nodeValue?.trim() || !antes(n)) return NodeFilter.FILTER_REJECT;
+        return pai.closest('.glos-balao') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
       },
     });
-    const lista: Text[] = [];
-    for (let n = walker.nextNode(); n; n = walker.nextNode()) lista.push(n as Text);
-    return lista;
+    const trechos: TrechoDeTexto[] = [];
+    let palavras = 0;
+    let secao = 0;
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const no = n as Text;
+      while (
+        secao < titulos.length &&
+        titulos[secao].compareDocumentPosition(no) & Node.DOCUMENT_POSITION_FOLLOWING
+      ) {
+        secao++;
+      }
+      trechos.push({
+        no,
+        posicao: palavras,
+        secao,
+        elegivel: !no.parentElement!.closest(IGNORAR),
+      });
+      palavras += no.data.match(/\S+/g)?.length ?? 0;
+    }
+    return { palavras, trechos };
+  }
+
+  /** Só texto corrido que vem antes do h2 "Glossário". */
+  private textosElegiveis(): Text[] {
+    return this.mapaDoTexto()
+      .trechos.filter((t) => t.elegivel)
+      .map((t) => t.no);
   }
 
   /** Primeira ocorrência elegível de cada linha da tabela (variantes contam como um só termo). */
@@ -271,16 +322,68 @@ export class Glossario implements OnDestroy {
   }
 
   /** De trás para frente: dividir um nó não desloca os índices das ocorrências anteriores. */
-  private marcar(escolhidos: Candidato[]): void {
+  private marcar(escolhidos: Candidato[], reaparicao: boolean): void {
     const ordenados = [...escolhidos].sort((a, b) => b.ordem - a.ordem || b.indice - a.indice);
+    let fim = Infinity; // evita duas marcas sobrepostas no mesmo nó (variantes que se tocam)
+    let anterior: Text | null = null;
     for (const c of ordenados) {
+      if (c.no === anterior && c.indice + c.tamanho > fim) continue;
+      anterior = c.no;
+      fim = c.indice;
       const meio: Text = c.no.splitText(c.indice);
       const depois: Text = meio.splitText(c.tamanho);
       const { controle, balao } = this.criarControle(meio.data, c.termo);
+      if (reaparicao) controle.dataset['reaparicao'] = 'true';
       meio.replaceWith(controle);
       controle.after(balao);
-      this.marcas.set(controle, { antes: c.no, depois, balao, termo: c.termo });
+      this.marcas.set(controle, { antes: c.no, depois, balao, termo: c.termo, reaparicao });
     }
+  }
+
+  /**
+   * Marca de novo o termo que volta bem depois da última marca dele. O plano sai só das
+   * posições (ver `planejarReaparicoes`), com as marcas existentes entrando na conta: rodar
+   * outra vez não muda nada.
+   */
+  private reaparecer(): void {
+    const { trechos } = this.mapaDoTexto();
+    const porNo = new Map<Node, TrechoDeTexto>(trechos.map((t) => [t.no, t]));
+    const aparicoes: Aparicao[] = [];
+    const candidatos = new Map<Aparicao, Candidato>();
+    const comMarca = new Set<string>();
+    for (const [controle, m] of this.marcas) {
+      const t = controle.firstChild ? porNo.get(controle.firstChild) : undefined;
+      if (!t) continue;
+      comMarca.add(m.termo.linha.id);
+      aparicoes.push({
+        linha: m.termo.linha.id,
+        posicao: t.posicao,
+        secao: t.secao,
+        marcada: true,
+      });
+    }
+    const elegiveis = trechos.filter((t) => t.elegivel);
+    for (const termo of this.termos) {
+      if (!comMarca.has(termo.linha.id)) continue;
+      elegiveis.forEach((t, ordem) => {
+        for (const o of ocorrencias(t.no.data, termo.regex)) {
+          if (this.jaExplicado(t.no, o.indice + o.tamanho)) continue;
+          const antesDoTermo = t.no.data.slice(0, o.indice).match(/\S+/g)?.length ?? 0;
+          const a: Aparicao = {
+            linha: termo.linha.id,
+            posicao: t.posicao + antesDoTermo,
+            secao: t.secao,
+            marcada: false,
+          };
+          aparicoes.push(a);
+          candidatos.set(a, { termo, no: t.no, ordem, indice: o.indice, tamanho: o.tamanho });
+        }
+      });
+    }
+    const novos = planejarReaparicoes(aparicoes)
+      .map((a) => candidatos.get(a))
+      .filter((c): c is Candidato => !!c);
+    this.marcar(novos, true);
   }
 
   private criarControle(
