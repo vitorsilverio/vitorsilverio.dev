@@ -68,6 +68,8 @@ interface Candidato {
   readonly ordem: number;
   readonly indice: number;
   readonly tamanho: number;
+  /** Maior prioridade entre as formas da linha que aparecem no texto (a sigla puxa o nome). */
+  readonly prioridade: number;
 }
 
 /**
@@ -308,7 +310,10 @@ export class Glossario implements OnDestroy {
   /** Primeira ocorrência elegível de cada linha da tabela (variantes contam como um só termo). */
   private candidatos(pendentes: Termo[], trechos: readonly TrechoDeTexto[]): Candidato[] {
     const textos = trechos.filter((t) => t.elegivel).map((t) => t.no);
-    const porLinha = new Map<HTMLElement, Candidato>();
+    const porLinha = new Map<HTMLElement, Omit<Candidato, 'prioridade'>>();
+    // A linha vale pela melhor prioridade entre as formas presentes no texto, não pela que
+    // aparece primeiro: `AddressSanitizer (ASan)` com a sigla no texto compete como sigla.
+    const prioridade = new Map<HTMLElement, number>();
     for (const termo of pendentes) {
       for (let ordem = 0; ordem < textos.length; ordem++) {
         const no = textos[ordem];
@@ -316,6 +321,7 @@ export class Glossario implements OnDestroy {
           (o) => !this.dispensada(no, o.indice, o.tamanho, termo),
         );
         if (!achado) continue;
+        prioridade.set(termo.linha, Math.max(prioridade.get(termo.linha) ?? 0, termo.prioridade));
         const atual = porLinha.get(termo.linha);
         if (
           !atual ||
@@ -327,26 +333,36 @@ export class Glossario implements OnDestroy {
         break;
       }
     }
-    return [...porLinha.values()];
+    return [...porLinha].map(([linha, c]) => ({ ...c, prioridade: prioridade.get(linha)! }));
   }
 
   /** A ocorrência não ganha marca: já vem explicada, ou é a expansão colada ao próprio termo. */
   private dispensada(no: Text, indice: number, tamanho: number, termo: Termo): boolean {
-    return this.jaExplicado(no, indice + tamanho) || this.coladaAoTermo(no, indice, tamanho, termo);
+    return this.jaExplicado(no, indice + tamanho) || this.coladaAoTermo(no, indice, termo);
   }
 
-  /** `JIT (just-in-time, ...)`: a forma entre parênteses logo depois de outra da mesma linha. */
-  private coladaAoTermo(no: Text, indice: number, tamanho: number, termo: Termo): boolean {
+  /**
+   * `JIT (just-in-time, ...)`: a forma entre parênteses logo depois de outra da mesma linha,
+   * mesmo que o parêntese esteja em outro nó (a forma anterior já marcada, ou o termo dentro de
+   * `<em>`): o texto antes é o do bloco inteiro, sem o texto dos balões.
+   */
+  private coladaAoTermo(no: Text, indice: number, termo: Termo): boolean {
     if (termo.variantes.length < 2) return false;
-    const antes = no.data.slice(0, indice);
-    if (terminaEmVariante(antes, termo.variantes)) return true;
-    if (!/^\s*\(\s*$/.test(antes)) return false;
-    // o parêntese abre o nó: a forma anterior já virou marca (termo + balão) ou é o nó vizinho
-    let ant = no.previousSibling;
-    while (ant && (ant as Element).classList?.contains('glos-balao')) ant = ant.previousSibling;
-    const nome = (ant?.textContent ?? '').trim().toLowerCase();
-    const esta = no.data.slice(indice, indice + tamanho).toLowerCase();
-    return nome !== esta && termo.variantes.some((v) => v.toLowerCase() === nome);
+    return terminaEmVariante(this.textoAntes(no, indice), termo.variantes);
+  }
+
+  /** Até 200 caracteres do texto do bloco que vêm antes da posição (balões não entram). */
+  private textoAntes(no: Text, indice: number): string {
+    const bloco = no.parentElement?.closest(BLOCOS);
+    let antes = no.data.slice(0, indice);
+    if (!bloco || antes.length >= 200) return antes;
+    const walker = this.doc.createTreeWalker(bloco, NodeFilter.SHOW_TEXT);
+    const nos: Text[] = [];
+    for (let n = walker.nextNode(); n && n !== no; n = walker.nextNode()) {
+      if (!n.parentElement?.closest('.glos-balao')) nos.push(n as Text);
+    }
+    for (let i = nos.length - 1; i >= 0 && antes.length < 200; i--) antes = nos[i].data + antes;
+    return antes;
   }
 
   /** O termo é seguido, ali mesmo, de uma definição entre parênteses. */
@@ -362,10 +378,7 @@ export class Glossario implements OnDestroy {
   /** Respeita o teto: os mais técnicos primeiro; empate, o que aparece antes no texto. */
   private escolher(candidatos: Candidato[], vagas: number): Candidato[] {
     return [...candidatos]
-      .sort(
-        (a, b) =>
-          b.termo.prioridade - a.termo.prioridade || a.ordem - b.ordem || a.indice - b.indice,
-      )
+      .sort((a, b) => b.prioridade - a.prioridade || a.ordem - b.ordem || a.indice - b.indice)
       .slice(0, vagas);
   }
 
@@ -423,7 +436,14 @@ export class Glossario implements OnDestroy {
             marcada: false,
           };
           aparicoes.push(a);
-          candidatos.set(a, { termo, no: t.no, ordem, indice: o.indice, tamanho: o.tamanho });
+          candidatos.set(a, {
+            termo,
+            no: t.no,
+            ordem,
+            indice: o.indice,
+            tamanho: o.tamanho,
+            prioridade: termo.prioridade,
+          });
         }
       });
     }

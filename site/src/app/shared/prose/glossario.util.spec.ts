@@ -87,6 +87,13 @@ describe('termos genéricos e prioridade', () => {
 describe('variantesDoTermo com parênteses no cabeçalho', () => {
   it('"X (Y)" gera o nome e a sigla', () => {
     expect(variantesDoTermo('AddressSanitizer (ASan)')).toEqual(['AddressSanitizer', 'ASan']);
+    expect(variantesDoTermo('Registrador em banco / banked')).toEqual([
+      'Registrador em banco',
+      'banked',
+    ]);
+    // tamanho mínimo: a sigla de 2 letras cai e só a outra forma vale
+    expect(variantesDoTermo('CA (autoridade certificadora)')).toEqual(['autoridade certificadora']);
+    expect(variantesDoTermo('lr (r14)')).toEqual(['r14']);
     expect(variantesDoTermo('JIT (just-in-time)')).toEqual(['JIT', 'just-in-time']);
     expect(variantesDoTermo('LLM (Large Language Model)')).toEqual(['LLM', 'Large Language Model']);
   });

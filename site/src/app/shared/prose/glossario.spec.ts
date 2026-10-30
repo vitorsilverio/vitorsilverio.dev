@@ -397,6 +397,21 @@ describe('Glossario em artigos longos', () => {
     expect(balaoDe(termos()[0]).textContent).toContain('detector de erros de memória');
   });
 
+  it('a linha "Nome (Sigla)" vale pela melhor prioridade das formas presentes no texto', async () => {
+    const nomes = 'alfa bravo charlie delta eco foxtrot golfe hotel'.split(' ');
+    const { termos } = await montar(`
+      <h2>Um</h2><p>${nomes.join(' ')}.</p>
+      <p>O AddressSanitizer acusa o erro, e o ASan também.</p>
+      ${tabela(...nomes.map((nome): [string, string] => [nome, `definição de ${nome}.`]), [
+        'AddressSanitizer (ASan)',
+        'detector de erros de memória.',
+      ])}`);
+    const textos = termos().map((t) => t.textContent);
+    expect(textos.length).toBe(8);
+    expect(textos).toContain('AddressSanitizer');
+    expect(textos).not.toContain('hotel');
+  });
+
   it('cabeçalho de comando continua sem marcar nada', async () => {
     const { termos } = await montar(`
       <h2>Um</h2><p>Use x/i $pc (GDB) para ver a instrução.</p>
@@ -513,6 +528,20 @@ describe('Glossario: custo da varredura, expansão colada e banner de cookies', 
       ${tabela(['JIT (just-in-time)', 'compilação em tempo de execução.'])}`);
     expect(termos().map((t) => t.textContent)).toEqual(['JIT']);
     expect(termos()[0].closest('p')!.textContent).toContain('volta');
+  });
+
+  it('não marca a expansão colada ao termo quando ela vem dentro de <em>', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2><p>O <code>JIT</code> (<em>just-in-time</em>, a compilação em tempo de execução) é rápido.</p>
+      ${tabela(['JIT (just-in-time)', 'compilação em tempo de execução.'])}`);
+    expect(termos()).toEqual([]);
+  });
+
+  it('cabeçalho "Nome / forma em inglês": a forma entre parênteses no texto é marcada', async () => {
+    const { termos } = await montar(`
+      <h2>Um</h2><p>Os registradores banqueados (<strong><em lang="en">banked</em></strong>) trocam com o modo.</p>
+      ${tabela(['Registrador em banco / <em><span lang="en">banked</span></em>', 'cópia por modo.'])}`);
+    expect(termos().map((t) => t.textContent)).toEqual(['banked']);
   });
 
   it('uma forma da linha longe da outra continua marcada', async () => {

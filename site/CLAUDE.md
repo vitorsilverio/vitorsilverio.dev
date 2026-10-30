@@ -295,7 +295,10 @@ que tem a tabela `## Glossário`. A primeira ocorrência de cada termo no texto 
 vira um termo clicável com a definição da própria tabela. Regras (em `glossario.util.ts`):
 - **Cabeçalho com parênteses**: `X (Y)` marca as duas formas (valem pela mesma linha) só quando Y é nome
   ou expansão de X e os dois lados são texto simples (`ehNomeAlternativo`): `AddressSanitizer (ASan)`,
-  `JIT (just-in-time)`, `TLV (Tag-Length-Value)`, `CA (autoridade certificadora)`, `lr (r14)`. Qualificador
+  `JIT (just-in-time)`, `TLV (Tag-Length-Value)`, `Código automodificável (SMC)`. Cada forma precisa ter pelo menos 3 caracteres
+  (`TAMANHO_MINIMO_TERMO`): em `CA (autoridade certificadora)` ou `lr (r14)` a sigla de 2 letras fica de fora e só a outra
+  forma é marcada. Duas formas na mesma linha competem pela vaga do teto com a melhor prioridade entre as que
+  aparecem no texto (a sigla puxa o nome). Qualificador
   (`Agente (de IA)`, `Estrelas (GitHub)`, `stepi (ou si)`, `continue (no GDB)`) não vira variante: vale só o
   nome. Tradução entre parênteses (`Ligar (link)`, `Folha (leaf)`) também fica de fora; se o texto usa a
   forma em inglês, escreva as duas no cabeçalho separadas por ` / `. Cabeçalho de comando
