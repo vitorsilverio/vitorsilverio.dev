@@ -74,6 +74,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/node2shell-brotli-node-python').then((m) => m.ArticleNode2shellBrotliNodePython),
   'python-jit-removido-pep-836': () =>
     import('./pages/article-detail/posts/python-jit-removido-pep-836').then((m) => m.ArticlePythonJitRemovidoPep836),
+  'fuzzer-ou-llm-fuzzilli-bigsleep-v8': () =>
+    import('./pages/article-detail/posts/fuzzer-ou-llm-fuzzilli-bigsleep-v8').then((m) => m.ArticleFuzzerOuLlmFuzzilliBigsleepV8),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */
