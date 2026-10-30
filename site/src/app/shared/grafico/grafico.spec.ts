@@ -77,6 +77,14 @@ class Hospedeiro {
   readonly dados = signal(JSON.stringify(DADOS));
 }
 
+const yAxisDe = (fk: Falso) => (fk.ultimaOpcao() as unknown as { yAxis: { min?: number } }).yAxis;
+
+/** Troca para o outro tema (o tema escolhido num teste fica salvo e vira o inicial do próximo). */
+function trocarTema() {
+  const t = TestBed.inject(ThemeService).theme;
+  t.set(t() === 'dark' ? 'light' : 'dark');
+}
+
 describe('Grafico', () => {
   let falso: Falso;
   let carregou: number;
@@ -125,8 +133,14 @@ describe('Grafico', () => {
   const qa = (f: { nativeElement: HTMLElement }, sel: string) => [
     ...f.nativeElement.querySelectorAll<HTMLElement>(sel),
   ];
-  const aviso = (f: { nativeElement: HTMLElement }) =>
+  const texto = (f: { nativeElement: HTMLElement }) =>
     q(f, '[role=status]').textContent!.replace(/\s+/g, ' ').trim();
+  /** O anúncio é esvaziado e reposto (para repetições serem faladas): espera a reposição. */
+  async function aviso(f: { nativeElement: HTMLElement; detectChanges(): void }, extra = 0) {
+    await new Promise((ok) => setTimeout(ok, 90 + extra));
+    f.detectChanges();
+    return texto(f);
+  }
   function tecla(f: { nativeElement: HTMLElement }, key: string) {
     const ev = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
     q(f, '.area').dispatchEvent(ev);
@@ -150,11 +164,11 @@ describe('Grafico', () => {
         'Teste',
       ]);
       expect(qa(f, '.legenda button')).toHaveLength(0);
-      expect(qa(f, '.zoom')).toHaveLength(0);
       expect(q(f, '.area').hasAttribute('tabindex')).toBe(false);
+      expect(q(f, '.area').getAttribute('role')).toBe('group');
       expect(q(f, '.fonte').textContent).toContain('Dados sintéticos');
       expect(q(f, 'details table')).toBeTruthy();
-      expect(q(f, '[role=status]').textContent!.trim()).toBe('');
+      expect(texto(f)).toBe('');
     });
 
     it('o ECharts só é pedido depois de o leitor chegar ao gráfico (IntersectionObserver)', async () => {
@@ -189,6 +203,48 @@ describe('Grafico', () => {
       expect(q(f, '.resumo').textContent).toBe('A ligação domina o tempo.');
       expect(qa(f, 'details')).toHaveLength(0);
       expect(qa(f, '.legenda')).toHaveLength(0);
+    });
+  });
+
+  describe('espaço reservado no pré-render (sem salto de layout)', () => {
+    it('a barra de zoom e a dica já existem, inertes e desabilitadas, até o ECharts carregar', async () => {
+      const f = await montar({ atrasar: true });
+      const zoom = q(f, '.zoom');
+      expect(zoom.hasAttribute('inert')).toBe(true);
+      expect(qa(f, '.zoom button').length).toBeGreaterThan(0);
+      expect(qa(f, '.zoom button').every((b) => (b as HTMLButtonElement).disabled)).toBe(true);
+      expect(q(f, '.dica')).toBeTruthy();
+      liberar!();
+      await new Promise((ok) => setTimeout(ok, 0));
+      await atualizar(f);
+      expect(q(f, '.zoom').hasAttribute('inert')).toBe(false);
+    });
+
+    it('a marcação muda de estado sem mudar de estrutura: mesmos botões e mesma dica', async () => {
+      const f = await montar({ atrasar: true });
+      const estrutura = () => ({
+        botoes: qa(f, '.zoom button').map(
+          (b) => b.getAttribute('aria-label') ?? b.textContent!.trim(),
+        ),
+        dica: q(f, '.dica').textContent,
+        itensLegenda: qa(f, '.legenda li').length,
+      });
+      const antes = estrutura();
+      liberar!();
+      await new Promise((ok) => setTimeout(ok, 0));
+      await atualizar(f);
+      expect(estrutura()).toEqual(antes);
+    });
+
+    it('o item da legenda estático tem a mesma caixa do botão (mesma classe base .item)', async () => {
+      const f = await montar({ atrasar: true });
+      const itens = qa(f, '.legenda .item');
+      expect(itens).toHaveLength(3);
+      expect(itens.every((i) => i.tagName === 'SPAN')).toBe(true);
+      liberar!();
+      await new Promise((ok) => setTimeout(ok, 0));
+      await atualizar(f);
+      expect(qa(f, '.legenda .item').every((i) => i.tagName === 'BUTTON')).toBe(true);
     });
   });
 
@@ -230,12 +286,15 @@ describe('Grafico', () => {
       const f = await montar();
       expect(falso.opcoes.length).toBeGreaterThan(0);
       expect(qa(f, '.legenda button')).toHaveLength(3);
-      expect(qa(f, '.zoom button')).toHaveLength(5);
+      expect(qa(f, '.zoom button')).toHaveLength(5); // barras empilhadas: só o eixo horizontal
       const area = q(f, '.area');
       expect(area.getAttribute('tabindex')).toBe('0');
-      expect(area.getAttribute('role')).toBe('group');
+      // role="application": sem ele NVDA/JAWS em modo de navegação consomem as setas (ver CLAUDE.md).
+      expect(area.getAttribute('role')).toBe('application');
+      expect(area.getAttribute('aria-roledescription')).toBe('gráfico interativo');
       expect(area.getAttribute('aria-label')).toBe('Gráfico de barras empilhadas: Tempo por etapa');
       expect(area.getAttribute('aria-describedby')).toContain(q(f, '.resumo').id);
+      expect(area.getAttribute('aria-describedby')).toContain(q(f, '.dica').id);
       expect(q(f, '.visual').getAttribute('aria-hidden')).toBe('true');
       expect(q(f, '.dica')).toBeTruthy();
     });
@@ -262,7 +321,7 @@ describe('Grafico', () => {
       await atualizar(f);
       expect(b1.getAttribute('aria-pressed')).toBe('false');
       expect(falso.ultima('legendUnSelect')).toEqual({ type: 'legendUnSelect', name: 'Ligação' });
-      expect(aviso(f)).toBe('Ligação: oculta. 2 de 3 séries visíveis.');
+      expect(await aviso(f)).toBe('Ligação: oculta. 2 de 3 séries visíveis.');
       b1.click();
       await atualizar(f);
       expect(b1.getAttribute('aria-pressed')).toBe('true');
@@ -280,11 +339,12 @@ describe('Grafico', () => {
       await atualizar(f);
       expect(b2.getAttribute('aria-pressed')).toBe('true');
       expect(falso.acoes).toHaveLength(antes);
-      expect(aviso(f)).toBe('Pelo menos uma série precisa ficar visível.');
+      expect(await aviso(f)).toBe('Pelo menos uma série precisa ficar visível.');
     });
   });
 
   describe('zoom', () => {
+    const desab = (b: HTMLElement) => b.getAttribute('aria-disabled') === 'true';
     const botao = (f: { nativeElement: HTMLElement }, nome: string) =>
       qa(f, '.zoom button').find(
         (b) => (b.getAttribute('aria-label') ?? b.textContent!.trim()) === nome,
@@ -292,18 +352,18 @@ describe('Grafico', () => {
 
     it('começa sem poder reduzir, amplia por índices de categoria e anuncia a janela', async () => {
       const f = await montar();
-      expect(botao(f, 'Reduzir').disabled).toBe(true);
-      expect(botao(f, 'Redefinir').disabled).toBe(true);
-      expect(botao(f, 'Mover para a esquerda').disabled).toBe(true);
-      expect(botao(f, 'Ampliar').disabled).toBe(false);
+      expect(desab(botao(f, 'Reduzir'))).toBe(true);
+      expect(desab(botao(f, 'Redefinir zoom'))).toBe(true);
+      expect(desab(botao(f, 'Mover para a esquerda'))).toBe(true);
+      expect(desab(botao(f, 'Ampliar'))).toBe(false);
       botao(f, 'Ampliar').click();
       await atualizar(f);
       const z = falso.ultima('dataZoom')!;
       expect(z['startValue']).toBeGreaterThan(0);
       expect(z['endValue']).toBeLessThan(5);
-      expect(aviso(f)).toMatch(/^Mostrando de 1\.\d a 1\.\d \(\d de 6 categorias\)\.$/);
-      expect(botao(f, 'Reduzir').disabled).toBe(false);
-      expect(botao(f, 'Redefinir').disabled).toBe(false);
+      expect(await aviso(f)).toMatch(/^Mostrando de 1\.\d a 1\.\d \(\d de 6 categorias\)\.$/);
+      expect(desab(botao(f, 'Reduzir'))).toBe(false);
+      expect(desab(botao(f, 'Redefinir zoom'))).toBe(false);
     });
 
     it('mover e redefinir', async () => {
@@ -315,10 +375,10 @@ describe('Grafico', () => {
       await atualizar(f);
       const z = falso.ultima('dataZoom')!;
       expect((z['endValue'] as number) - (z['startValue'] as number)).toBe(2);
-      botao(f, 'Redefinir').click();
+      botao(f, 'Redefinir zoom').click();
       await atualizar(f);
       expect(falso.ultima('dataZoom')).toMatchObject({ startValue: 0, endValue: 5 });
-      expect(aviso(f)).toBe('Mostrando todas as 6 categorias.');
+      expect(await aviso(f)).toBe('Mostrando todas as 6 categorias.');
     });
 
     it('espelha o zoom feito dentro do ECharts (arrastar, pinça) nos botões', async () => {
@@ -326,8 +386,51 @@ describe('Grafico', () => {
       falso.zoom = { startValue: 1.2, endValue: 3.8 };
       falso.eventos.get('datazoom')!();
       await atualizar(f);
-      expect(botao(f, 'Reduzir').disabled).toBe(false);
-      expect(botao(f, 'Mover para a esquerda').disabled).toBe(false);
+      expect(desab(botao(f, 'Reduzir'))).toBe(false);
+      expect(desab(botao(f, 'Mover para a esquerda'))).toBe(false);
+    });
+
+    it('chegar ao limite não desabilita o botão focado: o foco fica e o clique explica', async () => {
+      const f = await montar();
+      const ampliar = botao(f, 'Ampliar');
+      let guardas = 0;
+      while (!desab(ampliar) && guardas++ < 10) {
+        ampliar.focus();
+        ampliar.click();
+        await atualizar(f);
+      }
+      expect(desab(ampliar)).toBe(true);
+      expect(ampliar.disabled).toBe(false);
+      expect(document.activeElement).toBe(ampliar);
+      ampliar.click();
+      expect(await aviso(f)).toBe('Zoom máximo: 3 categorias.');
+      botao(f, 'Redefinir zoom').focus();
+      botao(f, 'Redefinir zoom').click();
+      await atualizar(f);
+      expect(botao(f, 'Redefinir zoom').disabled).toBe(false);
+      expect(document.activeElement).toBe(botao(f, 'Redefinir zoom'));
+    });
+
+    it('em barras o zoom é só horizontal: não há botões nem janela do eixo vertical', async () => {
+      const f = await montar();
+      expect(qa(f, '.zoom [aria-label*=vertical]')).toHaveLength(0);
+      expect(qa(f, '.zoom [aria-label="Mover para cima"]')).toHaveLength(0);
+      expect(yAxisDe(falso).min).toBeUndefined();
+    });
+
+    it('roda e pinça: anuncia só a janela final do gesto, depois de uma pausa', async () => {
+      const f = await montar();
+      for (const [a, b] of [
+        [0.8, 4.4],
+        [1.1, 4.0],
+        [1.4, 3.6],
+      ]) {
+        falso.zoom = { startValue: a, endValue: b };
+        falso.eventos.get('datazoom')!();
+      }
+      await atualizar(f);
+      expect(await aviso(f)).toBe(''); // ainda no meio do gesto
+      expect(await aviso(f, 520)).toBe('Mostrando de 1.1 a 1.4 (4 de 6 categorias).');
     });
 
     it('com 3 categorias ou menos não há zoom', async () => {
@@ -355,7 +458,7 @@ describe('Grafico', () => {
       const ev = tecla(f, 'ArrowRight');
       expect(ev.defaultPrevented).toBe(true);
       await atualizar(f);
-      expect(aviso(f)).toBe(
+      expect(await aviso(f)).toBe(
         'Categoria 1 de 6, 1.0: Compilação 10 ms; Ligação 20 ms; Teste 1 ms. Total: 31 ms.',
       );
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 0, dataIndex: 0 });
@@ -366,7 +469,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowLeft');
       await atualizar(f);
       expect(falso.ultima('showTip')).toMatchObject({ dataIndex: 1 });
-      expect(aviso(f)).toContain('Categoria 2 de 6, 1.1');
+      expect(await aviso(f)).toContain('Categoria 2 de 6, 1.1');
     });
 
     it('não passa das pontas; Home e End vão ao primeiro e ao último', async () => {
@@ -382,7 +485,40 @@ describe('Grafico', () => {
       tecla(f, 'End');
       await atualizar(f);
       expect(falso.ultima('showTip')).toMatchObject({ dataIndex: 5 });
-      expect(aviso(f)).toContain('Categoria 6 de 6, 1.5');
+      expect(await aviso(f)).toContain('Categoria 6 de 6, 1.5');
+    });
+
+    it('nas pontas diz "Última categoria"/"Primeira categoria" e repete o aviso a cada tentativa', async () => {
+      const f = await focada();
+      tecla(f, 'End');
+      expect(await aviso(f)).toMatch(/^Categoria 6 de 6, 1.5:/);
+      tecla(f, 'End');
+      expect(await aviso(f)).toMatch(/^Última categoria. Categoria 6 de 6/);
+      tecla(f, 'ArrowRight');
+      expect(await aviso(f)).toMatch(/^Última categoria./);
+      // a mesma mensagem de novo: a região é esvaziada antes, para o leitor de tela falar outra vez
+      tecla(f, 'ArrowRight');
+      await atualizar(f);
+      expect(texto(f)).toBe('');
+      expect(await aviso(f)).toMatch(/^Última categoria./);
+      tecla(f, 'Home');
+      tecla(f, 'ArrowLeft');
+      expect(await aviso(f)).toMatch(/^Primeira categoria. Categoria 1 de 6/);
+    });
+
+    it('a segunda tentativa de ocultar a última série também é anunciada', async () => {
+      const f = await focada();
+      const [b0, b1, b2] = qa(f, '.legenda button');
+      b0.click();
+      b1.click();
+      await atualizar(f);
+      b2.click();
+      await atualizar(f);
+      expect(await aviso(f)).toBe('Pelo menos uma série precisa ficar visível.');
+      b2.click();
+      await atualizar(f);
+      expect(texto(f)).toBe('');
+      expect(await aviso(f)).toBe('Pelo menos uma série precisa ficar visível.');
     });
 
     it('setas para cima e para baixo trocam a série (circulando) e anunciam só ela', async () => {
@@ -390,7 +526,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowRight');
       tecla(f, 'ArrowDown');
       await atualizar(f);
-      expect(aviso(f)).toBe('Compilação em 1.0: 10 ms.');
+      expect(await aviso(f)).toBe('Compilação em 1.0: 10 ms.');
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 0 });
       tecla(f, 'ArrowDown');
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 1 });
@@ -400,7 +536,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowUp');
       await atualizar(f);
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 2 });
-      expect(aviso(f)).toBe('Teste em 1.0: 1 ms.');
+      expect(await aviso(f)).toBe('Teste em 1.0: 1 ms.');
     });
 
     it('pula séries ocultas e anuncia "sem dado"', async () => {
@@ -415,7 +551,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowLeft');
       tecla(f, 'ArrowLeft');
       await atualizar(f);
-      expect(aviso(f)).toBe('Ligação em 1.3: sem dado.');
+      expect(await aviso(f)).toBe('Ligação em 1.3: sem dado.');
     });
 
     it('Esc esconde a dica e só captura a tecla quando há valor aberto', async () => {
@@ -466,12 +602,122 @@ describe('Grafico', () => {
       expect(falso.opcoes.at(-1)!.extra).toEqual({ notMerge: true });
     });
 
+    it('trocar o tema com o gráfico em foco devolve a dica e a linha-guia', async () => {
+      const f = await montar();
+      q(f, '.area').focus();
+      tecla(f, 'ArrowRight');
+      tecla(f, 'ArrowRight');
+      tecla(f, 'ArrowDown');
+      const tips = () => falso.acoes.filter((a) => a['type'] === 'showTip').length;
+      const antes = tips();
+      trocarTema();
+      await atualizar(f);
+      expect(tips()).toBe(antes + 1);
+      expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 0, dataIndex: 1 });
+      expect(falso.ultima('highlight')).toMatchObject({ seriesIndex: 0, dataIndex: 1 });
+    });
+
+    it('sem foco no gráfico, trocar o tema não abre dica', async () => {
+      const f = await montar();
+      const antes = falso.acoes.length;
+      trocarTema();
+      await atualizar(f);
+      expect(falso.acoes).toHaveLength(antes);
+    });
+
     it('as cores dos dois temas ficam como variáveis CSS no elemento (o pré-render troca por CSS)', async () => {
       const f = await montar({ atrasar: true });
       const estilo = q(f, 'app-grafico').getAttribute('style')!;
       expect(estilo).toContain(`--gc-l1: ${TOKENS.light.series[0]}`);
       expect(estilo).toContain(`--gc-d1: ${TOKENS.dark.series[0]}`);
       expect(estilo).toContain('--gc-dt:');
+    });
+  });
+
+  describe('zoom vertical (só nas linhas)', () => {
+    const DADOS_Y: DadosGrafico = {
+      categorias: ['a', 'b', 'c', 'd', 'e'],
+      series: [
+        { nome: 'Latência', valores: [80, 90, 100, 95, 85] },
+        { nome: 'Base', valores: [10, 20, 30, 25, 15] },
+      ],
+    };
+    const desab = (b: HTMLElement) => b.getAttribute('aria-disabled') === 'true';
+    const botao = (f: { nativeElement: HTMLElement }, nome: string) =>
+      qa(f, '.zoom button').find((b) => b.getAttribute('aria-label') === nome)!;
+    const yAxis = () =>
+      (falso.ultimaOpcao() as unknown as { yAxis: { min?: number; max?: number } }).yAxis;
+
+    async function linhas() {
+      const f = await montar();
+      f.componentInstance.tipo.set('linhas');
+      f.componentInstance.dados.set(JSON.stringify(DADOS_Y));
+      await atualizar(f);
+      return f;
+    }
+
+    it('aparecem os botões de zoom vertical e o eixo começa completo (a partir do zero)', async () => {
+      const f = await linhas();
+      expect(qa(f, '[aria-label="Zoom vertical"] button')).toHaveLength(4);
+      expect(yAxis().min).toBeUndefined();
+      expect(desab(botao(f, 'Reduzir vertical'))).toBe(true);
+      expect(desab(botao(f, 'Ampliar vertical'))).toBe(false);
+      expect(qa(f, '.aviso-y')).toHaveLength(0);
+    });
+
+    it('ampliar reduz a faixa, redesenha com min/max e anuncia a faixa', async () => {
+      const f = await linhas();
+      botao(f, 'Ampliar vertical').click();
+      await atualizar(f);
+      const { min, max } = yAxis();
+      expect(max! - min!).toBeLessThan(100);
+      expect(falso.opcoes.at(-1)!.extra).toEqual({ notMerge: true });
+      expect(await aviso(f)).toMatch(/^Eixo vertical de .+ a .+ ms./);
+    });
+
+    it('quando o eixo não começa em zero, o aviso é visível e anunciado', async () => {
+      const f = await linhas();
+      // sobe a faixa até deixar o zero para trás
+      for (let i = 0; i < 3; i++) botao(f, 'Ampliar vertical').click();
+      await atualizar(f);
+      for (let i = 0; i < 4; i++) botao(f, 'Mover para cima').click();
+      await atualizar(f);
+      expect(yAxis().min).toBeGreaterThan(0);
+      expect(q(f, '.aviso-y').textContent).toContain('Não começa em zero');
+      expect(await aviso(f)).toContain('Atenção: o eixo vertical não começa em zero.');
+    });
+
+    it('reduzir volta ao eixo completo e redefinir limpa as duas janelas', async () => {
+      const f = await linhas();
+      botao(f, 'Ampliar vertical').click();
+      botao(f, 'Ampliar horizontal').click();
+      await atualizar(f);
+      botao(f, 'Redefinir zoom').click();
+      await atualizar(f);
+      expect(yAxis().min).toBeUndefined();
+      expect(falso.ultima('dataZoom')).toMatchObject({ startValue: 0, endValue: 4 });
+      expect(qa(f, '.aviso-y')).toHaveLength(0);
+      expect(await aviso(f)).toContain('Eixo vertical completo.');
+    });
+
+    it('no limite o botão fica aria-disabled, mantém o foco e o clique explica', async () => {
+      const f = await linhas();
+      const b = botao(f, 'Reduzir vertical');
+      b.focus();
+      b.click();
+      expect(await aviso(f)).toBe('O eixo vertical já está completo.');
+      expect(b.hasAttribute('disabled')).toBe(false);
+      expect(document.activeElement).toBe(b);
+    });
+
+    it('ocultar a série de maior valor reajusta a faixa ampliada', async () => {
+      const f = await linhas();
+      for (let i = 0; i < 4; i++) botao(f, 'Ampliar vertical').click();
+      await atualizar(f);
+      const antes = yAxis().max!;
+      qa(f, '.legenda button')[0].click();
+      await atualizar(f);
+      expect(yAxis().max ?? 0).toBeLessThanOrEqual(Math.max(antes, 30));
     });
   });
 
@@ -489,7 +735,9 @@ describe('Grafico', () => {
 
     it('a roda sem Ctrl não chega ao motor, para a página continuar rolando', async () => {
       const { dentro, recebidos } = await comOuvinteDoMotor();
-      dentro.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, bubbles: true, cancelable: true }));
+      dentro.dispatchEvent(
+        new WheelEvent('wheel', { deltaY: 100, bubbles: true, cancelable: true }),
+      );
       expect(recebidos).toHaveLength(0);
     });
 

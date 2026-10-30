@@ -35,6 +35,8 @@ export interface ConfigGrafico {
   compacto: boolean;
   semMovimento: boolean;
   janela?: Janela;
+  /** Faixa do eixo Y (só linhas); ausente é o eixo completo. */
+  janelaY?: JanelaY | null;
   ocultas?: ReadonlySet<string>;
   /** Falso no SVG estático do pré-render: sem dica nem zoom. */
   interativo: boolean;
@@ -50,10 +52,10 @@ export const MAX_SERIES = 6;
 
 /**
  * Tokens do site (`src/styles.css`) e paleta categórica de dataviz, nos dois temas. Os valores
- * de série passaram em `validate_palette.js` contra a superfície do site: claro `#ffffff`
- * (CVD adjacente 9,1; visão normal 19,6) e escuro `#181822` (CVD 8,4; visão normal 19,3). No
- * tema claro azul, aqua, amarelo e magenta ficam abaixo de 3:1 contra o fundo: por isso a figura
- * nunca depende só da cor (marcador, textura, legenda e tabela).
+ * de série passaram em `validate_palette.js` (pares adjacentes) contra a superfície do site: claro
+ * `#ffffff` (todas >= 3:1; CVD adjacente 7,5, na faixa 6 a 8 que só vale com codificação
+ * secundária; visão normal 17,2) e escuro `#181822` (CVD 8,4; visão normal 19,3). A cor nunca é o
+ * único código: marcador (linhas), textura (barras), legenda e tabela completam a figura.
  */
 export const TOKENS: Record<
   Tema,
@@ -73,7 +75,7 @@ export const TOKENS: Record<
     suave: '#565664',
     borda: '#e3e3ec',
     grade: '#e3e3ec',
-    series: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'],
+    series: ['#2a78d6', '#d9541f', '#0d8a5e', '#a87000', '#c9407f', '#008300'],
     textura: 'rgba(0, 0, 0, 0.3)',
   },
   dark: {
@@ -240,6 +242,101 @@ export function trazerParaJanela(j: Janela, indice: number, n: number): Janela {
   if (indice < j[0]) return limitar([indice, indice + (j[1] - j[0])], n);
   if (indice > j[1]) return limitar([indice - (j[1] - j[0]), indice], n);
   return j;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Janela de zoom do eixo Y (só nas linhas)
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Faixa vertical visível, em unidades dos dados: `[min, max]`. `null` é o eixo completo
+ * (automático, que inclui o zero). Só existe em gráficos de linha: em barras, cortar a base do
+ * eixo engana (a altura da barra deixa de ser proporcional ao valor).
+ */
+export type JanelaY = readonly [number, number];
+
+/** Fração mínima da faixa completa que o zoom vertical ainda deixa visível. */
+const MIN_FRACAO_Y = 0.1;
+
+/** Faixa completa do eixo Y: dos dados das séries visíveis, sempre incluindo o zero. */
+export function faixaY(dados: DadosGrafico, ocultas: ReadonlySet<string>): JanelaY {
+  const vals = seriesVisiveis(dados, ocultas)
+    .flatMap((i) => dados.series[i].valores)
+    .filter((v): v is number => v !== null);
+  const lo = Math.min(0, ...vals);
+  const hi = Math.max(0, ...vals);
+  return hi > lo ? [lo, hi] : [lo, lo + 1];
+}
+
+function arredondarY(v: number): number {
+  return Number(v.toPrecision(6));
+}
+
+function limitarY(j: JanelaY, base: JanelaY): JanelaY {
+  const span = Math.min(base[1] - base[0], j[1] - j[0]);
+  const ini = Math.min(Math.max(base[0], j[0]), base[1] - span);
+  return [arredondarY(ini), arredondarY(ini + span)];
+}
+
+export function podeAmpliarY(j: JanelaY | null, base: JanelaY): boolean {
+  const [a, b] = j ?? base;
+  return b - a > (base[1] - base[0]) * MIN_FRACAO_Y * 1.0001;
+}
+
+export function podeReduzirY(j: JanelaY | null): boolean {
+  return j !== null;
+}
+
+export function ampliarY(j: JanelaY | null, base: JanelaY): JanelaY | null {
+  if (!podeAmpliarY(j, base)) return j;
+  const [a, b] = j ?? base;
+  const novo = Math.max((base[1] - base[0]) * MIN_FRACAO_Y, (b - a) * 0.6);
+  const centro = (a + b) / 2;
+  return limitarY([centro - novo / 2, centro + novo / 2], base);
+}
+
+export function reduzirY(j: JanelaY | null, base: JanelaY): JanelaY | null {
+  if (j === null) return null;
+  const novo = (j[1] - j[0]) / 0.6;
+  if (novo >= base[1] - base[0]) return null;
+  const centro = (j[0] + j[1]) / 2;
+  return limitarY([centro - novo / 2, centro + novo / 2], base);
+}
+
+/** Desloca a faixa; `direcao` é 1 (para cima) ou -1 (para baixo). */
+export function moverY(j: JanelaY | null, direcao: -1 | 1, base: JanelaY): JanelaY | null {
+  if (j === null) return null;
+  const passo = ((j[1] - j[0]) / 2) * direcao;
+  return limitarY([j[0] + passo, j[1] + passo], base);
+}
+
+export function podeMoverY(j: JanelaY | null, direcao: -1 | 1, base: JanelaY): boolean {
+  if (j === null) return false;
+  return direcao > 0 ? j[1] < base[1] : j[0] > base[0];
+}
+
+/** Mantém a faixa dentro da faixa completa (ao ocultar uma série, a base muda). */
+export function ajustarY(j: JanelaY | null, base: JanelaY): JanelaY | null {
+  if (j === null) return null;
+  if (j[1] - j[0] >= base[1] - base[0]) return null;
+  return limitarY(j, base);
+}
+
+/** O eixo mostra o zero? Quando não, o gráfico precisa dizer isso: a altura engana. */
+export function incluiZero(j: JanelaY | null): boolean {
+  return j === null || (j[0] <= 0 && j[1] >= 0);
+}
+
+/** "Eixo vertical de 80 ms a 100 ms." (a faixa visível, para o aviso na tela). */
+export function textoFaixaY(j: JanelaY, unidade: string): string {
+  return `Eixo vertical de ${formatarValor(j[0], unidade)} a ${formatarValor(j[1], unidade)}.`;
+}
+
+/** Anúncio: a faixa e, quando o zero ficou de fora, o alerta. */
+export function textoJanelaY(j: JanelaY | null, unidade: string): string {
+  if (j === null) return 'Eixo vertical completo, a partir do zero.';
+  const base = textoFaixaY(j, unidade);
+  return incluiZero(j) ? base : `${base} Atenção: o eixo vertical não começa em zero.`;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -429,6 +526,8 @@ export function montarOpcao(cfg: ConfigGrafico): EChartsCoreOption {
     },
     yAxis: {
       type: 'value',
+      min: linhas ? cfg.janelaY?.[0] : undefined,
+      max: linhas ? cfg.janelaY?.[1] : undefined,
       name: rotuloY,
       nameLocation: 'end',
       nameGap: 12,
@@ -436,7 +535,7 @@ export function montarOpcao(cfg: ConfigGrafico): EChartsCoreOption {
       axisLine: { show: false },
       axisTick: { show: false },
       splitLine: { lineStyle: { color: t.grade } },
-      axisLabel: { ...eixoTexto, formatter: (v: number) => formatarNumero(v) },
+      axisLabel: { ...eixoTexto, hideOverlap: true, formatter: (v: number) => formatarNumero(v) },
     },
     dataZoom:
       cfg.interativo && n > MIN_INTERVALOS + 1

@@ -1,6 +1,17 @@
 import {
+  ajustarY,
   ampliar,
+  ampliarY,
   DadosGrafico,
+  faixaY,
+  incluiZero,
+  JanelaY,
+  moverY,
+  podeAmpliarY,
+  podeMoverY,
+  podeReduzirY,
+  reduzirY,
+  textoJanelaY,
   escaparHtml,
   formatarValor,
   htmlTooltip,
@@ -278,5 +289,125 @@ describe('prefixarIds', () => {
     expect(prefixarIds(svg, 'gc1pl')).toBe(
       '<pattern id="gc1pl-p0"></pattern><path fill="url(#gc1pl-p0)"/><use href="#gc1pl-c1"/><text>zr0-x</text>',
     );
+  });
+});
+
+describe('paleta do tema claro', () => {
+  const luz = (hex: string) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+    const lin = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  };
+  const contraste = (a: string, b: string) => {
+    const [x, y] = [luz(a), luz(b)].sort((p, q) => q - p);
+    return (x + 0.05) / (y + 0.05);
+  };
+
+  it('usa a paleta validada (validate_palette.js) e toda cor passa de 3:1 contra o branco', () => {
+    expect(TOKENS.light.series).toEqual([
+      '#2a78d6',
+      '#d9541f',
+      '#0d8a5e',
+      '#a87000',
+      '#c9407f',
+      '#008300',
+    ]);
+    for (const cor of TOKENS.light.series) {
+      expect(contraste(cor, TOKENS.light.superficie), cor).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('as cores do tema escuro não mudaram', () => {
+    expect(TOKENS.dark.series).toEqual([
+      '#3987e5',
+      '#d95926',
+      '#199e70',
+      '#c98500',
+      '#d55181',
+      '#008300',
+    ]);
+  });
+});
+
+describe('zoom do eixo Y (linhas)', () => {
+  const d: DadosGrafico = {
+    categorias: ['a', 'b', 'c'],
+    series: [
+      { nome: 'A', valores: [80, 100, 90] },
+      { nome: 'B', valores: [-10, 5, null] },
+    ],
+  };
+  const base = faixaY(d, new Set());
+
+  it('a faixa completa vem das séries visíveis e sempre inclui o zero', () => {
+    expect(base).toEqual([-10, 100]);
+    expect(faixaY(d, new Set(['B']))).toEqual([0, 100]);
+    expect(faixaY({ categorias: ['a'], series: [{ nome: 'x', valores: [0] }] }, new Set())).toEqual(
+      [0, 1],
+    );
+  });
+
+  it('ampliar encolhe em torno do centro; reduzir volta; o fim do caminho é o eixo completo', () => {
+    const j = ampliarY(null, base)!;
+    expect(j[1] - j[0]).toBeCloseTo(66, 5);
+    expect(podeReduzirY(j)).toBe(true);
+    expect(reduzirY(j, base)).toBeNull();
+    expect(reduzirY(null, base)).toBeNull();
+  });
+
+  it('não amplia abaixo de 10% da faixa completa', () => {
+    let j: JanelaY | null = null;
+    for (let i = 0; i < 30; i++) j = ampliarY(j, base);
+    expect(j![1] - j![0]).toBeCloseTo(11, 5);
+    expect(podeAmpliarY(j, base)).toBe(false);
+    expect(ampliarY(j, base)).toEqual(j);
+  });
+
+  it('mover fica dentro da faixa completa e só existe depois de ampliar', () => {
+    expect(podeMoverY(null, 1, base)).toBe(false);
+    let j = ampliarY(ampliarY(null, base), base);
+    for (let i = 0; i < 10; i++) j = moverY(j, 1, base);
+    expect(j![1]).toBe(100);
+    expect(podeMoverY(j, 1, base)).toBe(false);
+    expect(podeMoverY(j, -1, base)).toBe(true);
+    for (let i = 0; i < 10; i++) j = moverY(j, -1, base);
+    expect(j![0]).toBe(-10);
+  });
+
+  it('ajustarY acompanha a mudança da faixa completa ao ocultar uma série', () => {
+    const j: JanelaY = [-10, 20];
+    const nova = faixaY(d, new Set(['B']));
+    expect(ajustarY(j, nova)).toEqual([0, 30]);
+    expect(ajustarY([0, 100], nova)).toBeNull();
+  });
+
+  it('diz quando o eixo não começa em zero', () => {
+    expect(incluiZero(null)).toBe(true);
+    expect(incluiZero([-10, 50])).toBe(true);
+    expect(incluiZero([60, 100])).toBe(false);
+    expect(textoJanelaY(null, 'ms')).toBe('Eixo vertical completo, a partir do zero.');
+    expect(textoJanelaY([0, 50], 'ms')).toBe('Eixo vertical de 0 ms a 50 ms.');
+    expect(textoJanelaY([60, 100], 'ms')).toBe(
+      'Eixo vertical de 60 ms a 100 ms. Atenção: o eixo vertical não começa em zero.',
+    );
+  });
+
+  it('montarOpcao aplica min/max só nas linhas', () => {
+    const cfg = {
+      dados: d,
+      unidade: 'ms',
+      eixoX: '',
+      eixoY: '',
+      tema: 'light' as const,
+      compacto: false,
+      semMovimento: false,
+      interativo: true,
+      janelaY: [60, 100] as const,
+    };
+    const y = (tipo: 'linhas' | 'barras') =>
+      (montarOpcao({ ...cfg, tipo }) as unknown as { yAxis: { min?: number; max?: number } }).yAxis;
+    expect(y('linhas')).toMatchObject({ min: 60, max: 100 });
+    expect(y('barras').min).toBeUndefined();
+    expect(y('barras').max).toBeUndefined();
   });
 });

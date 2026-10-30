@@ -74,11 +74,12 @@
 }
 
 .item {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 1.5rem;
-  padding: 0.15rem 0.4rem;
+  min-height: 2.25rem;
+  padding: 0.15rem 0.6rem;
   font: inherit;
   font-size: 0.875rem;
   color: var(--text);
@@ -88,8 +89,6 @@
 }
 
 button.item {
-  min-height: 2.25rem;
-  padding-inline: 0.6rem;
   cursor: pointer;
   border-color: var(--border);
   background: var(--surface-2);
@@ -147,7 +146,7 @@ summary:focus-visible {
 }
 
 @media (pointer: coarse) {
-  button.item,
+  .item,
   .zoom button {
     min-height: 2.75rem;
   }
@@ -252,4 +251,46 @@ summary:focus-visible {
 .dados td {
   font-variant-numeric: tabular-nums;
   text-align: right;
+}
+
+/* --- Reserva de espaço: o estado pré-renderizado tem a mesma altura do gráfico vivo --- */
+
+.zoom {
+  align-items: flex-end;
+  gap: 0.35rem 0.75rem;
+}
+
+.zoom .grupo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.zoom .rotulo {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.zoom.espera {
+  pointer-events: none;
+}
+
+.zoom button[aria-disabled='true'] {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.aviso-y {
+  margin: 0 0 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border-left: 4px solid var(--ring);
+  background: var(--surface-2);
+  border-radius: 4px;
+}
+
+.aviso-y.neutro {
+  border-left-color: var(--border);
 }

@@ -21,24 +21,35 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ThemeService } from '../../theme.service';
 import { GRAFICO_MOTOR, Instancia, Motor } from './grafico-motor';
 import {
+  ajustarY,
   ampliar,
+  ampliarY,
   ConfigGrafico,
+  faixaY,
   FORMAS,
   formatarNumero,
   Janela,
   janelaCompleta,
+  JanelaY,
   lerDados,
   montarOpcao,
   prefixarIds,
   mover,
+  moverY,
   podeAmpliar,
+  podeAmpliarY,
   podeMover,
+  podeMoverY,
   podeReduzir,
+  podeReduzirY,
   reduzir,
+  reduzirY,
   seriesVisiveis,
   TAMANHOS,
   Tema,
   textoCategoria,
+  textoFaixaY,
+  textoJanelaY,
   textoSerie,
   TipoGrafico,
   TOKENS,
@@ -53,6 +64,9 @@ type Estaticos = Record<Tamanho, Record<Tema, string>>;
 
 /** Largura do contêiner (em rem) a partir da qual vale o SVG largo. */
 const REM_LARGO = 34;
+
+/** Espera, em ms, depois do último evento de um gesto de zoom antes de anunciar a janela. */
+const ATRASO_GESTO = 500;
 
 const NOMES_TIPO: Record<TipoGrafico, string> = {
   barras: 'barras',
@@ -113,6 +127,7 @@ export class Grafico implements OnInit {
   protected readonly idTitulo = `grafico-${this.id}-titulo`;
   protected readonly idResumo = `grafico-${this.id}-resumo`;
   protected readonly idDica = `grafico-${this.id}-dica`;
+  protected readonly idAviso = `grafico-${this.id}-aviso`;
   protected readonly idTextura = `grafico-${this.id}-tx`;
   protected readonly texturas = [1, 2, 3, 4, 5];
 
@@ -148,7 +163,9 @@ export class Grafico implements OnInit {
   protected readonly pronto = signal(false);
   protected readonly ocultas = signal<ReadonlySet<string>>(new Set());
   protected readonly janela = signal<Janela | null>(null);
+  protected readonly janelaY = signal<JanelaY | null>(null);
   protected readonly anuncio = signal('');
+  private temporizadorAnuncio: ReturnType<typeof setTimeout> | undefined;
   private readonly indiceFoco = signal<number | null>(null);
   private readonly serieFoco = signal<number | null>(null);
 
@@ -170,6 +187,30 @@ export class Grafico implements OnInit {
     podeMover(this.janelaAtual(), 1, this.nCategorias()),
   );
 
+  /** Zoom vertical só nas linhas: em barras, cortar a base do eixo engana. */
+  protected readonly ehLinhas = computed(() => this.tipo() === 'linhas');
+  protected readonly barraDeZoom = computed(() => this.temZoom() || this.ehLinhas());
+  private readonly baseY = computed<JanelaY>(() => {
+    const m = this.modelo();
+    return m ? faixaY(m, this.ocultas()) : [0, 1];
+  });
+  protected readonly podeAmpliarVertical = computed(() =>
+    podeAmpliarY(this.janelaY(), this.baseY()),
+  );
+  protected readonly podeReduzirVertical = computed(() => podeReduzirY(this.janelaY()));
+  protected readonly podeSubir = computed(() => podeMoverY(this.janelaY(), 1, this.baseY()));
+  protected readonly podeDescer = computed(() => podeMoverY(this.janelaY(), -1, this.baseY()));
+  /** Texto visível quando o eixo vertical foi ampliado (e, se não começa em zero, o aviso). */
+  protected readonly avisoEixoY = computed(() => {
+    const j = this.janelaY();
+    return j === null ? '' : textoFaixaY(j, this.unidade());
+  });
+  protected readonly semZeroY = computed(() => {
+    const j = this.janelaY();
+    return j !== null && !(j[0] <= 0 && j[1] >= 0);
+  });
+  protected readonly redefinivel = computed(() => this.podeReduzir() || this.podeReduzirVertical());
+
   private chart: Instancia | null = null;
   private compacto = false;
   private semMovimento = false;
@@ -184,6 +225,7 @@ export class Grafico implements OnInit {
     this.destroyRef.onDestroy(() => {
       this.chart?.dispose();
       this.chart = null;
+      clearTimeout(this.temporizadorAnuncio);
     });
   }
 
@@ -252,6 +294,7 @@ export class Grafico implements OnInit {
       compacto: this.compacto,
       semMovimento: this.semMovimento,
       janela: this.janelaAtual(),
+      janelaY: this.janelaY(),
       ocultas: this.ocultas(),
       interativo: true,
       ...sobre,
@@ -303,7 +346,9 @@ export class Grafico implements OnInit {
       if (!e.ctrlKey) e.stopPropagation();
     };
     vivo.addEventListener('wheel', soComCtrl, { capture: true, passive: true });
-    this.destroyRef.onDestroy(() => vivo.removeEventListener('wheel', soComCtrl, { capture: true }));
+    this.destroyRef.onDestroy(() =>
+      vivo.removeEventListener('wheel', soComCtrl, { capture: true }),
+    );
     const chart = motor.criar(vivo, { renderer: 'svg' });
     this.chart = chart;
     chart.setOption(this.opcao());
@@ -334,7 +379,22 @@ export class Grafico implements OnInit {
   }
 
   private redesenhar(): void {
-    this.chart?.setOption(this.opcao(), { notMerge: true });
+    if (!this.chart) return;
+    this.chart.setOption(this.opcao(), { notMerge: true });
+    // O redesenho (tema, largura, zoom vertical) apaga a dica e a linha-guia: devolve-as.
+    const i = this.indiceFoco();
+    if (i !== null) this.focarPonto(i, this.serieFoco(), false);
+  }
+
+  /**
+   * Região `aria-live`. O texto é esvaziado e reposto: o leitor de tela só fala quando o conteúdo
+   * muda, e a mesma mensagem repetida (limite alcançado de novo) ficaria muda. `atraso` serve
+   * para esperar o fim de um gesto contínuo (roda, pinça) e anunciar só o estado final.
+   */
+  private anunciar(texto: string, atraso = 0): void {
+    clearTimeout(this.temporizadorAnuncio);
+    this.anuncio.set('');
+    this.temporizadorAnuncio = setTimeout(() => this.anuncio.set(texto), 60 + atraso);
   }
 
   // -------------------------------------------------------------------------------------------
@@ -353,7 +413,7 @@ export class Grafico implements OnInit {
       novas.delete(nome);
     } else {
       if (seriesVisiveis(m, novas).length <= 1) {
-        this.anuncio.set('Pelo menos uma série precisa ficar visível.');
+        this.anunciar('Pelo menos uma série precisa ficar visível.');
         return;
       }
       novas.add(nome);
@@ -363,29 +423,77 @@ export class Grafico implements OnInit {
       type: novas.has(nome) ? 'legendUnSelect' : 'legendSelect',
       name: nome,
     });
-    this.anuncio.set(
+    this.anunciar(
       `${nome}: ${novas.has(nome) ? 'oculta' : 'visível'}. ` +
         `${seriesVisiveis(m, novas).length} de ${m.series.length} séries visíveis.`,
     );
-    const i = this.indiceFoco();
-    if (i !== null) this.focarPonto(i, this.serieFoco(), false);
+    // A faixa vertical completa depende das séries visíveis.
+    const ajustada = ajustarY(this.janelaY(), faixaY(m, novas));
+    if (ajustada !== this.janelaY()) {
+      this.janelaY.set(ajustada);
+      this.redesenhar();
+    } else {
+      const i = this.indiceFoco();
+      if (i !== null) this.focarPonto(i, this.serieFoco(), false);
+    }
   }
 
   // -------------------------------------------------------------------------------------------
   // Zoom
   // -------------------------------------------------------------------------------------------
 
+  // Os botões usam `aria-disabled`, não `disabled`: ao chegar no limite o foco fica onde está
+  // (`disabled` o mandaria para o `body`) e o clique repetido ainda diz por que nada mudou.
   protected ampliarJanela(): void {
+    if (!this.podeAmpliar()) return this.anunciar('Zoom máximo: 3 categorias.');
     this.aplicarJanela(ampliar(this.janelaAtual(), this.nCategorias()), true);
   }
   protected reduzirJanela(): void {
+    if (!this.podeReduzir()) return this.anunciar('Já mostra todas as categorias.');
     this.aplicarJanela(reduzir(this.janelaAtual(), this.nCategorias()), true);
   }
   protected moverJanela(direcao: -1 | 1): void {
+    if (!(direcao < 0 ? this.podeEsquerda() : this.podeDireita())) {
+      return this.anunciar(direcao < 0 ? 'Já está no início.' : 'Já está no fim.');
+    }
     this.aplicarJanela(mover(this.janelaAtual(), direcao, this.nCategorias()), true);
   }
   protected redefinirJanela(): void {
-    this.aplicarJanela(janelaCompleta(this.nCategorias()), true);
+    if (!this.redefinivel()) return this.anunciar('O gráfico já está sem zoom.');
+    const eraY = this.janelaY() !== null;
+    if (eraY) {
+      this.janelaY.set(null);
+      this.redesenhar();
+    }
+    this.aplicarJanela(janelaCompleta(this.nCategorias()), false);
+    this.anunciarJanela(eraY ? ' Eixo vertical completo.' : '');
+  }
+
+  protected ampliarVertical(): void {
+    if (!this.podeAmpliarVertical()) return this.anunciar('Zoom vertical máximo.');
+    this.aplicarJanelaY(ampliarY(this.janelaY(), this.baseY()));
+  }
+  protected reduzirVertical(): void {
+    if (!this.podeReduzirVertical()) return this.anunciar('O eixo vertical já está completo.');
+    this.aplicarJanelaY(reduzirY(this.janelaY(), this.baseY()));
+  }
+  protected moverVertical(direcao: -1 | 1): void {
+    if (!(direcao > 0 ? this.podeSubir() : this.podeDescer())) {
+      return this.anunciar(
+        this.janelaY() === null
+          ? 'Amplie o eixo vertical antes de movê-lo.'
+          : direcao > 0
+            ? 'Já está no topo.'
+            : 'Já está na base.',
+      );
+    }
+    this.aplicarJanelaY(moverY(this.janelaY(), direcao, this.baseY()));
+  }
+
+  private aplicarJanelaY(j: JanelaY | null): void {
+    this.janelaY.set(j);
+    this.redesenhar();
+    this.anunciar(textoJanelaY(j, this.unidade()));
   }
 
   private aplicarJanela(j: Janela, anunciar: boolean): void {
@@ -401,15 +509,16 @@ export class Grafico implements OnInit {
     if (anunciar) this.anunciarJanela();
   }
 
-  private anunciarJanela(): void {
+  private anunciarJanela(extra = '', atraso = 0): void {
     const m = this.modelo();
     if (!m) return;
     const [a, b] = this.janelaAtual();
-    this.anuncio.set(
-      a === 0 && b === m.categorias.length - 1
+    this.anunciar(
+      (a === 0 && b === m.categorias.length - 1
         ? `Mostrando todas as ${m.categorias.length} categorias.`
         : `Mostrando de ${m.categorias[a]} a ${m.categorias[b]} ` +
-            `(${b - a + 1} de ${m.categorias.length} categorias).`,
+          `(${b - a + 1} de ${m.categorias.length} categorias).`) + extra,
+      atraso,
     );
   }
 
@@ -421,7 +530,10 @@ export class Grafico implements OnInit {
     if (z?.startValue === undefined || z.endValue === undefined) return;
     const j: Janela = [Math.round(z.startValue), Math.round(z.endValue)];
     const atual = this.janelaAtual();
-    if (j[0] !== atual[0] || j[1] !== atual[1]) this.janela.set(j);
+    if (j[0] === atual[0] && j[1] === atual[1]) return;
+    this.janela.set(j);
+    // Roda e pinça disparam dezenas de eventos: anuncia só a janela em que o gesto parou.
+    this.anunciarJanela('', ATRASO_GESTO);
   }
 
   // -------------------------------------------------------------------------------------------
@@ -434,7 +546,8 @@ export class Grafico implements OnInit {
     const n = m.categorias.length;
     const j = this.janelaAtual();
     const vis = seriesVisiveis(m, this.ocultas());
-    let i = this.indiceFoco();
+    const antes = this.indiceFoco();
+    let i = antes;
     let serie = this.serieFoco();
     if (serie !== null && !vis.includes(serie)) serie = null;
 
@@ -470,7 +583,13 @@ export class Grafico implements OnInit {
         return;
     }
     e.preventDefault();
-    this.focarPonto(i, serie, true);
+    // Tentativa de passar da ponta (ou Home/End repetido): diz que chegou, em vez de silenciar.
+    let limite = '';
+    if (antes !== null && i === antes) {
+      if (e.key === 'ArrowRight' || e.key === 'End') limite = 'Última categoria. ';
+      else if (e.key === 'ArrowLeft' || e.key === 'Home') limite = 'Primeira categoria. ';
+    }
+    this.focarPonto(i, serie, true, limite);
   }
 
   protected aoSairDoGrafico(): void {
@@ -484,7 +603,7 @@ export class Grafico implements OnInit {
     this.chart?.dispatchAction({ type: 'downplay' });
   }
 
-  private focarPonto(i: number, serie: number | null, anunciar: boolean): void {
+  private focarPonto(i: number, serie: number | null, anunciar: boolean, prefixo = ''): void {
     const m = this.modelo();
     const chart = this.chart;
     if (!m || !chart) return;
@@ -498,10 +617,11 @@ export class Grafico implements OnInit {
     chart.dispatchAction({ type: 'highlight', seriesIndex: alvo, dataIndex: i });
     chart.dispatchAction({ type: 'showTip', seriesIndex: alvo, dataIndex: i });
     if (anunciar) {
-      this.anuncio.set(
-        serie === null
-          ? textoCategoria(m, i, this.ocultas(), this.unidade(), this.empilhado())
-          : textoSerie(m, serie, i, this.unidade()),
+      this.anunciar(
+        prefixo +
+          (serie === null
+            ? textoCategoria(m, i, this.ocultas(), this.unidade(), this.empilhado())
+            : textoSerie(m, serie, i, this.unidade())),
       );
     }
   }
