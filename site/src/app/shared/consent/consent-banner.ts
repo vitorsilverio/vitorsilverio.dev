@@ -3,6 +3,7 @@ import {
   ElementRef,
   Injector,
   afterNextRender,
+  DestroyRef,
   effect,
   inject,
   signal,
@@ -51,6 +52,8 @@ export class ConsentBanner {
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private observer?: ResizeObserver;
 
   /**
    * Banner recolhido para uma barra mínima. Não é uma decisão: o consentimento
@@ -70,6 +73,15 @@ export class ConsentBanner {
         this.message.set('');
       }
     });
+
+    // Foco não encoberto (WCAG 2.4.11): publica em --consent-offset o espaço real ocupado pelo
+    // banner (ou pela barra recolhida) na base da janela; o CSS global o usa em scroll-padding.
+    effect(() => {
+      this.consent.visible();
+      this.collapsed();
+      afterNextRender(() => this.observar(), { injector: this.injector });
+    });
+    this.destroyRef.onDestroy(() => this.soltar());
   }
 
   /**
@@ -98,6 +110,32 @@ export class ConsentBanner {
       },
       { injector: this.injector },
     );
+  }
+
+  private observar(): void {
+    this.observer?.disconnect();
+    const el = this.host.nativeElement.querySelector<HTMLElement>('.consent-banner, .consent-bar');
+    const raiz = this.document.documentElement;
+    if (!el || typeof ResizeObserver === 'undefined') {
+      raiz.style.removeProperty('--consent-offset');
+      return;
+    }
+    const medir = () => {
+      const r = el.getBoundingClientRect();
+      const altura = this.document.defaultView?.innerHeight ?? 0;
+      // altura do elemento + distância dele à base da janela + 1rem de folga.
+      const ocupado = Math.max(0, altura - r.top);
+      raiz.style.setProperty('--consent-offset', `calc(${Math.ceil(ocupado)}px + 1rem)`);
+    };
+    this.observer = new ResizeObserver(medir);
+    this.observer.observe(el);
+    this.observer.observe(raiz);
+    medir();
+  }
+
+  private soltar(): void {
+    this.observer?.disconnect();
+    this.document.documentElement.style.removeProperty('--consent-offset');
   }
 
   /** Esc recolhe sem aceitar nem rejeitar; o foco vai para o botão que reabre. */

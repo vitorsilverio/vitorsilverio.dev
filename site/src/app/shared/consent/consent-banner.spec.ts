@@ -20,6 +20,14 @@ describe('ConsentBanner', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    // jsdom não tem ResizeObserver.
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    );
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
     });
@@ -31,6 +39,7 @@ describe('ConsentBanner', () => {
   });
 
   afterEach(() => {
+    vi.unstubAllGlobals();
     fixture.nativeElement.remove();
     localStorage.clear();
   });
@@ -160,5 +169,24 @@ describe('ConsentBanner', () => {
       await flush();
       expect(document.activeElement).toBe(main);
     });
+  });
+
+  it('publica --consent-offset enquanto o banner está na tela e o remove ao decidir', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    );
+    await flush();
+    await flush();
+    const raiz = document.documentElement;
+    expect(raiz.style.getPropertyValue('--consent-offset')).toContain('calc(');
+
+    q('.btn-reject')!.click();
+    await flush();
+    await flush();
+    expect(raiz.style.getPropertyValue('--consent-offset')).toBe('');
   });
 });

@@ -85,13 +85,13 @@ html {
 
 /* Foco não encoberto (WCAG 2.4.11): enquanto o banner de cookies está na tela (fixo, até ~9rem
    em tela estreita), o navegador não pode deixar o elemento focado por Tab atrás dele. */
-html:has(.consent-banner) {
-  scroll-padding-bottom: 10rem;
+html:has(.consent-banner, .consent-bar) {
+  scroll-padding-bottom: var(--consent-offset, 10rem);
 }
 
 /* E no fim da página, onde não há mais o que rolar, o rodapé ganha respiro para sair de baixo dele. */
-html:has(.consent-banner) body {
-  padding-bottom: 9rem;
+html:has(.consent-banner, .consent-bar) body {
+  padding-bottom: var(--consent-offset, 9rem);
 }
 
 body {
