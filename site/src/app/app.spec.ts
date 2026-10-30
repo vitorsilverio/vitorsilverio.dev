@@ -1,7 +1,11 @@
+import { Component, createComponent, EnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideLocationMocks } from '@angular/common/testing';
 import { App } from './app';
+
+@Component({ template: '<p>Página</p>' })
+class Pagina {}
 
 describe('App', () => {
   beforeEach(async () => {
@@ -105,5 +109,42 @@ describe('App · botão de tema', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe(
       depois === 'true' ? 'dark' : 'light',
     );
+  });
+});
+
+describe('App · rodapé ao assumir o pré-render (CLS)', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: '', component: Pagina }]), provideLocationMocks()],
+    });
+  });
+
+  function montar(prerender: boolean) {
+    const hostElement = document.createElement('app-root');
+    if (prerender) hostElement.setAttribute('ng-server-context', 'ssg');
+    document.body.appendChild(hostElement);
+    const ref = createComponent(App, {
+      environmentInjector: TestBed.inject(EnvironmentInjector),
+      hostElement,
+    });
+    return { ref, el: hostElement };
+  }
+
+  it('sem pré-render (testes, dev) o rodapé existe desde o início', () => {
+    const { ref, el } = montar(false);
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeTruthy();
+    ref.destroy();
+  });
+
+  it('assumindo o pré-render, o rodapé só volta depois da primeira navegação', async () => {
+    const { ref, el } = montar(true);
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeNull();
+
+    await TestBed.inject(Router).navigateByUrl('/');
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeTruthy();
+    ref.destroy();
   });
 });

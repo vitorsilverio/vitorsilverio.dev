@@ -8,7 +8,17 @@ import {
   viewChild,
 } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationSkipped,
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { filter } from 'rxjs';
 import { ThemeService } from './theme.service';
 import { ConsentBanner } from './shared/consent/consent-banner';
@@ -54,6 +64,13 @@ export class App {
         this.document.defaultView?.location.reload();
       }
     });
+  /**
+   * Sem hidratação, ao iniciar o Angular troca o HTML pré-renderizado por um DOM novo, e a
+   * página fica sem conteúdo até a rota lazy ativar. Com o rodapé visível nesse intervalo, ele
+   * sobe para o pé da janela e depois salta para baixo do conteúdo (CLS). Por isso o rodapé só
+   * é recriado no cliente depois da primeira navegação (no servidor e em testes, sempre existe).
+   */
+  protected readonly rodapePronto = signal(!this.assumindoPrerender());
   private firstNav = true;
   private lastTrigger: string | null = null;
 
@@ -61,6 +78,23 @@ export class App {
     // Aplica o consentimento salvo só após a hidratação (cliente), igual aos
     // comentários: nada de GA no pré-render e sem mismatch de hidratação.
     afterNextRender(() => this.consent.applyStored());
+
+    if (!this.rodapePronto()) {
+      const fim = this.router.events
+        .pipe(
+          filter(
+            (e) =>
+              e instanceof NavigationEnd ||
+              e instanceof NavigationCancel ||
+              e instanceof NavigationError ||
+              e instanceof NavigationSkipped,
+          ),
+        )
+        .subscribe(() => {
+          this.rodapePronto.set(true);
+          fim.unsubscribe();
+        });
+    }
 
     // Acessibilidade SPA: em navegação por link (avanço), move o foco para o
     // <h1> da página (ou <main>) — o scroll volta ao topo via withInMemoryScrolling.
@@ -81,8 +115,7 @@ export class App {
           setTimeout(() => {
             const main = this.document.querySelector('main');
             const target =
-              (main?.querySelector('h1') as HTMLElement | null) ??
-              (main as HTMLElement | null);
+              (main?.querySelector('h1') as HTMLElement | null) ?? (main as HTMLElement | null);
             target?.focus();
           }, 0);
         });
@@ -146,6 +179,11 @@ export class App {
       icon: 'github',
     },
   ] as const;
+
+  /** O cliente está assumindo um HTML pré-renderizado (o Angular marca o servidor no app-root). */
+  private assumindoPrerender(): boolean {
+    return this.isBrowser && this.host.nativeElement.hasAttribute('ng-server-context');
+  }
 
   protected toggleMenu(): void {
     this.menuOpen.update((open) => !open);
