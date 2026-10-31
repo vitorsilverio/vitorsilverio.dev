@@ -301,7 +301,11 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   );
 
   // Captions: "Tabela: X" (ou "Table: X") imediatamente antes de uma tabela.
+  // Cada legenda vira um marcador `<!--legenda:N-->` no lugar da linha; depois do lexer,
+  // o marcador é ligado à tabela que vem logo a seguir (e só a ela). Assim uma tabela sem
+  // legenda não consome a de outra, e uma legenda sem tabela vira aviso.
   const captions = [];
+  const avisosLegenda = [];
   src = src.replace(
     /^(?:Tabela|Table)(\s*\(matriz\))?:[ \t]*(.*)\r?\n(?=\s*\|)/gim,
     (todo, matriz, c) => {
@@ -309,7 +313,7 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
       // Sem o marcador, a legenda continua obrigatória (linha "Tabela:" vazia não é legenda).
       if (!matriz && !c.trim()) return todo;
       captions.push({ texto: c.trim(), matriz: !!matriz });
-      return '';
+      return `<!--legenda:${captions.length - 1}-->\n\n`;
     },
   );
 
@@ -408,7 +412,7 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   };
 
   renderer.table = (token) => {
-    const { texto: cap, matriz } = captions.shift() ?? { texto: '', matriz: false };
+    const { texto: cap, matriz } = token.legenda ?? { texto: '', matriz: false };
     const caption = cap ? `<caption>${escapeHtml(cap)}</caption>` : '';
     // Nome acessível: legenda explícita; senão o título da seção; senão genérico.
     const rotulo = cap
@@ -469,7 +473,9 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
 
   marked.setOptions({ gfm: true, breaks: false });
   marked.use({ extensions: [extensaoTraducao()] });
-  let html = marked.parse(src, { renderer, async: false });
+  const tokens = marked.lexer(src);
+  ligarLegendas(tokens, captions, avisosLegenda);
+  let html = marked.parser(tokens, { ...marked.defaults, renderer, async: false });
   html = preservarEspacos(html);
   usa.traducao = usaTraducao(html);
 
@@ -494,6 +500,12 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
     console.warn(
       `⚠ ${deadLinks.length} link(s) para artigo(s) não publicado(s) — mantidos como texto:\n  ` +
         [...new Set(deadLinks)].join('\n  '),
+    );
+  }
+  if (avisosLegenda.length) {
+    console.warn(
+      `⚠ ${avisosLegenda.length} legenda(s) de tabela sem tabela logo a seguir (ignoradas):\n  ` +
+        avisosLegenda.join('\n  '),
     );
   }
   if (avisosImg.length) {
@@ -526,6 +538,30 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   }
 
   return { html: html.trim(), usa };
+}
+
+/**
+ * Liga cada marcador `<!--legenda:N-->` à tabela que vem imediatamente depois dele
+ * (token.legenda) e remove o marcador. Marcador sem tabela logo a seguir gera aviso.
+ * Percorre também listas e citações (tokens aninhados).
+ */
+function ligarLegendas(tokens, captions, avisos) {
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    const m = t.type === 'html' ? /^<!--legenda:(\d+)-->\s*$/.exec(t.text) : null;
+    if (m) {
+      const legenda = captions[Number(m[1])];
+      let j = i + 1;
+      while (tokens[j]?.type === 'space') j++;
+      if (tokens[j]?.type === 'table') tokens[j].legenda = legenda;
+      else avisos.push(`"Tabela: ${legenda.texto}": não há tabela logo depois da legenda`);
+      tokens.splice(i, 1);
+      i--;
+      continue;
+    }
+    if (Array.isArray(t.items)) ligarLegendas(t.items, captions, avisos);
+    if (Array.isArray(t.tokens)) ligarLegendas(t.tokens, captions, avisos);
+  }
 }
 
 /** Monta o arquivo .ts do componente do post. */

@@ -114,9 +114,9 @@ import { Traducao } from '../../../shared/traducao/traducao';
 <app-nota n="1">Existe também um &quot;interpretador do Tier 2&quot;, pensado para depurar as etapas anteriores do JIT. O manual do 3.13 diz que ele é <app-traducao><span lang="en">mostly intended for debugging</span><span data-traducao>pensado principalmente para depuração</span></app-traducao>, e é o que as flags <code>interpreter</code> e <code>--experimental-jit-interpreter</code> ligam. Os &quot;2-9%&quot; que a imprensa citou para o 3.13 compararam o JIT com esse interpretador do Tier 2, não com o interpretador normal.</app-nota>
 <h3>Como ligar e como conferir</h3>
 <p>O JIT sempre foi uma opção de <strong>compilação</strong> do CPython, desligada por padrão. No Linux e no macOS a flag do <code>configure</code> é <code>--enable-experimental-jit</code>, com quatro valores. A documentação do 3.15 define:</p>
-<div class="scroll-x" tabindex="0" role="group" aria-label="Medições publicadas do JIT do CPython, cada uma com versão, máquina e linha de base. Não são comparáveis entre si. (rolável)">
-  <table class="tabela-matriz">
-    <caption>Medições publicadas do JIT do CPython, cada uma com versão, máquina e linha de base. Não são comparáveis entre si.</caption><thead>
+<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Invalidação de cache: o código muda embaixo do JIT (rolável)">
+  <table class="tabela-lista" role="table">
+    <thead>
       <tr><th scope="col">Valor</th><th scope="col">Efeito</th></tr>
     </thead>
     <tbody>
@@ -152,9 +152,9 @@ import { Traducao } from '../../../shared/traducao/traducao';
 <p>Isso é o que o manual descreve para o <code>yes-off</code>: o JIT está disponível, vem desligado, <code>PYTHON_JIT=1</code> o liga e <code>PYTHON_JIT=0</code> o mantém desligado.</p>
 <h2>Os números, sempre com a máquina e a linha de base</h2>
 <p>&quot;Quanto mais rápido?&quot; é a pergunta mais mal respondida desta história, porque cada fonte mede uma coisa diferente. Esta tabela junta o que li, com o contexto de cada número:</p>
-<div class="scroll-x" tabindex="0" role="group" aria-label="As três preocupações do conselho do Python e a resposta de cada projeto. A coluna do CPython descreve o que o PEP 836 e o parecer dizem, não o código do CPython. (rolável)">
+<div class="scroll-x" tabindex="0" role="group" aria-label="Medições publicadas do JIT do CPython, cada uma com versão, máquina e linha de base. Não são comparáveis entre si. (rolável)">
   <table class="tabela-matriz">
-    <caption>As três preocupações do conselho do Python e a resposta de cada projeto. A coluna do CPython descreve o que o PEP 836 e o parecer dizem, não o código do CPython.</caption><thead>
+    <caption>Medições publicadas do JIT do CPython, cada uma com versão, máquina e linha de base. Não são comparáveis entre si.</caption><thead>
       <tr><th scope="col">Fonte</th><th scope="col">Versão</th><th scope="col">Máquina / contexto</th><th scope="col">Linha de base</th><th scope="col">Resultado</th></tr>
     </thead>
     <tbody>
@@ -283,9 +283,9 @@ bloco ARM ainda no cache? false</span></code></pre>
 <p>Linha a linha: depois de guardar os dois blocos há 2 no cache e a geração é 0. A escrita em <code>0x3000</code> cai fora de qualquer bloco, o cache não muda e a geração fica em 0. A escrita de 4 bytes em <code>0x1008</code> cai dentro do bloco ARM <code>[0x1000, 0x1010)</code>: ele sai, o cache fica com 1 bloco e a geração sobe para 1. A escrita de 4 bytes em <code>0x2000</code> cobre <code>[0x2000, 0x2004)</code> e <strong>não contém</strong> o endereço-base <code>0x2002</code> do bloco Thumb, mas o intervalo se sobrepõe a ele, então o bloco sai e a geração vai a 2. A última linha confirma que o bloco ARM não está mais lá.</p>
 <p>No programa real, quem chama <code>invalidate</code> é um decorador do barramento de memória, o <code>InvalidationAwareAddressSpace</code>, que envolve a memória do emulador e invalida o runtime a cada <code>write8</code>, <code>write16</code> e <code>write32</code>. No <code>armbox</code> essa composição acontece na montagem do emulador. O método <code>notifyWrite</code> da interface <code>AddressSpace</code>, descrito no artigo <a routerLink="/artigos/arm-jitter-api-java">Usando o arm-jitter direto pela API Java</a>, é o aviso manual para os casos em que a escrita não passa por esses métodos.</p>
 <p>Resumindo o espelho numa tabela:</p>
-<div class="scroll-x" tabindex="0" role="group" aria-label="Tabela: Invalidação de cache: o código muda embaixo do JIT (rolável)">
-  <table class="tabela-lista" role="table">
-    <thead role="rowgroup">
+<div class="scroll-x" tabindex="0" role="group" aria-label="As três preocupações do conselho do Python e a resposta de cada projeto. A coluna do CPython descreve o que o PEP 836 e o parecer dizem, não o código do CPython. (rolável)">
+  <table class="tabela-matriz">
+    <caption>As três preocupações do conselho do Python e a resposta de cada projeto. A coluna do CPython descreve o que o PEP 836 e o parecer dizem, não o código do CPython.</caption><thead role="rowgroup">
       <tr role="row"><th scope="col" role="columnheader">Pergunta</th><th scope="col" role="columnheader">JIT do CPython (PEP 836 e parecer)</th><th scope="col" role="columnheader">arm-jitter 1.5.0</th></tr>
     </thead>
     <tbody role="rowgroup">
