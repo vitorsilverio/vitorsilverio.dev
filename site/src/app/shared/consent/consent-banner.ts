@@ -112,29 +112,78 @@ export class ConsentBanner {
     );
   }
 
+  /**
+   * Mede o banner (ou a barra) e acompanha a janela. A mudança de --consent-offset altera o
+   * padding do body, então ela nunca roda dentro do callback do ResizeObserver (isso gera o
+   * erro "ResizeObserver loop completed with undelivered notifications"): vai para o
+   * próximo quadro. Só o banner é observado, não o html.
+   */
   private observar(): void {
-    this.observer?.disconnect();
+    this.soltarObservacao();
     const el = this.host.nativeElement.querySelector<HTMLElement>('.consent-banner, .consent-bar');
     const raiz = this.document.documentElement;
-    if (!el || typeof ResizeObserver === 'undefined') {
+    const view = this.document.defaultView;
+    if (!el || !view) {
       raiz.style.removeProperty('--consent-offset');
       return;
     }
     const medir = () => {
       const r = el.getBoundingClientRect();
-      const altura = this.document.defaultView?.innerHeight ?? 0;
       // altura do elemento + distância dele à base da janela + 1rem de folga.
-      const ocupado = Math.max(0, altura - r.top);
+      const ocupado = Math.max(0, view.innerHeight - r.top);
       raiz.style.setProperty('--consent-offset', `calc(${Math.ceil(ocupado)}px + 1rem)`);
     };
-    this.observer = new ResizeObserver(medir);
-    this.observer.observe(el);
-    this.observer.observe(raiz);
+    let quadro = 0;
+    const agendar = () => {
+      view.cancelAnimationFrame(quadro);
+      quadro = view.requestAnimationFrame(medir);
+    };
+    // Foco não encoberto (WCAG 2.4.11): o navegador só rola o foco quando o elemento está fora
+    // da janela; se já está visível mas sob o banner, rola o mínimo para tirá-lo de baixo.
+    const aoFocar = (ev: FocusEvent) => {
+      const alvo = ev.target;
+      if (!(alvo instanceof view.HTMLElement) || el.contains(alvo)) return;
+      view.requestAnimationFrame(() => this.livrarDoBanner(alvo, el));
+    };
+    this.observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(agendar);
+    this.observer?.observe(el);
+    view.addEventListener('resize', agendar);
+    this.document.addEventListener('focusin', aoFocar);
+    this.limpar = () => {
+      view.cancelAnimationFrame(quadro);
+      view.removeEventListener('resize', agendar);
+      this.document.removeEventListener('focusin', aoFocar);
+    };
     medir();
   }
 
-  private soltar(): void {
+  private livrarDoBanner(alvo: HTMLElement, banner: HTMLElement): void {
+    const view = this.document.defaultView;
+    if (!view || !banner.isConnected || !alvo.isConnected) return;
+    const r = alvo.getBoundingClientRect();
+    const b = banner.getBoundingClientRect();
+    const sob = r.bottom > b.top && r.top < b.bottom && r.right > b.left && r.left < b.right;
+    if (!sob) return;
+    const topo = this.document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
+    // Bloco mais alto que o espaço livre (ex.: <pre> grande) é exceção: rolar não adianta.
+    if (r.height > b.top - topo) return;
+    const descer = Math.min(r.bottom - b.top + 16, r.top - topo);
+    if (descer <= 0) return;
+    const reduz = view.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    view.scrollBy({ top: descer, behavior: reduz ? 'instant' : 'smooth' });
+  }
+
+  private limpar?: () => void;
+
+  private soltarObservacao(): void {
     this.observer?.disconnect();
+    this.observer = undefined;
+    this.limpar?.();
+    this.limpar = undefined;
+  }
+
+  private soltar(): void {
+    this.soltarObservacao();
     this.document.documentElement.style.removeProperty('--consent-offset');
   }
 
