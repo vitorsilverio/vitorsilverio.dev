@@ -361,7 +361,7 @@ acima da figura e é anunciado. Redefinir limpa os dois eixos.
 
 *Teclado e leitor de tela.* A área do gráfico tem `tabindex="0"` e, depois que o ECharts carrega,
 `role="application"` com `aria-roledescription="gráfico interativo"` (antes disso, `role="group"`). Setas
-esquerda/direita percorrem as categorias, cima/baixo trocam a série, Home/End vão às pontas, Esc fecha a dica.
+esquerda/direita percorrem as categorias, cima/baixo trocam a série, Home/End vão às pontas, Esc fecha a dica e anuncia "Valor fechado." (o blur é mudo). O nome acessível leva o resumo e uma frase curta de uso (`aria-describedby`; a dica completa fica só como texto, para o NVDA não lê-la a cada entrada). Com série selecionada o anúncio traz a posição ("4 de 10, B em 04: 14 ms.").
 **Por que `application`:** NVDA e JAWS em modo de navegação consomem as setas para o cursor virtual e o `keydown`
 nunca chega a um `role="group"`; `application` os leva ao modo de foco (é o papel que a ARIA reserva a widgets que
 tratam o teclado por conta própria). O custo (o cursor virtual não anda por dentro) não existe aqui: dentro da área

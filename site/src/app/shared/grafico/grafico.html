@@ -178,7 +178,7 @@
       [attr.role]="interativo() ? 'application' : 'group'"
       [attr.aria-roledescription]="interativo() ? 'gráfico interativo' : null"
       [attr.aria-label]="rotuloArea()"
-      [attr.aria-describedby]="interativo() ? idResumo + ' ' + idDica : idResumo"
+      [attr.aria-describedby]="interativo() ? idResumo + ' ' + idDicaCurta : idResumo"
       [attr.tabindex]="interativo() ? 0 : null"
       (keydown)="aoTeclar($event)"
       (blur)="aoSairDoGrafico()"
@@ -204,6 +204,10 @@
       </div>
     </div>
 
+    <!-- Só esta frase entra no aria-describedby; a dica completa fica como texto para o cursor virtual. -->
+    <span class="visually-hidden" [id]="idDicaCurta"
+      >Setas percorrem as categorias e as séries; Esc fecha.</span
+    >
     <p class="dica" [id]="idDica">
       Com o gráfico carregado e em foco: setas esquerda e direita percorrem as categorias, setas
       para cima e para baixo trocam a série, Home e End vão às pontas e Esc fecha o valor. Ctrl com

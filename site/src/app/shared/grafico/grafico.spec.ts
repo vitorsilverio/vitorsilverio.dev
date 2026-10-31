@@ -294,7 +294,10 @@ describe('Grafico', () => {
       expect(area.getAttribute('aria-roledescription')).toBe('gráfico interativo');
       expect(area.getAttribute('aria-label')).toBe('Gráfico de barras empilhadas: Tempo por etapa');
       expect(area.getAttribute('aria-describedby')).toContain(q(f, '.resumo').id);
-      expect(area.getAttribute('aria-describedby')).toContain(q(f, '.dica').id);
+      expect(area.getAttribute('aria-describedby')).toContain(
+        q(f, '.visually-hidden[id$=dica-curta]').id,
+      );
+      expect(area.getAttribute('aria-describedby')!.split(' ')).not.toContain(q(f, '.dica').id);
       expect(q(f, '.visual').getAttribute('aria-hidden')).toBe('true');
       expect(q(f, '.dica')).toBeTruthy();
     });
@@ -526,7 +529,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowRight');
       tecla(f, 'ArrowDown');
       await atualizar(f);
-      expect(await aviso(f)).toBe('Compilação em 1.0: 10 ms.');
+      expect(await aviso(f)).toBe('1 de 6, Compilação em 1.0: 10 ms.');
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 0 });
       tecla(f, 'ArrowDown');
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 1 });
@@ -536,7 +539,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowUp');
       await atualizar(f);
       expect(falso.ultima('showTip')).toMatchObject({ seriesIndex: 2 });
-      expect(await aviso(f)).toBe('Teste em 1.0: 1 ms.');
+      expect(await aviso(f)).toBe('1 de 6, Teste em 1.0: 1 ms.');
     });
 
     it('pula séries ocultas e anuncia "sem dado"', async () => {
@@ -551,7 +554,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowLeft');
       tecla(f, 'ArrowLeft');
       await atualizar(f);
-      expect(await aviso(f)).toBe('Ligação em 1.3: sem dado.');
+      expect(await aviso(f)).toBe('4 de 6, Ligação em 1.3: sem dado.');
     });
 
     it('Esc esconde a dica e só captura a tecla quando há valor aberto', async () => {
@@ -561,6 +564,7 @@ describe('Grafico', () => {
       const ev = tecla(f, 'Escape');
       expect(ev.defaultPrevented).toBe(true);
       expect(falso.tipos().slice(-2)).toEqual(['hideTip', 'downplay']);
+      expect(await aviso(f)).toBe('Valor fechado.');
       expect(tecla(f, 'Escape').defaultPrevented).toBe(false);
     });
 
@@ -569,6 +573,7 @@ describe('Grafico', () => {
       tecla(f, 'ArrowRight');
       q(f, '.area').dispatchEvent(new FocusEvent('blur'));
       expect(falso.tipos().at(-2)).toBe('hideTip');
+      expect(await aviso(f)).not.toContain('Valor fechado');
     });
 
     it('a janela acompanha o foco e não captura Tab nem atalhos com modificador', async () => {

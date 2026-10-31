@@ -127,6 +127,7 @@ export class Grafico implements OnInit {
   protected readonly idTitulo = `grafico-${this.id}-titulo`;
   protected readonly idResumo = `grafico-${this.id}-resumo`;
   protected readonly idDica = `grafico-${this.id}-dica`;
+  protected readonly idDicaCurta = `grafico-${this.id}-dica-curta`;
   protected readonly idAviso = `grafico-${this.id}-aviso`;
   protected readonly idTextura = `grafico-${this.id}-tx`;
   protected readonly texturas = [1, 2, 3, 4, 5];
@@ -578,6 +579,7 @@ export class Grafico implements OnInit {
         if (i === null) return;
         e.preventDefault();
         this.limparFoco();
+        this.anunciar('Valor fechado.');
         return;
       default:
         return;
@@ -621,7 +623,7 @@ export class Grafico implements OnInit {
         prefixo +
           (serie === null
             ? textoCategoria(m, i, this.ocultas(), this.unidade(), this.empilhado())
-            : textoSerie(m, serie, i, this.unidade())),
+            : `${i + 1} de ${m.categorias.length}, ` + textoSerie(m, serie, i, this.unidade())),
       );
     }
   }
