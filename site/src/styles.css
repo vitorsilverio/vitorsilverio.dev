@@ -510,6 +510,20 @@ button.tag:hover {
   min-width: 0;
 }
 
+/* A legenda de uma matriz que rola fica colada à borda esquerda e com a largura do contêiner
+   visível (não a da tabela): senão, no celular, só se lê o resto rolando. */
+.scroll-x:has(> table.tabela-matriz) {
+  container-type: inline-size;
+}
+
+.prose table.tabela-matriz caption {
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+  width: 100cqw;
+  max-width: 100%;
+}
+
 .prose caption {
   text-align: left;
   font-weight: 600;
