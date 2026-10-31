@@ -111,7 +111,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
     </dl>
     <p>
       O detalhe que confunde quem vem de x86: o ARM tem
-      <strong>registradores banqueados (banked)</strong>. Em modos privilegiados
+      <strong>registradores banqueados (<span lang="en">banked</span>)</strong>. Em modos privilegiados
       (ex.: <code>svc</code>, <code>irq</code>, <code>fiq</code>) o processador
       troca para cópias <em>sombra</em> de R13 e R14 — e o modo FIQ ganha até
       R8–R12 próprios. É por isso que uma interrupção "some" com o SP e o LR do
