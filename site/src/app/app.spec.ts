@@ -28,6 +28,22 @@ describe('App', () => {
   });
 });
 
+describe('App · ordem de foco do banner de cookies', () => {
+  it('o banner vem logo depois do link de pular e antes do cabeçalho e do conteúdo', async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([]), provideLocationMocks()],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const filhos = Array.from(el.children).map((c) => c.localName);
+    expect(filhos.indexOf('app-consent-banner')).toBeGreaterThan(filhos.indexOf('a'));
+    expect(filhos.indexOf('app-consent-banner')).toBeLessThan(filhos.indexOf('header'));
+    expect(filhos.indexOf('header')).toBeLessThan(filhos.indexOf('main'));
+  });
+});
+
 describe('App · menu móvel', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -135,6 +151,7 @@ describe('App · rodapé ao assumir o pré-render (CLS)', () => {
     ref.changeDetectorRef.detectChanges();
     expect(el.querySelector('footer.site-footer')).toBeTruthy();
     ref.destroy();
+    el.remove();
   });
 
   it('assumindo o pré-render, o rodapé só volta depois da primeira navegação', async () => {
@@ -146,5 +163,6 @@ describe('App · rodapé ao assumir o pré-render (CLS)', () => {
     ref.changeDetectorRef.detectChanges();
     expect(el.querySelector('footer.site-footer')).toBeTruthy();
     ref.destroy();
+    el.remove();
   });
 });

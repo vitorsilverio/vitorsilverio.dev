@@ -1,5 +1,9 @@
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
+<!-- Logo depois do link de pular: o banner (fixo sobre o conteúdo) entra cedo na ordem de foco
+     e de leitura enquanto a escolha está pendente (WCAG 2.4.3). Não recebe foco sozinho. -->
+<app-consent-banner />
+
 <header class="site-header" (focusout)="onHeaderFocusOut($event)">
   <div class="container header-inner">
     <a class="brand" routerLink="/" (click)="closeMenu()" aria-label="Início — Vítor Silvério">
@@ -135,4 +139,3 @@
   </footer>
 }
 
-<app-consent-banner />
