@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-29</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-29</lastmod>
+    <lastmod>2026-10-30</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-29</lastmod>
+    <lastmod>2026-10-30</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -52,7 +52,7 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
-    <lastmod>2026-10-29</lastmod>
+    <lastmod>2026-10-30</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/thumb/</loc>
@@ -103,6 +103,10 @@
     <lastmod>2026-09-04</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/certificados/</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/compilador/</loc>
     <lastmod>2026-09-11</lastmod>
   </url>
@@ -127,12 +131,28 @@
     <lastmod>2026-10-27</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/docker/</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/java/</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/pki/</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/rce/</loc>
     <lastmod>2026-10-27</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/registradores/</loc>
     <lastmod>2026-09-06</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/tls/</loc>
+    <lastmod>2026-10-30</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/trilha/</loc>
@@ -307,5 +327,10 @@
     <loc>https://vitorsilverio.dev/artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8/</loc>
     <lastmod>2026-10-29</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/fuzzer-ou-llm-fuzzilli-bigsleep-v8.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/revogacao-ocsp-crl-fora-do-ar/</loc>
+    <lastmod>2026-10-30</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/revogacao-ocsp-crl-fora-do-ar.png</image:loc></image:image>
   </url>
 </urlset>

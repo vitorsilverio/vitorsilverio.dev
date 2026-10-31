@@ -39,6 +39,7 @@
 /artigos/node2shell-brotli-node-python
 /artigos/python-jit-removido-pep-836
 /artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8
+/artigos/revogacao-ocsp-crl-fora-do-ar
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -58,14 +59,19 @@
 /tags/arm-box
 /tags/armcore
 /tags/arquitetura
+/tags/certificados
 /tags/compilador
 /tags/condicionais
 /tags/cpsr
 /tags/cve
 /tags/debug
 /tags/defesa
+/tags/docker
+/tags/java
+/tags/pki
 /tags/rce
 /tags/registradores
+/tags/tls
 /tags/trilha
 /tags/and
 /tags/angular
@@ -80,15 +86,14 @@
 /tags/brotli
 /tags/c
 /tags/carreira
-/tags/certificados
 /tags/chamada
 /tags/codigo-aberto
 /tags/compiladores
 /tags/consoles
 /tags/cpython
 /tags/criptografia
+/tags/crl
 /tags/decompilacao
-/tags/docker
 /tags/elf
 /tags/emudhra
 /tags/eor
@@ -102,7 +107,6 @@
 /tags/instruction-set
 /tags/ir
 /tags/it
-/tags/java
 /tags/jit
 /tags/jvm
 /tags/linker
@@ -111,6 +115,7 @@
 /tags/mod-php
 /tags/modos
 /tags/node-js
+/tags/ocsp
 /tags/openssl
 /tags/orr
 /tags/pep-836
@@ -118,9 +123,9 @@
 /tags/php
 /tags/php-fpm
 /tags/pipeline
-/tags/pki
 /tags/predicacao
 /tags/ps5
+/tags/revogacao
 /tags/sala-limpa
 /tags/semihosting
 /tags/signals
@@ -128,5 +133,4 @@
 /tags/sub-rotinas
 /tags/supply-chain
 /tags/switch-2
-/tags/tls
 /tags/v8

@@ -28,12 +28,6 @@ describe(`Artigo ${SLUG}`, () => {
     expect(meta?.tags).toContain('Fuzzing');
   });
 
-  it('é o artigo mais recente da lista', () => {
-    const maisRecente = [...articles].sort((a, b) => b.date.localeCompare(a.date))[0];
-
-    expect(maisRecente.slug).toBe(SLUG);
-  });
-
   it('link para os arquivos do laboratório, e não para a pasta (que não tem index e daria 404)', () => {
     const hrefs = Array.from(el.querySelectorAll<HTMLAnchorElement>('.prose a[href^="/exemplos/"]')).map((a) =>
       a.getAttribute('href')!,
