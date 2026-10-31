@@ -111,7 +111,7 @@ import { Objdump } from '../../../shared/objdump/objdump';
     </dl>
     <p>
       O detalhe que confunde quem vem de x86: o ARM tem
-      <strong>registradores banqueados (banked)</strong>. Em modos privilegiados
+      <strong>registradores banqueados (<span lang="en">banked</span>)</strong>. Em modos privilegiados
       (ex.: <code>svc</code>, <code>irq</code>, <code>fiq</code>) o processador
       troca para cópias <em>sombra</em> de R13 e R14 — e o modo FIQ ganha até
       R8–R12 próprios. É por isso que uma interrupção "some" com o SP e o LR do
@@ -351,7 +351,7 @@ cpsr           0x800000df          2147483871</code></pre>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">CPSR</th><td role="cell" data-label="O que é"><em><span lang="en">Current Program Status Register</span></em>: flags N/Z/C/V, máscaras de interrupção, bit Thumb e modo atual.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Flags N, Z, C, V</th><td role="cell" data-label="O que é">negativo, zero, <em><span lang="en">carry</span></em> (vai-um) e <em><span lang="en">overflow</span></em> (estouro com sinal).</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Modo de execução</th><td role="cell" data-label="O que é">estado de privilégio e contexto da CPU (User, Supervisor, IRQ, FIQ, Abort, Undefined, System).</td></tr>
-          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco (<em><span lang="en">banked</span></em>)</th><td role="cell" data-label="O que é">registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
+          <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Registrador em banco / <em><span lang="en">banked</span></em></th><td role="cell" data-label="O que é">registrador com uma cópia física por modo; trocar de modo troca qual cópia o programa enxerga.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Thumb / Thumb-2</th><td role="cell" data-label="O que é">conjuntos de instruções compactos: 16 bits (Thumb) e mistura de 16 e 32 bits (Thumb-2).</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Execução condicional</th><td role="cell" data-label="O que é">sufixo de condição (<code>eq</code>, <code>ne</code>...) que faz a instrução só ter efeito se as flags satisfizerem a condição.</td></tr>
           <tr role="row"><th scope="row" role="rowheader" data-label="Termo">Pré/pós-indexado</th><td role="cell" data-label="O que é">modos de endereçamento em que o registrador base é atualizado antes (<code>!</code>) ou depois do acesso à memória.</td></tr>
