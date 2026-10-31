@@ -290,4 +290,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Em 27 de outubro de 2026, o Project Zero publicou a primeira comparação em números entre um fuzzer (Fuzzilli) e um agente de IA (BigSleep) caçando bugs no V8. Leio os gráficos do post, separo as medidas que não se misturam e mostro, com um laboratório de brinquedo em Docker, por que fuzzer e revisor têm pontos cegos diferentes.',
     tags: ['Segurança', 'Fuzzing', 'IA', 'LLM', 'V8', 'Docker'],
   },
+  {
+    slug: 'revogacao-ocsp-crl-fora-do-ar',
+    title: 'Revogação não é detalhe: o que seu sistema faz quando o OCSP/CRL está fora do ar',
+    date: '2026-10-30',
+    readingTime: '35 min',
+    excerpt: 'Ligar a checagem de revogação não basta: o que importa é o que o cliente faz quando a CRL ou o responder OCSP não responde. Monto um laboratório em Docker e meço Java, Python, Node e curl com o responder no ar, parado e travado, com certificado bom e revogado, staple bom, vencido e ausente, CRL atual, antiga e expirada. O Java em modo SOFT_FAIL aceitou o certificado revogado, e uma propriedade de timeout guarda uma pegadinha de unidade. Fecho com as decisões de projeto para quem implementa validação e assinatura.',
+    tags: ['Segurança', 'PKI', 'TLS', 'Certificados', 'Revogação', 'OCSP', 'CRL', 'Java', 'Docker'],
+  },
 ];

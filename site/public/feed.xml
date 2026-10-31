@@ -6,7 +6,23 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Thu, 29 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 30 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Revogação não é detalhe: o que seu sistema faz quando o OCSP/CRL está fora do ar</title>
+      <link>https://vitorsilverio.dev/artigos/revogacao-ocsp-crl-fora-do-ar/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/revogacao-ocsp-crl-fora-do-ar/</guid>
+      <pubDate>Fri, 30 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Ligar a checagem de revogação não basta: o que importa é o que o cliente faz quando a CRL ou o responder OCSP não responde. Monto um laboratório em Docker e meço Java, Python, Node e curl com o responder no ar, parado e travado, com certificado bom e revogado, staple bom, vencido e ausente, CRL atual, antiga e expirada. O Java em modo SOFT_FAIL aceitou o certificado revogado, e uma propriedade de timeout guarda uma pegadinha de unidade. Fecho com as decisões de projeto para quem implementa validação e assinatura.</description>
+      <category>Segurança</category>
+      <category>PKI</category>
+      <category>TLS</category>
+      <category>Certificados</category>
+      <category>Revogação</category>
+      <category>OCSP</category>
+      <category>CRL</category>
+      <category>Java</category>
+      <category>Docker</category>
+    </item>
     <item>
       <title>Fuzzer ou LLM: o que o Project Zero mediu ao comparar Fuzzilli e BigSleep no V8</title>
       <link>https://vitorsilverio.dev/artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8/</link>
