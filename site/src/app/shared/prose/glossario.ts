@@ -239,7 +239,12 @@ export class Glossario implements OnDestroy {
         (n) => modo === 'sim' || !ehGenerico(n),
       );
       if (nomes.length === 0) continue;
-      if (!linha.id) linha.id = `glossario-${slugificar(nomes[0])}`;
+      if (!linha.id) {
+        const base = `glossario-${slugificar(nomes[0])}`;
+        let id = base;
+        for (let n = 2; linhas.some((l) => l.id === id); n++) id = `${base}-${n}`;
+        linha.id = id;
+      }
       const codigo = !!cab.querySelector('code');
       for (const nome of nomes) {
         const regex = regexDoTermo(nome);

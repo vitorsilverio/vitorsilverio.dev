@@ -336,6 +336,15 @@ describe('Glossario em artigos longos', () => {
   const marcas = (termos: HTMLElement[]) =>
     termos.map((t) => t.textContent + (t.dataset['reaparicao'] ? '*' : ''));
 
+  it('não repete id quando duas linhas geram o mesmo slug', async () => {
+    const { el } = await montar(`
+      <h2>Um</h2>
+      <p>O soft-fail aceita; o SOFT_FAIL é a opção do Java.</p>
+      ${tabela(['Soft-fail / fail-open', 'aceita.'], ['SOFT_FAIL (Java)', 'opção.'])}`);
+    const ids = [...el.querySelectorAll('tbody tr')].map((l) => l.id);
+    expect(ids).toEqual(['glossario-soft-fail', 'glossario-soft-fail-2']);
+  });
+
   it('marca a reaparição depois de 2500 palavras, e não antes', async () => {
     const { termos } = await montar(`
       <h2>Um</h2>
