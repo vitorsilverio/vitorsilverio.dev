@@ -80,6 +80,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/revogacao-ocsp-crl-fora-do-ar').then((m) => m.ArticleRevogacaoOcspCrlForaDoAr),
   'memoria-e-mmio-no-emulador': () =>
     import('./pages/article-detail/posts/memoria-e-mmio-no-emulador').then((m) => m.ArticleMemoriaEMmioNoEmulador),
+  'assinatura-pdf-pades-icp-brasil': () =>
+    import('./pages/article-detail/posts/assinatura-pdf-pades-icp-brasil').then((m) => m.ArticleAssinaturaPdfPadesIcpBrasil),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

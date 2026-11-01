@@ -306,4 +306,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Do ponto de vista do processador, memória é read32/write32. Por baixo há um barramento inteiro: RAM, periféricos mapeados em endereços, espelhos, waitstates e código automodificável. Este artigo abre o AddressSpace e o PagedAddressSpace do arm-jitter e monta, em Java, um barramento com uma "UART" que imprime o que um programa ARM escreve nela.',
     tags: ['ARM', 'Emulação', 'arm-jitter', 'MMIO', 'Memória', 'SMC', 'Tutorial'],
   },
+  {
+    slug: 'assinatura-pdf-pades-icp-brasil',
+    title: 'Assinatura digital de PDF por dentro: PAdES, carimbo do tempo e validação de longo prazo, com ICP-Brasil',
+    date: '2026-11-01',
+    readingTime: '50 min',
+    excerpt: 'Abro um PDF assinado byte a byte: o ByteRange, o /Contents, as revisões, o /DSS e o carimbo de documento. Monto em Docker uma autoridade certificadora e uma autoridade de carimbo do tempo de teste, assino o mesmo arquivo nos quatro níveis do PAdES (B-B, B-T, B-LT e B-LTA), mostro por que só os níveis de longo prazo (B-LT e B-LTA) validam depois que o certificado vence, explico as quatro políticas PAdES da ICP-Brasil, o ciclo da Lista de Políticas de Assinatura e o que muda com chave em HSM, e fecho com um checklist de implementação e as defesas contra os ataques publicados.',
+    tags: ['Assinatura digital', 'PAdES', 'PDF', 'ICP-Brasil', 'PKI', 'Carimbo do tempo', 'Segurança', 'Python', 'Docker'],
+  },
 ];

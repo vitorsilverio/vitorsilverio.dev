@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-01</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-01</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-01</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -52,7 +52,7 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-01</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/thumb/</loc>
@@ -67,6 +67,14 @@
     <lastmod>2026-10-29</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/python/</loc>
+    <lastmod>2026-11-01</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/docker/</loc>
+    <lastmod>2026-11-01</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/engenharia-reversa/</loc>
     <lastmod>2026-10-26</lastmod>
   </url>
@@ -79,8 +87,8 @@
     <lastmod>2026-09-09</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/python/</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://vitorsilverio.dev/tags/pki/</loc>
+    <lastmod>2026-11-01</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/thumb-2/</loc>
@@ -131,15 +139,7 @@
     <lastmod>2026-10-27</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/docker/</loc>
-    <lastmod>2026-10-30</lastmod>
-  </url>
-  <url>
     <loc>https://vitorsilverio.dev/tags/java/</loc>
-    <lastmod>2026-10-30</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/pki/</loc>
     <lastmod>2026-10-30</lastmod>
   </url>
   <url>
@@ -337,5 +337,10 @@
     <loc>https://vitorsilverio.dev/artigos/memoria-e-mmio-no-emulador/</loc>
     <lastmod>2026-10-31</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/memoria-e-mmio-no-emulador.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/assinatura-pdf-pades-icp-brasil/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/assinatura-pdf-pades-icp-brasil.png</image:loc></image:image>
   </url>
 </urlset>

@@ -6,7 +6,23 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Sat, 31 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 01 Nov 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Assinatura digital de PDF por dentro: PAdES, carimbo do tempo e validação de longo prazo, com ICP-Brasil</title>
+      <link>https://vitorsilverio.dev/artigos/assinatura-pdf-pades-icp-brasil/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/assinatura-pdf-pades-icp-brasil/</guid>
+      <pubDate>Sun, 01 Nov 2026 11:00:00 GMT</pubDate>
+      <description>Abro um PDF assinado byte a byte: o ByteRange, o /Contents, as revisões, o /DSS e o carimbo de documento. Monto em Docker uma autoridade certificadora e uma autoridade de carimbo do tempo de teste, assino o mesmo arquivo nos quatro níveis do PAdES (B-B, B-T, B-LT e B-LTA), mostro por que só os níveis de longo prazo (B-LT e B-LTA) validam depois que o certificado vence, explico as quatro políticas PAdES da ICP-Brasil, o ciclo da Lista de Políticas de Assinatura e o que muda com chave em HSM, e fecho com um checklist de implementação e as defesas contra os ataques publicados.</description>
+      <category>Assinatura digital</category>
+      <category>PAdES</category>
+      <category>PDF</category>
+      <category>ICP-Brasil</category>
+      <category>PKI</category>
+      <category>Carimbo do tempo</category>
+      <category>Segurança</category>
+      <category>Python</category>
+      <category>Docker</category>
+    </item>
     <item>
       <title>Memória e MMIO no emulador</title>
       <link>https://vitorsilverio.dev/artigos/memoria-e-mmio-no-emulador/</link>

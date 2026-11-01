@@ -41,6 +41,7 @@
 /artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8
 /artigos/revogacao-ocsp-crl-fora-do-ar
 /artigos/memoria-e-mmio-no-emulador
+/artigos/assinatura-pdf-pades-icp-brasil
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -51,10 +52,12 @@
 /tags/thumb
 /tags/decodificacao
 /tags/ia
+/tags/python
+/tags/docker
 /tags/engenharia-reversa
 /tags/llm
 /tags/objdump
-/tags/python
+/tags/pki
 /tags/thumb-2
 /tags/toolchain
 /tags/arm-box
@@ -67,9 +70,7 @@
 /tags/cve
 /tags/debug
 /tags/defesa
-/tags/docker
 /tags/java
-/tags/pki
 /tags/rce
 /tags/registradores
 /tags/tls
@@ -78,6 +79,7 @@
 /tags/angular
 /tags/api
 /tags/artcraft
+/tags/assinatura-digital
 /tags/barrel-shifter
 /tags/bfc
 /tags/bfi
@@ -86,6 +88,7 @@
 /tags/bits
 /tags/brotli
 /tags/c
+/tags/carimbo-do-tempo
 /tags/carreira
 /tags/chamada
 /tags/codigo-aberto
@@ -105,6 +108,7 @@
 /tags/gcc
 /tags/gdb
 /tags/ghidra
+/tags/icp-brasil
 /tags/instruction-set
 /tags/ir
 /tags/it
@@ -121,6 +125,8 @@
 /tags/ocsp
 /tags/openssl
 /tags/orr
+/tags/pades
+/tags/pdf
 /tags/pep-836
 /tags/pessoal
 /tags/php
