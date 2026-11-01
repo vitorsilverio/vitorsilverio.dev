@@ -85,13 +85,13 @@ html {
 
 /* Foco não encoberto (WCAG 2.4.11): enquanto o banner de cookies está na tela (fixo, até ~9rem
    em tela estreita), o navegador não pode deixar o elemento focado por Tab atrás dele. */
-html:has(.consent-banner) {
-  scroll-padding-bottom: 10rem;
+html:has(.consent-banner, .consent-bar) {
+  scroll-padding-bottom: var(--consent-offset, 10rem);
 }
 
 /* E no fim da página, onde não há mais o que rolar, o rodapé ganha respiro para sair de baixo dele. */
-html:has(.consent-banner) body {
-  padding-bottom: 9rem;
+html:has(.consent-banner, .consent-bar) body {
+  padding-bottom: var(--consent-offset, 9rem);
 }
 
 body {
@@ -508,6 +508,20 @@ button.tag:hover {
    32rem, para caber sem rolar quando o conteúdo é curto; se não couber, o contêiner rola. */
 .prose table.tabela-matriz {
   min-width: 0;
+}
+
+/* A legenda de uma matriz que rola fica colada à borda esquerda e com a largura do contêiner
+   visível (não a da tabela): senão, no celular, só se lê o resto rolando. */
+.scroll-x:has(> table.tabela-matriz) {
+  container-type: inline-size;
+}
+
+.prose table.tabela-matriz caption {
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+  width: 100cqw;
+  max-width: 100%;
 }
 
 .prose caption {

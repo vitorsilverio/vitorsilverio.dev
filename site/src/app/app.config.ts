@@ -1,4 +1,10 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
+import { DOCUMENT, ViewportScroller } from '@angular/common';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -40,5 +46,15 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     { provide: UrlSerializer, useClass: TrailingSlashSerializer },
+    // O scroll até o fragmento (#id) do Router é manual (window.scrollTo) e ignora o
+    // scroll-padding do CSS: sem este deslocamento o título ficaria atrás do cabeçalho fixo
+    // (WCAG 2.4.11). Folga de 1rem sob o cabeçalho.
+    provideAppInitializer(() => {
+      const doc = inject(DOCUMENT);
+      inject(ViewportScroller).setOffset(() => [
+        0,
+        (doc.querySelector('.site-header')?.clientHeight ?? 64) + 16,
+      ]);
+    }),
   ],
 };

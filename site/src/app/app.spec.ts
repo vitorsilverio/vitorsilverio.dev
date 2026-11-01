@@ -1,7 +1,11 @@
+import { Component, createComponent, EnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideLocationMocks } from '@angular/common/testing';
 import { App } from './app';
+
+@Component({ template: '<p>Página</p>' })
+class Pagina {}
 
 describe('App', () => {
   beforeEach(async () => {
@@ -21,6 +25,22 @@ describe('App', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.brand-name')?.textContent).toContain('Vítor Silvério');
+  });
+});
+
+describe('App · ordem de foco do banner de cookies', () => {
+  it('o banner vem logo depois do link de pular e antes do cabeçalho e do conteúdo', async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([]), provideLocationMocks()],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const filhos = Array.from(el.children).map((c) => c.localName);
+    expect(filhos.indexOf('app-consent-banner')).toBeGreaterThan(filhos.indexOf('a'));
+    expect(filhos.indexOf('app-consent-banner')).toBeLessThan(filhos.indexOf('header'));
+    expect(filhos.indexOf('header')).toBeLessThan(filhos.indexOf('main'));
   });
 });
 
@@ -105,5 +125,44 @@ describe('App · botão de tema', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe(
       depois === 'true' ? 'dark' : 'light',
     );
+  });
+});
+
+describe('App · rodapé ao assumir o pré-render (CLS)', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: '', component: Pagina }]), provideLocationMocks()],
+    });
+  });
+
+  function montar(prerender: boolean) {
+    const hostElement = document.createElement('app-root');
+    if (prerender) hostElement.setAttribute('ng-server-context', 'ssg');
+    document.body.appendChild(hostElement);
+    const ref = createComponent(App, {
+      environmentInjector: TestBed.inject(EnvironmentInjector),
+      hostElement,
+    });
+    return { ref, el: hostElement };
+  }
+
+  it('sem pré-render (testes, dev) o rodapé existe desde o início', () => {
+    const { ref, el } = montar(false);
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeTruthy();
+    ref.destroy();
+    el.remove();
+  });
+
+  it('assumindo o pré-render, o rodapé só volta depois da primeira navegação', async () => {
+    const { ref, el } = montar(true);
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeNull();
+
+    await TestBed.inject(Router).navigateByUrl('/');
+    ref.changeDetectorRef.detectChanges();
+    expect(el.querySelector('footer.site-footer')).toBeTruthy();
+    ref.destroy();
+    el.remove();
   });
 });
