@@ -462,8 +462,9 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
     const t = title ? ` title="${escapeHtml(title)}"` : '';
     if (/^\/(?!\/)/.test(href)) {
       // Caminho interno com extensão de arquivo (/curso-arm/exemplos/x.s,
-      // /feed.xml, ...) = asset estático servido direto, não uma rota do SPA.
-      if (/\.[a-z0-9]+([#?].*)?$/i.test(href)) {
+      // /feed.xml, ...) ou dentro de exemplos (Dockerfile, Makefile, ...) =
+      // asset estático servido direto, não uma rota do SPA.
+      if (/\.[a-z0-9]+([#?].*)?$/i.test(href) || /\/exemplos\//.test(href)) {
         return `<a href="${href}"${t}>${text}</a>`;
       }
       const m = href.match(/^\/artigos\/([^/#?]+)/);
