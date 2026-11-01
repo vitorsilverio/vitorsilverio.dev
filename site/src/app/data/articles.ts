@@ -298,4 +298,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Ligar a checagem de revogação não basta: o que importa é o que o cliente faz quando a CRL ou o responder OCSP não responde. Monto um laboratório em Docker e meço Java, Python, Node e curl com o responder no ar, parado e travado, com certificado bom e revogado, staple bom, vencido e ausente, CRL atual, antiga e expirada. O Java em modo SOFT_FAIL aceitou o certificado revogado, e uma propriedade de timeout guarda uma pegadinha de unidade. Fecho com as decisões de projeto para quem implementa validação e assinatura.',
     tags: ['Segurança', 'PKI', 'TLS', 'Certificados', 'Revogação', 'OCSP', 'CRL', 'Java', 'Docker'],
   },
+  {
+    slug: 'memoria-e-mmio-no-emulador',
+    title: 'Memória e MMIO no emulador',
+    date: '2026-10-31',
+    readingTime: '15 min',
+    excerpt: 'Do ponto de vista do processador, memória é read32/write32. Por baixo há um barramento inteiro: RAM, periféricos mapeados em endereços, espelhos, waitstates e código automodificável. Este artigo abre o AddressSpace e o PagedAddressSpace do arm-jitter e monta, em Java, um barramento com uma "UART" que imprime o que um programa ARM escreve nela.',
+    tags: ['ARM', 'Emulação', 'arm-jitter', 'MMIO', 'Memória', 'SMC', 'Tutorial'],
+  },
 ];

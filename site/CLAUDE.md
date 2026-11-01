@@ -321,6 +321,94 @@ Controle por
 artigo: `data-glossario="nao"` numa `<tr>` da tabela tira o termo, `data-glossario="sim"` força um
 termo genérico, e `data-glossario="nao"` em qualquer elemento do texto exclui o que está dentro dele.
 
+## Gráficos (`app-grafico`)
+
+`app-grafico` (`src/app/shared/grafico/`) desenha **barras**, **barras empilhadas** e **linhas** com
+[Apache ECharts](https://echarts.apache.org/) 6, chamado direto (sem wrapper), renderizador SVG e import
+parcial (`echarts/core` + barras, linhas, grade, dica, legenda e zoom). Use quando a **forma** dos números
+(tendência, comparação, composição) importa mais que os valores exatos; para poucos valores, uma tabela
+basta. Um gráfico por ideia, com o resumo dizendo o que ele mostra.
+
+No **rascunho** use a cerca `grafico`. A linha de abertura traz o **tipo** (`barras`, `barras-empilhadas`,
+`linhas`) e o título; antes da linha `---` ficam os metadados `chave: valor`; depois dela, a tabela de dados
+(primeira linha: coluna das categorias e as séries, até 6; uma linha por categoria):
+
+````markdown
+```grafico barras-empilhadas Tempo por etapa
+resumo: A ligação ocupa a maior parte do tempo em todas as versões; o total cai de 460 ms para 330 ms.
+unidade: ms
+eixo-x: Versão
+eixo-y: Tempo
+fonte: Medição própria em container Docker
+---
+Versão | Compilação | Ligação
+1.0 | 120 | 340
+1.1 | 110 | 280
+```
+````
+
+- **`resumo` é obrigatório**: é o texto equivalente da figura (leitor de tela, quem está sem JavaScript). Sem
+  ele o gerador **avisa** e põe um resumo genérico. Escreva o que o gráfico *conclui*, não "gráfico de barras".
+- `unidade`, `eixo-x`, `eixo-y` e `fonte` são opcionais. Números aceitam ponto ou vírgula decimal, sem
+  separador de milhar; célula vazia, `-` ou `—` é "sem dado" (a linha do gráfico quebra ali). Linha com o
+  número de colunas errado, valor que não é número, categoria sem nome, tipo desconhecido ou mais de 6 séries
+  são ignorados **com aviso**. Dados reais, de fonte verificada (nada inventado em artigo publicado).
+- O gerador acrescenta o import `Grafico`. Em post publicado, rode-o com o rascunho (`--dry-run --print`) e cole o bloco.
+- **Nunca coloque os dados num `<pre>` ou em imagem** além do gráfico: a tabela já vai junto.
+
+**Como funciona (SVG estático, depois interativo).** O HTML pré-renderizado já traz tudo que não exige
+JavaScript: título, resumo, legenda, a figura como **SVG estático** (o próprio ECharts em modo SSR, em 3
+tamanhos × 2 temas, escolhidos por CSS conforme a largura do contêiner e o `data-theme`, sem piscar) e a
+tabela de dados em `<details>`. O SVG vai também no `TransferState`, porque o app não usa hidratação e o
+navegador recria o DOM. Quando o leitor chega a 300 px do gráfico (`IntersectionObserver`; sem ele, logo
+depois do primeiro render), o chunk do ECharts (`echarts-lazy`, ~585 kB, ~168 kB em brotli) é baixado,
+o gráfico vivo troca o SVG sem mudança de layout e os controles passam de esmaecidos a ativos. **O espaço
+é reservado desde o pré-render**: a barra de zoom (inerte, `inert`, botões `disabled`), a dica de uso e os itens
+da legenda (`span` com a mesma caixa do `button`) já estão no HTML estático, com a marcação idêntica à do estado
+vivo, e a proporção da figura vem do contêiner. Qualquer controle novo precisa nascer no pré-render, senão a figura
+salta (CLS). Sem JavaScript, o leitor vê os botões esmaecidos, não um buraco. Se o chunk
+falhar, ficam o SVG, a legenda e a tabela. O ECharts só é importado em `echarts-lazy.ts`: **nunca** importe
+`echarts` em outro arquivo (entraria no chunk do artigo ou no inicial). O budget `echarts-lazy` do
+`angular.json` avisa se o chunk crescer.
+
+**Interações.** Mouse, toque e teclado mostram uma dica com os valores (texto escapado: nome de série e de
+categoria nunca viram HTML); a legenda são botões (`aria-pressed`) que ocultam e mostram séries (a última
+visível não pode ser ocultada); zoom por botões (Ampliar, Reduzir, setas, Redefinir), Ctrl + roda e pinça (a
+roda sozinha rola a página; arrastar na vertical rola a página).
+
+*Zoom por tipo.* Em **barras** e **barras empilhadas** o zoom é **só no eixo X**: cortar a base do eixo Y faz a
+altura da barra deixar de ser proporcional ao valor e engana. Em **linhas** há também o zoom no **eixo Y**, por
+botões (grupo "Zoom vertical": Ampliar, Reduzir, cima, baixo; alternativa por botão do WCAG 2.5.1; Ctrl + roda e
+pinça ficam só no X). O eixo Y completo é automático e inclui o zero; ampliar fixa `min`/`max` (até 10% da faixa).
+Quando a faixa visível **não inclui o zero**, um aviso visível ("Atenção: o eixo vertical não começa em zero") aparece
+acima da figura e é anunciado. Redefinir limpa os dois eixos.
+
+*Teclado e leitor de tela.* A área do gráfico tem `tabindex="0"` e, depois que o ECharts carrega,
+`role="application"` com `aria-roledescription="gráfico interativo"` (antes disso, `role="group"`). Setas
+esquerda/direita percorrem as categorias, cima/baixo trocam a série, Home/End vão às pontas, Esc fecha a dica e anuncia "Valor fechado." (o blur é mudo). O nome acessível leva o resumo e uma frase curta de uso (`aria-describedby`; a dica completa fica só como texto, para o NVDA não lê-la a cada entrada). Com série selecionada o anúncio traz a posição ("4 de 10, B em 04: 14 ms.").
+**Por que `application`:** NVDA e JAWS em modo de navegação consomem as setas para o cursor virtual e o `keydown`
+nunca chega a um `role="group"`; `application` os leva ao modo de foco (é o papel que a ARIA reserva a widgets que
+tratam o teclado por conta própria). O custo (o cursor virtual não anda por dentro) não existe aqui: dentro da área
+só há a figura, `aria-hidden`; o texto equivalente (resumo, dica, tabela) fica fora e continua navegável. É
+fundamento por especificação e relato de uso, **não testado com leitor real**: reteste com NVDA/JAWS pendente.
+O que se move é anunciado numa região `aria-live="polite"` que é esvaziada e reposta a cada anúncio (para a
+mesma frase repetida ser falada de novo); no limite diz "Última categoria."/"Primeira categoria." e os botões
+de zoom no limite dizem por que nada mudou. Roda e pinça são anunciadas uma vez, depois de 500 ms de pausa.
+Os botões de zoom usam `aria-disabled` (não `disabled`) depois de ativos: o foco não se perde ao chegar no limite.
+
+**Acessibilidade e cor.** Cor nunca é o único código: cada série tem uma **forma de marcador** (linhas),
+uma **textura** (barras, `decal`) e nome na legenda; a tabela traz todos os valores. A paleta é a categórica
+de `dataviz` nos dois temas, validada com `validate_palette.js` contra as superfícies do site (claro `#ffffff`,
+escuro `#181822`). Tema claro `#2a78d6, #d9541f, #0d8a5e, #a87000, #c9407f, #008300`: todas as cores com pelo menos
+3:1 contra o branco, CVD adjacente 7,5 (faixa 6 a 8, legal só com codificação secundária, que existe) e visão normal
+17,2. Tema escuro: CVD adjacente 8,4, visão normal 19,3. Cor e forma/textura valem juntas: **não troque as cores**
+sem repetir a validação (`--mode light --surface "#ffffff"`; o teste de `grafico-modelo.spec.ts` guarda os 3:1). `prefers-reduced-motion` desliga a
+animação. Alvos de 36 px (44 px em ponteiro grosseiro), sem rolagem horizontal da página a 320 px.
+
+**Para mudar o componente:** `grafico-modelo.ts` é puro (opção do ECharts, cores, janela de zoom, textos) e
+tem teste sem navegador; o componente é testado com um dublê do motor (`GRAFICO_MOTOR`), sem carregar o
+ECharts no jsdom.
+
 ## Tabelas dos artigos em telas estreitas
 
 Tabelas se apresentam como lista de definição (cada linha vira um bloco, cada célula "nome da coluna: valor") quando o `.scroll-x` que as envolve tem menos de 40rem (container query em `src/styles.css`, bloco "Tabelas como lista"). É só CSS: o HTML continua sendo `<table>`.

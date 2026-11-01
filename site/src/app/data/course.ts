@@ -206,7 +206,7 @@ export const courseModules: readonly CourseModule[] = [
         code: 'M4.2',
         title: 'Memória e MMIO no emulador',
         slug: 'memoria-e-mmio-no-emulador',
-        status: 'planned',
+        status: 'published',
         blurb: 'AddressSpace, PagedAddressSpace, callbacks de MMIO, waitstates e SMC.',
       },
       {

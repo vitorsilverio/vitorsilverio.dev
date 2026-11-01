@@ -29,7 +29,7 @@
 | 10 | 2026-09-13 | M3.2 Montar e ligar | `montar-e-ligar-arm` | `flash.ld`, `build-testdata.ps1` |
 | ~~11~~ | ✅ 2026-10-20 | M3.4 arm-jitter via API Java | `arm-jitter-api-java` | **publicado** |
 | ~~12~~ | ✅ 2026-10-24 | M4.1 O Core | `dentro-do-emulador-o-core` | **publicado** |
-| 13 | 2026-09-16 | M4.2 Memória e MMIO | `memoria-e-mmio-no-emulador` | `AddressSpace`, `PagedAddressSpace` |
+| ~~13~~ | ✅ 2026-10-31 | M4.2 Memória e MMIO | `memoria-e-mmio-no-emulador` | **publicado** |
 | 14 | 2026-09-17 | M4.3 IR, otimizador e backends | `ir-otimizador-e-backends` | `ir.opt`, `codegen.jvm` |
 | 15 | 2026-09-18 | M4.4 Performance e encadeamento | `performance-e-encadeamento-de-blocos` | `jit` (inline cache, chain budget) |
 | 16 | 2026-09-19 | M4.5 Interrupções e exceções | `interrupcoes-excecoes` | md |

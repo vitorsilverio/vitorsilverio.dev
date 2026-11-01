@@ -6,7 +6,21 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Fri, 30 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Memória e MMIO no emulador</title>
+      <link>https://vitorsilverio.dev/artigos/memoria-e-mmio-no-emulador/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/memoria-e-mmio-no-emulador/</guid>
+      <pubDate>Sat, 31 Oct 2026 11:00:00 GMT</pubDate>
+      <description>Do ponto de vista do processador, memória é read32/write32. Por baixo há um barramento inteiro: RAM, periféricos mapeados em endereços, espelhos, waitstates e código automodificável. Este artigo abre o AddressSpace e o PagedAddressSpace do arm-jitter e monta, em Java, um barramento com uma &quot;UART&quot; que imprime o que um programa ARM escreve nela.</description>
+      <category>ARM</category>
+      <category>Emulação</category>
+      <category>arm-jitter</category>
+      <category>MMIO</category>
+      <category>Memória</category>
+      <category>SMC</category>
+      <category>Tutorial</category>
+    </item>
     <item>
       <title>Revogação não é detalhe: o que seu sistema faz quando o OCSP/CRL está fora do ar</title>
       <link>https://vitorsilverio.dev/artigos/revogacao-ocsp-crl-fora-do-ar/</link>

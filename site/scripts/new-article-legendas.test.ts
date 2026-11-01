@@ -64,3 +64,11 @@ describe('legendas de tabela no gerador de artigos', () => {
     for (const b of blocos(saida)) expect(b).not.toContain('<caption>Órfã');
   });
 });
+
+describe('links para exemplos', () => {
+  it('arquivo sem extensão em exemplos é asset, não rota do SPA', () => {
+    const { saida } = gerar('[Dockerfile](/curso-arm/exemplos/lab/Dockerfile)');
+    expect(saida).toContain('<a href="/curso-arm/exemplos/lab/Dockerfile">');
+    expect(saida).not.toContain('routerLink="/curso-arm/exemplos');
+  });
+});

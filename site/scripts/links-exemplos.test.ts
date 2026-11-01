@@ -26,6 +26,18 @@ describe('links para exemplos nos artigos', () => {
     expect(links.filter((l) => l.caminho.endsWith('/'))).toEqual([]);
   });
 
+  // routerLink trata o arquivo como rota do SPA, e a barra final do serializador dá 404.
+  it('nenhum usa routerLink', () => {
+    const rotas = readdirSync(POSTS_DIR)
+      .filter((nome) => nome.endsWith('.ts') && !nome.endsWith('.spec.ts'))
+      .filter((nome) =>
+        /routerLink="\/(?:curso-arm\/)?exemplos\//.test(
+          readFileSync(resolve(POSTS_DIR, nome), 'utf8'),
+        ),
+      );
+    expect(rotas).toEqual([]);
+  });
+
   it('todo arquivo citado existe em public/', () => {
     const faltando = links.filter(
       (l) => !l.caminho.endsWith('/') && !existsSync(resolve(SITE_ROOT, 'public', `.${l.caminho}`)),

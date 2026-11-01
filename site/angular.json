@@ -47,6 +47,12 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
+                },
+                {
+                  "type": "bundle",
+                  "name": "echarts-lazy",
+                  "maximumWarning": "650kB",
+                  "maximumError": "800kB"
                 }
               ],
               "outputHashing": "all"

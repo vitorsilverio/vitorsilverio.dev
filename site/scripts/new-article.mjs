@@ -8,6 +8,7 @@ import { ehObjdump, pareceBitField } from './lib/blocos.mjs';
 import { dimensoes, parseFiguras } from './lib/imagem.mjs';
 import { tagNota } from './lib/nota.mjs';
 import { tagLinhaDoTempo } from './lib/linha-do-tempo.mjs';
+import { tagGrafico } from './lib/grafico.mjs';
 import { tagFormula } from './lib/formula.mjs';
 import { extensaoTraducao, preservarEspacos, usaTraducao } from './lib/traducao.mjs';
 import { marcarMatriz, marcarTabela } from './lib/tabela-lista.mjs';
@@ -48,7 +49,7 @@ const USAGE =
 // --------------------------------------------------------------------------
 let mdMeta = null;
 let mdTemplate = null;
-let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
+let mdUsa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, grafico: false, traducao: false };
 
 if (opts.from) {
   const mdPath = resolve(SITE_ROOT, opts.from);
@@ -263,7 +264,7 @@ function escAttr(s) {
  *   "Artigos relacionados" que o próprio article-detail já renderiza)
  */
 function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
-  const usa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
+  const usa = { routerLink: false, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, grafico: false, traducao: false };
   const deadLinks = [];
   const candidatosBf = [];
   let autoObjdump = 0;
@@ -272,6 +273,7 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
   const avisosNota = [];
   const avisosFormula = [];
   const avisosTempo = [];
+  const avisosGrafico = [];
 
   /// Dimensões do arquivo: em public/ (já publicado) ou ao lado do .md (rascunho).
   const lerDims = (src) => {
@@ -364,6 +366,13 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
       usa.linhaDoTempo = true;
       return tag;
     }
+    if (tipo === 'grafico') {
+      const { html: tag, erros } = tagGrafico(legenda, text);
+      avisosGrafico.push(...erros);
+      if (tag === null) return '';
+      usa.grafico = true;
+      return tag;
+    }
     if (tipo === 'formula') {
       const { html: tag, erros } = tagFormula(legenda, text, (md) =>
         marked.parseInline(md, { renderer }),
@@ -453,8 +462,9 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
     const t = title ? ` title="${escapeHtml(title)}"` : '';
     if (/^\/(?!\/)/.test(href)) {
       // Caminho interno com extensão de arquivo (/curso-arm/exemplos/x.s,
-      // /feed.xml, ...) = asset estático servido direto, não uma rota do SPA.
-      if (/\.[a-z0-9]+([#?].*)?$/i.test(href)) {
+      // /feed.xml, ...) ou dentro de exemplos (Dockerfile, Makefile, ...) =
+      // asset estático servido direto, não uma rota do SPA.
+      if (/\.[a-z0-9]+([#?].*)?$/i.test(href) || /\/exemplos\//.test(href)) {
         return `<a href="${href}"${t}>${text}</a>`;
       }
       const m = href.match(/^\/artigos\/([^/#?]+)/);
@@ -521,6 +531,11 @@ function mdBodyToHtml(body, knownSlugs = new Set(), mdDir = SITE_ROOT) {
       `⚠ ${avisosTempo.length} problema(s) com linhas do tempo:\n  ` + avisosTempo.join('\n  '),
     );
   }
+  if (avisosGrafico.length) {
+    console.warn(
+      `⚠ ${avisosGrafico.length} problema(s) com gráficos:\n  ` + avisosGrafico.join('\n  '),
+    );
+  }
   if (avisosFormula.length) {
     console.warn(
       `⚠ ${avisosFormula.length} problema(s) com fórmulas:\n  ` + avisosFormula.join('\n  '),
@@ -571,7 +586,7 @@ function buildPostComponent() {
   const safe = bodyHtml.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '$\\{');
 
   // O stub (sem `--from`) já vem com um link, então importa RouterLink.
-  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, traducao: false };
+  const usa = mdTemplate ? mdUsa : { routerLink: true, bitField: false, objdump: false, figura: false, nota: false, formula: false, linhaDoTempo: false, grafico: false, traducao: false };
 
   const nomes = [];
   const linhas = [];
@@ -598,6 +613,10 @@ function buildPostComponent() {
   if (usa.linhaDoTempo) {
     nomes.push('LinhaDoTempo');
     linhas.push("import { LinhaDoTempo } from '../../../shared/linha-do-tempo/linha-do-tempo';");
+  }
+  if (usa.grafico) {
+    nomes.push('Grafico');
+    linhas.push("import { Grafico } from '../../../shared/grafico/grafico';");
   }
   if (usa.traducao) {
     nomes.push('Traducao');
