@@ -78,6 +78,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/fuzzer-ou-llm-fuzzilli-bigsleep-v8').then((m) => m.ArticleFuzzerOuLlmFuzzilliBigsleepV8),
   'revogacao-ocsp-crl-fora-do-ar': () =>
     import('./pages/article-detail/posts/revogacao-ocsp-crl-fora-do-ar').then((m) => m.ArticleRevogacaoOcspCrlForaDoAr),
+  'memoria-e-mmio-no-emulador': () =>
+    import('./pages/article-detail/posts/memoria-e-mmio-no-emulador').then((m) => m.ArticleMemoriaEMmioNoEmulador),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

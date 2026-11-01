@@ -40,6 +40,7 @@
 /artigos/python-jit-removido-pep-836
 /artigos/fuzzer-ou-llm-fuzzilli-bigsleep-v8
 /artigos/revogacao-ocsp-crl-fora-do-ar
+/artigos/memoria-e-mmio-no-emulador
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
@@ -112,6 +113,8 @@
 /tags/linker
 /tags/load-store
 /tags/mcp
+/tags/memoria
+/tags/mmio
 /tags/mod-php
 /tags/modos
 /tags/node-js
@@ -129,6 +132,7 @@
 /tags/sala-limpa
 /tags/semihosting
 /tags/signals
+/tags/smc
 /tags/software
 /tags/sub-rotinas
 /tags/supply-chain

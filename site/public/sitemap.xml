@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -13,30 +13,30 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/curso-arm/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/privacidade/</loc>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/arm/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/arm-jitter/</loc>
-    <lastmod>2026-10-28</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/assembly/</loc>
@@ -48,7 +48,7 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/emulacao/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
@@ -332,5 +332,10 @@
     <loc>https://vitorsilverio.dev/artigos/revogacao-ocsp-crl-fora-do-ar/</loc>
     <lastmod>2026-10-30</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/revogacao-ocsp-crl-fora-do-ar.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/memoria-e-mmio-no-emulador/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/memoria-e-mmio-no-emulador.png</image:loc></image:image>
   </url>
 </urlset>
