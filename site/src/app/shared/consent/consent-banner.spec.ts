@@ -156,6 +156,19 @@ describe('ConsentBanner', () => {
       rodape.remove();
     });
 
+    it('ao reabrir pelo rodapé, o foco vai para o banner (Rejeitar)', async () => {
+      q('.btn-reject')!.click();
+      await flush();
+      const rodape = document.createElement('button');
+      document.body.appendChild(rodape);
+      rodape.focus();
+      service.reset();
+      await flush();
+      await flush();
+      expect(document.activeElement).toBe(q('.btn-reject'));
+      rodape.remove();
+    });
+
     it('se quem reabriu sumiu do DOM, cai no <main>', async () => {
       q('.btn-reject')!.click();
       await flush();

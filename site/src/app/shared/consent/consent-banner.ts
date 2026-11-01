@@ -7,6 +7,7 @@ import {
   effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -81,6 +82,14 @@ export class ConsentBanner {
       this.collapsed();
       afterNextRender(() => this.observar(), { injector: this.injector });
     });
+
+    // Reaberto pelo botão "Preferências de cookies" do rodapé: o banner está no início do DOM,
+    // então o foco vai para ele (como ao reabrir pela barra); senão o próximo Tab sairia da página.
+    effect(() => {
+      if (this.consent.visible() && untracked(() => this.consent.invoker)) {
+        this.focusAfterRender('.btn-reject');
+      }
+    });
     this.destroyRef.onDestroy(() => this.soltar());
   }
 
@@ -143,7 +152,10 @@ export class ConsentBanner {
     const aoFocar = (ev: FocusEvent) => {
       const alvo = ev.target;
       if (!(alvo instanceof view.HTMLElement) || el.contains(alvo)) return;
-      view.requestAnimationFrame(() => this.livrarDoBanner(alvo, el));
+      view.requestAnimationFrame(() => {
+        // Só foco por teclado: clique de mouse não rola a página.
+        if (alvo.matches(':focus-visible')) this.livrarDoBanner(alvo, el);
+      });
     };
     this.observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(agendar);
     this.observer?.observe(el);
