@@ -78,7 +78,9 @@ li a {
 
 /* Coluna lateral (telas largas): lista aberta, sem caixa, com a seção atual marcada. */
 .toc-lateral {
-  max-height: calc(100vh - 7.5rem);
+  /* Com o banner de cookies na tela (fixo, na base), a coluna não passa de onde ele começa:
+     o último link ficaria sob o banner sem como rolar (WCAG 2.4.11); a TOC rola por dentro. */
+  max-height: max(10rem, calc(100vh - 7.5rem - var(--consent-offset, 0px)));
   overflow-y: auto;
   overscroll-behavior: contain;
   border: 0;
