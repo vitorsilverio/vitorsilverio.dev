@@ -42,20 +42,21 @@
 /artigos/revogacao-ocsp-crl-fora-do-ar
 /artigos/memoria-e-mmio-no-emulador
 /artigos/assinatura-pdf-pades-icp-brasil
+/artigos/qwenputer-cpu-risc-v-nos-pesos
 /tags/tutorial
 /tags/arm
 /tags/arm-jitter
 /tags/assembly
-/tags/armbox
 /tags/emulacao
+/tags/armbox
 /tags/seguranca
 /tags/thumb
 /tags/decodificacao
-/tags/ia
-/tags/python
 /tags/docker
-/tags/engenharia-reversa
+/tags/ia
 /tags/llm
+/tags/python
+/tags/engenharia-reversa
 /tags/objdump
 /tags/pki
 /tags/thumb-2
@@ -114,6 +115,7 @@
 /tags/it
 /tags/jit
 /tags/jvm
+/tags/leitura-critica
 /tags/linker
 /tags/load-store
 /tags/mcp
@@ -135,6 +137,7 @@
 /tags/predicacao
 /tags/ps5
 /tags/revogacao
+/tags/risc-v
 /tags/sala-limpa
 /tags/semihosting
 /tags/signals
@@ -143,4 +146,5 @@
 /tags/sub-rotinas
 /tags/supply-chain
 /tags/switch-2
+/tags/transformers
 /tags/v8

@@ -1,0 +1,7 @@
+# Laboratorio do artigo: compila o riscv-tests oficial e roda no qemu-riscv32 10.0.
+# Debian 13 (trixie): gcc-riscv64-unknown-elf 14.2, qemu-user 10.0.
+FROM debian:trixie-slim
+RUN apt-get update -qq && apt-get install -y -qq git qemu-user gcc-riscv64-unknown-elf binutils-riscv64-unknown-elf >/dev/null && rm -rf /var/lib/apt/lists/*
+RUN git clone -q https://github.com/divagr18/qwenputer /qwenputer \
+ && git -C /qwenputer checkout -q ca13310e2f9f788d1dd3feeea8213c1b0c23913c
+WORKDIR /qwenputer/experimental/riscv

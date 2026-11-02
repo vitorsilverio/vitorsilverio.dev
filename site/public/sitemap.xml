@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://vitorsilverio.dev/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/og-default.png</image:loc></image:image>
   </url>
   <url>
@@ -20,11 +20,11 @@
   </url>
   <url>
     <loc>https://vitorsilverio.dev/artigos/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-02</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-02</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/tutorial/</loc>
@@ -43,12 +43,12 @@
     <lastmod>2026-09-20</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/armbox/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://vitorsilverio.dev/tags/emulacao/</loc>
+    <lastmod>2026-11-02</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/emulacao/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://vitorsilverio.dev/tags/armbox/</loc>
+    <lastmod>2026-08-31</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/seguranca/</loc>
@@ -63,24 +63,24 @@
     <lastmod>2026-09-11</lastmod>
   </url>
   <url>
+    <loc>https://vitorsilverio.dev/tags/docker/</loc>
+    <lastmod>2026-11-02</lastmod>
+  </url>
+  <url>
     <loc>https://vitorsilverio.dev/tags/ia/</loc>
     <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/tags/llm/</loc>
+    <lastmod>2026-11-02</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/python/</loc>
     <lastmod>2026-11-01</lastmod>
   </url>
   <url>
-    <loc>https://vitorsilverio.dev/tags/docker/</loc>
-    <lastmod>2026-11-01</lastmod>
-  </url>
-  <url>
     <loc>https://vitorsilverio.dev/tags/engenharia-reversa/</loc>
     <lastmod>2026-10-26</lastmod>
-  </url>
-  <url>
-    <loc>https://vitorsilverio.dev/tags/llm/</loc>
-    <lastmod>2026-10-29</lastmod>
   </url>
   <url>
     <loc>https://vitorsilverio.dev/tags/objdump/</loc>
@@ -342,5 +342,10 @@
     <loc>https://vitorsilverio.dev/artigos/assinatura-pdf-pades-icp-brasil/</loc>
     <lastmod>2026-11-01</lastmod>
     <image:image><image:loc>https://vitorsilverio.dev/assets/covers/assinatura-pdf-pades-icp-brasil.png</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://vitorsilverio.dev/artigos/qwenputer-cpu-risc-v-nos-pesos/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <image:image><image:loc>https://vitorsilverio.dev/assets/covers/qwenputer-cpu-risc-v-nos-pesos.png</image:loc></image:image>
   </url>
 </urlset>

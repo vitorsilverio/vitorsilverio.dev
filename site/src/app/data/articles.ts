@@ -314,4 +314,12 @@ export const articles: readonly ArticleMeta[] = [
     excerpt: 'Abro um PDF assinado byte a byte: o ByteRange, o /Contents, as revisões, o /DSS e o carimbo de documento. Monto em Docker uma autoridade certificadora e uma autoridade de carimbo do tempo de teste, assino o mesmo arquivo nos quatro níveis do PAdES (B-B, B-T, B-LT e B-LTA), mostro por que só os níveis de longo prazo (B-LT e B-LTA) validam depois que o certificado vence, explico as quatro políticas PAdES da ICP-Brasil, o ciclo da Lista de Políticas de Assinatura e o que muda com chave em HSM, e fecho com um checklist de implementação e as defesas contra os ataques publicados.',
     tags: ['Assinatura digital', 'PAdES', 'PDF', 'ICP-Brasil', 'PKI', 'Carimbo do tempo', 'Segurança', 'Python', 'Docker'],
   },
+  {
+    slug: 'qwenputer-cpu-risc-v-nos-pesos',
+    title: 'Qwenputer: uma CPU RISC-V nos pesos de um LLM, lida como se fosse um emulador',
+    date: '2026-11-02',
+    readingTime: '25 min',
+    excerpt: 'Um projeto compila uma CPU RV32IM nas camadas do Qwen3.5-4B e diz que ela é exata. Leio o Qwenputer como leio um emulador, separo o que o autor declara do que consegui verificar em Docker (a referência em Python contra o qemu e o riscv-tests recompilado) e comparo o ciclo dele com o do ArmCore.step().',
+    tags: ['RISC-V', 'Emulação', 'LLM', 'Transformers', 'Leitura crítica', 'Docker'],
+  },
 ];

@@ -82,6 +82,8 @@ const postLoaders = {
     import('./pages/article-detail/posts/memoria-e-mmio-no-emulador').then((m) => m.ArticleMemoriaEMmioNoEmulador),
   'assinatura-pdf-pades-icp-brasil': () =>
     import('./pages/article-detail/posts/assinatura-pdf-pades-icp-brasil').then((m) => m.ArticleAssinaturaPdfPadesIcpBrasil),
+  'qwenputer-cpu-risc-v-nos-pesos': () =>
+    import('./pages/article-detail/posts/qwenputer-cpu-risc-v-nos-pesos').then((m) => m.ArticleQwenputerCpuRiscVNosPesos),
 } as const;
 
 /** Casa /tags/<slug> só para tags que existem; qualquer outro slug cai no 404. */

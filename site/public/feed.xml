@@ -6,7 +6,20 @@
     <atom:link href="https://vitorsilverio.dev/feed.xml" rel="self" type="application/rss+xml" />
     <description>Artigos sobre ARM, emulação e tecnologia, escritos com ajuda de IA por Vítor Silvério.</description>
     <language>pt-BR</language>
-    <lastBuildDate>Sun, 01 Nov 2026 11:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2026 11:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Qwenputer: uma CPU RISC-V nos pesos de um LLM, lida como se fosse um emulador</title>
+      <link>https://vitorsilverio.dev/artigos/qwenputer-cpu-risc-v-nos-pesos/</link>
+      <guid isPermaLink="true">https://vitorsilverio.dev/artigos/qwenputer-cpu-risc-v-nos-pesos/</guid>
+      <pubDate>Mon, 02 Nov 2026 11:00:00 GMT</pubDate>
+      <description>Um projeto compila uma CPU RV32IM nas camadas do Qwen3.5-4B e diz que ela é exata. Leio o Qwenputer como leio um emulador, separo o que o autor declara do que consegui verificar em Docker (a referência em Python contra o qemu e o riscv-tests recompilado) e comparo o ciclo dele com o do ArmCore.step().</description>
+      <category>RISC-V</category>
+      <category>Emulação</category>
+      <category>LLM</category>
+      <category>Transformers</category>
+      <category>Leitura crítica</category>
+      <category>Docker</category>
+    </item>
     <item>
       <title>Assinatura digital de PDF por dentro: PAdES, carimbo do tempo e validação de longo prazo, com ICP-Brasil</title>
       <link>https://vitorsilverio.dev/artigos/assinatura-pdf-pades-icp-brasil/</link>
